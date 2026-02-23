@@ -15,6 +15,10 @@ async function bootstrap() {
   const config = app.get(ConfigService)
   const redis = new IORedis(config.getOrThrow('REDIS_URI'))
 
+  redis.on('connect', () => console.log('✅ Redis connected'))
+  redis.on('ready', () => console.log('✅ Redis ready'))
+  redis.on('error', err => console.error('❌ Redis error:', err))
+
   app.use(cookieParser(config.getOrThrow<string>('COOKIES_SECRET')))
 
   app.useGlobalPipes(
@@ -27,16 +31,21 @@ async function bootstrap() {
     session({
       secret: config.getOrThrow<string>('SESSION_SECRET'),
       name: config.getOrThrow<string>('SESSION_NAME'),
-      resave: true,
+      resave: false,
       saveUninitialized: false,
       cookie: {
-        domain: config.getOrThrow<string>('SESSION_DOMAIN'),
+        // domain: config.getOrThrow<string>('SESSION_DOMAIN'),
         maxAge: ms(config.getOrThrow<StringValue>('SESSION_MAX_AGE')),
         httpOnly: parseBoolean(config.getOrThrow<string>('SESSION_HTTP_ONLY')),
         secure: parseBoolean(config.getOrThrow<string>('SESSION_SECURE')),
         sameSite: 'lax'
       },
-      store: new RedisStore({ client: redis, prefix: config.getOrThrow<string>('SESSION_FOLDER') })
+      store: new RedisStore({
+        client: redis,
+        prefix: config.getOrThrow<string>('SESSION_FOLDER'),
+        disableTouch: true,
+        disableTTL: true
+      })
     })
   )
 
@@ -48,4 +57,4 @@ async function bootstrap() {
 
   await app.listen(config.getOrThrow<number>('APPLICATION_PORT'))
 }
-bootstrap()
+void bootstrap()
