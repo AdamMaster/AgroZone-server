@@ -1,5 +1,5 @@
 import 'express-session'
-import { UserRole } from 'prisma/generated/client'
+import { User, UserRole } from 'prisma/generated/client'
 
 declare module 'express-session' {
   interface SessionData {
@@ -7,3 +7,13 @@ declare module 'express-session' {
     userRole: UserRole
   }
 }
+
+declare global {
+  namespace Express {
+    interface Request {
+      user: User
+    }
+  }
+}
+
+export {}
