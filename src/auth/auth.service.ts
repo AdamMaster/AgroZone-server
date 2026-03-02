@@ -16,12 +16,12 @@ import { ConfigService } from '@nestjs/config'
 
 @Injectable()
 export class AuthService {
-  public constructor(
-    private readonly userService: UserService,
-    private readonly confiService: ConfigService
+  constructor(
+    readonly userService: UserService,
+    readonly confiService: ConfigService
   ) {}
 
-  public async register(req: Request, dto: RegisterDto) {
+  async register(req: Request, dto: RegisterDto) {
     const isExists = await this.userService.findByEmail(dto.email)
 
     if (isExists) {
@@ -35,7 +35,7 @@ export class AuthService {
     return this.saveSession(req, newUser)
   }
 
-  public async login(req: Request, dto: LoginDto) {
+  async login(req: Request, dto: LoginDto) {
     const user = await this.userService.findByEmail(dto.email)
 
     if (!user || !user.password) {
@@ -53,7 +53,7 @@ export class AuthService {
     return this.saveSession(req, user)
   }
 
-  public async logout(req: Request, res: Response): Promise<void> {
+  async logout(req: Request, res: Response): Promise<void> {
     return new Promise((resolve, reject) => {
       req.session.destroy(err => {
         if (err) {
@@ -70,7 +70,7 @@ export class AuthService {
     })
   }
 
-  private async saveSession(req: Request, user: User) {
+  async saveSession(req: Request, user: User) {
     return new Promise((resolve, reject) => {
       req.session.userId = user.id
       req.session.userRole = user.role

@@ -11,14 +11,14 @@ export class UserController {
   @Authorization()
   @HttpCode(HttpStatus.OK)
   @Get('profile')
-  public async findProfile(@Authorized('id') userId: string) {
+  async findProfile(@Authorized('id') userId: string) {
     return this.userService.findById(userId)
   }
 
   @Authorization(UserRole.ADMIN)
   @HttpCode(HttpStatus.OK)
   @Get('by-id/:id')
-  public async findById(@Param('id') id: string) {
+  async findById(@Param('id') id: string) {
     return this.userService.findById(id)
   }
 }

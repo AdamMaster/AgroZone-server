@@ -3,12 +3,12 @@ import { ValidationArguments, ValidatorConstraint, ValidatorConstraintInterface 
 
 @ValidatorConstraint({ name: 'IsPasswordsMatching', async: false })
 export class IsPasswordsMatchingConstraint implements ValidatorConstraintInterface {
-  public validate(passwordRepeat: string, args: ValidationArguments) {
+  validate(passwordRepeat: string, args: ValidationArguments) {
     const obj = args.object as RegisterDto
     return obj.password === passwordRepeat
   }
 
-  public defaultMessage(validationArguments?: ValidationArguments) {
+  defaultMessage(validationArguments?: ValidationArguments) {
     return 'Пароли не совпадают.'
   }
 }

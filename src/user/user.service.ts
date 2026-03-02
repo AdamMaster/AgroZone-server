@@ -5,9 +5,9 @@ import { AuthMethod } from 'prisma/generated/enums'
 
 @Injectable()
 export class UserService {
-  public constructor(private readonly prismaService: PrismaService) {}
+  constructor(private readonly prismaService: PrismaService) {}
 
-  public async findById(id: string) {
+  async findById(id: string) {
     const user = await this.prismaService.user.findUnique({
       where: {
         id
@@ -24,7 +24,7 @@ export class UserService {
     return user
   }
 
-  public async findByEmail(email: string) {
+  async findByEmail(email: string) {
     const user = await this.prismaService.user.findUnique({
       where: {
         email
@@ -37,7 +37,7 @@ export class UserService {
     return user
   }
 
-  public async create(
+  async create(
     email: string,
     password: string,
     displayName: string,

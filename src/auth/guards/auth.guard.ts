@@ -4,9 +4,9 @@ import { UserService } from '@/user/user.service'
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  public constructor(private readonly UserService: UserService) {}
+  constructor(private readonly UserService: UserService) {}
 
-  public async canActivate(context: ExecutionContext): Promise<boolean> {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<Request>()
     const userRole = request.session.userRole
 
