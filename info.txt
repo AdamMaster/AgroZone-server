@@ -1,1 +1,13 @@
-https://youtu.be/O5Qry8cBhG4?t=4253
+https://youtu.be/O5Qry8cBhG4?t=11044
+
+вход в redis:
+docker exec -it dredis redis-cli -a pass123456
+
+проверить сессии:
+keys *
+
+удалить все сессии:
+flushdb
+
+очистить все сессии:
+FLUSHDB

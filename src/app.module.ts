@@ -5,6 +5,10 @@ import { PrismaModule } from './prisma/prisma.module'
 import { AuthModule } from './auth/auth.module'
 import { UserModule } from './user/user.module'
 import { ProviderModule } from './auth/provider/provider.module'
+import { MailModule } from './libs/mail/mail.module'
+import { EmailConfirmationModule } from './auth/email-confirmation/email-confirmation.module'
+import { PasswordRecoveryModule } from './auth/password-recovery/password-recovery.module'
+import { TwoFactorAuthModule } from './auth/two-factor-auth/two-factor-auth.module'
 
 @Module({
   imports: [
@@ -15,7 +19,11 @@ import { ProviderModule } from './auth/provider/provider.module'
     PrismaModule,
     AuthModule,
     UserModule,
-    ProviderModule
+    ProviderModule,
+    MailModule,
+    EmailConfirmationModule,
+    PasswordRecoveryModule,
+    TwoFactorAuthModule
   ]
 })
 export class AppModule {}
