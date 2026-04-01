@@ -8,7 +8,7 @@ interface ConfirmationTemplateProps {
 }
 
 export function ConfirmationTemplate({ domain, token }: ConfirmationTemplateProps) {
-  const confirmLink = `${domain}/auth/new-vrification?token=${token}`
+  const confirmLink = `${domain}/new-verification?token=${token}`
 
   return (
     <Tailwind>

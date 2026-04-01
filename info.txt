@@ -1,4 +1,4 @@
-https://youtu.be/O5Qry8cBhG4?t=11044
+https://youtu.be/O5Qry8cBhG4?t=17835
 
 вход в redis:
 docker exec -it dredis redis-cli -a pass123456
