@@ -13,7 +13,7 @@ interface ITokenResponse {
 
 @Injectable()
 export class BaseOAuthService {
-  private BASE_URL: string
+  private BASE_URL!: string
 
   constructor(private readonly options: TypeBaseProviderOptions) {}
 

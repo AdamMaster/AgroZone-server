@@ -8,12 +8,16 @@ import { parseBoolean } from './libs/common/utils/parse-boolean.util'
 import IORedis from 'ioredis'
 import session from 'express-session'
 import { RedisStore } from 'connect-redis'
+import { createClient } from 'redis'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
 
   const config = app.get(ConfigService)
   const redis = new IORedis(config.getOrThrow('REDIS_URI'))
+
+  const redisClient = createClient({ url: config.getOrThrow('REDIS_URI') })
+  await redisClient.connect()
 
   redis.on('connect', () => console.log('✅ Redis connected'))
   redis.on('ready', () => console.log('✅ Redis ready'))
@@ -41,10 +45,10 @@ async function bootstrap() {
         sameSite: 'lax'
       },
       store: new RedisStore({
-        client: redis,
-        prefix: config.getOrThrow<string>('SESSION_FOLDER'),
-        disableTouch: true,
-        disableTTL: true
+        client: redisClient,
+        prefix: config.getOrThrow<string>('SESSION_FOLDER')
+        // disableTouch: false,
+        // disableTTL: false
       })
     })
   )

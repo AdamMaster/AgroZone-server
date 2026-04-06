@@ -4,14 +4,14 @@ export class LoginDto {
   @IsString({ message: 'Email должен быть строкой.' })
   @IsEmail({}, { message: 'Некорректный формат email.' })
   @IsNotEmpty({ message: 'Email обязателен для заполнения.' })
-  email: string
+  email!: string
 
   @IsString({ message: 'Пароль должен быть строкой.' })
   @IsNotEmpty({ message: 'Пароль не может быть пустым.' })
   @MinLength(6, { message: 'Пароль должен содержать не менее 6 символов.' })
-  password: string
+  password!: string
 
   @IsOptional()
   @IsString()
-  code: string
+  code!: string
 }
