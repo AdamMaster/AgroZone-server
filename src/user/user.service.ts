@@ -26,6 +26,19 @@ export class UserService {
     return user
   }
 
+  async findByPhone(phone: string) {
+    const user = await this.prismaService.user.findUnique({
+      where: {
+        phone
+      },
+      include: {
+        accounts: true
+      }
+    })
+
+    return user
+  }
+
   async findByEmail(email: string) {
     const user = await this.prismaService.user.findUnique({
       where: {
@@ -52,7 +65,7 @@ export class UserService {
       data: {
         phone,
         email,
-        password: password ? await hash(password) : '',
+        password: password ? await hash(password) : null,
         displayName,
         picture,
         method,
@@ -76,6 +89,7 @@ export class UserService {
       data: {
         email: dto.email,
         displayName: dto.name,
+        phone: dto.phone,
         isTwoFactorEnabled: dto.isTwoFactorEnabled
       }
     })

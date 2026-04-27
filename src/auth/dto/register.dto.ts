@@ -1,15 +1,20 @@
 import { IsPasswordsMatchingConstraint } from 'src/libs/common/decorators/is-passwords-matching-constraint.decorator'
 
-import { IsEmail, IsNotEmpty, IsString, MinLength, Validate } from 'class-validator'
+import { IsEmail, IsNotEmpty, IsOptional, IsString, Matches, MinLength, Validate } from 'class-validator'
 
 export class RegisterDto {
   @IsString({ message: 'Имя должно быть строкой.' })
   @IsNotEmpty({ message: 'Имя обязательно для заполнения.' })
   name!: string
 
+  @IsOptional()
+  @IsString({ message: 'Телефон должен быть строкой.' })
+  @Matches(/^\d{10,15}$/, { message: 'Номер телефона должен содержать от 10 до 15 цифр.' })
+  phone?: string
+
+  @IsOptional()
   @IsString({ message: 'Email должен быть строкой.' })
   @IsEmail({}, { message: 'Некорректный формат email.' })
-  @IsNotEmpty({ message: 'Email обязателен для заполнения.' })
   email!: string
 
   @IsString({ message: 'Пароль должен быть строкой.' })
@@ -20,6 +25,6 @@ export class RegisterDto {
   @IsString({ message: 'Пароль подтверждения должен быть строкой.' })
   @IsNotEmpty({ message: 'Поле подтверждения пароля не может быть пустым.' })
   @MinLength(6, { message: 'Пароль подтверждения должен содержать не менее 6 символов.' })
-  @Validate(IsPasswordsMatchingConstraint, { message: 'Пароли не совпадаюьт.' })
+  @Validate(IsPasswordsMatchingConstraint, { message: 'Пароли не совпадают.' })
   passwordRepeat!: string
 }

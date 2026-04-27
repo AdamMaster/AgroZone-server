@@ -20,6 +20,7 @@ import { Request, Response } from 'express'
 import { LoginDto } from './dto/login.dto'
 import { Recaptcha } from '@nestlab/google-recaptcha'
 import { AuthProviderGuard } from './guards/provider.quard'
+import { CheckUserDto } from './dto/check-user.dto'
 
 @Controller('auth')
 export class AuthController {
@@ -28,6 +29,12 @@ export class AuthController {
     private readonly providerService: ProviderService,
     private readonly configService: ConfigService
   ) {}
+
+  @Post('check-user')
+  @HttpCode(HttpStatus.OK)
+  async checkUser(@Body() dto: CheckUserDto) {
+    return this.authService.checkUser(dto)
+  }
 
   @Recaptcha()
   @Post('register')

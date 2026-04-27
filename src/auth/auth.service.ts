@@ -1,6 +1,7 @@
 import { EmailConfirmationService } from './email-confirmation/email-confirmation.service'
 
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   InternalServerErrorException,
@@ -31,6 +32,10 @@ export class AuthService {
   ) {}
 
   async register(dto: RegisterDto) {
+    if (!dto.email && !dto.phone) {
+      throw new BadRequestException('Укажите Email или номер телефона для регистрации')
+    }
+
     const isExists = await this.userService.findByEmail(dto.email)
 
     if (isExists) {
@@ -40,18 +45,24 @@ export class AuthService {
     }
 
     const newUser = await this.userService.create(
-      dto.email,
+      dto.email ?? null,
       dto.password,
       dto.name,
-      null,
+      dto.phone ?? null,
       '',
       AuthMethod.CREDENTIALS,
       false
     )
 
-    if (!newUser.email) return
+    if (newUser.email) {
+      await this.emailConfirmationService.sendVerificationToken(newUser.email)
+      return { message: 'Пожалуйста, подтвердите ваш email.' }
+    }
 
-    await this.emailConfirmationService.sendVerificationToken(newUser.email)
+    if (newUser.phone) {
+      await this.sendSmsCode(newUser.phone)
+      return { message: 'Код подтверждения отправлен на ваш телефон.' }
+    }
 
     return {
       message:
@@ -81,6 +92,24 @@ export class AuthService {
     console.log(`---------------------\n`)
 
     return { message: 'Код подтверждения отправлен на ваш телефон' }
+  }
+
+  async checkUser(dto: { identifier: string }) {
+    const isEmail = dto.identifier.includes('@')
+    let user: User | null = null
+
+    if (isEmail) {
+      user = await this.userService.findByEmail(dto.identifier)
+    } else {
+      const phone = dto.identifier.replace(/\D/g, '')
+      user = await this.userService.findByPhone(phone)
+    }
+
+    return {
+      exists: !!user,
+      type: isEmail ? 'EMAIL' : 'PHONE',
+      identifier: dto.identifier
+    }
   }
 
   async extractProfileFromCode(req: Request, provider: string, code: string) {
@@ -147,7 +176,11 @@ export class AuthService {
   }
 
   async login(req: Request, dto: LoginDto) {
-    const user = await this.userService.findByEmail(dto.email)
+    const user = dto.email
+      ? await this.userService.findByEmail(dto.email)
+      : dto.phone
+        ? await this.userService.findByPhone(dto.phone)
+        : null
 
     if (!user || !user.password) {
       throw new NotFoundException('Пользователь не найден. Пожалуйста, проверьте введенные данные.')
