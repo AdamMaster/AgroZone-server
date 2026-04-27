@@ -1,6 +1,13 @@
 import { UserService } from './../../user/user.service'
 import { PrismaService } from '@/prisma/prisma.service'
-import { BadRequestException, forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common'
+import {
+  BadRequestException,
+  forwardRef,
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException
+} from '@nestjs/common'
 import { Request } from 'express'
 import { TokenType } from 'prisma/generated/enums'
 import { v4 as uuidv4 } from 'uuid'
@@ -20,7 +27,7 @@ export class EmailConfirmationService {
   ) {}
 
   async newVirification(req: Request, dto: ConfirmationDto) {
-    const existingToken = await this.prismaService.token.findUnique({
+    const existingToken = await this.prismaService.token.findFirst({
       where: {
         token: dto.token,
         type: TokenType.VERIFICATION
@@ -35,6 +42,10 @@ export class EmailConfirmationService {
 
     if (hasExpired) {
       throw new BadRequestException('Токен подтверждения истек. Пожалуйста, запросите новый токен для подтвержденияю')
+    }
+
+    if (!existingToken.email) {
+      throw new InternalServerErrorException('Токен не содержит email адреса.')
     }
 
     const existingUser = await this.userService.findByEmail(existingToken.email)
@@ -66,6 +77,10 @@ export class EmailConfirmationService {
 
   async sendVerificationToken(email: string) {
     const verificationToken = await this.generateVerificationToken(email)
+
+    if (!verificationToken.email) {
+      throw new InternalServerErrorException('Ошибка: Токен подтверждения был создан без привязки к email.')
+    }
 
     await this.mailService.sendConfirmationEmail(verificationToken.email, verificationToken.token)
 

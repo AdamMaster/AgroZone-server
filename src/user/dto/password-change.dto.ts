@@ -1,8 +1,9 @@
-import { IsString, MinLength } from 'class-validator'
+import { IsOptional, IsString, MinLength } from 'class-validator'
 
 export class PasswordChangeDto {
-  @IsString()
-  oldPassword?: string
+  @IsOptional() // Чтобы не ругалось, если поля вообще нет (если это логика позволяет)
+  @IsString({ message: 'Пароль должен быть строкой' })
+  currentPassword?: string
 
   @IsString()
   @MinLength(6, { message: 'Пароль минимум 6 символов' })

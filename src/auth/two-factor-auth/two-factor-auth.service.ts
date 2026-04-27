@@ -51,6 +51,10 @@ export class TwoFactorAuthService {
   async sendTwoFactorToken(email: string) {
     const twoFactorToken = await this.generateTwoFactorToken(email)
 
+    if (!twoFactorToken.email) {
+      throw new BadRequestException('Не удалось отправить код: email не найден.')
+    }
+
     await this.mailService.sendTwoFactorTokenEmail(twoFactorToken.email, twoFactorToken.token)
 
     return true

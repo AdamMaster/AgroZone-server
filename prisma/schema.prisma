@@ -8,14 +8,16 @@ datasource db {
 }
 
 model User {
-  id       String  @id @default(uuid())
-  phone    String  @unique
-  password String?
-
-  email String? @unique
-
+  id          String  @id @default(uuid())
+  phone       String? @unique
+  password    String?
+  email       String? @unique
   displayName String? @map("display_name")
   picture     String?
+
+  type     UserType @default(INDIVIDUAL)
+  bio      String?  @db.Text
+  location String?
 
   role UserRole @default(REGULAR)
 
@@ -24,10 +26,6 @@ model User {
 
   method   AuthMethod
   accounts Account[]
-
-  type     UserType @default(INDIVIDUAL)
-  bio      String?  @db.Text
-  location String?
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -61,13 +59,15 @@ model Token {
   user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String? @map("user_id")
 
-  email     String
-  token     String    @unique
+  phone     String?
+  email     String?
+  token     String
   type      TokenType
   expiresIn DateTime  @map("expires_in")
 
   createdAt DateTime @default(now()) @map("created_at")
 
+  @@unique([phone, token, type])
   @@map("tokens")
 }
 
@@ -92,4 +92,5 @@ enum TokenType {
   TWO_FACTOR
   PASSWORD_RESET
   EMAIL_CHANGE
+  SMS_VERIFICATION
 }

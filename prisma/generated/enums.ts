@@ -17,6 +17,14 @@ export const UserRole = {
 export type UserRole = (typeof UserRole)[keyof typeof UserRole]
 
 
+export const UserType = {
+  INDIVIDUAL: 'INDIVIDUAL',
+  BUSINESS: 'BUSINESS'
+} as const
+
+export type UserType = (typeof UserType)[keyof typeof UserType]
+
+
 export const AuthMethod = {
   CREDENTIALS: 'CREDENTIALS',
   GOOGLE: 'GOOGLE',
@@ -30,7 +38,8 @@ export const TokenType = {
   VERIFICATION: 'VERIFICATION',
   TWO_FACTOR: 'TWO_FACTOR',
   PASSWORD_RESET: 'PASSWORD_RESET',
-  EMAIL_CHANGE: 'EMAIL_CHANGE'
+  EMAIL_CHANGE: 'EMAIL_CHANGE',
+  SMS_VERIFICATION: 'SMS_VERIFICATION'
 } as const
 
 export type TokenType = (typeof TokenType)[keyof typeof TokenType]

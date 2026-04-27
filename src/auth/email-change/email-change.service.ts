@@ -21,13 +21,15 @@ export class EmailChangeService {
       throw new NotFoundException('Пользователь не найден')
     }
 
-    // 1. Проверяем текущий пароль (безопасность)
+    if (!user.password) {
+      throw new BadRequestException('Для этого аккаунта пароль не установлен. Попробуйте войти через соцсети.')
+    }
+
     const isPasswordCorrect = await verify(user.password, dto.password)
     if (!isPasswordCorrect) {
       throw new BadRequestException('Неверный текущий пароль')
     }
 
-    // 2. Проверяем, не занят ли НОВЫЙ email
     const isEmailTaken = await this.userService.findByEmail(dto.newEmail)
     if (isEmailTaken) {
       throw new BadRequestException('Этот адрес электронной почты уже используется')

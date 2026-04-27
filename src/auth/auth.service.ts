@@ -39,7 +39,17 @@ export class AuthService {
       )
     }
 
-    const newUser = await this.userService.create(dto.email, dto.password, dto.name, '', AuthMethod.CREDENTIALS, false)
+    const newUser = await this.userService.create(
+      dto.email,
+      dto.password,
+      dto.name,
+      null,
+      '',
+      AuthMethod.CREDENTIALS,
+      false
+    )
+
+    if (!newUser.email) return
 
     await this.emailConfirmationService.sendVerificationToken(newUser.email)
 
@@ -47,6 +57,30 @@ export class AuthService {
       message:
         'Вы успешно зарегистрировались. Пожалуйста, подтвердите ваш email. Сообщение было отправлено на ваш почтовый адрес.'
     }
+  }
+
+  async sendSmsCode(phone: string) {
+    const code = Math.floor(1000 + Math.random() * 9000).toString()
+
+    await this.prismaService.token.deleteMany({
+      where: { phone, type: 'SMS_VERIFICATION' }
+    })
+
+    await this.prismaService.token.create({
+      data: {
+        phone,
+        token: code,
+        type: 'SMS_VERIFICATION',
+        expiresIn: new Date(Date.now() + 5 * 60 * 1000),
+        email: null
+      }
+    })
+
+    console.log(`\n--- [SMS.RU MOCK] ---`)
+    console.log(`КОД ДЛЯ НОМЕРА ${phone}: ${code}`)
+    console.log(`---------------------\n`)
+
+    return { message: 'Код подтверждения отправлен на ваш телефон' }
   }
 
   async extractProfileFromCode(req: Request, provider: string, code: string) {
@@ -87,9 +121,10 @@ export class AuthService {
     const method: AuthMethod = AuthMethod[providerKey] || AuthMethod.GOOGLE
 
     user = await this.userService.create(
-      profile?.email ?? '',
-      '',
+      profile?.email ?? null,
+      null,
       profile?.name ?? '',
+      null,
       profile?.picture ?? '',
       method,
       true
@@ -126,12 +161,12 @@ export class AuthService {
       )
     }
 
-    if (!user.isVerified) {
+    if (!user.isVerified && user.email) {
       await this.emailConfirmationService.sendVerificationToken(user.email)
       throw new UnauthorizedException('Ваш email не подтвержден. Пожалуйста,проверьте вашу почту и подтвердите адрес.')
     }
 
-    if (user.isTwoFactorEnabled) {
+    if (user.isTwoFactorEnabled && user.email) {
       if (!dto.code) {
         await this.twoFactorAuthService.sendTwoFactorToken(user.email)
 

@@ -2,7 +2,7 @@ import { hash } from 'argon2'
 import { MailService } from '@/libs/mail/mail.service'
 import { PrismaService } from '@/prisma/prisma.service'
 import { UserService } from '@/user/user.service'
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common'
 import { v4 as uuidv4 } from 'uuid'
 import { TokenType } from 'prisma/generated/enums'
 import { ResetPasswordDto } from './dto/reset-password.dto'
@@ -25,7 +25,15 @@ export class PasswordRecoveryService {
       )
     }
 
+    if (!existingUser.email) {
+      throw new BadRequestException('У этого пользователя не указан Email. Сброс пароля невозможен.')
+    }
+
     const passwordResetToken = await this.generatePasswordResetToken(existingUser.email)
+
+    if (!passwordResetToken.email) {
+      throw new InternalServerErrorException('Ошибка при формировании данных для письма')
+    }
 
     await this.mailService.sendPasswordResetEmail(passwordResetToken.email, passwordResetToken.token)
 
@@ -50,6 +58,10 @@ export class PasswordRecoveryService {
 
     if (hasExpired) {
       throw new BadRequestException('Токен истек. Пожалуйста, запросите новый токен для подтверждения сброса пароля.')
+    }
+
+    if (!existingToken.email) {
+      throw new BadRequestException('Токен не связан с адресом электронной почты.')
     }
 
     const existingUser = await this.userService.findByEmail(existingToken.email)

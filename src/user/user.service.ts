@@ -40,15 +40,17 @@ export class UserService {
   }
 
   async create(
-    email: string,
-    password: string,
+    email: string | null,
+    password: string | null,
     displayName: string,
+    phone: string | null,
     picture: string,
     method: AuthMethod,
     isVerified: boolean
   ) {
     const user = await this.prismaService.user.create({
       data: {
+        phone,
         email,
         password: password ? await hash(password) : '',
         displayName,
@@ -98,11 +100,11 @@ export class UserService {
     const user = await this.findById(userId)
 
     if (user.password) {
-      if (!dto.oldPassword) {
+      if (!dto.currentPassword) {
         throw new BadRequestException('Необходимо указать текущий пароль')
       }
 
-      const isValidPassword = await verify(user.password, dto.oldPassword)
+      const isValidPassword = await verify(user.password, dto.currentPassword)
       if (!isValidPassword) {
         throw new BadRequestException('Текущий пароль указан неверно')
       }
