@@ -1,8 +1,9 @@
 import { PrismaService } from '@/prisma/prisma.service'
-import { Injectable, NotFoundException } from '@nestjs/common'
-import { hash } from 'argon2'
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
+import { hash, verify } from 'argon2'
 import { AuthMethod } from 'prisma/generated/enums'
 import { UpdateUserDto } from './dto/update-user.dto'
+import { PasswordChangeDto } from './dto/password-change.dto'
 
 @Injectable()
 export class UserService {
@@ -78,5 +79,55 @@ export class UserService {
     })
 
     return updatedUser
+  }
+
+  async updateAvatar(userId: string, fileName: string) {
+    await this.findById(userId)
+
+    return this.prismaService.user.update({
+      where: {
+        id: userId
+      },
+      data: {
+        picture: fileName
+      }
+    })
+  }
+
+  async updatePassword(userId: string, dto: PasswordChangeDto) {
+    const user = await this.findById(userId)
+
+    if (user.password) {
+      if (!dto.oldPassword) {
+        throw new BadRequestException('Необходимо указать текущий пароль')
+      }
+
+      const isValidPassword = await verify(user.password, dto.oldPassword)
+      if (!isValidPassword) {
+        throw new BadRequestException('Текущий пароль указан неверно')
+      }
+    }
+
+    return this.prismaService.user.update({
+      where: { id: userId },
+      data: {
+        password: await hash(dto.newPassword)
+      }
+    })
+  }
+
+  async toggleTwoFactor(userId: string) {
+    const user = await this.findById(userId)
+
+    if (!user.isVerified && !user.isTwoFactorEnabled) {
+      throw new BadRequestException('Сначала подтвердите почту')
+    }
+
+    return this.prismaService.user.update({
+      where: { id: userId },
+      data: {
+        isTwoFactorEnabled: !user.isTwoFactorEnabled
+      }
+    })
   }
 }

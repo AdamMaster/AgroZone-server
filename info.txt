@@ -1,5 +1,3 @@
-https://youtu.be/O5Qry8cBhG4?t=19289
-
 вход в redis:
 docker exec -it dredis redis-cli -a pass123456
 
@@ -12,3 +10,5 @@ flushdb
 очистить все сессии:
 FLUSHDB
 
+imagekit.io
+opvkyp2pd

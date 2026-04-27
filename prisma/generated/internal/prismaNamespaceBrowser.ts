@@ -106,6 +106,7 @@ export type AccountScalarFieldEnum = (typeof AccountScalarFieldEnum)[keyof typeo
 
 export const TokenScalarFieldEnum = {
   id: 'id',
+  userId: 'userId',
   email: 'email',
   token: 'token',
   type: 'type',

@@ -14,7 +14,7 @@ export function ResetPasswordTemplate({ domain, token }: ResetPasswordTemplatePr
     <Tailwind>
       <Html>
         <Body className='text-black'>
-          <Heading>Сброс пароля</Heading>
+          <Heading as='h2'>Сброс пароля</Heading>
           <Text>
             Привет! Вы запросили сброс пароля. Пожалуйста, перейдите по следующей ссылке, чтобы создать новый пароль:
           </Text>

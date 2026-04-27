@@ -8,12 +8,13 @@ datasource db {
 }
 
 model User {
-  id String @id @default(uuid())
+  id       String  @id @default(uuid())
+  phone    String  @unique
+  password String?
 
-  email    String @unique
-  password String
+  email String? @unique
 
-  displayName String  @map("dispaly_name")
+  displayName String? @map("display_name")
   picture     String?
 
   role UserRole @default(REGULAR)
@@ -21,12 +22,16 @@ model User {
   isVerified         Boolean @default(false) @map("is_verified")
   isTwoFactorEnabled Boolean @default(false) @map("is_two_factor_enabled")
 
-  method AuthMethod
-
+  method   AuthMethod
   accounts Account[]
+
+  type     UserType @default(INDIVIDUAL)
+  bio      String?  @db.Text
+  location String?
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
+  tokens    Token[]
 
   @@map("users")
 }
@@ -53,6 +58,9 @@ model Account {
 model Token {
   id String @id @default(uuid())
 
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String? @map("user_id")
+
   email     String
   token     String    @unique
   type      TokenType
@@ -68,6 +76,11 @@ enum UserRole {
   ADMIN
 }
 
+enum UserType {
+  INDIVIDUAL
+  BUSINESS
+}
+
 enum AuthMethod {
   CREDENTIALS
   GOOGLE
@@ -78,4 +91,5 @@ enum TokenType {
   VERIFICATION
   TWO_FACTOR
   PASSWORD_RESET
+  EMAIL_CHANGE
 }

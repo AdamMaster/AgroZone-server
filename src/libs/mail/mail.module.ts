@@ -12,6 +12,7 @@ import { getMailerConfig } from '@/config/mailer.config'
       inject: [ConfigService]
     })
   ],
-  providers: [MailService]
+  providers: [MailService],
+  exports: [MailService]
 })
 export class MailModule {}

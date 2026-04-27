@@ -7,17 +7,15 @@ interface ConfirmationTemplateProps {
   token: string
 }
 
-export function ConfirmationTemplate({ domain, token }: ConfirmationTemplateProps) {
-  const confirmLink = `${domain}/new-verification?token=${token}`
+export function EmailChangeTemplate({ domain, token }: ConfirmationTemplateProps) {
+  const confirmLink = `${domain}/change-email?token=${token}`
 
   return (
     <Tailwind>
       <Html>
         <Body className='text-black'>
-          <Heading as='h2'>Подтверждение почты</Heading>
-          <Text>
-            Привет! Чтобы подтвердить свой адрес электронной почты, пожалуйста, перейдите по следующей ссылке:
-          </Text>
+          <Heading as='h2'>Подтверждение смены почты</Heading>
+          <Text>Привет! Чтобы сменить свой адрес электронной почты, пожалуйста, перейдите по следующей ссылке:</Text>
           <Link href={confirmLink}>Подтвердить почту</Link>
           <Text>
             Эта ссылка действительна в течение 1 часа. Если вы не запрашивали подтверждение, просто проигнорируйте это

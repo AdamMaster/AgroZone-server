@@ -168,13 +168,16 @@ export class AuthService {
       req.session.userId = user.id
       req.session.userRole = user.role
 
-      // ВАЖНО: Просто вызываем save, библиотека сама должна
-      // посчитать TTL на основе cookie.maxAge из main.ts
       req.session.save(err => {
         if (err) {
-          console.error('КРИТИЧЕСКАЯ ОШИБКА REDIS:', err)
-          return reject(new InternalServerErrorException())
+          console.error('SESSION SAVE ERROR:', err)
+          return reject(
+            new InternalServerErrorException(
+              'Не удалось сохранить сессию. Проверьте правильно ли настроены параметры сессии.'
+            )
+          )
         }
+
         resolve({ user })
       })
     })

@@ -11,9 +11,10 @@ export function TwoFactorAuthTemplate({ token }: TwoFactorAuthTemplateProps) {
     <Tailwind>
       <Html>
         <Body className='text-black'>
-          <Heading>Двухфакторная аутентификация</Heading>
-          <Text>
-            Ваш код двухфакторной аутентификации: <strong>{token}</strong>
+          <Heading as='h2'>Двухфакторная аутентификация</Heading>
+          <Text>Ваш код подтверждения:</Text>
+          <Text className='text-2xl py-3 px-4 rounded-md bg-gray-100 w-fit'>
+            <strong>{token}</strong>
           </Text>
           <Text>Пожалуйста, введите этот код в приложении для завершения процесса аутентификации.</Text>
           <Text>Если вы не запрашивали этот код, просто проигнорируйте это сообщение.</Text>
