@@ -21,6 +21,9 @@ import { LoginDto } from './dto/login.dto'
 import { Recaptcha } from '@nestlab/google-recaptcha'
 import { AuthProviderGuard } from './guards/provider.quard'
 import { CheckUserDto } from './dto/check-user.dto'
+import { VerifySmsDto } from './dto/verify-sms.dto'
+import { SmsRegisterDto } from './dto/sms-register.dto'
+import { SmsCompleteDto } from './dto/sms-complete.dto'
 
 @Controller('auth')
 export class AuthController {
@@ -30,10 +33,22 @@ export class AuthController {
     private readonly configService: ConfigService
   ) {}
 
-  @Post('check-user')
+  @Post('register/sms/start')
   @HttpCode(HttpStatus.OK)
-  async checkUser(@Body() dto: CheckUserDto) {
-    return this.authService.checkUser(dto)
+  async registerSmsStart(@Body() dto: SmsRegisterDto) {
+    return this.authService.registerSmsStart(dto)
+  }
+
+  @Post('register/sms/complete')
+  @HttpCode(HttpStatus.OK)
+  async registerSmsComplete(@Req() req: Request, @Body() dto: SmsCompleteDto) {
+    return this.authService.registerSmsComplete(req, dto)
+  }
+
+  @Post('verify-sms')
+  @HttpCode(HttpStatus.OK)
+  async verifySms(@Req() req: Request, @Body() dto: VerifySmsDto) {
+    return this.authService.verifySms(req, dto)
   }
 
   @Recaptcha()
@@ -41,6 +56,12 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   async register(@Req() req: Request, @Body() dto: RegisterDto) {
     return this.authService.register(dto)
+  }
+
+  @Post('check-user')
+  @HttpCode(HttpStatus.OK)
+  async checkUser(@Body() dto: CheckUserDto) {
+    return this.authService.checkUser(dto)
   }
 
   @Recaptcha()

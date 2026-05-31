@@ -223,7 +223,7 @@ export type TokenOrderByWithRelationInput = {
 
 export type TokenWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  phone_token_type?: Prisma.TokenPhoneTokenTypeCompoundUniqueInput
+  email_phone_token_type?: Prisma.TokenEmailPhoneTokenTypeCompoundUniqueInput
   AND?: Prisma.TokenWhereInput | Prisma.TokenWhereInput[]
   OR?: Prisma.TokenWhereInput[]
   NOT?: Prisma.TokenWhereInput | Prisma.TokenWhereInput[]
@@ -235,7 +235,7 @@ export type TokenWhereUniqueInput = Prisma.AtLeast<{
   expiresIn?: Prisma.DateTimeFilter<"Token"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"Token"> | Date | string
   user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
-}, "id" | "phone_token_type">
+}, "id" | "email_phone_token_type">
 
 export type TokenOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -351,7 +351,8 @@ export type TokenOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type TokenPhoneTokenTypeCompoundUniqueInput = {
+export type TokenEmailPhoneTokenTypeCompoundUniqueInput = {
+  email: string
   phone: string
   token: string
   type: $Enums.TokenType

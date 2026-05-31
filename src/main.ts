@@ -12,22 +12,21 @@ import { createClient } from 'redis'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
-
   const config = app.get(ConfigService)
-  const redis = new IORedis(config.getOrThrow('REDIS_URI'))
 
   const redisClient = createClient({ url: config.getOrThrow('REDIS_URI') })
   await redisClient.connect()
 
-  redis.on('connect', () => console.log('✅ Redis connected'))
-  redis.on('ready', () => console.log('✅ Redis ready'))
-  redis.on('error', err => console.error('❌ Redis error:', err))
+  redisClient.on('connect', () => console.log('✅ Redis connected'))
+  redisClient.on('error', err => console.error('❌ Redis error:', err))
 
   app.use(cookieParser(config.getOrThrow<string>('COOKIES_SECRET')))
 
   app.useGlobalPipes(
     new ValidationPipe({
-      transform: true
+      transform: true,
+      whitelist: true,
+      forbidNonWhitelisted: true
     })
   )
 
@@ -58,6 +57,8 @@ async function bootstrap() {
     credentials: true,
     exposedHeaders: ['set-cookie']
   })
+
+  app.enableShutdownHooks()
 
   await app.listen(config.getOrThrow<number>('APPLICATION_PORT'))
 }

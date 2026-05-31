@@ -15,15 +15,15 @@ export function ResetPasswordTemplate({ domain, token }: ResetPasswordTemplatePr
       <Html>
         <Body className='text-black'>
           <Heading as='h2'>Сброс пароля</Heading>
-          <Text>
-            Привет! Вы запросили сброс пароля. Пожалуйста, перейдите по следующей ссылке, чтобы создать новый пароль:
-          </Text>
-          <Link href={resetLink}>Подтвердить сброс пароля</Link>
-          <Text>
+          <Text>Пожалуйста, перейдите по следующей ссылке, чтобы создать новый пароль:</Text>
+          <Link className='px-3 py-1.5 block rounded-md text-white mb-8 bg-[#5ea500] w-fit' href={resetLink}>
+            Подтвердить сброс пароля
+          </Link>
+          <Text className='text-gray-500'>
             Эта ссылка действительна в течение 1 часа. Если вы не запрашивали подтверждение, просто проигнорируйте это
             сообщение.
           </Text>
-          <Text>Спасибо за использование нашего сервиса!</Text>
+          <Text className='text-gray-500'>Спасибо за использование нашего сервиса!</Text>
         </Body>
       </Html>
     </Tailwind>

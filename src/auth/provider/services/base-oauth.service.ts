@@ -72,9 +72,11 @@ export class BaseOAuthService {
       )
     }
 
+    const authHeader = this.options.name === 'yandex' ? `OAuth ${tokens.access_token}` : `Bearer ${tokens.access_token}`
+
     const userRequest = await fetch(this.options.profile_url, {
       headers: {
-        Authorization: `Bearer ${tokens.access_token}`
+        Authorization: this.options.name === 'yandex' ? `OAuth ${tokens.access_token}` : `Bearer ${tokens.access_token}`
       }
     })
 

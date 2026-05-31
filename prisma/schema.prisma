@@ -26,10 +26,10 @@ model User {
 
   method   AuthMethod
   accounts Account[]
+  tokens   Token[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
-  tokens    Token[]
 
   @@map("users")
 }
@@ -37,19 +37,21 @@ model User {
 model Account {
   id String @id @default(uuid())
 
-  type     String
-  provider String
+  type              String
+  provider          String
+  providerAccountId String @map("provider_account_id")
 
   refreshToken String? @map("refresh_token")
   accessToken  String? @map("access_token")
   expiresAt    Int     @map("expires_at")
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
   user   User?   @relation(fields: [userId], references: [id])
   userId String? @map("user_id")
 
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([provider, providerAccountId])
   @@map("accounts")
 }
 
@@ -67,7 +69,10 @@ model Token {
 
   createdAt DateTime @default(now()) @map("created_at")
 
-  @@unique([phone, token, type])
+  @@unique([email, phone, token, type])
+  @@index([phone, type])
+  @@index([userId])
+  @@index([token])
   @@map("tokens")
 }
 

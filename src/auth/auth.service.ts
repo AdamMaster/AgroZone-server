@@ -19,29 +19,75 @@ import { ConfigService } from '@nestjs/config'
 import { ProviderService } from './provider/provider.service'
 import { PrismaService } from '@/prisma/prisma.service'
 import { TwoFactorAuthService } from './two-factor-auth/two-factor-auth.service'
+import { VerifySmsDto } from './dto/verify-sms.dto'
+import { SmsRegisterDto } from './dto/sms-register.dto'
+import { SmsCompleteDto } from './dto/sms-complete.dto'
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly userService: UserService,
-    private readonly confiService: ConfigService,
+    private readonly configService: ConfigService,
     private readonly providerService: ProviderService,
     private readonly emailConfirmationService: EmailConfirmationService,
     private readonly twoFactorAuthService: TwoFactorAuthService
   ) {}
+
+  async registerSmsStart(dto: SmsRegisterDto) {
+    const isExists = await this.userService.findByPhone(dto.phone)
+
+    if (isExists) {
+      throw new ConflictException('Пользователь с таким номером телефона уже зарегистрирован.')
+    }
+
+    return await this.sendSmsCode(dto.phone)
+  }
+
+  async registerSmsComplete(req: Request, dto: SmsCompleteDto) {
+    const smsToken = await this.prismaService.token.findFirst({
+      where: {
+        phone: dto.phone,
+        token: dto.code,
+        type: 'SMS_VERIFICATION'
+      }
+    })
+
+    if (!smsToken) {
+      throw new BadRequestException('Неверный код подтверждения')
+    }
+
+    if (new Date() > smsToken.expiresIn) {
+      await this.prismaService.token.delete({ where: { id: smsToken.id } })
+      throw new BadRequestException('Срок действия кода истек. Запросите новый.')
+    }
+
+    const newUser = await this.userService.create(
+      null, // email
+      dto.password, // пароль
+      dto.name, // имя
+      dto.phone, // телефон
+      '', // picture
+      AuthMethod.CREDENTIALS,
+      true // isVerified сразу ставим true, так как код подошел
+    )
+
+    await this.prismaService.token.delete({ where: { id: smsToken.id } })
+
+    return this.saveSession(req, newUser)
+  }
 
   async register(dto: RegisterDto) {
     if (!dto.email && !dto.phone) {
       throw new BadRequestException('Укажите Email или номер телефона для регистрации')
     }
 
-    const isExists = await this.userService.findByEmail(dto.email)
+    const isExists = dto.email
+      ? await this.userService.findByEmail(dto.email)
+      : await this.userService.findByPhone(dto.phone!)
 
     if (isExists) {
-      throw new ConflictException(
-        'Регистрация не удалась. Пользователь с таким email уже существует. Пожалуйста, используйте другой email, или войдите в систему.'
-      )
+      throw new ConflictException(`Пользователь с таким ${dto.email ? 'email' : 'номером телефона'} уже существует.`)
     }
 
     const newUser = await this.userService.create(
@@ -73,9 +119,12 @@ export class AuthService {
   async sendSmsCode(phone: string) {
     const code = Math.floor(1000 + Math.random() * 9000).toString()
 
+    // Удаляем старые коды для этого номера
     await this.prismaService.token.deleteMany({
       where: { phone, type: 'SMS_VERIFICATION' }
     })
+
+    const user = await this.userService.findByPhone(phone)
 
     await this.prismaService.token.create({
       data: {
@@ -83,15 +132,55 @@ export class AuthService {
         token: code,
         type: 'SMS_VERIFICATION',
         expiresIn: new Date(Date.now() + 5 * 60 * 1000),
-        email: null
+        ...(user ? { user: { connect: { id: user.id } } } : {})
       }
     })
 
+    // Твой консоль-лог для дебага
     console.log(`\n--- [SMS.RU MOCK] ---`)
     console.log(`КОД ДЛЯ НОМЕРА ${phone}: ${code}`)
     console.log(`---------------------\n`)
 
     return { message: 'Код подтверждения отправлен на ваш телефон' }
+  }
+
+  async verifySms(req: Request, dto: VerifySmsDto) {
+    // 1. Ищем токен в базе
+    const smsToken = await this.prismaService.token.findFirst({
+      where: {
+        phone: dto.phone,
+        token: dto.code,
+        type: 'SMS_VERIFICATION'
+      }
+    })
+
+    if (!smsToken) {
+      throw new BadRequestException('Неверный код подтверждения или номер телефона')
+    }
+
+    // 2. Проверяем срок действия
+    if (new Date() > smsToken.expiresIn) {
+      await this.prismaService.token.delete({ where: { id: smsToken.id } })
+      throw new BadRequestException('Срок действия кода истек. Запросите новый.')
+    }
+
+    // 3. Ищем пользователя и обновляем его статус
+    const user = await this.userService.findByPhone(dto.phone)
+
+    if (!user) {
+      throw new NotFoundException('Пользователь с таким номером не найден')
+    }
+
+    await this.prismaService.user.update({
+      where: { id: user.id },
+      data: { isVerified: true }
+    })
+
+    // 4. Удаляем использованный токен
+    await this.prismaService.token.delete({ where: { id: smsToken.id } })
+
+    // 5. Логиним пользователя (сохраняем сессию)
+    return this.saveSession(req, user)
   }
 
   async checkUser(dto: { identifier: string }) {
@@ -116,10 +205,12 @@ export class AuthService {
     const providerInstance = this.providerService.findByService(provider)
     const profile = await providerInstance?.findUserByCode(code)
 
-    const account = await this.prismaService.account.findFirst({
+    const account = await this.prismaService.account.findUnique({
       where: {
-        id: profile?.id,
-        provider: profile?.provider
+        provider_providerAccountId: {
+          provider: profile?.provider ?? '',
+          providerAccountId: profile?.id ?? '' // Это ID из соцсети
+        }
       }
     })
 
@@ -130,13 +221,13 @@ export class AuthService {
     }
 
     if (user) {
-      // Если аккаунта еще не было (зашли через новую соцсеть с существующей почтой) - создаем связку
       if (!account) {
         await this.prismaService.account.create({
           data: {
             userId: user.id,
             type: 'oauth',
             provider: profile?.provider ?? '',
+            providerAccountId: profile?.id ?? '',
             accessToken: profile?.access_token,
             refreshToken: profile?.refresh_token ?? null,
             expiresAt: profile?.expires_at ?? 0
@@ -165,6 +256,7 @@ export class AuthService {
           userId: user.id,
           type: 'oauth',
           provider: profile?.provider ?? '',
+          providerAccountId: profile?.id ?? '', // <--- ДОБАВЬ ЭТУ СТРОКУ
           accessToken: profile?.access_token,
           refreshToken: profile?.refresh_token ?? null,
           expiresAt: profile?.expires_at ?? 0
@@ -225,7 +317,7 @@ export class AuthService {
           )
         }
 
-        res.clearCookie(this.confiService.getOrThrow<string>('SESSION_NAME'))
+        res.clearCookie(this.configService.getOrThrow<string>('SESSION_NAME'))
         resolve()
       })
     })

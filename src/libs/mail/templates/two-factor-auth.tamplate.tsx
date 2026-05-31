@@ -17,7 +17,7 @@ export function TwoFactorAuthTemplate({ token }: TwoFactorAuthTemplateProps) {
             <strong>{token}</strong>
           </Text>
           <Text>Пожалуйста, введите этот код в приложении для завершения процесса аутентификации.</Text>
-          <Text>Если вы не запрашивали этот код, просто проигнорируйте это сообщение.</Text>
+          <Text className='text-gray-500'>Если вы не запрашивали этот код, просто проигнорируйте это сообщение.</Text>
         </Body>
       </Html>
     </Tailwind>

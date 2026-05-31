@@ -15,15 +15,15 @@ export function ConfirmationTemplate({ domain, token }: ConfirmationTemplateProp
       <Html>
         <Body className='text-black'>
           <Heading as='h2'>Подтверждение почты</Heading>
-          <Text>
-            Привет! Чтобы подтвердить свой адрес электронной почты, пожалуйста, перейдите по следующей ссылке:
-          </Text>
-          <Link href={confirmLink}>Подтвердить почту</Link>
-          <Text>
+          <Text>Пожалуйста, перейдите по следующей ссылке, чтобы подтвердить адрес электронной почты:</Text>
+          <Link className='px-3 py-1.5 block rounded-md text-white mb-8 bg-[#5ea500] w-fit' href={confirmLink}>
+            Подтвердить почту
+          </Link>
+          <Text className='text-gray-500'>
             Эта ссылка действительна в течение 1 часа. Если вы не запрашивали подтверждение, просто проигнорируйте это
             сообщение.
           </Text>
-          <Text>Спасибо за использование нашего сервиса!</Text>
+          <Text className='text-gray-500'>Спасибо за использование нашего сервиса!</Text>
         </Body>
       </Html>
     </Tailwind>
