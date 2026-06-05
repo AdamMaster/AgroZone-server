@@ -52,3 +52,13 @@ export type Account = Prisma.AccountModel
  * 
  */
 export type Token = Prisma.TokenModel
+/**
+ * Model Category
+ * 
+ */
+export type Category = Prisma.CategoryModel
+/**
+ * Model Ad
+ * 
+ */
+export type Ad = Prisma.AdModel

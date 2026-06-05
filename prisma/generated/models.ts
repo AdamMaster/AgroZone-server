@@ -11,4 +11,6 @@
 export type * from './models/User'
 export type * from './models/Account'
 export type * from './models/Token'
+export type * from './models/Category'
+export type * from './models/Ad'
 export type * from './commonInputTypes'

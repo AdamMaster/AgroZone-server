@@ -30,6 +30,7 @@ model User {
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
+  ads       Ad[]
 
   @@map("users")
 }
@@ -69,11 +70,46 @@ model Token {
 
   createdAt DateTime @default(now()) @map("created_at")
 
-  @@unique([email, phone, token, type])
+  @@unique([token, type])
   @@index([phone, type])
   @@index([userId])
   @@index([token])
   @@map("tokens")
+}
+
+model Category {
+  id       String     @id @default(uuid())
+  name     String
+  parentId String?    @map("parent_id")
+  parent   Category?  @relation("CategoryToCategory", fields: [parentId], references: [id], onDelete: Cascade)
+  children Category[] @relation("CategoryToCategory")
+
+  ads Ad[]
+
+  @@map("categories")
+}
+
+model Ad {
+  id          String   @id @default(uuid())
+  title       String
+  description String   @db.Text
+  price       Float
+  unit        String   @default("pcs")
+  location    String?
+  images      String[]
+
+  userId String? @map("user_id")
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  categoryId String   @map("category_id")
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  features Json @default("{}")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("ads")
 }
 
 enum UserRole {
@@ -98,4 +134,5 @@ enum TokenType {
   PASSWORD_RESET
   EMAIL_CHANGE
   SMS_VERIFICATION
+  PHONE_CHANGE
 }

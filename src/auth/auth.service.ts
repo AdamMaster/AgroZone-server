@@ -158,13 +158,11 @@ export class AuthService {
       throw new BadRequestException('Неверный код подтверждения или номер телефона')
     }
 
-    // 2. Проверяем срок действия
     if (new Date() > smsToken.expiresIn) {
       await this.prismaService.token.delete({ where: { id: smsToken.id } })
       throw new BadRequestException('Срок действия кода истек. Запросите новый.')
     }
 
-    // 3. Ищем пользователя и обновляем его статус
     const user = await this.userService.findByPhone(dto.phone)
 
     if (!user) {
@@ -176,11 +174,30 @@ export class AuthService {
       data: { isVerified: true }
     })
 
-    // 4. Удаляем использованный токен
     await this.prismaService.token.delete({ where: { id: smsToken.id } })
 
-    // 5. Логиним пользователя (сохраняем сессию)
     return this.saveSession(req, user)
+  }
+
+  async checkRegisterCode(dto: { phone: string; code: string }) {
+    const smsToken = await this.prismaService.token.findFirst({
+      where: {
+        phone: dto.phone,
+        token: dto.code,
+        type: 'SMS_VERIFICATION'
+      }
+    })
+
+    if (!smsToken) {
+      throw new BadRequestException('Неверный код подтверждения')
+    }
+
+    if (new Date() > smsToken.expiresIn) {
+      await this.prismaService.token.delete({ where: { id: smsToken.id } })
+      throw new BadRequestException('Срок действия кода истек. Запросите новый.')
+    }
+
+    return { success: true }
   }
 
   async checkUser(dto: { identifier: string }) {
@@ -268,11 +285,21 @@ export class AuthService {
   }
 
   async login(req: Request, dto: LoginDto) {
-    const user = dto.email
-      ? await this.userService.findByEmail(dto.email)
-      : dto.phone
-        ? await this.userService.findByPhone(dto.phone)
-        : null
+    const isEmail = dto.login.includes('@')
+    let user: User | null = null
+
+    if (isEmail) {
+      user = await this.userService.findByEmail(dto.login)
+    } else {
+      // Очищаем телефон от пробелов, тире и скобок, оставляя только цифры
+      let phone = dto.login.replace(/\D/g, '')
+
+      if (phone.length === 11 && phone.startsWith('8')) {
+        phone = '7' + phone.slice(1)
+      }
+
+      user = await this.userService.findByPhone(phone)
+    }
 
     if (!user || !user.password) {
       throw new NotFoundException('Пользователь не найден. Пожалуйста, проверьте введенные данные.')
@@ -288,7 +315,7 @@ export class AuthService {
 
     if (!user.isVerified && user.email) {
       await this.emailConfirmationService.sendVerificationToken(user.email)
-      throw new UnauthorizedException('Ваш email не подтвержден. Пожалуйста,проверьте вашу почту и подтвердите адрес.')
+      throw new UnauthorizedException('Ваш email не подтвержден. Пожалуйста, проверьте вашу почту и подтвердите адрес.')
     }
 
     if (user.isTwoFactorEnabled && user.email) {

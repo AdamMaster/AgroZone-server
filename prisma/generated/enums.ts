@@ -39,7 +39,8 @@ export const TokenType = {
   TWO_FACTOR: 'TWO_FACTOR',
   PASSWORD_RESET: 'PASSWORD_RESET',
   EMAIL_CHANGE: 'EMAIL_CHANGE',
-  SMS_VERIFICATION: 'SMS_VERIFICATION'
+  SMS_VERIFICATION: 'SMS_VERIFICATION',
+  PHONE_CHANGE: 'PHONE_CHANGE'
 } as const
 
 export type TokenType = (typeof TokenType)[keyof typeof TokenType]

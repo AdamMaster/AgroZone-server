@@ -11,6 +11,9 @@ import { PasswordRecoveryModule } from './auth/password-recovery/password-recove
 import { TwoFactorAuthModule } from './auth/two-factor-auth/two-factor-auth.module'
 import { EmailChangeModule } from './auth/email-change/email-change.module'
 import { FileModule } from './file/file.module'
+import { ThrottlerModule } from '@nestjs/throttler'
+import { CategoriesModule } from './categories/categories.module';
+import { AdsModule } from './ads/ads.module';
 
 @Module({
   imports: [
@@ -27,7 +30,15 @@ import { FileModule } from './file/file.module'
     PasswordRecoveryModule,
     TwoFactorAuthModule,
     EmailChangeModule,
-    FileModule
+    FileModule,
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60000, // Время в миллисекундах (1 минута)
+        limit: 3 // Максимум 3 запроса за эту минуту
+      }
+    ]),
+    CategoriesModule,
+    AdsModule
   ]
 })
 export class AppModule {}

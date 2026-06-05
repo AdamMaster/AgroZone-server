@@ -51,6 +51,12 @@ export class AuthController {
     return this.authService.verifySms(req, dto)
   }
 
+  @HttpCode(HttpStatus.OK)
+  @Post('register/check-code')
+  async checkRegisterCode(@Body() dto: VerifySmsDto) {
+    return this.authService.checkRegisterCode(dto)
+  }
+
   @Recaptcha()
   @Post('register')
   @HttpCode(HttpStatus.OK)

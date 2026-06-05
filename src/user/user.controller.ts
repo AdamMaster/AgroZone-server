@@ -9,8 +9,10 @@ import {
   Param,
   ParseFilePipe,
   Patch,
+  Post,
   UploadedFile,
-  UseInterceptors
+  UseInterceptors,
+  UseGuards
 } from '@nestjs/common'
 import { UserService } from './user.service'
 import { Authorized } from '@/auth/decorators/authorized.decorator'
@@ -20,6 +22,9 @@ import { UpdateUserDto } from './dto/update-user.dto'
 import { FileService } from '@/file/file.service'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { PasswordChangeDto } from './dto/password-change.dto'
+import { PhoneChangeDto } from './dto/phone-change.dto'
+import { ConfirmPhoneChangeDto } from './dto/confirm-phone-change.dto'
+import { ThrottlerGuard } from '@nestjs/throttler'
 
 @Controller('users')
 export class UserController {
@@ -82,5 +87,20 @@ export class UserController {
   @Authorization() // Твой декоратор для защиты роута
   async toggleTwoFactor(@Authorized('id') userId: string) {
     return this.userService.toggleTwoFactor(userId)
+  }
+
+  @Authorization()
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(ThrottlerGuard)
+  @Post('profile/change-phone/request')
+  async requestPhoneChange(@Authorized('id') userId: string, @Body() dto: PhoneChangeDto) {
+    return this.userService.requestPhoneChange(userId, dto.newPhone)
+  }
+
+  @Authorization()
+  @HttpCode(HttpStatus.OK)
+  @Patch('profile/change-phone/confirm')
+  async confirmPhoneChange(@Authorized('id') userId: string, @Body() dto: ConfirmPhoneChangeDto) {
+    return this.userService.confirmPhoneChange(userId, dto.code)
   }
 }
