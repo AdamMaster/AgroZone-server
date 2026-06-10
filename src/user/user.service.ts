@@ -4,10 +4,17 @@ import { hash, verify } from 'argon2'
 import { AuthMethod } from 'prisma/generated/enums'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { PasswordChangeDto } from './dto/password-change.dto'
+import { ConfigService } from '@nestjs/config'
+import { FileService } from '../file/file.service'
+import { AD_LIMITS } from '@/ads/constants/ads.constants'
 
 @Injectable()
 export class UserService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly fileService: FileService,
+    private readonly configService: ConfigService
+  ) {}
 
   async findById(id: string) {
     const user = await this.prismaService.user.findUnique({
@@ -24,6 +31,15 @@ export class UserService {
     }
 
     return user
+  }
+
+  async getProfileForClient(userId: string) {
+    const user = await this.findById(userId)
+
+    return {
+      ...user,
+      maxUploadLimit: user.role === 'PREMIUM' ? AD_LIMITS.PREMIUM : AD_LIMITS.REGULAR
+    }
   }
 
   async findByPhone(phone: string) {
@@ -98,14 +114,29 @@ export class UserService {
   }
 
   async updateAvatar(userId: string, fileName: string) {
-    await this.findById(userId)
+    const user = await this.findById(userId)
 
+    // 2. Если у пользователя уже была старая аватарка, удаляем её из S3
+    if (user && user.picture) {
+      try {
+        const bucketName = this.configService.getOrThrow<string>('S3_BUCKET_NAME')
+        const fileId = user.picture.split(`${bucketName}/`)[1]
+
+        if (fileId) {
+          await this.fileService.deleteFile(fileId)
+        }
+      } catch (error) {
+        console.error('Не удалось удалить старую аватарку из S3:', error)
+      }
+    }
+
+    // 3. Обновляем поле picture новой ссылкой
     return this.prismaService.user.update({
       where: {
         id: userId
       },
       data: {
-        picture: fileName
+        picture: fileName // Сюда прилетит uploadResult.url из контроллера
       }
     })
   }

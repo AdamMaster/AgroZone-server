@@ -37,7 +37,7 @@ export class UserController {
   @HttpCode(HttpStatus.OK)
   @Get('profile')
   async findProfile(@Authorized('id') userId: string) {
-    return this.userService.findById(userId)
+    return this.userService.getProfileForClient(userId)
   }
 
   @Authorization(UserRole.ADMIN)
@@ -68,7 +68,7 @@ export class UserController {
         ]
       })
     )
-    file: any
+    file: Express.Multer.File
   ) {
     const uploadResult = await this.fileService.uploadFile(file, 'avatars')
 

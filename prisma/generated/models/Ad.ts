@@ -28,10 +28,14 @@ export type AggregateAd = {
 
 export type AdAvgAggregateOutputType = {
   price: number | null
+  lat: number | null
+  lng: number | null
 }
 
 export type AdSumAggregateOutputType = {
   price: number | null
+  lat: number | null
+  lng: number | null
 }
 
 export type AdMinAggregateOutputType = {
@@ -40,9 +44,13 @@ export type AdMinAggregateOutputType = {
   description: string | null
   price: number | null
   unit: string | null
-  location: string | null
+  address: string | null
+  lat: number | null
+  lng: number | null
   userId: string | null
   categoryId: string | null
+  status: $Enums.AdStatus | null
+  rejectionReason: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -53,9 +61,13 @@ export type AdMaxAggregateOutputType = {
   description: string | null
   price: number | null
   unit: string | null
-  location: string | null
+  address: string | null
+  lat: number | null
+  lng: number | null
   userId: string | null
   categoryId: string | null
+  status: $Enums.AdStatus | null
+  rejectionReason: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -66,11 +78,15 @@ export type AdCountAggregateOutputType = {
   description: number
   price: number
   unit: number
-  location: number
   images: number
+  address: number
+  lat: number
+  lng: number
   userId: number
   categoryId: number
   features: number
+  status: number
+  rejectionReason: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -79,10 +95,14 @@ export type AdCountAggregateOutputType = {
 
 export type AdAvgAggregateInputType = {
   price?: true
+  lat?: true
+  lng?: true
 }
 
 export type AdSumAggregateInputType = {
   price?: true
+  lat?: true
+  lng?: true
 }
 
 export type AdMinAggregateInputType = {
@@ -91,9 +111,13 @@ export type AdMinAggregateInputType = {
   description?: true
   price?: true
   unit?: true
-  location?: true
+  address?: true
+  lat?: true
+  lng?: true
   userId?: true
   categoryId?: true
+  status?: true
+  rejectionReason?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -104,9 +128,13 @@ export type AdMaxAggregateInputType = {
   description?: true
   price?: true
   unit?: true
-  location?: true
+  address?: true
+  lat?: true
+  lng?: true
   userId?: true
   categoryId?: true
+  status?: true
+  rejectionReason?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -117,11 +145,15 @@ export type AdCountAggregateInputType = {
   description?: true
   price?: true
   unit?: true
-  location?: true
   images?: true
+  address?: true
+  lat?: true
+  lng?: true
   userId?: true
   categoryId?: true
   features?: true
+  status?: true
+  rejectionReason?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -217,13 +249,17 @@ export type AdGroupByOutputType = {
   id: string
   title: string
   description: string
-  price: number
+  price: number | null
   unit: string
-  location: string | null
   images: string[]
+  address: string
+  lat: number
+  lng: number
   userId: string | null
   categoryId: string
   features: runtime.JsonValue
+  status: $Enums.AdStatus
+  rejectionReason: string | null
   createdAt: Date
   updatedAt: Date
   _count: AdCountAggregateOutputType | null
@@ -255,13 +291,17 @@ export type AdWhereInput = {
   id?: Prisma.StringFilter<"Ad"> | string
   title?: Prisma.StringFilter<"Ad"> | string
   description?: Prisma.StringFilter<"Ad"> | string
-  price?: Prisma.FloatFilter<"Ad"> | number
+  price?: Prisma.FloatNullableFilter<"Ad"> | number | null
   unit?: Prisma.StringFilter<"Ad"> | string
-  location?: Prisma.StringNullableFilter<"Ad"> | string | null
   images?: Prisma.StringNullableListFilter<"Ad">
+  address?: Prisma.StringFilter<"Ad"> | string
+  lat?: Prisma.FloatFilter<"Ad"> | number
+  lng?: Prisma.FloatFilter<"Ad"> | number
   userId?: Prisma.StringNullableFilter<"Ad"> | string | null
   categoryId?: Prisma.StringFilter<"Ad"> | string
   features?: Prisma.JsonFilter<"Ad">
+  status?: Prisma.EnumAdStatusFilter<"Ad"> | $Enums.AdStatus
+  rejectionReason?: Prisma.StringNullableFilter<"Ad"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Ad"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Ad"> | Date | string
   user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
@@ -272,13 +312,17 @@ export type AdOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  price?: Prisma.SortOrder
+  price?: Prisma.SortOrderInput | Prisma.SortOrder
   unit?: Prisma.SortOrder
-  location?: Prisma.SortOrderInput | Prisma.SortOrder
   images?: Prisma.SortOrder
+  address?: Prisma.SortOrder
+  lat?: Prisma.SortOrder
+  lng?: Prisma.SortOrder
   userId?: Prisma.SortOrderInput | Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   features?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  rejectionReason?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
@@ -292,13 +336,17 @@ export type AdWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.AdWhereInput | Prisma.AdWhereInput[]
   title?: Prisma.StringFilter<"Ad"> | string
   description?: Prisma.StringFilter<"Ad"> | string
-  price?: Prisma.FloatFilter<"Ad"> | number
+  price?: Prisma.FloatNullableFilter<"Ad"> | number | null
   unit?: Prisma.StringFilter<"Ad"> | string
-  location?: Prisma.StringNullableFilter<"Ad"> | string | null
   images?: Prisma.StringNullableListFilter<"Ad">
+  address?: Prisma.StringFilter<"Ad"> | string
+  lat?: Prisma.FloatFilter<"Ad"> | number
+  lng?: Prisma.FloatFilter<"Ad"> | number
   userId?: Prisma.StringNullableFilter<"Ad"> | string | null
   categoryId?: Prisma.StringFilter<"Ad"> | string
   features?: Prisma.JsonFilter<"Ad">
+  status?: Prisma.EnumAdStatusFilter<"Ad"> | $Enums.AdStatus
+  rejectionReason?: Prisma.StringNullableFilter<"Ad"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Ad"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Ad"> | Date | string
   user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
@@ -309,13 +357,17 @@ export type AdOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  price?: Prisma.SortOrder
+  price?: Prisma.SortOrderInput | Prisma.SortOrder
   unit?: Prisma.SortOrder
-  location?: Prisma.SortOrderInput | Prisma.SortOrder
   images?: Prisma.SortOrder
+  address?: Prisma.SortOrder
+  lat?: Prisma.SortOrder
+  lng?: Prisma.SortOrder
   userId?: Prisma.SortOrderInput | Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   features?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  rejectionReason?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.AdCountOrderByAggregateInput
@@ -332,13 +384,17 @@ export type AdScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Ad"> | string
   title?: Prisma.StringWithAggregatesFilter<"Ad"> | string
   description?: Prisma.StringWithAggregatesFilter<"Ad"> | string
-  price?: Prisma.FloatWithAggregatesFilter<"Ad"> | number
+  price?: Prisma.FloatNullableWithAggregatesFilter<"Ad"> | number | null
   unit?: Prisma.StringWithAggregatesFilter<"Ad"> | string
-  location?: Prisma.StringNullableWithAggregatesFilter<"Ad"> | string | null
   images?: Prisma.StringNullableListFilter<"Ad">
+  address?: Prisma.StringWithAggregatesFilter<"Ad"> | string
+  lat?: Prisma.FloatWithAggregatesFilter<"Ad"> | number
+  lng?: Prisma.FloatWithAggregatesFilter<"Ad"> | number
   userId?: Prisma.StringNullableWithAggregatesFilter<"Ad"> | string | null
   categoryId?: Prisma.StringWithAggregatesFilter<"Ad"> | string
   features?: Prisma.JsonWithAggregatesFilter<"Ad">
+  status?: Prisma.EnumAdStatusWithAggregatesFilter<"Ad"> | $Enums.AdStatus
+  rejectionReason?: Prisma.StringNullableWithAggregatesFilter<"Ad"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Ad"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Ad"> | Date | string
 }
@@ -347,11 +403,15 @@ export type AdCreateInput = {
   id?: string
   title: string
   description: string
-  price: number
+  price?: number | null
   unit?: string
-  location?: string | null
   images?: Prisma.AdCreateimagesInput | string[]
+  address: string
+  lat: number
+  lng: number
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  status?: $Enums.AdStatus
+  rejectionReason?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user?: Prisma.UserCreateNestedOneWithoutAdsInput
@@ -362,13 +422,17 @@ export type AdUncheckedCreateInput = {
   id?: string
   title: string
   description: string
-  price: number
+  price?: number | null
   unit?: string
-  location?: string | null
   images?: Prisma.AdCreateimagesInput | string[]
+  address: string
+  lat: number
+  lng: number
   userId?: string | null
   categoryId: string
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  status?: $Enums.AdStatus
+  rejectionReason?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -377,11 +441,15 @@ export type AdUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  price?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   unit?: Prisma.StringFieldUpdateOperationsInput | string
-  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   images?: Prisma.AdUpdateimagesInput | string[]
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  lat?: Prisma.FloatFieldUpdateOperationsInput | number
+  lng?: Prisma.FloatFieldUpdateOperationsInput | number
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  status?: Prisma.EnumAdStatusFieldUpdateOperationsInput | $Enums.AdStatus
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneWithoutAdsNestedInput
@@ -392,13 +460,17 @@ export type AdUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  price?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   unit?: Prisma.StringFieldUpdateOperationsInput | string
-  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   images?: Prisma.AdUpdateimagesInput | string[]
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  lat?: Prisma.FloatFieldUpdateOperationsInput | number
+  lng?: Prisma.FloatFieldUpdateOperationsInput | number
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  status?: Prisma.EnumAdStatusFieldUpdateOperationsInput | $Enums.AdStatus
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -407,13 +479,17 @@ export type AdCreateManyInput = {
   id?: string
   title: string
   description: string
-  price: number
+  price?: number | null
   unit?: string
-  location?: string | null
   images?: Prisma.AdCreateimagesInput | string[]
+  address: string
+  lat: number
+  lng: number
   userId?: string | null
   categoryId: string
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  status?: $Enums.AdStatus
+  rejectionReason?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -422,11 +498,15 @@ export type AdUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  price?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   unit?: Prisma.StringFieldUpdateOperationsInput | string
-  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   images?: Prisma.AdUpdateimagesInput | string[]
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  lat?: Prisma.FloatFieldUpdateOperationsInput | number
+  lng?: Prisma.FloatFieldUpdateOperationsInput | number
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  status?: Prisma.EnumAdStatusFieldUpdateOperationsInput | $Enums.AdStatus
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -435,13 +515,17 @@ export type AdUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  price?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   unit?: Prisma.StringFieldUpdateOperationsInput | string
-  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   images?: Prisma.AdUpdateimagesInput | string[]
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  lat?: Prisma.FloatFieldUpdateOperationsInput | number
+  lng?: Prisma.FloatFieldUpdateOperationsInput | number
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  status?: Prisma.EnumAdStatusFieldUpdateOperationsInput | $Enums.AdStatus
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -470,17 +554,23 @@ export type AdCountOrderByAggregateInput = {
   description?: Prisma.SortOrder
   price?: Prisma.SortOrder
   unit?: Prisma.SortOrder
-  location?: Prisma.SortOrder
   images?: Prisma.SortOrder
+  address?: Prisma.SortOrder
+  lat?: Prisma.SortOrder
+  lng?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   features?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  rejectionReason?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type AdAvgOrderByAggregateInput = {
   price?: Prisma.SortOrder
+  lat?: Prisma.SortOrder
+  lng?: Prisma.SortOrder
 }
 
 export type AdMaxOrderByAggregateInput = {
@@ -489,9 +579,13 @@ export type AdMaxOrderByAggregateInput = {
   description?: Prisma.SortOrder
   price?: Prisma.SortOrder
   unit?: Prisma.SortOrder
-  location?: Prisma.SortOrder
+  address?: Prisma.SortOrder
+  lat?: Prisma.SortOrder
+  lng?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  rejectionReason?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -502,15 +596,21 @@ export type AdMinOrderByAggregateInput = {
   description?: Prisma.SortOrder
   price?: Prisma.SortOrder
   unit?: Prisma.SortOrder
-  location?: Prisma.SortOrder
+  address?: Prisma.SortOrder
+  lat?: Prisma.SortOrder
+  lng?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  rejectionReason?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type AdSumOrderByAggregateInput = {
   price?: Prisma.SortOrder
+  lat?: Prisma.SortOrder
+  lng?: Prisma.SortOrder
 }
 
 export type AdCreateNestedManyWithoutUserInput = {
@@ -601,8 +701,8 @@ export type AdCreateimagesInput = {
   set: string[]
 }
 
-export type FloatFieldUpdateOperationsInput = {
-  set?: number
+export type NullableFloatFieldUpdateOperationsInput = {
+  set?: number | null
   increment?: number
   decrement?: number
   multiply?: number
@@ -614,15 +714,31 @@ export type AdUpdateimagesInput = {
   push?: string | string[]
 }
 
+export type FloatFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
+export type EnumAdStatusFieldUpdateOperationsInput = {
+  set?: $Enums.AdStatus
+}
+
 export type AdCreateWithoutUserInput = {
   id?: string
   title: string
   description: string
-  price: number
+  price?: number | null
   unit?: string
-  location?: string | null
   images?: Prisma.AdCreateimagesInput | string[]
+  address: string
+  lat: number
+  lng: number
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  status?: $Enums.AdStatus
+  rejectionReason?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   category: Prisma.CategoryCreateNestedOneWithoutAdsInput
@@ -632,12 +748,16 @@ export type AdUncheckedCreateWithoutUserInput = {
   id?: string
   title: string
   description: string
-  price: number
+  price?: number | null
   unit?: string
-  location?: string | null
   images?: Prisma.AdCreateimagesInput | string[]
+  address: string
+  lat: number
+  lng: number
   categoryId: string
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  status?: $Enums.AdStatus
+  rejectionReason?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -675,13 +795,17 @@ export type AdScalarWhereInput = {
   id?: Prisma.StringFilter<"Ad"> | string
   title?: Prisma.StringFilter<"Ad"> | string
   description?: Prisma.StringFilter<"Ad"> | string
-  price?: Prisma.FloatFilter<"Ad"> | number
+  price?: Prisma.FloatNullableFilter<"Ad"> | number | null
   unit?: Prisma.StringFilter<"Ad"> | string
-  location?: Prisma.StringNullableFilter<"Ad"> | string | null
   images?: Prisma.StringNullableListFilter<"Ad">
+  address?: Prisma.StringFilter<"Ad"> | string
+  lat?: Prisma.FloatFilter<"Ad"> | number
+  lng?: Prisma.FloatFilter<"Ad"> | number
   userId?: Prisma.StringNullableFilter<"Ad"> | string | null
   categoryId?: Prisma.StringFilter<"Ad"> | string
   features?: Prisma.JsonFilter<"Ad">
+  status?: Prisma.EnumAdStatusFilter<"Ad"> | $Enums.AdStatus
+  rejectionReason?: Prisma.StringNullableFilter<"Ad"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Ad"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Ad"> | Date | string
 }
@@ -690,11 +814,15 @@ export type AdCreateWithoutCategoryInput = {
   id?: string
   title: string
   description: string
-  price: number
+  price?: number | null
   unit?: string
-  location?: string | null
   images?: Prisma.AdCreateimagesInput | string[]
+  address: string
+  lat: number
+  lng: number
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  status?: $Enums.AdStatus
+  rejectionReason?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user?: Prisma.UserCreateNestedOneWithoutAdsInput
@@ -704,12 +832,16 @@ export type AdUncheckedCreateWithoutCategoryInput = {
   id?: string
   title: string
   description: string
-  price: number
+  price?: number | null
   unit?: string
-  location?: string | null
   images?: Prisma.AdCreateimagesInput | string[]
+  address: string
+  lat: number
+  lng: number
   userId?: string | null
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  status?: $Enums.AdStatus
+  rejectionReason?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -744,12 +876,16 @@ export type AdCreateManyUserInput = {
   id?: string
   title: string
   description: string
-  price: number
+  price?: number | null
   unit?: string
-  location?: string | null
   images?: Prisma.AdCreateimagesInput | string[]
+  address: string
+  lat: number
+  lng: number
   categoryId: string
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  status?: $Enums.AdStatus
+  rejectionReason?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -758,11 +894,15 @@ export type AdUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  price?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   unit?: Prisma.StringFieldUpdateOperationsInput | string
-  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   images?: Prisma.AdUpdateimagesInput | string[]
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  lat?: Prisma.FloatFieldUpdateOperationsInput | number
+  lng?: Prisma.FloatFieldUpdateOperationsInput | number
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  status?: Prisma.EnumAdStatusFieldUpdateOperationsInput | $Enums.AdStatus
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   category?: Prisma.CategoryUpdateOneRequiredWithoutAdsNestedInput
@@ -772,12 +912,16 @@ export type AdUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  price?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   unit?: Prisma.StringFieldUpdateOperationsInput | string
-  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   images?: Prisma.AdUpdateimagesInput | string[]
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  lat?: Prisma.FloatFieldUpdateOperationsInput | number
+  lng?: Prisma.FloatFieldUpdateOperationsInput | number
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  status?: Prisma.EnumAdStatusFieldUpdateOperationsInput | $Enums.AdStatus
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -786,12 +930,16 @@ export type AdUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  price?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   unit?: Prisma.StringFieldUpdateOperationsInput | string
-  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   images?: Prisma.AdUpdateimagesInput | string[]
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  lat?: Prisma.FloatFieldUpdateOperationsInput | number
+  lng?: Prisma.FloatFieldUpdateOperationsInput | number
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  status?: Prisma.EnumAdStatusFieldUpdateOperationsInput | $Enums.AdStatus
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -800,12 +948,16 @@ export type AdCreateManyCategoryInput = {
   id?: string
   title: string
   description: string
-  price: number
+  price?: number | null
   unit?: string
-  location?: string | null
   images?: Prisma.AdCreateimagesInput | string[]
+  address: string
+  lat: number
+  lng: number
   userId?: string | null
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  status?: $Enums.AdStatus
+  rejectionReason?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -814,11 +966,15 @@ export type AdUpdateWithoutCategoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  price?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   unit?: Prisma.StringFieldUpdateOperationsInput | string
-  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   images?: Prisma.AdUpdateimagesInput | string[]
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  lat?: Prisma.FloatFieldUpdateOperationsInput | number
+  lng?: Prisma.FloatFieldUpdateOperationsInput | number
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  status?: Prisma.EnumAdStatusFieldUpdateOperationsInput | $Enums.AdStatus
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneWithoutAdsNestedInput
@@ -828,12 +984,16 @@ export type AdUncheckedUpdateWithoutCategoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  price?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   unit?: Prisma.StringFieldUpdateOperationsInput | string
-  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   images?: Prisma.AdUpdateimagesInput | string[]
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  lat?: Prisma.FloatFieldUpdateOperationsInput | number
+  lng?: Prisma.FloatFieldUpdateOperationsInput | number
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  status?: Prisma.EnumAdStatusFieldUpdateOperationsInput | $Enums.AdStatus
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -842,12 +1002,16 @@ export type AdUncheckedUpdateManyWithoutCategoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  price?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   unit?: Prisma.StringFieldUpdateOperationsInput | string
-  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   images?: Prisma.AdUpdateimagesInput | string[]
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  lat?: Prisma.FloatFieldUpdateOperationsInput | number
+  lng?: Prisma.FloatFieldUpdateOperationsInput | number
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  status?: Prisma.EnumAdStatusFieldUpdateOperationsInput | $Enums.AdStatus
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -860,11 +1024,15 @@ export type AdSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = run
   description?: boolean
   price?: boolean
   unit?: boolean
-  location?: boolean
   images?: boolean
+  address?: boolean
+  lat?: boolean
+  lng?: boolean
   userId?: boolean
   categoryId?: boolean
   features?: boolean
+  status?: boolean
+  rejectionReason?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.Ad$userArgs<ExtArgs>
@@ -877,11 +1045,15 @@ export type AdSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions
   description?: boolean
   price?: boolean
   unit?: boolean
-  location?: boolean
   images?: boolean
+  address?: boolean
+  lat?: boolean
+  lng?: boolean
   userId?: boolean
   categoryId?: boolean
   features?: boolean
+  status?: boolean
+  rejectionReason?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.Ad$userArgs<ExtArgs>
@@ -894,11 +1066,15 @@ export type AdSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions
   description?: boolean
   price?: boolean
   unit?: boolean
-  location?: boolean
   images?: boolean
+  address?: boolean
+  lat?: boolean
+  lng?: boolean
   userId?: boolean
   categoryId?: boolean
   features?: boolean
+  status?: boolean
+  rejectionReason?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.Ad$userArgs<ExtArgs>
@@ -911,16 +1087,20 @@ export type AdSelectScalar = {
   description?: boolean
   price?: boolean
   unit?: boolean
-  location?: boolean
   images?: boolean
+  address?: boolean
+  lat?: boolean
+  lng?: boolean
   userId?: boolean
   categoryId?: boolean
   features?: boolean
+  status?: boolean
+  rejectionReason?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type AdOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "price" | "unit" | "location" | "images" | "userId" | "categoryId" | "features" | "createdAt" | "updatedAt", ExtArgs["result"]["ad"]>
+export type AdOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "price" | "unit" | "images" | "address" | "lat" | "lng" | "userId" | "categoryId" | "features" | "status" | "rejectionReason" | "createdAt" | "updatedAt", ExtArgs["result"]["ad"]>
 export type AdInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.Ad$userArgs<ExtArgs>
   category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>
@@ -944,13 +1124,17 @@ export type $AdPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
     id: string
     title: string
     description: string
-    price: number
+    price: number | null
     unit: string
-    location: string | null
     images: string[]
+    address: string
+    lat: number
+    lng: number
     userId: string | null
     categoryId: string
     features: runtime.JsonValue
+    status: $Enums.AdStatus
+    rejectionReason: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["ad"]>
@@ -1383,11 +1567,15 @@ export interface AdFieldRefs {
   readonly description: Prisma.FieldRef<"Ad", 'String'>
   readonly price: Prisma.FieldRef<"Ad", 'Float'>
   readonly unit: Prisma.FieldRef<"Ad", 'String'>
-  readonly location: Prisma.FieldRef<"Ad", 'String'>
   readonly images: Prisma.FieldRef<"Ad", 'String[]'>
+  readonly address: Prisma.FieldRef<"Ad", 'String'>
+  readonly lat: Prisma.FieldRef<"Ad", 'Float'>
+  readonly lng: Prisma.FieldRef<"Ad", 'Float'>
   readonly userId: Prisma.FieldRef<"Ad", 'String'>
   readonly categoryId: Prisma.FieldRef<"Ad", 'String'>
   readonly features: Prisma.FieldRef<"Ad", 'Json'>
+  readonly status: Prisma.FieldRef<"Ad", 'AdStatus'>
+  readonly rejectionReason: Prisma.FieldRef<"Ad", 'String'>
   readonly createdAt: Prisma.FieldRef<"Ad", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Ad", 'DateTime'>
 }

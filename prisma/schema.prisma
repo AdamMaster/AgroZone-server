@@ -84,6 +84,8 @@ model Category {
   parent   Category?  @relation("CategoryToCategory", fields: [parentId], references: [id], onDelete: Cascade)
   children Category[] @relation("CategoryToCategory")
 
+  availableFeatures Json? @map("available_features")
+
   ads Ad[]
 
   @@map("categories")
@@ -93,10 +95,12 @@ model Ad {
   id          String   @id @default(uuid())
   title       String
   description String   @db.Text
-  price       Float
+  price       Int?
   unit        String   @default("pcs")
-  location    String?
   images      String[]
+  address     String
+  lat         Float
+  lng         Float
 
   userId String? @map("user_id")
   user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -106,15 +110,23 @@ model Ad {
 
   features Json @default("{}")
 
+  status AdStatus @default(PENDING)
+
+  rejectionReason String? @map("rejection_reason")
+
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
+  @@index([status])
+  @@index([userId])
+  @@index([categoryId])
   @@map("ads")
 }
 
 enum UserRole {
   REGULAR
   ADMIN
+  PREMIUM
 }
 
 enum UserType {
@@ -135,4 +147,12 @@ enum TokenType {
   EMAIL_CHANGE
   SMS_VERIFICATION
   PHONE_CHANGE
+}
+
+enum AdStatus {
+  DRAFT
+  PENDING
+  PUBLISHED
+  REJECTED
+  ARCHIVED
 }

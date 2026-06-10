@@ -11,7 +11,8 @@
 
 export const UserRole = {
   REGULAR: 'REGULAR',
-  ADMIN: 'ADMIN'
+  ADMIN: 'ADMIN',
+  PREMIUM: 'PREMIUM'
 } as const
 
 export type UserRole = (typeof UserRole)[keyof typeof UserRole]
@@ -44,3 +45,14 @@ export const TokenType = {
 } as const
 
 export type TokenType = (typeof TokenType)[keyof typeof TokenType]
+
+
+export const AdStatus = {
+  DRAFT: 'DRAFT',
+  PENDING: 'PENDING',
+  PUBLISHED: 'PUBLISHED',
+  REJECTED: 'REJECTED',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type AdStatus = (typeof AdStatus)[keyof typeof AdStatus]

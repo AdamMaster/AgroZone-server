@@ -128,7 +128,8 @@ export type TokenScalarFieldEnum = (typeof TokenScalarFieldEnum)[keyof typeof To
 export const CategoryScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  parentId: 'parentId'
+  parentId: 'parentId',
+  availableFeatures: 'availableFeatures'
 } as const
 
 export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum]
@@ -140,11 +141,15 @@ export const AdScalarFieldEnum = {
   description: 'description',
   price: 'price',
   unit: 'unit',
-  location: 'location',
   images: 'images',
+  address: 'address',
+  lat: 'lat',
+  lng: 'lng',
   userId: 'userId',
   categoryId: 'categoryId',
   features: 'features',
+  status: 'status',
+  rejectionReason: 'rejectionReason',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -158,6 +163,14 @@ export const SortOrder = {
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const JsonNullValueInput = {

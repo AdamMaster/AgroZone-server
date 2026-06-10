@@ -1,78 +1,65 @@
 import { PrismaClient } from './generated/client'
 import { PrismaPg } from '@prisma/adapter-pg'
 import { Pool } from 'pg'
+import { CATEGORIES_DATA } from './data/categories'
 
 const pool = new Pool({ connectionString: process.env.POSTGRES_URI })
 const adapter = new PrismaPg(pool)
 const prisma = new PrismaClient({ adapter })
 
-interface CategoryInput {
+// Типы оставляем как есть
+type FeatureInput = {
   name: string
-  children?: { name: string }[]
+  label: string
+  type: 'text' | 'number' | 'select' | 'boolean'
+  options?: string[]
+  required: boolean
 }
 
-const categoriesData: CategoryInput[] = [
-  {
-    name: 'Сельскохозяйственная техника, оборудование и запчасти',
-    children: [
-      { name: 'Агродроны (беспилотные летательные аппараты)' },
-      { name: 'Комбайны (зерноуборочные, кормоуборочные, картофелеуборочные и др.)' },
-      { name: 'Запчасти, комплектующие, расходные материалы' },
-      { name: 'Оборудование для полива, орошения и поливомоечные машины' },
-      { name: 'Почвообрабатывающая техника и оборудование' },
-      { name: 'Посевная и посадочная техника' },
-      { name: 'Тракторы (гусеничные, колесные, мини-тракторы)' }
-    ]
-  },
-  {
-    name: 'Сельскохозяйственная продукция и сырье',
-    children: [
-      { name: 'Зерновые, зернобобовые и масличные культуры' },
-      { name: 'Животные и птица (живок)' },
-      { name: 'Овощи, фрукты, ягоды, грибы, орехи свежие' },
-      { name: 'Семена, саженцы, посадочный материал' }
-    ]
-  }
-]
+type CategoryInput = {
+  name: string
+  children?: CategoryInput[]
+  features?: FeatureInput[]
+}
 
-async function main(): Promise<void> {
-  console.log('Начало заполнения базы данных категориями (TS)...')
+// Рекурсивная функция — это самый чистый способ
+async function createCategory(data: CategoryInput, parentId: string | null = null) {
+  // Создаем категорию
+  const category = await prisma.category.create({
+    data: {
+      name: data.name,
+      parentId: parentId,
+      // Сохраняем features как JSON в поле availableFeatures
+      availableFeatures: data.features ? JSON.parse(JSON.stringify(data.features)) : null
+    }
+  })
 
-  // Очищаем старые категории, чтобы не было дублей
-  await prisma.category.deleteMany()
-
-  for (const parentCat of categoriesData) {
-    // Создаем главную категорию
-    const createdParent = await prisma.category.create({
-      data: {
-        name: parentCat.name
-      }
-    })
-
-    console.log(`Создана главная категория: ${createdParent.name}`)
-
-    // Создаем вложенные подкатегории
-    if (parentCat.children && parentCat.children.length > 0) {
-      for (const childCat of parentCat.children) {
-        await prisma.category.create({
-          data: {
-            name: childCat.name,
-            parentId: createdParent.id
-          }
-        })
-      }
+  // Рекурсивно создаем детей
+  if (data.children && data.children.length > 0) {
+    for (const child of data.children) {
+      await createCategory(child, category.id)
     }
   }
+}
 
-  console.log('Заполнение успешно завершено!')
+async function main(): Promise<void> {
+  console.log('Начало заполнения базы данных категориями...')
+
+  await prisma.category.deleteMany()
+
+  for (const rootCategory of CATEGORIES_DATA) {
+    await createCategory(rootCategory)
+    console.log(`Создана ветка: ${rootCategory.name}`)
+  }
+
+  console.log('Импорт успешно завершен!')
 }
 
 main()
-  .catch((e: unknown) => {
-    console.error('Ошибка при заполнении БД:', e)
+  .catch(e => {
+    console.error(e)
     process.exit(1)
   })
   .finally(async () => {
     await prisma.$disconnect()
-    await pool.end()
   })

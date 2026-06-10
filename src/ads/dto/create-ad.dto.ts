@@ -1,4 +1,6 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator'
+import { IsNotEmpty, IsNumber, IsObject, IsOptional, IsString, IsArray } from 'class-validator'
+import { Transform } from 'class-transformer'
+import { Prisma } from 'prisma/generated/client'
 
 export class CreateAdDto {
   @IsString()
@@ -9,10 +11,34 @@ export class CreateAdDto {
   @IsNotEmpty()
   description!: string
 
+  @Transform(({ value }) => Number(value))
   @IsNumber()
-  price!: number
+  @IsOptional()
+  price?: number
+
+  @IsArray()
+  @IsString({ each: true })
+  @IsOptional()
+  images?: string[]
+
+  @IsString()
+  @IsNotEmpty()
+  address!: string
+
+  @Transform(({ value }) => Number(value))
+  @IsNumber()
+  lat!: number
+
+  @Transform(({ value }) => Number(value))
+  @IsNumber()
+  lng!: number
 
   @IsString()
   @IsNotEmpty()
   categoryId!: string
+
+  @Transform(({ value }) => (typeof value === 'string' ? JSON.parse(value) : value))
+  @IsObject()
+  @IsOptional()
+  features?: Record<string, unknown>
 }
