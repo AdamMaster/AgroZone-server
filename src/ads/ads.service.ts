@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common'
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
 import { PrismaService } from '@/prisma/prisma.service'
 import { FileService } from '../file/file.service'
 import { ConfigService } from '@nestjs/config'
@@ -90,15 +90,47 @@ export class AdsService {
   }
 
   async findOne(id: string) {
-    return this.prisma.ad.findFirst({
+    const ad = await this.prisma.ad.findFirst({
       where: {
         id,
         status: AdStatus.PUBLISHED
       },
       include: {
+        category: true,
+        user: {
+          select: {
+            id: true,
+            name: true,
+            avatar: true,
+            createdAt: true
+          }
+        }
+      }
+    })
+
+    if (!ad) {
+      throw new NotFoundException('Объявление не найдено')
+    }
+
+    return ad
+  }
+
+  async findOneForOwner(id: string, userId: string) {
+    const ad = await this.prisma.ad.findFirst({
+      where: {
+        id,
+        userId
+      },
+      include: {
         category: true
       }
     })
+
+    if (!ad) {
+      throw new NotFoundException('Объявление не найдено')
+    }
+
+    return ad
   }
 
   private async deleteImagesFromS3(imageUrls: string[]) {
@@ -121,8 +153,8 @@ export class AdsService {
 
     let images = ad.images
 
-    if (updateAdDto.images) {
-      const remainingImages = updateAdDto.images
+    if (updateAdDto.existingImages) {
+      const remainingImages = updateAdDto.existingImages
 
       const imagesToDelete = ad.images.filter(url => !remainingImages.includes(url))
 
@@ -139,13 +171,18 @@ export class AdsService {
       images = [...images, ...uploadResults.map(r => r.url)]
     }
 
+    const { existingImages, ...rest } = updateAdDto
+
+    const data: Prisma.AdUpdateInput = {
+      ...rest,
+      images,
+      status: AdStatus.PENDING,
+      features: updateAdDto.features !== undefined ? (updateAdDto.features as Prisma.InputJsonValue) : undefined
+    }
+
     return this.prisma.ad.update({
       where: { id },
-      data: {
-        ...updateAdDto,
-        images,
-        status: AdStatus.PENDING
-      }
+      data
     })
   }
 

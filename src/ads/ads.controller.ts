@@ -6,12 +6,13 @@ import { Request } from 'express'
 import { UseInterceptors, UploadedFiles } from '@nestjs/common'
 import { FilesInterceptor } from '@nestjs/platform-express'
 import 'multer'
-import { AD_LIMITS } from './constants/ads.constants'
+import { AD_LIMITS, AD_MAX_FILE_SIZE } from './constants/ads.constants'
 import { ModerateAdDto } from './dto/moderation-ad.dto'
 import { Roles } from '../auth/decorators/roles.decorator'
 import { RolesGuard } from '../auth/guards/roles.guard'
 import { UserRole } from 'prisma/generated/enums'
 import { UpdateAdDto } from './dto/update-ad.dto'
+import { CurrentUser } from '@/auth/decorators/decorators/user.decorator'
 
 @Controller('ads')
 export class AdsController {
@@ -19,7 +20,13 @@ export class AdsController {
 
   @Post()
   @UseGuards(AuthGuard)
-  @UseInterceptors(FilesInterceptor('images', AD_LIMITS.PREMIUM))
+  @UseInterceptors(
+    FilesInterceptor('images', AD_LIMITS.PREMIUM, {
+      limits: {
+        fileSize: AD_MAX_FILE_SIZE
+      }
+    })
+  )
   create(@Body() createAdDto: CreateAdDto, @Req() req: Request, @UploadedFiles() files: Express.Multer.File[]) {
     const userId = req.user.id
 
@@ -64,6 +71,12 @@ export class AdsController {
     return await this.adsService.getAddressFromCoords(lat, lon)
   }
 
+  @Get('my/:id')
+  @UseGuards(AuthGuard)
+  findOneForOwner(@Param('id') id: string, @Req() req: Request) {
+    return this.adsService.findOneForOwner(id, req.user.id)
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.adsService.findOne(id)
@@ -71,7 +84,13 @@ export class AdsController {
 
   @Patch(':id')
   @UseGuards(AuthGuard)
-  @UseInterceptors(FilesInterceptor('images', AD_LIMITS.PREMIUM))
+  @UseInterceptors(
+    FilesInterceptor('images', AD_LIMITS.PREMIUM, {
+      limits: {
+        fileSize: AD_MAX_FILE_SIZE
+      }
+    })
+  )
   update(
     @Param('id') id: string,
     @Body() updateAdDto: UpdateAdDto,
