@@ -150,6 +150,8 @@ export const AdScalarFieldEnum = {
   features: 'features',
   status: 'status',
   rejectionReason: 'rejectionReason',
+  expiresAt: 'expiresAt',
+  publishedAt: 'publishedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

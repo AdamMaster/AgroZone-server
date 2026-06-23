@@ -16,7 +16,7 @@ export function ResetPasswordTemplate({ domain, token }: ResetPasswordTemplatePr
         <Body className='text-black'>
           <Heading as='h2'>Сброс пароля</Heading>
           <Text>Пожалуйста, перейдите по следующей ссылке, чтобы создать новый пароль:</Text>
-          <Link className='px-3 py-1.5 block rounded-md text-white mb-8 bg-[#5ea500] w-fit' href={resetLink}>
+          <Link className='px-3 py-1.5 block rounded-lg text-white mb-8 bg-[#5ea500] w-fit' href={resetLink}>
             Подтвердить сброс пароля
           </Link>
           <Text className='text-gray-500'>

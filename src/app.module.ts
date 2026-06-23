@@ -12,8 +12,10 @@ import { TwoFactorAuthModule } from './auth/two-factor-auth/two-factor-auth.modu
 import { EmailChangeModule } from './auth/email-change/email-change.module'
 import { FileModule } from './file/file.module'
 import { ThrottlerModule } from '@nestjs/throttler'
-import { CategoriesModule } from './categories/categories.module';
-import { AdsModule } from './ads/ads.module';
+import { CategoriesModule } from './categories/categories.module'
+import { AdsModule } from './ads/ads.module'
+import { BullModule } from '@nestjs/bullmq'
+import { ScheduleModule } from '@nestjs/schedule'
 
 @Module({
   imports: [
@@ -22,23 +24,34 @@ import { AdsModule } from './ads/ads.module';
       isGlobal: true
     }),
     PrismaModule,
-    AuthModule,
-    UserModule,
-    ProviderModule,
-    MailModule,
-    EmailConfirmationModule,
-    PasswordRecoveryModule,
-    TwoFactorAuthModule,
-    EmailChangeModule,
-    FileModule,
+
+    BullModule.forRoot({
+      connection: {
+        host: 'localhost',
+        port: 6379,
+        password: process.env.REDIS_PASSWORD
+      }
+    }),
+    ScheduleModule.forRoot(),
     ThrottlerModule.forRoot([
       {
         ttl: 60000, // Время в миллисекундах (1 минута)
         limit: 3 // Максимум 3 запроса за эту минуту
       }
     ]),
+
+    AuthModule,
+    UserModule,
+    ProviderModule,
+    EmailConfirmationModule,
+    PasswordRecoveryModule,
+    TwoFactorAuthModule,
+    EmailChangeModule,
+
     CategoriesModule,
-    AdsModule
+    AdsModule,
+    FileModule,
+    MailModule
   ]
 })
 export class AppModule {}

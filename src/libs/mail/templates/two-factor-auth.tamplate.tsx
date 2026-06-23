@@ -13,7 +13,7 @@ export function TwoFactorAuthTemplate({ token }: TwoFactorAuthTemplateProps) {
         <Body className='text-black'>
           <Heading as='h2'>Двухфакторная аутентификация</Heading>
           <Text>Ваш код подтверждения:</Text>
-          <Text className='text-2xl py-3 px-4 rounded-md bg-gray-100 w-fit'>
+          <Text className='text-2xl py-3 px-4lg bg-gray-100 w-fit'>
             <strong>{token}</strong>
           </Text>
           <Text>Пожалуйста, введите этот код в приложении для завершения процесса аутентификации.</Text>

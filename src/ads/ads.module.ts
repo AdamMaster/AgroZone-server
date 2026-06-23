@@ -4,10 +4,19 @@ import { AdsController } from './ads.controller'
 import { PrismaService } from '@/prisma/prisma.service'
 import { UserModule } from '@/user/user.module'
 import { FileModule } from '../file/file.module'
+import { AdStateMachineService } from './ad-state-machine.service'
+import { BullModule } from '@nestjs/bullmq'
+import { AdsExpirationWorker } from './workers/ads-expiration.worker'
 
 @Module({
-  imports: [UserModule, FileModule],
+  imports: [
+    UserModule,
+    FileModule,
+    BullModule.registerQueue({
+      name: 'ads'
+    })
+  ],
   controllers: [AdsController],
-  providers: [AdsService, PrismaService]
+  providers: [AdsService, PrismaService, AdStateMachineService, AdsExpirationWorker]
 })
 export class AdsModule {}

@@ -52,7 +52,8 @@ export const AdStatus = {
   PENDING: 'PENDING',
   PUBLISHED: 'PUBLISHED',
   REJECTED: 'REJECTED',
-  ARCHIVED: 'ARCHIVED'
+  ARCHIVED: 'ARCHIVED',
+  EXPIRED: 'EXPIRED'
 } as const
 
 export type AdStatus = (typeof AdStatus)[keyof typeof AdStatus]
