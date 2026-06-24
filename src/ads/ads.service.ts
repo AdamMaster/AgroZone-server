@@ -20,28 +20,22 @@ export class AdsService {
     private readonly adStateMachine: AdStateMachineService
   ) {}
 
-  async create(createAdDto: CreateAdDto, userId: string, files: Express.Multer.File[]) {
-    const user = await this.prisma.user.findUnique({
-      where: { id: userId },
-      select: { role: true }
-    })
+  async create(
+    createAdDto: CreateAdDto,
+    userId: string,
+    files: Express.Multer.File[],
+    status: AdStatus = AdStatus.PENDING
+  ) {
+    await this.validateFileLimits(userId, files)
 
-    const maxFiles = user?.role === 'PREMIUM' ? AD_LIMITS.PREMIUM : AD_LIMITS.REGULAR
-
-    if ((files?.length ?? 0) > maxFiles) {
-      throw new BadRequestException(`Вы можете загрузить не более ${maxFiles} фото`)
-    }
-
-    const images = files?.length
-      ? (await Promise.all(files.map(f => this.fileService.uploadFile(f, 'ads')))).map(r => r.url)
-      : []
+    const images = await this.prepareImages(null, [], files)
 
     return this.prisma.ad.create({
       data: {
         ...createAdDto,
         images,
         userId,
-        status: AdStatus.PENDING,
+        status,
         features: (createAdDto.features ?? {}) as Prisma.InputJsonValue
       }
     })
@@ -142,6 +136,31 @@ export class AdsService {
     return ad
   }
 
+  private async getUserAdOrThrow(id: string, userId: string) {
+    const ad = await this.prisma.ad.findFirst({
+      where: { id, userId }
+    })
+
+    if (!ad) {
+      throw new NotFoundException('Объявление не найдено')
+    }
+
+    return ad
+  }
+
+  private async validateFileLimits(userId: string, files: Express.Multer.File[]) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: { role: true }
+    })
+
+    const maxFiles = user?.role === 'PREMIUM' ? AD_LIMITS.PREMIUM : AD_LIMITS.REGULAR
+
+    if ((files?.length ?? 0) > maxFiles) {
+      throw new BadRequestException(`Вы можете загрузить не более ${maxFiles} фото`)
+    }
+  }
+
   private async deleteImagesFromS3(imageUrls: string[]) {
     const bucketName = this.configService.getOrThrow<string>('S3_BUCKET_NAME')
     const deletePromises = imageUrls.map(url => {
@@ -151,13 +170,32 @@ export class AdsService {
     await Promise.all(deletePromises)
   }
 
+  private async prepareImages(
+    ad: { images: string[] } | null,
+    existingImages: string[],
+    newFiles: Express.Multer.File[]
+  ): Promise<string[]> {
+    let images = ad?.images || []
+
+    // Удаление старых
+    const toDelete = images.filter(img => !existingImages.includes(img))
+    if (toDelete.length) await this.deleteImagesFromS3(toDelete)
+
+    images = existingImages
+
+    // Загрузка новых
+    if (newFiles?.length) {
+      const uploaded = await Promise.all(newFiles.map(f => this.fileService.uploadFile(f, 'ads')))
+      images = [...images, ...uploaded.map(r => r.url)]
+    }
+    return images
+  }
+
   async update(id: string, updateAdDto: UpdateAdDto, userId: string, files?: Express.Multer.File[]) {
-    const ad = await this.prisma.ad.findFirst({
-      where: { id, userId }
-    })
+    const ad = await this.getUserAdOrThrow(id, userId)
 
     if (!ad) {
-      throw new BadRequestException('Объявление не найдено')
+      throw new NotFoundException('Объявление не найдено')
     }
 
     let images = ad.images
@@ -219,7 +257,7 @@ export class AdsService {
     const ad = await this.prisma.ad.findUnique({ where: { id } })
 
     if (!ad) {
-      throw new BadRequestException('Объявление не найдено')
+      throw new NotFoundException('Объявление не найдено')
     }
 
     const now = new Date()
@@ -241,8 +279,8 @@ export class AdsService {
   }
 
   async republish(id: string, userId: string, updateDto?: UpdateAdDto) {
-    const ad = await this.prisma.ad.findFirst({ where: { id, userId } })
-    if (!ad) throw new BadRequestException('Объявление не найдено')
+    const ad = await this.getUserAdOrThrow(id, userId)
+    if (!ad) throw new NotFoundException('Объявление не найдено')
 
     const hasChanges =
       updateDto &&
@@ -276,7 +314,7 @@ export class AdsService {
     })
 
     if (!ad) {
-      throw new BadRequestException('Объявление не найдено')
+      throw new NotFoundException('Объявление не найдено')
     }
 
     if (ad.status === AdStatus.REJECTED) {
@@ -326,12 +364,10 @@ export class AdsService {
   }
 
   async archive(id: string, userId: string) {
-    const ad = await this.prisma.ad.findFirst({
-      where: { id, userId }
-    })
+    const ad = await this.getUserAdOrThrow(id, userId)
 
     if (!ad) {
-      throw new BadRequestException('Объявление не найдено')
+      throw new NotFoundException('Объявление не найдено')
     }
 
     const status = this.adStateMachine.transition(ad.status, 'ARCHIVE')
@@ -343,8 +379,8 @@ export class AdsService {
   }
 
   async activate(id: string, userId: string) {
-    const ad = await this.prisma.ad.findFirst({ where: { id, userId } })
-    if (!ad) throw new BadRequestException('Объявление не найдено')
+    const ad = await this.getUserAdOrThrow(id, userId)
+    if (!ad) throw new NotFoundException('Объявление не найдено')
 
     const nextStatus = this.adStateMachine.transition(ad.status, 'ACTIVATE')
 
@@ -355,31 +391,74 @@ export class AdsService {
   }
 
   async draft(id: string, userId: string) {
-    const ad = await this.prisma.ad.findFirst({
-      where: { id, userId }
-    })
-
-    if (!ad) {
-      throw new BadRequestException('Объявление не найдено')
-    }
+    const ad = await this.getUserAdOrThrow(id, userId)
+    if (!ad) throw new NotFoundException('Объявление не найдено')
 
     const status = this.adStateMachine.transition(ad.status, 'DRAFT')
 
     return this.prisma.ad.update({
       where: { id },
       data: {
-        status
+        status,
+        rejectionReason: null // Очищаем причину, так как статус изменился
+      }
+    })
+  }
+
+  async saveDraft(
+    userId: string,
+    createAdDto: CreateAdDto & { existingImages?: string[] },
+    files: Express.Multer.File[],
+    id?: string
+  ) {
+    await this.validateFileLimits(userId, files)
+    const { existingImages, features, lat, lng, price, ...rest } = createAdDto
+
+    // Безопасно приводим к числам, чтобы Prisma не ругалась
+    const parsedLat = lat ? Number(lat) : 0
+    const parsedLng = lng ? Number(lng) : 0
+    const parsedPrice = price ? Number(price) : undefined
+
+    if (id) {
+      const ad = await this.getUserAdOrThrow(id, userId)
+      const images = await this.prepareImages(ad, existingImages || [], files)
+
+      return this.prisma.ad.update({
+        where: { id },
+        data: {
+          ...rest,
+          lat: parsedLat,
+          lng: parsedLng,
+          price: parsedPrice,
+          images,
+          status: AdStatus.DRAFT,
+          rejectionReason: null,
+          features: features ? (features as Prisma.InputJsonValue) : {}
+        }
+      })
+    }
+
+    const images = await this.prepareImages(null, [], files)
+
+    return this.prisma.ad.create({
+      data: {
+        ...rest,
+        lat: parsedLat,
+        lng: parsedLng,
+        price: parsedPrice,
+        images,
+        userId,
+        status: AdStatus.DRAFT,
+        features: features ? (features as Prisma.InputJsonValue) : {}
       }
     })
   }
 
   async publishDraft(id: string, userId: string) {
-    const ad = await this.prisma.ad.findFirst({
-      where: { id, userId }
-    })
+    const ad = await this.getUserAdOrThrow(id, userId)
 
     if (!ad) {
-      throw new BadRequestException('Объявление не найдено')
+      throw new NotFoundException('Объявление не найдено')
     }
 
     const status = this.adStateMachine.transition(ad.status, 'PUBLISH')
@@ -394,12 +473,10 @@ export class AdsService {
   }
 
   async remove(id: string, userId: string) {
-    const ad = await this.prisma.ad.findFirst({
-      where: { id, userId }
-    })
+    const ad = await this.getUserAdOrThrow(id, userId)
 
     if (!ad) {
-      throw new BadRequestException('Объявление не найдено')
+      throw new NotFoundException('Объявление не найдено')
     }
 
     if (ad.images?.length) {

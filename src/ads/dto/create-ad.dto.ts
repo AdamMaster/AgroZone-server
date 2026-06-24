@@ -21,6 +21,15 @@ export class CreateAdDto {
   @IsOptional()
   images?: string[]
 
+  @IsOptional()
+  @Transform(({ value }) => {
+    if (Array.isArray(value)) return value
+    return value ? [value] : []
+  })
+  @IsArray()
+  @IsString({ each: true })
+  existingImages?: string[]
+
   @IsString()
   @IsNotEmpty()
   address!: string

@@ -11,28 +11,34 @@ export class AdStateMachineService {
       ACTIVATE: AdStatus.PENDING
     },
 
+    // Разрешаем возвращаться в черновик из PENDING или REJECTED,
+    // если пользователь решил доработать объявление
     PENDING: {
       PUBLISH: AdStatus.PUBLISHED,
       REJECT: AdStatus.REJECTED,
-      ARCHIVE: AdStatus.ARCHIVED
+      ARCHIVE: AdStatus.ARCHIVED,
+      DRAFT: AdStatus.DRAFT // <--- Добавляем это
+    },
+
+    REJECTED: {
+      ACTIVATE: AdStatus.PENDING,
+      DRAFT: AdStatus.DRAFT // <--- И это (если отклонили, уходим в черновик исправлять)
     },
 
     PUBLISHED: {
       ARCHIVE: AdStatus.ARCHIVED
+      // PUBLISHED обычно не уходит в DRAFT, так как оно уже "в эфире"
     },
 
     ARCHIVED: {
       ACTIVATE: AdStatus.PENDING,
-      PUBLISH: AdStatus.PENDING
-    },
-
-    REJECTED: {
-      ACTIVATE: AdStatus.PENDING
+      PUBLISH: AdStatus.PENDING,
+      DRAFT: AdStatus.DRAFT // <--- Из архива тоже можно вернуть в черновик
     },
 
     EXPIRED: {
-      // обычно только реактивация
-      ACTIVATE: AdStatus.PENDING
+      ACTIVATE: AdStatus.PENDING,
+      DRAFT: AdStatus.DRAFT
     }
   }
 

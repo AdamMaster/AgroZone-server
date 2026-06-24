@@ -36,18 +36,16 @@ export class AdsController {
   @Post()
   @UseGuards(AuthGuard)
   @UseInterceptors(
-    FilesInterceptor('images', AD_LIMITS.PREMIUM, {
-      limits: {
-        fileSize: AD_MAX_FILE_SIZE
-      }
+    FilesInterceptor('files', AD_LIMITS.PREMIUM, {
+      limits: { fileSize: AD_MAX_FILE_SIZE }
     })
   )
-  create(
+  async create(
     @Body() createAdDto: CreateAdDto,
     @CurrentUser('id') userId: string,
     @UploadedFiles() files: Express.Multer.File[]
   ) {
-    return this.adsService.create(createAdDto, userId, files)
+    return this.adsService.create(createAdDto, userId, files) // <-- И передаваться первым аргументом в сервис
   }
 
   @Get()
@@ -137,6 +135,25 @@ export class AdsController {
   async republish(@Param('id') id: string, @CurrentUser('id') userId: string, @Body() updateDto: UpdateAdDto) {
     const data = Object.keys(updateDto).length > 0 ? updateDto : undefined
     return this.adsService.republish(id, userId, data)
+  }
+
+  @Post('draft')
+  @UseGuards(AuthGuard)
+  @UseInterceptors(
+    FilesInterceptor('files', AD_LIMITS.PREMIUM, {
+      limits: { fileSize: AD_MAX_FILE_SIZE }
+    })
+  )
+  async saveDraft(
+    @Body() createAdDto: CreateAdDto & { existingImages?: string[] | string },
+    @CurrentUser('id') userId: string,
+    @UploadedFiles() files: Express.Multer.File[],
+    @Query('id') id?: string
+  ) {
+    const existingImages =
+      typeof createAdDto.existingImages === 'string' ? [createAdDto.existingImages] : createAdDto.existingImages
+
+    return this.adsService.saveDraft(userId, { ...createAdDto, existingImages }, files, id)
   }
 
   @Patch(':id/draft')
