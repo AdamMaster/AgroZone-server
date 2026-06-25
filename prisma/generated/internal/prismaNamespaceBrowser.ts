@@ -55,7 +55,8 @@ export const ModelName = {
   Account: 'Account',
   Token: 'Token',
   Category: 'Category',
-  Ad: 'Ad'
+  Ad: 'Ad',
+  Favorite: 'Favorite'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -128,6 +129,7 @@ export type TokenScalarFieldEnum = (typeof TokenScalarFieldEnum)[keyof typeof To
 export const CategoryScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  slug: 'slug',
   parentId: 'parentId',
   availableFeatures: 'availableFeatures'
 } as const
@@ -143,11 +145,11 @@ export const AdScalarFieldEnum = {
   unit: 'unit',
   images: 'images',
   address: 'address',
+  features: 'features',
   lat: 'lat',
   lng: 'lng',
   userId: 'userId',
   categoryId: 'categoryId',
-  features: 'features',
   status: 'status',
   rejectionReason: 'rejectionReason',
   expiresAt: 'expiresAt',
@@ -157,6 +159,16 @@ export const AdScalarFieldEnum = {
 } as const
 
 export type AdScalarFieldEnum = (typeof AdScalarFieldEnum)[keyof typeof AdScalarFieldEnum]
+
+
+export const FavoriteScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  adId: 'adId',
+  createdAt: 'createdAt'
+} as const
+
+export type FavoriteScalarFieldEnum = (typeof FavoriteScalarFieldEnum)[keyof typeof FavoriteScalarFieldEnum]
 
 
 export const SortOrder = {

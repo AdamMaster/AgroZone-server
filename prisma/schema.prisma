@@ -28,9 +28,11 @@ model User {
   accounts Account[]
   tokens   Token[]
 
+  ads       Ad[]
+  favorites Favorite[]
+
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
-  ads       Ad[]
 
   @@map("users")
 }
@@ -80,6 +82,7 @@ model Token {
 model Category {
   id       String     @id @default(uuid())
   name     String
+  slug     String     @unique
   parentId String?    @map("parent_id")
   parent   Category?  @relation("CategoryToCategory", fields: [parentId], references: [id], onDelete: Cascade)
   children Category[] @relation("CategoryToCategory")
@@ -106,8 +109,9 @@ model Ad {
   userId String @map("user_id")
   user   User?  @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  categoryId String   @map("category_id")
-  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId String     @map("category_id")
+  category   Category   @relation(fields: [categoryId], references: [id])
+  favorites  Favorite[]
 
   status AdStatus @default(PENDING)
 
@@ -123,6 +127,23 @@ model Ad {
   @@index([userId])
   @@index([categoryId])
   @@map("ads")
+}
+
+model Favorite {
+  id String @id @default(uuid())
+
+  userId String @map("user_id")
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  adId String @map("ad_id")
+  ad   Ad     @relation(fields: [adId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@unique([userId, adId]) // Ограничение: юзер не может добавить одно объявление дважды
+  @@index([userId])
+  @@index([adId])
+  @@map("favorites")
 }
 
 enum UserRole {

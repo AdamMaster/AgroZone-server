@@ -9,11 +9,12 @@ import {
   Query,
   UseGuards,
   Req,
-  UnauthorizedException
+  UnauthorizedException,
+  ParseUUIDPipe
 } from '@nestjs/common'
 import { AdsService } from './ads.service'
 import { CreateAdDto } from './dto/create-ad.dto'
-import { AuthGuard } from '../auth/guards/auth.guard'
+import { AuthGuard, OptionalAuthGuard } from '../auth/guards/auth.guard'
 import { Request } from 'express'
 import { UseInterceptors, UploadedFiles } from '@nestjs/common'
 import { FilesInterceptor } from '@nestjs/platform-express'
@@ -33,6 +34,12 @@ import { User } from 'prisma/generated/client'
 export class AdsController {
   constructor(private readonly adsService: AdsService) {}
 
+  @Post(':id/favorite')
+  @UseGuards(AuthGuard)
+  async toggleFavorite(@Param('id', ParseUUIDPipe) adId: string, @CurrentUser('id') userId: string) {
+    return this.adsService.toggleFavorite(userId, adId)
+  }
+
   @Post()
   @UseGuards(AuthGuard)
   @UseInterceptors(
@@ -49,8 +56,10 @@ export class AdsController {
   }
 
   @Get()
-  findAll(@Query() query: FindAdsQueryDto) {
-    return this.adsService.findAll(query)
+  async findAll(@Query() query: FindAdsQueryDto, @Req() request: Request) {
+    const userId = request.session?.userId
+
+    return this.adsService.findAll(query, userId)
   }
 
   @Get('my')

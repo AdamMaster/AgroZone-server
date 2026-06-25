@@ -62,3 +62,8 @@ export type Category = Prisma.CategoryModel
  * 
  */
 export type Ad = Prisma.AdModel
+/**
+ * Model Favorite
+ * 
+ */
+export type Favorite = Prisma.FavoriteModel

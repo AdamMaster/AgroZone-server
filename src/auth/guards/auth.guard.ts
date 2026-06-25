@@ -12,9 +12,7 @@ export class AuthGuard implements CanActivate {
     const userId = request.session?.userId
 
     if (!userId) {
-      throw new UnauthorizedException(
-        'Пользователь не авторизован. Пожалуйста, войдите в систему, чтобы получить доступ.'
-      )
+      throw new UnauthorizedException('Чтобы добавлять в избранное, необходимо авторизоваться.')
     }
 
     const user = await this.userService.findById(userId)
@@ -26,5 +24,12 @@ export class AuthGuard implements CanActivate {
     request.user = user
 
     return true
+  }
+}
+
+@Injectable()
+export class OptionalAuthGuard extends AuthGuard {
+  handleRequest(err, user, info, context: ExecutionContext) {
+    return user || null
   }
 }

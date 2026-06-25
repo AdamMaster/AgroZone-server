@@ -41,26 +41,58 @@ export class AdsService {
     })
   }
 
-  async findAll(query: FindAdsQueryDto) {
+  async findAll(query: FindAdsQueryDto, userId?: string) {
     const page = query.page ?? 1
     const limit = Math.min(query.limit ?? 20, 50)
     const skip = (page - 1) * limit
 
-    return this.prisma.ad.findMany({
+    const now = new Date()
+
+    // 1. Собираем массив ID категорий для фильтрации
+    let categoryIds: string[] | undefined = undefined
+
+    if (query.categoryId) {
+      // Рекурсивно собираем ID выбранной категории и всех её потомков
+      const result = await this.prisma.$queryRaw<{ id: string }[]>`
+      WITH RECURSIVE category_tree AS (
+        SELECT id FROM categories WHERE id = ${query.categoryId}
+        UNION ALL
+        SELECT c.id FROM categories c
+        INNER JOIN category_tree ct ON c.parent_id = ct.id
+      )
+      SELECT id FROM category_tree;
+    `
+
+      categoryIds = result.map(row => row.id)
+    }
+
+    // 2. Делаем основной запрос к объявлениям
+    const ads = await this.prisma.ad.findMany({
       where: {
         status: AdStatus.PUBLISHED,
-        expiresAt: { gt: new Date() },
-        ...(query.categoryId ? { categoryId: query.categoryId } : {})
+        expiresAt: { gt: now },
+        // Если отфильтровано по категории, ищем совпадения по всему дереву ID
+        ...(categoryIds ? { categoryId: { in: categoryIds } } : {})
       },
       include: {
-        category: true
+        category: true,
+        favorites: userId
+          ? {
+              where: { userId },
+              select: { id: true }
+            }
+          : false
       },
-      orderBy: {
-        createdAt: 'desc'
-      },
+      orderBy: { createdAt: 'desc' },
       skip,
       take: limit
     })
+
+    return ads.map(ad => ({
+      ...ad,
+      isFavorite: userId ? ad.favorites?.length > 0 : false,
+      isExpired: false
+    }))
   }
 
   async findMyAds(userId: string, query: FindMyAdsQueryDto) {
@@ -470,6 +502,33 @@ export class AdsService {
         rejectionReason: null
       }
     })
+  }
+
+  async toggleFavorite(userId: string, adId: string) {
+    const favorite = await this.prisma.favorite.findUnique({
+      where: {
+        userId_adId: {
+          userId,
+          adId
+        }
+      }
+    })
+
+    let isFavorite: boolean
+
+    if (favorite) {
+      await this.prisma.favorite.delete({
+        where: { id: favorite.id }
+      })
+      isFavorite = false
+    } else {
+      await this.prisma.favorite.create({
+        data: { userId, adId }
+      })
+      isFavorite = true
+    }
+
+    return { isFavorite }
   }
 
   async remove(id: string, userId: string) {
