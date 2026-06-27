@@ -8,7 +8,6 @@ const pool = new Pool({ connectionString: process.env.POSTGRES_URI })
 const adapter = new PrismaPg(pool)
 const prisma = new PrismaClient({ adapter })
 
-// Типы оставляем как есть
 type FeatureInput = {
   name: string
   label: string
@@ -19,6 +18,8 @@ type FeatureInput = {
 
 type CategoryInput = {
   name: string
+  iconId?: string
+  code?: string
   children?: CategoryInput[]
   features?: FeatureInput[]
 }
@@ -31,33 +32,80 @@ const generateSlug = (text: string) => {
   })
 }
 
-async function createCategory(data: CategoryInput, parentId: string | null = null, parentSlug: string | null = null) {
-  const currentSlug = generateSlug(data.name)
-  const finalSlug = parentSlug ? `${parentSlug}/${currentSlug}` : currentSlug
+function generateCode(name: string): string {
+  return name
+    .toLowerCase()
+    .trim()
+    .replace(/ё/g, 'e')
+    .replace(/[^a-zа-я0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+}
 
-  const category = await prisma.category.create({
-    data: {
-      name: data.name,
-      slug: finalSlug,
-      parentId: parentId,
-      availableFeatures: data.features ? JSON.parse(JSON.stringify(data.features)) : null
-    }
+function buildCode(parentCode: string | null, name: string) {
+  const base = generateCode(name)
+
+  return parentCode ? `${parentCode}_${base}` : base
+}
+
+async function upsertCategory(
+  data: CategoryInput,
+  parentId: string | null = null,
+  parentCode: string | null = null,
+  parentSlug: string | null = null,
+  level = 0
+) {
+  const currentSubSlug = generateSlug(data.name)
+  const slug = parentSlug ? `${parentSlug}/${currentSubSlug}` : currentSubSlug
+
+  const existingCategory = await prisma.category.findUnique({
+    where: { slug }
   })
 
-  if (data.children && data.children.length > 0) {
+  let category
+
+  if (existingCategory) {
+    category = await prisma.category.update({
+      where: { id: existingCategory.id },
+      data: {
+        name: data.name,
+        iconId: data.iconId,
+        parentId,
+        level,
+        availableFeatures: data.features ?? undefined
+      }
+    })
+  } else {
+    const newCode = data.code ?? buildCode(parentCode, data.name)
+
+    category = await prisma.category.create({
+      data: {
+        name: data.name,
+        code: newCode,
+        slug,
+        iconId: data.iconId,
+        parentId,
+        level,
+        availableFeatures: data.features ?? undefined
+      }
+    })
+  }
+
+  if (data.children?.length) {
     for (const child of data.children) {
-      await createCategory(child, category.id, finalSlug)
+      await upsertCategory(child, category.id, category.code, slug, level + 1)
     }
   }
+
+  return category
 }
 
 async function main(): Promise<void> {
   console.log('Начало заполнения базы данных категориями...')
 
-  await prisma.category.deleteMany()
+  // await prisma.category.deleteMany()
 
   for (const rootCategory of CATEGORIES_DATA) {
-    await createCategory(rootCategory)
+    await upsertCategory(rootCategory)
     console.log(`Создана ветка: ${rootCategory.name}`)
   }
 
