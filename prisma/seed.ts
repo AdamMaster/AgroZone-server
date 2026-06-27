@@ -33,7 +33,7 @@ const generateSlug = (text: string) => {
 
 async function createCategory(data: CategoryInput, parentId: string | null = null, parentSlug: string | null = null) {
   const currentSlug = generateSlug(data.name)
-  const finalSlug = parentSlug ? `${parentSlug}-${currentSlug}` : currentSlug
+  const finalSlug = parentSlug ? `${parentSlug}/${currentSlug}` : currentSlug
 
   const category = await prisma.category.create({
     data: {

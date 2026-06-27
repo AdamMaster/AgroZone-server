@@ -8,6 +8,7 @@ export type FeatureInput = {
 
 export type CategoryInput = {
   name: string
+  iconId?: string
   children?: CategoryInput[]
   features?: FeatureInput[]
 }
@@ -104,6 +105,7 @@ const OTHER_FEATURES = [
 export const CATEGORIES_DATA: CategoryInput[] = [
   {
     name: 'Агрохимия',
+    iconId: 'FlaskConical',
     children: [
       { name: 'Биопрепараты', children: [], features: AGRO_CHEM_FEATURES },
       { name: 'Грунты', children: [], features: AGRO_CHEM_FEATURES },
@@ -119,6 +121,7 @@ export const CATEGORIES_DATA: CategoryInput[] = [
   },
   {
     name: 'Корма для с.х. животных и птиц',
+    iconId: 'Wheat',
     children: [
       { name: 'Барда, пивная дробина', children: [], features: FEED_BASE_FEATURES },
       { name: 'Жмых, шрот, жом, патока', children: [], features: FEED_BASE_FEATURES },
@@ -150,6 +153,7 @@ export const CATEGORIES_DATA: CategoryInput[] = [
   },
   {
     name: 'Оборудование',
+    iconId: 'Wrench',
     children: [
       {
         name: 'Зерноперерабатывающее оборудование',
@@ -314,6 +318,7 @@ export const CATEGORIES_DATA: CategoryInput[] = [
   },
   {
     name: 'Продукты переработки',
+    iconId: 'Factory',
     children: [
       { name: 'Замороженные овощи и фрукты', children: [], features: PROCESSED_FEATURES },
       {
@@ -448,6 +453,7 @@ export const CATEGORIES_DATA: CategoryInput[] = [
   },
   {
     name: 'Продукция и сырье',
+    iconId: 'Apple',
     children: [
       { name: 'Грибы пищевые', children: [], features: DEFAULT_FEATURES },
       {
@@ -683,6 +689,7 @@ export const CATEGORIES_DATA: CategoryInput[] = [
   },
   {
     name: 'Сельскохозяйственная техника',
+    iconId: 'Truck',
     children: [
       {
         name: 'Запчасти для сельхозтехники',
@@ -772,6 +779,7 @@ export const CATEGORIES_DATA: CategoryInput[] = [
   },
   {
     name: 'Тара и упаковка',
+    iconId: 'Box',
     children: [
       { name: 'Маркировочное и этикетировочное оборудование', children: [], features: EQUIP_FEATURES },
       { name: 'Оборудование для производства упаковки', children: [], features: EQUIP_FEATURES },
@@ -783,6 +791,7 @@ export const CATEGORIES_DATA: CategoryInput[] = [
   },
   {
     name: 'Прочее',
+    iconId: 'EqualApproximately',
     children: [
       { name: 'Ангары и каркасно-тентовые конструкции', children: [], features: OTHER_FEATURES },
       { name: 'Веники и травы для бани', children: [], features: OTHER_FEATURES },
