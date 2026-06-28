@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
+import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common'
 import { PrismaService } from '@/prisma/prisma.service'
 import { FileService } from '../file/file.service'
 import { ConfigService } from '@nestjs/config'
@@ -504,31 +504,83 @@ export class AdsService {
     })
   }
 
-  async toggleFavorite(userId: string, adId: string) {
-    const favorite = await this.prisma.favorite.findUnique({
-      where: {
-        userId_adId: {
+  async addFavorite(userId: string, adId: string) {
+    try {
+      await this.prisma.favorite.create({
+        data: {
           userId,
           adId
+        }
+      })
+
+      return { success: true }
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        switch (error.code) {
+          case 'P2002':
+            throw new ConflictException('Объявление уже есть в избранном')
+
+          case 'P2003':
+            throw new NotFoundException('Объявление не найдено')
+        }
+      }
+
+      throw error
+    }
+  }
+
+  async removeFavorite(userId: string, adId: string) {
+    try {
+      await this.prisma.favorite.delete({
+        where: {
+          userId_adId: {
+            userId,
+            adId
+          }
+        }
+      })
+
+      return { success: true }
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
+        throw new NotFoundException('Избранное не найдено')
+      }
+
+      throw error
+    }
+  }
+
+  async getFavorites(userId: string, page = 1, limit = 20) {
+    const favorites = await this.prisma.favorite.findMany({
+      where: {
+        userId
+      },
+      orderBy: {
+        createdAt: 'desc'
+      },
+      skip: (page - 1) * limit,
+      take: limit,
+      select: {
+        ad: {
+          select: {
+            id: true,
+            title: true,
+            price: true,
+            createdAt: true,
+            images: true,
+            address: true,
+            user: {
+              select: {
+                id: true,
+                displayName: true
+              }
+            }
+          }
         }
       }
     })
 
-    let isFavorite: boolean
-
-    if (favorite) {
-      await this.prisma.favorite.delete({
-        where: { id: favorite.id }
-      })
-      isFavorite = false
-    } else {
-      await this.prisma.favorite.create({
-        data: { userId, adId }
-      })
-      isFavorite = true
-    }
-
-    return { isFavorite }
+    return favorites.map(({ ad }) => ad)
   }
 
   async remove(id: string, userId: string) {

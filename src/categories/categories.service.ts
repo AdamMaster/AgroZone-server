@@ -61,4 +61,65 @@ export class CategoriesService {
 
     return build(null)
   }
+
+  async getSearchSuggestions(search: string) {
+    const q = search?.trim()
+
+    if (!q || q.length < 2) return []
+
+    const [categories, ads] = await Promise.all([
+      this.prisma.category.findMany({
+        where: {
+          name: {
+            contains: q,
+            mode: 'insensitive'
+          }
+        },
+        take: 5,
+        select: { id: true, name: true }
+      }),
+
+      this.prisma.ad.findMany({
+        where: {
+          title: {
+            contains: q,
+            mode: 'insensitive'
+          }
+        },
+        take: 10,
+        select: { id: true, title: true }
+      })
+    ])
+
+    const normalize = (str: string) => str.toLowerCase()
+
+    const scoredCategories = categories.map(c => {
+      const name = normalize(c.name)
+
+      return {
+        id: c.id,
+        type: 'category' as const,
+        rawName: c.name,
+        name: `В категории: ${c.name}`,
+        score: name.startsWith(q.toLowerCase()) ? 100 : 50
+      }
+    })
+
+    const scoredAds = ads.map(a => {
+      const title = normalize(a.title)
+
+      return {
+        id: a.id,
+        type: 'ad' as const,
+        rawName: a.title,
+        name: a.title,
+        score: title.startsWith(q.toLowerCase()) ? 100 : 50
+      }
+    })
+
+    return [...scoredCategories, ...scoredAds]
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 10)
+      .map(({ score, ...rest }) => rest)
+  }
 }

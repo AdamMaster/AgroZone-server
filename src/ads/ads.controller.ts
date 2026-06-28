@@ -10,7 +10,9 @@ import {
   UseGuards,
   Req,
   UnauthorizedException,
-  ParseUUIDPipe
+  ParseUUIDPipe,
+  ParseIntPipe,
+  DefaultValuePipe
 } from '@nestjs/common'
 import { AdsService } from './ads.service'
 import { CreateAdDto } from './dto/create-ad.dto'
@@ -36,8 +38,24 @@ export class AdsController {
 
   @Post(':id/favorite')
   @UseGuards(AuthGuard)
-  async toggleFavorite(@Param('id', ParseUUIDPipe) adId: string, @CurrentUser('id') userId: string) {
-    return this.adsService.toggleFavorite(userId, adId)
+  async addFavorite(@Param('id', ParseUUIDPipe) adId: string, @CurrentUser('id') userId: string) {
+    return this.adsService.addFavorite(userId, adId)
+  }
+
+  @Delete(':id/favorite')
+  @UseGuards(AuthGuard)
+  async removeFavorite(@Param('id', ParseUUIDPipe) adId: string, @CurrentUser('id') userId: string) {
+    return this.adsService.removeFavorite(userId, adId)
+  }
+
+  @Get('me/favorites')
+  @UseGuards(AuthGuard)
+  async getFavorites(
+    @CurrentUser('id') userId: string,
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query('limit', new DefaultValuePipe(20), ParseIntPipe) limit: number
+  ) {
+    return this.adsService.getFavorites(userId, page, limit)
   }
 
   @Post()
