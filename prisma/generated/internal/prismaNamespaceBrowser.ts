@@ -133,6 +133,7 @@ export const CategoryScalarFieldEnum = {
   code: 'code',
   iconId: 'iconId',
   parentId: 'parentId',
+  path: 'path',
   level: 'level',
   sortOrder: 'sortOrder',
   availableFeatures: 'availableFeatures',
@@ -145,6 +146,7 @@ export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typ
 
 export const AdScalarFieldEnum = {
   id: 'id',
+  slug: 'slug',
   title: 'title',
   description: 'description',
   price: 'price',
@@ -154,6 +156,8 @@ export const AdScalarFieldEnum = {
   features: 'features',
   lat: 'lat',
   lng: 'lng',
+  categoryPath: 'categoryPath',
+  seoPath: 'seoPath',
   userId: 'userId',
   categoryId: 'categoryId',
   status: 'status',

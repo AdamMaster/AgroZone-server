@@ -7,6 +7,7 @@ import { FileModule } from '../file/file.module'
 import { AdStateMachineService } from './ad-state-machine.service'
 import { BullModule } from '@nestjs/bullmq'
 import { AdsExpirationWorker } from './workers/ads-expiration.worker'
+import { CategoriesModule } from '@/categories/categories.module'
 
 @Module({
   imports: [
@@ -14,7 +15,8 @@ import { AdsExpirationWorker } from './workers/ads-expiration.worker'
     FileModule,
     BullModule.registerQueue({
       name: 'ads'
-    })
+    }),
+    CategoriesModule
   ],
   controllers: [AdsController],
   providers: [AdsService, PrismaService, AdStateMachineService, AdsExpirationWorker]

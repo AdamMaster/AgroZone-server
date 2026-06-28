@@ -23,27 +23,21 @@ export class CategoriesService {
     })
 
     const byParent = new Map<string, typeof categories>()
-    const getKey = (parentId: string | null) => parentId ?? 'root'
+
+    const key = (parentId: string | null) => parentId ?? 'root'
 
     for (const cat of categories) {
-      const key = getKey(cat.parentId)
-      if (!byParent.has(key)) {
-        byParent.set(key, [])
-      }
-      byParent.get(key)!.push(cat)
-    }
+      const k = key(cat.parentId)
 
-    for (const [key, list] of byParent) {
-      if (key === 'root') {
-        list.sort((a, b) => a.sortOrder - b.sortOrder)
-      } else {
-        list.sort((a, b) => a.name.localeCompare(b.name, 'ru'))
+      if (!byParent.has(k)) {
+        byParent.set(k, [])
       }
+
+      byParent.get(k)!.push(cat)
     }
 
     const build = (parentId: string | null): CategoryWithChildren[] => {
-      const key = getKey(parentId)
-      const children = byParent.get(key) ?? []
+      const children = byParent.get(key(parentId)) ?? []
 
       return children.map(cat => ({
         id: cat.id,
@@ -62,64 +56,29 @@ export class CategoriesService {
     return build(null)
   }
 
-  async getSearchSuggestions(search: string) {
-    const q = search?.trim()
+  async getCategoryPath(categoryId: string): Promise<string[]> {
+    const path: string[] = []
 
-    if (!q || q.length < 2) return []
+    let current = await this.prisma.category.findUnique({
+      where: { id: categoryId },
+      select: { slug: true, parentId: true }
+    })
 
-    const [categories, ads] = await Promise.all([
-      this.prisma.category.findMany({
-        where: {
-          name: {
-            contains: q,
-            mode: 'insensitive'
-          }
-        },
-        take: 5,
-        select: { id: true, name: true }
-      }),
+    while (current) {
+      path.unshift(current.slug)
 
-      this.prisma.ad.findMany({
-        where: {
-          title: {
-            contains: q,
-            mode: 'insensitive'
-          }
-        },
-        take: 10,
-        select: { id: true, title: true }
+      if (!current.parentId) break
+
+      current = await this.prisma.category.findUnique({
+        where: { id: current.parentId },
+        select: { slug: true, parentId: true }
       })
-    ])
+    }
 
-    const normalize = (str: string) => str.toLowerCase()
+    return path
+  }
 
-    const scoredCategories = categories.map(c => {
-      const name = normalize(c.name)
-
-      return {
-        id: c.id,
-        type: 'category' as const,
-        rawName: c.name,
-        name: `В категории: ${c.name}`,
-        score: name.startsWith(q.toLowerCase()) ? 100 : 50
-      }
-    })
-
-    const scoredAds = ads.map(a => {
-      const title = normalize(a.title)
-
-      return {
-        id: a.id,
-        type: 'ad' as const,
-        rawName: a.title,
-        name: a.title,
-        score: title.startsWith(q.toLowerCase()) ? 100 : 50
-      }
-    })
-
-    return [...scoredCategories, ...scoredAds]
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 10)
-      .map(({ score, ...rest }) => rest)
+  buildSeoPath(categoryPath: string[], slug: string): string {
+    return [...categoryPath, slug].join('/')
   }
 }

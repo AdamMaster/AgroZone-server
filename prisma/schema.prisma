@@ -1,10 +1,12 @@
 generator client {
-  provider = "prisma-client"
-  output   = "./generated"
+  provider        = "prisma-client"
+  output          = "./generated"
+  previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
-  provider = "postgresql"
+  provider   = "postgresql"
+  extensions = [pg_trgm]
 }
 
 model User {
@@ -89,6 +91,8 @@ model Category {
   parent   Category?  @relation("CategoryToCategory", fields: [parentId], references: [id], onDelete: Cascade)
   children Category[] @relation("CategoryToCategory")
 
+  path String[] @default([])
+
   level     Int @default(0)
   sortOrder Int @default(0)
 
@@ -107,6 +111,7 @@ model Category {
 
 model Ad {
   id          String   @id @default(uuid())
+  slug        String   @unique @default("")
   title       String
   description String   @db.Text
   price       Int?
@@ -116,6 +121,9 @@ model Ad {
   features    Json     @default("{}")
   lat         Float
   lng         Float
+
+  categoryPath String[] @default([]) @map("category_path")
+  seoPath      String   @map("seo_path")
 
   userId String @map("user_id")
   user   User?  @relation(fields: [userId], references: [id], onDelete: Cascade)

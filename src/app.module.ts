@@ -16,6 +16,8 @@ import { CategoriesModule } from './categories/categories.module'
 import { AdsModule } from './ads/ads.module'
 import { BullModule } from '@nestjs/bullmq'
 import { ScheduleModule } from '@nestjs/schedule'
+import { SearchModule } from './search/search.module'
+import { RedisModule } from './redis/redis.module'
 
 @Module({
   imports: [
@@ -51,7 +53,9 @@ import { ScheduleModule } from '@nestjs/schedule'
     CategoriesModule,
     AdsModule,
     FileModule,
-    MailModule
+    MailModule,
+    SearchModule,
+    RedisModule
   ]
 })
 export class AppModule {}

@@ -10,6 +10,8 @@ import { UpdateAdDto } from './dto/update-ad.dto'
 import { AdStateMachineService } from './ad-state-machine.service'
 import { FindAdsQueryDto } from './dto/find-ads-query.dto'
 import { FindMyAdsQueryDto } from './dto/find-my-ads-query.dto'
+import { CategoriesService } from '@/categories/categories.service'
+import slugify from 'slugify'
 
 @Injectable()
 export class AdsService {
@@ -17,7 +19,8 @@ export class AdsService {
     private readonly prisma: PrismaService,
     private readonly fileService: FileService,
     private readonly configService: ConfigService,
-    private readonly adStateMachine: AdStateMachineService
+    private readonly adStateMachine: AdStateMachineService,
+    private readonly categoriesService: CategoriesService
   ) {}
 
   async create(
@@ -30,12 +33,23 @@ export class AdsService {
 
     const images = await this.prepareImages(null, [], files)
 
+    const categoryPath = await this.categoriesService.getCategoryPath(createAdDto.categoryId)
+    const slug = slugify(createAdDto.title, {
+      lower: true,
+      strict: true
+    })
+
+    const seoPath = this.categoriesService.buildSeoPath(categoryPath, slug)
+
     return this.prisma.ad.create({
       data: {
         ...createAdDto,
         images,
         userId,
         status,
+        categoryPath,
+        seoPath,
+        slug,
         features: (createAdDto.features ?? {}) as Prisma.InputJsonValue
       }
     })
@@ -454,6 +468,14 @@ export class AdsService {
     if (id) {
       const ad = await this.getUserAdOrThrow(id, userId)
       const images = await this.prepareImages(ad, existingImages || [], files)
+      const categoryPath = await this.categoriesService.getCategoryPath(rest.categoryId)
+
+      const slug = slugify(createAdDto.title, {
+        lower: true,
+        strict: true
+      })
+
+      const seoPath = this.categoriesService.buildSeoPath(categoryPath, slug)
 
       return this.prisma.ad.update({
         where: { id },
@@ -465,12 +487,22 @@ export class AdsService {
           images,
           status: AdStatus.DRAFT,
           rejectionReason: null,
-          features: features ? (features as Prisma.InputJsonValue) : {}
+          features: features ? (features as Prisma.InputJsonValue) : {},
+          categoryPath,
+          seoPath
         }
       })
     }
 
     const images = await this.prepareImages(null, [], files)
+    const categoryPath = await this.categoriesService.getCategoryPath(rest.categoryId)
+
+    const slug = slugify(createAdDto.title, {
+      lower: true,
+      strict: true
+    })
+
+    const seoPath = this.categoriesService.buildSeoPath(categoryPath, slug)
 
     return this.prisma.ad.create({
       data: {
@@ -481,7 +513,10 @@ export class AdsService {
         images,
         userId,
         status: AdStatus.DRAFT,
-        features: features ? (features as Prisma.InputJsonValue) : {}
+        features: features ? (features as Prisma.InputJsonValue) : {},
+        slug,
+        categoryPath,
+        seoPath
       }
     })
   }
