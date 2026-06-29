@@ -17,4 +17,8 @@ export class FindAdsQueryDto {
   @IsInt()
   @Min(1)
   limit?: number
+
+  @IsOptional()
+  @IsString()
+  search?: string
 }

@@ -6,39 +6,88 @@ const pool = new Pool({ connectionString: process.env.POSTGRES_URI })
 const adapter = new PrismaPg(pool)
 const prisma = new PrismaClient({ adapter })
 
-async function run() {
-  const ads = await prisma.ad.findMany({
+type Category = {
+  id: string
+  slug: string
+  parentId: string | null
+}
+
+async function buildCategoryMap() {
+  const categories = await prisma.category.findMany({
     select: {
       id: true,
-      categoryId: true
+      slug: true,
+      parentId: true
     }
   })
 
-  for (const ad of ads) {
-    const path: string[] = []
+  const map = new Map<string, Category>()
 
-    let current = await prisma.category.findUnique({
-      where: { id: ad.categoryId },
-      select: { slug: true, parentId: true }
-    })
+  for (const c of categories) {
+    map.set(c.id, c)
+  }
 
-    while (current) {
-      path.unshift(current.slug)
+  return map
+}
 
-      if (!current.parentId) break
+function getCategoryPath(categoryId: string, map: Map<string, Category>): string[] {
+  const path: string[] = []
+  const visited = new Set<string>()
 
-      current = await prisma.category.findUnique({
-        where: { id: current.parentId },
-        select: { slug: true, parentId: true }
-      })
+  let current = map.get(categoryId)
+
+  while (current) {
+    // 🔥 защита от циклов
+    if (visited.has(current.id)) {
+      console.error('CYCLE DETECTED in categories:', current)
+      break
     }
 
-    await prisma.ad.update({
-      where: { id: ad.id },
-      data: {
-        categoryPath: path
+    visited.add(current.id)
+
+    // кладём slug
+    path.unshift(current.slug)
+
+    if (!current.parentId) break
+
+    current = map.get(current.parentId)
+  }
+
+  return path
+}
+
+async function run() {
+  const [ads, categoryMap] = await Promise.all([
+    prisma.ad.findMany({
+      select: {
+        id: true,
+        categoryId: true
       }
-    })
+    }),
+    buildCategoryMap()
+  ])
+
+  console.log(`Found ads: ${ads.length}`)
+
+  const chunkSize = 50
+
+  for (let i = 0; i < ads.length; i += chunkSize) {
+    const chunk = ads.slice(i, i + chunkSize)
+
+    await Promise.all(
+      chunk.map(ad => {
+        const categoryPath = getCategoryPath(ad.categoryId, categoryMap)
+
+        return prisma.ad.update({
+          where: { id: ad.id },
+          data: {
+            categoryPath
+          }
+        })
+      })
+    )
+
+    console.log(`Processed ${Math.min(i + chunkSize, ads.length)}/${ads.length}`)
   }
 
   console.log('DONE')

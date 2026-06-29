@@ -54,7 +54,7 @@ export class SearchService {
         id: category.id,
         type: 'category' as const,
         rawName: category.name,
-        name: `Категория: ${category.name}`,
+        name: `${category.name}`,
         slug: category.slug,
         url: `/catalog/${category.slug}`,
         score: Number(category.score || 0)

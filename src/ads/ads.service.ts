@@ -62,11 +62,9 @@ export class AdsService {
 
     const now = new Date()
 
-    // 1. Собираем массив ID категорий для фильтрации
     let categoryIds: string[] | undefined = undefined
 
     if (query.categoryId) {
-      // Рекурсивно собираем ID выбранной категории и всех её потомков
       const result = await this.prisma.$queryRaw<{ id: string }[]>`
       WITH RECURSIVE category_tree AS (
         SELECT id FROM categories WHERE id = ${query.categoryId}
@@ -80,13 +78,19 @@ export class AdsService {
       categoryIds = result.map(row => row.id)
     }
 
-    // 2. Делаем основной запрос к объявлениям
     const ads = await this.prisma.ad.findMany({
       where: {
         status: AdStatus.PUBLISHED,
         expiresAt: { gt: now },
-        // Если отфильтровано по категории, ищем совпадения по всему дереву ID
-        ...(categoryIds ? { categoryId: { in: categoryIds } } : {})
+        ...(categoryIds ? { categoryId: { in: categoryIds } } : {}),
+        ...(query.search
+          ? {
+              OR: [
+                { title: { contains: query.search, mode: 'insensitive' } },
+                { description: { contains: query.search, mode: 'insensitive' } }
+              ]
+            }
+          : {})
       },
       include: {
         category: true,
