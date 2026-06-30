@@ -23,8 +23,6 @@ async function run() {
     })
   ])
 
-  console.log(`Найдено объявлений: ${ads.length}`)
-
   const categoryMap = new Map<string, string[]>(categories.map(c => [c.id, c.path]))
 
   // 2. Формируем массив апдейтов

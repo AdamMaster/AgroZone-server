@@ -67,8 +67,6 @@ async function run() {
     buildCategoryMap()
   ])
 
-  console.log(`Found ads: ${ads.length}`)
-
   const chunkSize = 50
 
   for (let i = 0; i < ads.length; i += chunkSize) {
@@ -86,8 +84,6 @@ async function run() {
         })
       })
     )
-
-    console.log(`Processed ${Math.min(i + chunkSize, ads.length)}/${ads.length}`)
   }
 
   console.log('DONE')

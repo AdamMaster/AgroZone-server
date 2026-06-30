@@ -11,6 +11,7 @@ import { AdStateMachineService } from './ad-state-machine.service'
 import { FindAdsQueryDto } from './dto/find-ads-query.dto'
 import { FindMyAdsQueryDto } from './dto/find-my-ads-query.dto'
 import { CategoriesService } from '@/categories/categories.service'
+import { randomBytes } from 'crypto'
 import slugify from 'slugify'
 
 @Injectable()
@@ -34,11 +35,13 @@ export class AdsService {
     const images = await this.prepareImages(null, [], files)
 
     const categoryPath = await this.categoriesService.getCategoryPath(createAdDto.categoryId)
-    const slug = slugify(createAdDto.title, {
+
+    const baseSlug = slugify(createAdDto.title, {
       lower: true,
       strict: true
     })
-
+    const uniqueHash = randomBytes(3).toString('hex')
+    const slug = `${baseSlug}-${uniqueHash}`
     const seoPath = this.categoriesService.buildSeoPath(categoryPath, slug)
 
     return this.prisma.ad.create({
@@ -86,7 +89,17 @@ export class AdsService {
         status: AdStatus.PUBLISHED,
         expiresAt: { gt: now },
         // Если отфильтровано по категории, ищем совпадения по всему дереву ID
-        ...(categoryIds ? { categoryId: { in: categoryIds } } : {})
+        ...(categoryIds ? { categoryId: { in: categoryIds } } : {}),
+
+        // Наш поиск по подстроке (работает, если query.search не пустой)
+        ...(query.search
+          ? {
+              OR: [
+                { title: { contains: query.search, mode: 'insensitive' } },
+                { description: { contains: query.search, mode: 'insensitive' } }
+              ]
+            }
+          : {})
       },
       include: {
         category: true,

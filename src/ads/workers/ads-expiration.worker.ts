@@ -21,7 +21,5 @@ export class AdsExpirationWorker {
         status: AdStatus.EXPIRED
       }
     })
-
-    console.log(`Expired ads updated: ${result.count}`)
   }
 }

@@ -33,21 +33,27 @@ export class SearchService {
       `,
 
         this.prisma.$queryRaw<any[]>`
-        SELECT
-          a.id,
-          a.title,
-          a.slug,
-          c.full_path AS category_full_path,
-          similarity(a.title, ${q}) *
-          CASE
-            WHEN a.title ILIKE ${q + '%'} THEN 1.5
-            WHEN a.title ILIKE ${'%' + q + '%'} THEN 1.0
-            ELSE 0.7
-          END AS score
-        FROM ads a
-        LEFT JOIN categories c ON a.category_id = c.id
-        WHERE a.title % ${q}
-        ORDER BY score DESC
+        SELECT * FROM (
+          SELECT DISTINCT ON (a.title)
+            a.id,
+            a.title,
+            a.slug,
+            c.full_path AS category_full_path,
+            similarity(a.title, ${q}) *
+            CASE
+              WHEN a.title ILIKE ${q + '%'} THEN 1.5
+              WHEN a.title ILIKE ${'%' + q + '%'} THEN 1.0
+              ELSE 0.7
+            END AS score
+          FROM ads a
+          LEFT JOIN categories c ON a.category_id = c.id
+          WHERE
+            a.status = 'PUBLISHED'
+            AND (a.expires_at IS NULL OR a.expires_at > NOW())
+            AND a.title % ${q}
+          ORDER BY a.title, score DESC
+        ) AS unique_ads
+        ORDER BY score DESC -- ⚡ Вот теперь итоговый результат сортируется строго по качеству совпадения!
         LIMIT 10
       `
       ])
