@@ -49,6 +49,8 @@ export class CategoriesService {
         level: cat.level,
         sortOrder: cat.sortOrder,
         availableFeatures: cat.availableFeatures,
+        path: cat.path,
+        fullPath: cat.fullPath,
         children: build(cat.id)
       }))
     }

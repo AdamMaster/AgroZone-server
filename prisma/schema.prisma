@@ -82,16 +82,20 @@ model Token {
 }
 
 model Category {
-  id       String     @id @default(uuid())
-  name     String
-  slug     String     @unique
-  code     String     @unique
-  iconId   String?    @map("icon_id")
+  id   String @id @default(uuid())
+  name String
+
+  slug     String
+  path     String[] @default([])
+  fullPath String   @unique @map("full_path")
+
+  code String @unique
+
+  iconId String? @map("icon_id")
+
   parentId String?    @map("parent_id")
   parent   Category?  @relation("CategoryToCategory", fields: [parentId], references: [id], onDelete: Cascade)
   children Category[] @relation("CategoryToCategory")
-
-  path String[] @default([])
 
   level     Int @default(0)
   sortOrder Int @default(0)
@@ -103,8 +107,10 @@ model Category {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  @@unique([parentId, slug])
   @@index([parentId])
   @@index([slug])
+  @@index([fullPath])
   @@index([code])
   @@map("categories")
 }

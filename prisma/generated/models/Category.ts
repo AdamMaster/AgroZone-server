@@ -40,6 +40,7 @@ export type CategoryMinAggregateOutputType = {
   id: string | null
   name: string | null
   slug: string | null
+  fullPath: string | null
   code: string | null
   iconId: string | null
   parentId: string | null
@@ -53,6 +54,7 @@ export type CategoryMaxAggregateOutputType = {
   id: string | null
   name: string | null
   slug: string | null
+  fullPath: string | null
   code: string | null
   iconId: string | null
   parentId: string | null
@@ -66,10 +68,11 @@ export type CategoryCountAggregateOutputType = {
   id: number
   name: number
   slug: number
+  path: number
+  fullPath: number
   code: number
   iconId: number
   parentId: number
-  path: number
   level: number
   sortOrder: number
   availableFeatures: number
@@ -93,6 +96,7 @@ export type CategoryMinAggregateInputType = {
   id?: true
   name?: true
   slug?: true
+  fullPath?: true
   code?: true
   iconId?: true
   parentId?: true
@@ -106,6 +110,7 @@ export type CategoryMaxAggregateInputType = {
   id?: true
   name?: true
   slug?: true
+  fullPath?: true
   code?: true
   iconId?: true
   parentId?: true
@@ -119,10 +124,11 @@ export type CategoryCountAggregateInputType = {
   id?: true
   name?: true
   slug?: true
+  path?: true
+  fullPath?: true
   code?: true
   iconId?: true
   parentId?: true
-  path?: true
   level?: true
   sortOrder?: true
   availableFeatures?: true
@@ -221,10 +227,11 @@ export type CategoryGroupByOutputType = {
   id: string
   name: string
   slug: string
+  path: string[]
+  fullPath: string
   code: string
   iconId: string | null
   parentId: string | null
-  path: string[]
   level: number
   sortOrder: number
   availableFeatures: runtime.JsonValue | null
@@ -259,10 +266,11 @@ export type CategoryWhereInput = {
   id?: Prisma.StringFilter<"Category"> | string
   name?: Prisma.StringFilter<"Category"> | string
   slug?: Prisma.StringFilter<"Category"> | string
+  path?: Prisma.StringNullableListFilter<"Category">
+  fullPath?: Prisma.StringFilter<"Category"> | string
   code?: Prisma.StringFilter<"Category"> | string
   iconId?: Prisma.StringNullableFilter<"Category"> | string | null
   parentId?: Prisma.StringNullableFilter<"Category"> | string | null
-  path?: Prisma.StringNullableListFilter<"Category">
   level?: Prisma.IntFilter<"Category"> | number
   sortOrder?: Prisma.IntFilter<"Category"> | number
   availableFeatures?: Prisma.JsonNullableFilter<"Category">
@@ -277,10 +285,11 @@ export type CategoryOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   slug?: Prisma.SortOrder
+  path?: Prisma.SortOrder
+  fullPath?: Prisma.SortOrder
   code?: Prisma.SortOrder
   iconId?: Prisma.SortOrderInput | Prisma.SortOrder
   parentId?: Prisma.SortOrderInput | Prisma.SortOrder
-  path?: Prisma.SortOrder
   level?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
   availableFeatures?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -293,15 +302,17 @@ export type CategoryOrderByWithRelationInput = {
 
 export type CategoryWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  slug?: string
+  fullPath?: string
   code?: string
+  parentId_slug?: Prisma.CategoryParentIdSlugCompoundUniqueInput
   AND?: Prisma.CategoryWhereInput | Prisma.CategoryWhereInput[]
   OR?: Prisma.CategoryWhereInput[]
   NOT?: Prisma.CategoryWhereInput | Prisma.CategoryWhereInput[]
   name?: Prisma.StringFilter<"Category"> | string
+  slug?: Prisma.StringFilter<"Category"> | string
+  path?: Prisma.StringNullableListFilter<"Category">
   iconId?: Prisma.StringNullableFilter<"Category"> | string | null
   parentId?: Prisma.StringNullableFilter<"Category"> | string | null
-  path?: Prisma.StringNullableListFilter<"Category">
   level?: Prisma.IntFilter<"Category"> | number
   sortOrder?: Prisma.IntFilter<"Category"> | number
   availableFeatures?: Prisma.JsonNullableFilter<"Category">
@@ -310,16 +321,17 @@ export type CategoryWhereUniqueInput = Prisma.AtLeast<{
   parent?: Prisma.XOR<Prisma.CategoryNullableScalarRelationFilter, Prisma.CategoryWhereInput> | null
   children?: Prisma.CategoryListRelationFilter
   ads?: Prisma.AdListRelationFilter
-}, "id" | "slug" | "code">
+}, "id" | "fullPath" | "code" | "parentId_slug">
 
 export type CategoryOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   slug?: Prisma.SortOrder
+  path?: Prisma.SortOrder
+  fullPath?: Prisma.SortOrder
   code?: Prisma.SortOrder
   iconId?: Prisma.SortOrderInput | Prisma.SortOrder
   parentId?: Prisma.SortOrderInput | Prisma.SortOrder
-  path?: Prisma.SortOrder
   level?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
   availableFeatures?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -339,10 +351,11 @@ export type CategoryScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Category"> | string
   name?: Prisma.StringWithAggregatesFilter<"Category"> | string
   slug?: Prisma.StringWithAggregatesFilter<"Category"> | string
+  path?: Prisma.StringNullableListFilter<"Category">
+  fullPath?: Prisma.StringWithAggregatesFilter<"Category"> | string
   code?: Prisma.StringWithAggregatesFilter<"Category"> | string
   iconId?: Prisma.StringNullableWithAggregatesFilter<"Category"> | string | null
   parentId?: Prisma.StringNullableWithAggregatesFilter<"Category"> | string | null
-  path?: Prisma.StringNullableListFilter<"Category">
   level?: Prisma.IntWithAggregatesFilter<"Category"> | number
   sortOrder?: Prisma.IntWithAggregatesFilter<"Category"> | number
   availableFeatures?: Prisma.JsonNullableWithAggregatesFilter<"Category">
@@ -354,9 +367,10 @@ export type CategoryCreateInput = {
   id?: string
   name: string
   slug: string
+  path?: Prisma.CategoryCreatepathInput | string[]
+  fullPath: string
   code: string
   iconId?: string | null
-  path?: Prisma.CategoryCreatepathInput | string[]
   level?: number
   sortOrder?: number
   availableFeatures?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -371,10 +385,11 @@ export type CategoryUncheckedCreateInput = {
   id?: string
   name: string
   slug: string
+  path?: Prisma.CategoryCreatepathInput | string[]
+  fullPath: string
   code: string
   iconId?: string | null
   parentId?: string | null
-  path?: Prisma.CategoryCreatepathInput | string[]
   level?: number
   sortOrder?: number
   availableFeatures?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -388,9 +403,10 @@ export type CategoryUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
+  path?: Prisma.CategoryUpdatepathInput | string[]
+  fullPath?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   iconId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  path?: Prisma.CategoryUpdatepathInput | string[]
   level?: Prisma.IntFieldUpdateOperationsInput | number
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   availableFeatures?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -405,10 +421,11 @@ export type CategoryUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
+  path?: Prisma.CategoryUpdatepathInput | string[]
+  fullPath?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   iconId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  path?: Prisma.CategoryUpdatepathInput | string[]
   level?: Prisma.IntFieldUpdateOperationsInput | number
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   availableFeatures?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -422,10 +439,11 @@ export type CategoryCreateManyInput = {
   id?: string
   name: string
   slug: string
+  path?: Prisma.CategoryCreatepathInput | string[]
+  fullPath: string
   code: string
   iconId?: string | null
   parentId?: string | null
-  path?: Prisma.CategoryCreatepathInput | string[]
   level?: number
   sortOrder?: number
   availableFeatures?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -437,9 +455,10 @@ export type CategoryUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
+  path?: Prisma.CategoryUpdatepathInput | string[]
+  fullPath?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   iconId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  path?: Prisma.CategoryUpdatepathInput | string[]
   level?: Prisma.IntFieldUpdateOperationsInput | number
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   availableFeatures?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -451,10 +470,11 @@ export type CategoryUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
+  path?: Prisma.CategoryUpdatepathInput | string[]
+  fullPath?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   iconId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  path?: Prisma.CategoryUpdatepathInput | string[]
   level?: Prisma.IntFieldUpdateOperationsInput | number
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   availableFeatures?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -485,14 +505,20 @@ export type CategoryOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type CategoryParentIdSlugCompoundUniqueInput = {
+  parentId: string
+  slug: string
+}
+
 export type CategoryCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   slug?: Prisma.SortOrder
+  path?: Prisma.SortOrder
+  fullPath?: Prisma.SortOrder
   code?: Prisma.SortOrder
   iconId?: Prisma.SortOrder
   parentId?: Prisma.SortOrder
-  path?: Prisma.SortOrder
   level?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
   availableFeatures?: Prisma.SortOrder
@@ -509,6 +535,7 @@ export type CategoryMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   slug?: Prisma.SortOrder
+  fullPath?: Prisma.SortOrder
   code?: Prisma.SortOrder
   iconId?: Prisma.SortOrder
   parentId?: Prisma.SortOrder
@@ -522,6 +549,7 @@ export type CategoryMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   slug?: Prisma.SortOrder
+  fullPath?: Prisma.SortOrder
   code?: Prisma.SortOrder
   iconId?: Prisma.SortOrder
   parentId?: Prisma.SortOrder
@@ -626,9 +654,10 @@ export type CategoryCreateWithoutChildrenInput = {
   id?: string
   name: string
   slug: string
+  path?: Prisma.CategoryCreatepathInput | string[]
+  fullPath: string
   code: string
   iconId?: string | null
-  path?: Prisma.CategoryCreatepathInput | string[]
   level?: number
   sortOrder?: number
   availableFeatures?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -642,10 +671,11 @@ export type CategoryUncheckedCreateWithoutChildrenInput = {
   id?: string
   name: string
   slug: string
+  path?: Prisma.CategoryCreatepathInput | string[]
+  fullPath: string
   code: string
   iconId?: string | null
   parentId?: string | null
-  path?: Prisma.CategoryCreatepathInput | string[]
   level?: number
   sortOrder?: number
   availableFeatures?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -663,9 +693,10 @@ export type CategoryCreateWithoutParentInput = {
   id?: string
   name: string
   slug: string
+  path?: Prisma.CategoryCreatepathInput | string[]
+  fullPath: string
   code: string
   iconId?: string | null
-  path?: Prisma.CategoryCreatepathInput | string[]
   level?: number
   sortOrder?: number
   availableFeatures?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -679,9 +710,10 @@ export type CategoryUncheckedCreateWithoutParentInput = {
   id?: string
   name: string
   slug: string
+  path?: Prisma.CategoryCreatepathInput | string[]
+  fullPath: string
   code: string
   iconId?: string | null
-  path?: Prisma.CategoryCreatepathInput | string[]
   level?: number
   sortOrder?: number
   availableFeatures?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -716,9 +748,10 @@ export type CategoryUpdateWithoutChildrenInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
+  path?: Prisma.CategoryUpdatepathInput | string[]
+  fullPath?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   iconId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  path?: Prisma.CategoryUpdatepathInput | string[]
   level?: Prisma.IntFieldUpdateOperationsInput | number
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   availableFeatures?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -732,10 +765,11 @@ export type CategoryUncheckedUpdateWithoutChildrenInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
+  path?: Prisma.CategoryUpdatepathInput | string[]
+  fullPath?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   iconId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  path?: Prisma.CategoryUpdatepathInput | string[]
   level?: Prisma.IntFieldUpdateOperationsInput | number
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   availableFeatures?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -767,10 +801,11 @@ export type CategoryScalarWhereInput = {
   id?: Prisma.StringFilter<"Category"> | string
   name?: Prisma.StringFilter<"Category"> | string
   slug?: Prisma.StringFilter<"Category"> | string
+  path?: Prisma.StringNullableListFilter<"Category">
+  fullPath?: Prisma.StringFilter<"Category"> | string
   code?: Prisma.StringFilter<"Category"> | string
   iconId?: Prisma.StringNullableFilter<"Category"> | string | null
   parentId?: Prisma.StringNullableFilter<"Category"> | string | null
-  path?: Prisma.StringNullableListFilter<"Category">
   level?: Prisma.IntFilter<"Category"> | number
   sortOrder?: Prisma.IntFilter<"Category"> | number
   availableFeatures?: Prisma.JsonNullableFilter<"Category">
@@ -782,9 +817,10 @@ export type CategoryCreateWithoutAdsInput = {
   id?: string
   name: string
   slug: string
+  path?: Prisma.CategoryCreatepathInput | string[]
+  fullPath: string
   code: string
   iconId?: string | null
-  path?: Prisma.CategoryCreatepathInput | string[]
   level?: number
   sortOrder?: number
   availableFeatures?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -798,10 +834,11 @@ export type CategoryUncheckedCreateWithoutAdsInput = {
   id?: string
   name: string
   slug: string
+  path?: Prisma.CategoryCreatepathInput | string[]
+  fullPath: string
   code: string
   iconId?: string | null
   parentId?: string | null
-  path?: Prisma.CategoryCreatepathInput | string[]
   level?: number
   sortOrder?: number
   availableFeatures?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -830,9 +867,10 @@ export type CategoryUpdateWithoutAdsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
+  path?: Prisma.CategoryUpdatepathInput | string[]
+  fullPath?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   iconId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  path?: Prisma.CategoryUpdatepathInput | string[]
   level?: Prisma.IntFieldUpdateOperationsInput | number
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   availableFeatures?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -846,10 +884,11 @@ export type CategoryUncheckedUpdateWithoutAdsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
+  path?: Prisma.CategoryUpdatepathInput | string[]
+  fullPath?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   iconId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  path?: Prisma.CategoryUpdatepathInput | string[]
   level?: Prisma.IntFieldUpdateOperationsInput | number
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   availableFeatures?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -862,9 +901,10 @@ export type CategoryCreateManyParentInput = {
   id?: string
   name: string
   slug: string
+  path?: Prisma.CategoryCreatepathInput | string[]
+  fullPath: string
   code: string
   iconId?: string | null
-  path?: Prisma.CategoryCreatepathInput | string[]
   level?: number
   sortOrder?: number
   availableFeatures?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -876,9 +916,10 @@ export type CategoryUpdateWithoutParentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
+  path?: Prisma.CategoryUpdatepathInput | string[]
+  fullPath?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   iconId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  path?: Prisma.CategoryUpdatepathInput | string[]
   level?: Prisma.IntFieldUpdateOperationsInput | number
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   availableFeatures?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -892,9 +933,10 @@ export type CategoryUncheckedUpdateWithoutParentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
+  path?: Prisma.CategoryUpdatepathInput | string[]
+  fullPath?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   iconId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  path?: Prisma.CategoryUpdatepathInput | string[]
   level?: Prisma.IntFieldUpdateOperationsInput | number
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   availableFeatures?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -908,9 +950,10 @@ export type CategoryUncheckedUpdateManyWithoutParentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
+  path?: Prisma.CategoryUpdatepathInput | string[]
+  fullPath?: Prisma.StringFieldUpdateOperationsInput | string
   code?: Prisma.StringFieldUpdateOperationsInput | string
   iconId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  path?: Prisma.CategoryUpdatepathInput | string[]
   level?: Prisma.IntFieldUpdateOperationsInput | number
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   availableFeatures?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -962,10 +1005,11 @@ export type CategorySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   id?: boolean
   name?: boolean
   slug?: boolean
+  path?: boolean
+  fullPath?: boolean
   code?: boolean
   iconId?: boolean
   parentId?: boolean
-  path?: boolean
   level?: boolean
   sortOrder?: boolean
   availableFeatures?: boolean
@@ -981,10 +1025,11 @@ export type CategorySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   id?: boolean
   name?: boolean
   slug?: boolean
+  path?: boolean
+  fullPath?: boolean
   code?: boolean
   iconId?: boolean
   parentId?: boolean
-  path?: boolean
   level?: boolean
   sortOrder?: boolean
   availableFeatures?: boolean
@@ -997,10 +1042,11 @@ export type CategorySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   id?: boolean
   name?: boolean
   slug?: boolean
+  path?: boolean
+  fullPath?: boolean
   code?: boolean
   iconId?: boolean
   parentId?: boolean
-  path?: boolean
   level?: boolean
   sortOrder?: boolean
   availableFeatures?: boolean
@@ -1013,10 +1059,11 @@ export type CategorySelectScalar = {
   id?: boolean
   name?: boolean
   slug?: boolean
+  path?: boolean
+  fullPath?: boolean
   code?: boolean
   iconId?: boolean
   parentId?: boolean
-  path?: boolean
   level?: boolean
   sortOrder?: boolean
   availableFeatures?: boolean
@@ -1024,7 +1071,7 @@ export type CategorySelectScalar = {
   updatedAt?: boolean
 }
 
-export type CategoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "slug" | "code" | "iconId" | "parentId" | "path" | "level" | "sortOrder" | "availableFeatures" | "createdAt" | "updatedAt", ExtArgs["result"]["category"]>
+export type CategoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "slug" | "path" | "fullPath" | "code" | "iconId" | "parentId" | "level" | "sortOrder" | "availableFeatures" | "createdAt" | "updatedAt", ExtArgs["result"]["category"]>
 export type CategoryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   parent?: boolean | Prisma.Category$parentArgs<ExtArgs>
   children?: boolean | Prisma.Category$childrenArgs<ExtArgs>
@@ -1049,10 +1096,11 @@ export type $CategoryPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     id: string
     name: string
     slug: string
+    path: string[]
+    fullPath: string
     code: string
     iconId: string | null
     parentId: string | null
-    path: string[]
     level: number
     sortOrder: number
     availableFeatures: runtime.JsonValue | null
@@ -1487,10 +1535,11 @@ export interface CategoryFieldRefs {
   readonly id: Prisma.FieldRef<"Category", 'String'>
   readonly name: Prisma.FieldRef<"Category", 'String'>
   readonly slug: Prisma.FieldRef<"Category", 'String'>
+  readonly path: Prisma.FieldRef<"Category", 'String[]'>
+  readonly fullPath: Prisma.FieldRef<"Category", 'String'>
   readonly code: Prisma.FieldRef<"Category", 'String'>
   readonly iconId: Prisma.FieldRef<"Category", 'String'>
   readonly parentId: Prisma.FieldRef<"Category", 'String'>
-  readonly path: Prisma.FieldRef<"Category", 'String[]'>
   readonly level: Prisma.FieldRef<"Category", 'Int'>
   readonly sortOrder: Prisma.FieldRef<"Category", 'Int'>
   readonly availableFeatures: Prisma.FieldRef<"Category", 'Json'>

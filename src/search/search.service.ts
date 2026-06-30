@@ -19,6 +19,7 @@ export class SearchService {
           id,
           name,
           slug,
+          full_path,
           similarity(name, ${q}) *
           CASE
             WHEN name ILIKE ${q + '%'} THEN 1.5
@@ -33,18 +34,19 @@ export class SearchService {
 
         this.prisma.$queryRaw<any[]>`
         SELECT
-          id,
-          title,
-          slug,
-          seo_path,
-          similarity(title, ${q}) *
+          a.id,
+          a.title,
+          a.slug,
+          c.full_path AS category_full_path,
+          similarity(a.title, ${q}) *
           CASE
-            WHEN title ILIKE ${q + '%'} THEN 1.5
-            WHEN title ILIKE ${'%' + q + '%'} THEN 1.0
+            WHEN a.title ILIKE ${q + '%'} THEN 1.5
+            WHEN a.title ILIKE ${'%' + q + '%'} THEN 1.0
             ELSE 0.7
           END AS score
-        FROM ads
-        WHERE title % ${q}
+        FROM ads a
+        LEFT JOIN categories c ON a.category_id = c.id
+        WHERE a.title % ${q}
         ORDER BY score DESC
         LIMIT 10
       `
@@ -56,7 +58,7 @@ export class SearchService {
         rawName: category.name,
         name: `${category.name}`,
         slug: category.slug,
-        url: `/catalog/${category.slug}`,
+        url: `/catalog/${category.full_path || category.slug}`,
         score: Number(category.score || 0)
       }))
 
@@ -66,7 +68,7 @@ export class SearchService {
         rawName: ad.title,
         name: ad.title,
         slug: ad.slug,
-        url: ad.seo_path ? `/catalog/${ad.seo_path}` : '',
+        url: `/catalog/${ad.category_full_path || ''}?search=${encodeURIComponent(ad.title)}`,
         score: Number(ad.score)
       }))
 

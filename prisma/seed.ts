@@ -51,23 +51,33 @@ async function upsertCategory(
   data: CategoryInput,
   parentId: string | null = null,
   parentCode: string | null = null,
-  parentSlug: string | null = null,
+  parentPath: string[] = [],
   level = 0
 ) {
-  const currentSubSlug = generateSlug(data.name)
-  const slug = parentSlug ? `${parentSlug}/${currentSubSlug}` : currentSubSlug
+  const slug = generateSlug(data.name)
+
+  const fullPath = [...parentPath, slug].join('/')
+
+  const path = [...parentPath, slug]
 
   const existingCategory = await prisma.category.findUnique({
-    where: { slug }
+    where: {
+      fullPath
+    }
   })
 
   let category
 
   if (existingCategory) {
     category = await prisma.category.update({
-      where: { id: existingCategory.id },
+      where: {
+        id: existingCategory.id
+      },
       data: {
         name: data.name,
+        slug,
+        fullPath,
+        path,
         iconId: data.iconId,
         parentId,
         level,
@@ -82,6 +92,8 @@ async function upsertCategory(
         name: data.name,
         code: newCode,
         slug,
+        fullPath,
+        path,
         iconId: data.iconId,
         parentId,
         level,
@@ -92,7 +104,7 @@ async function upsertCategory(
 
   if (data.children?.length) {
     for (const child of data.children) {
-      await upsertCategory(child, category.id, category.code, slug, level + 1)
+      await upsertCategory(child, category.id, category.code, path, level + 1)
     }
   }
 

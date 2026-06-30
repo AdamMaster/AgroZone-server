@@ -13,7 +13,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
       })
     )
 
-    super({ adapter }) // 🔥 КЛЮЧЕВАЯ СТРОКА
+    super({ adapter, log: ['query', 'info', 'warn', 'error'] })
   }
 
   async onModuleInit(): Promise<void> {
