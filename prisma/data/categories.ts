@@ -452,7 +452,7 @@ export const CATEGORIES_DATA: CategoryInput[] = [
     ]
   },
   {
-    name: 'Продукция и сырье',
+    name: 'Продукты питания',
     iconId: 'Apple',
     children: [
       { name: 'Грибы пищевые', children: [], features: DEFAULT_FEATURES },
