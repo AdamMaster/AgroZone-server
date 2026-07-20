@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from '@/prisma/prisma.service'
+import { CategoryFeature } from 'prisma/generated/client'
 
 export interface CategoryWithChildren {
   id: string
@@ -10,6 +11,7 @@ export interface CategoryWithChildren {
   parentId: string | null
   level: number
   sortOrder: number
+  categoryFeatures: CategoryFeature[]
   children: CategoryWithChildren[]
 }
 
@@ -19,7 +21,10 @@ export class CategoriesService {
 
   async findAll(): Promise<CategoryWithChildren[]> {
     const categories = await this.prisma.category.findMany({
-      orderBy: [{ sortOrder: 'asc' }, { name: 'asc' }]
+      orderBy: [{ sortOrder: 'asc' }, { name: 'asc' }],
+      include: {
+        categoryFeatures: true
+      }
     })
 
     const byParent = new Map<string, typeof categories>()
@@ -48,7 +53,7 @@ export class CategoriesService {
         parentId: cat.parentId,
         level: cat.level,
         sortOrder: cat.sortOrder,
-        availableFeatures: cat.availableFeatures,
+        categoryFeatures: cat.categoryFeatures,
         path: cat.path,
         fullPath: cat.fullPath,
         children: build(cat.id)

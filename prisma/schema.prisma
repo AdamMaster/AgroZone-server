@@ -100,7 +100,7 @@ model Category {
   level     Int @default(0)
   sortOrder Int @default(0)
 
-  availableFeatures Json? @map("available_features")
+  categoryFeatures CategoryFeature[]
 
   ads Ad[]
 
@@ -113,6 +113,43 @@ model Category {
   @@index([fullPath])
   @@index([code])
   @@map("categories")
+}
+
+model CategoryFeature {
+  id String @id @default(uuid())
+
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  name  String
+  label String
+
+  type FeatureType
+
+  required   Boolean @default(false)
+  filterable Boolean @default(true)
+
+  placeholder String?
+
+  unit String?
+
+  options Json?
+
+  sortOrder Int @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([categoryId])
+  @@index([categoryId, sortOrder])
+  @@map("category_features")
+}
+
+enum FeatureType {
+  TEXT
+  NUMBER
+  BOOLEAN
+  SELECT
 }
 
 model Ad {

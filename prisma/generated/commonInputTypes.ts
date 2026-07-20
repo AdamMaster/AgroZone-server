@@ -218,6 +218,13 @@ export type EnumTokenTypeWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumTokenTypeFilter<$PrismaModel>
 }
 
+export type EnumFeatureTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.FeatureType | Prisma.EnumFeatureTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.FeatureType[] | Prisma.ListEnumFeatureTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FeatureType[] | Prisma.ListEnumFeatureTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFeatureTypeFilter<$PrismaModel> | $Enums.FeatureType
+}
+
 export type JsonNullableFilter<$PrismaModel = never> =
 | Prisma.PatchUndefined<
     Prisma.Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
@@ -240,6 +247,16 @@ export type JsonNullableFilterBase<$PrismaModel = never> = {
   gt?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel>
   gte?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel>
   not?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel> | Prisma.JsonNullValueFilter
+}
+
+export type EnumFeatureTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.FeatureType | Prisma.EnumFeatureTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.FeatureType[] | Prisma.ListEnumFeatureTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FeatureType[] | Prisma.ListEnumFeatureTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFeatureTypeWithAggregatesFilter<$PrismaModel> | $Enums.FeatureType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumFeatureTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumFeatureTypeFilter<$PrismaModel>
 }
 
 export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
@@ -631,6 +648,23 @@ export type NestedEnumTokenTypeWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumTokenTypeFilter<$PrismaModel>
   _max?: Prisma.NestedEnumTokenTypeFilter<$PrismaModel>
+}
+
+export type NestedEnumFeatureTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.FeatureType | Prisma.EnumFeatureTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.FeatureType[] | Prisma.ListEnumFeatureTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FeatureType[] | Prisma.ListEnumFeatureTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFeatureTypeFilter<$PrismaModel> | $Enums.FeatureType
+}
+
+export type NestedEnumFeatureTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.FeatureType | Prisma.EnumFeatureTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.FeatureType[] | Prisma.ListEnumFeatureTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FeatureType[] | Prisma.ListEnumFeatureTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFeatureTypeWithAggregatesFilter<$PrismaModel> | $Enums.FeatureType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumFeatureTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumFeatureTypeFilter<$PrismaModel>
 }
 
 export type NestedJsonNullableFilter<$PrismaModel = never> =

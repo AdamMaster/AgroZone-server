@@ -388,6 +388,7 @@ export const ModelName = {
   Account: 'Account',
   Token: 'Token',
   Category: 'Category',
+  CategoryFeature: 'CategoryFeature',
   Ad: 'Ad',
   Favorite: 'Favorite'
 } as const
@@ -405,7 +406,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "account" | "token" | "category" | "ad" | "favorite"
+    modelProps: "user" | "account" | "token" | "category" | "categoryFeature" | "ad" | "favorite"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -705,6 +706,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    CategoryFeature: {
+      payload: Prisma.$CategoryFeaturePayload<ExtArgs>
+      fields: Prisma.CategoryFeatureFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CategoryFeatureFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CategoryFeaturePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CategoryFeatureFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CategoryFeaturePayload>
+        }
+        findFirst: {
+          args: Prisma.CategoryFeatureFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CategoryFeaturePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CategoryFeatureFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CategoryFeaturePayload>
+        }
+        findMany: {
+          args: Prisma.CategoryFeatureFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CategoryFeaturePayload>[]
+        }
+        create: {
+          args: Prisma.CategoryFeatureCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CategoryFeaturePayload>
+        }
+        createMany: {
+          args: Prisma.CategoryFeatureCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CategoryFeatureCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CategoryFeaturePayload>[]
+        }
+        delete: {
+          args: Prisma.CategoryFeatureDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CategoryFeaturePayload>
+        }
+        update: {
+          args: Prisma.CategoryFeatureUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CategoryFeaturePayload>
+        }
+        deleteMany: {
+          args: Prisma.CategoryFeatureDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CategoryFeatureUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CategoryFeatureUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CategoryFeaturePayload>[]
+        }
+        upsert: {
+          args: Prisma.CategoryFeatureUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CategoryFeaturePayload>
+        }
+        aggregate: {
+          args: Prisma.CategoryFeatureAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCategoryFeature>
+        }
+        groupBy: {
+          args: Prisma.CategoryFeatureGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CategoryFeatureGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CategoryFeatureCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CategoryFeatureCountAggregateOutputType> | number
+        }
+      }
+    }
     Ad: {
       payload: Prisma.$AdPayload<ExtArgs>
       fields: Prisma.AdFieldRefs
@@ -954,12 +1029,30 @@ export const CategoryScalarFieldEnum = {
   parentId: 'parentId',
   level: 'level',
   sortOrder: 'sortOrder',
-  availableFeatures: 'availableFeatures',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum]
+
+
+export const CategoryFeatureScalarFieldEnum = {
+  id: 'id',
+  categoryId: 'categoryId',
+  name: 'name',
+  label: 'label',
+  type: 'type',
+  required: 'required',
+  filterable: 'filterable',
+  placeholder: 'placeholder',
+  unit: 'unit',
+  options: 'options',
+  sortOrder: 'sortOrder',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CategoryFeatureScalarFieldEnum = (typeof CategoryFeatureScalarFieldEnum)[keyof typeof CategoryFeatureScalarFieldEnum]
 
 
 export const AdScalarFieldEnum = {
@@ -1159,6 +1252,20 @@ export type ListEnumTokenTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$Pr
 
 
 /**
+ * Reference to a field of type 'FeatureType'
+ */
+export type EnumFeatureTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FeatureType'>
+    
+
+
+/**
+ * Reference to a field of type 'FeatureType[]'
+ */
+export type ListEnumFeatureTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FeatureType[]'>
+    
+
+
+/**
  * Reference to a field of type 'Json'
  */
 export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
@@ -1298,6 +1405,7 @@ export type GlobalOmitConfig = {
   account?: Prisma.AccountOmit
   token?: Prisma.TokenOmit
   category?: Prisma.CategoryOmit
+  categoryFeature?: Prisma.CategoryFeatureOmit
   ad?: Prisma.AdOmit
   favorite?: Prisma.FavoriteOmit
 }

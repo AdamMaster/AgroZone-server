@@ -1,30 +1,35 @@
-import { PrismaClient } from './generated/client'
+import { PrismaClient, FeatureType } from './generated/client'
 import { PrismaPg } from '@prisma/adapter-pg'
 import { Pool } from 'pg'
-import { CATEGORIES_DATA } from './data/categories'
+import { CATEGORIES_DATA, CategoryFeatureInput } from './data/categories'
 import slugify from 'slugify'
 
-const pool = new Pool({ connectionString: process.env.POSTGRES_URI })
-const adapter = new PrismaPg(pool)
-const prisma = new PrismaClient({ adapter })
+const pool = new Pool({
+  connectionString: process.env.POSTGRES_URI
+})
 
-type FeatureInput = {
-  name: string
-  label: string
-  type: 'text' | 'number' | 'select' | 'boolean'
-  options?: string[]
-  required: boolean
-}
+const adapter = new PrismaPg(pool)
+
+const prisma = new PrismaClient({
+  adapter
+})
 
 type CategoryInput = {
   name: string
   iconId?: string
   code?: string
   children?: CategoryInput[]
-  features?: FeatureInput[]
+  categoryFeatures?: CategoryFeatureInput[]
 }
 
-const generateSlug = (text: string) => {
+const featureTypeMap: Record<CategoryFeatureInput['type'], FeatureType> = {
+  TEXT: FeatureType.TEXT,
+  NUMBER: FeatureType.NUMBER,
+  BOOLEAN: FeatureType.BOOLEAN,
+  SELECT: FeatureType.SELECT
+}
+
+function generateSlug(text: string) {
   return slugify(text, {
     lower: true,
     strict: true,
@@ -32,12 +37,12 @@ const generateSlug = (text: string) => {
   })
 }
 
-function generateCode(name: string): string {
+function generateCode(name: string) {
   return name
     .toLowerCase()
     .trim()
-    .replace(/ё/g, 'e')
-    .replace(/[^a-zа-я0-9\s-]/g, '')
+    .replace(/ё/g, 'е')
+    .replace(/[^a-zа-я0-9\s-]/gi, '')
     .replace(/\s+/g, '-')
 }
 
@@ -56,49 +61,86 @@ async function upsertCategory(
 ) {
   const slug = generateSlug(data.name)
 
-  const fullPath = [...parentPath, slug].join('/')
-
   const path = [...parentPath, slug]
 
-  const existingCategory = await prisma.category.findUnique({
+  const fullPath = path.join('/')
+
+  const code = data.code ?? buildCode(parentCode, data.name)
+
+  let category = await prisma.category.findUnique({
     where: {
       fullPath
     }
   })
 
-  let category
-
-  if (existingCategory) {
+  if (category) {
     category = await prisma.category.update({
       where: {
-        id: existingCategory.id
+        id: category.id
       },
       data: {
         name: data.name,
         slug,
-        fullPath,
         path,
+        fullPath,
+        code,
         iconId: data.iconId,
-        parentId,
         level,
-        availableFeatures: data.features ?? undefined
+        parent: parentId
+          ? {
+              connect: {
+                id: parentId
+              }
+            }
+          : {
+              disconnect: true
+            }
       }
     })
   } else {
-    const newCode = data.code ?? buildCode(parentCode, data.name)
-
     category = await prisma.category.create({
       data: {
         name: data.name,
-        code: newCode,
         slug,
-        fullPath,
         path,
+        fullPath,
+        code,
         iconId: data.iconId,
-        parentId,
         level,
-        availableFeatures: data.features ?? undefined
+        parent: parentId
+          ? {
+              connect: {
+                id: parentId
+              }
+            }
+          : undefined
       }
+    })
+  }
+
+  await prisma.categoryFeature.deleteMany({
+    where: {
+      categoryId: category.id
+    }
+  })
+
+  if (data.categoryFeatures?.length) {
+    await prisma.categoryFeature.createMany({
+      data: data.categoryFeatures.map((feature, index) => ({
+        categoryId: category.id,
+
+        name: feature.name,
+        label: feature.label,
+
+        type: featureTypeMap[feature.type],
+
+        required: feature.required ?? false,
+        filterable: true,
+
+        options: feature.options,
+
+        sortOrder: index
+      }))
     })
   }
 
@@ -111,24 +153,23 @@ async function upsertCategory(
   return category
 }
 
-async function main(): Promise<void> {
-  console.log('Начало заполнения базы данных категориями...')
+async function main() {
+  console.log('Начало импорта категорий...')
 
+  // Если нужен полный пересид:
   // await prisma.category.deleteMany()
 
-  for (const rootCategory of CATEGORIES_DATA) {
-    await upsertCategory(rootCategory)
-    console.log(`Создана ветка: ${rootCategory.name}`)
+  for (const category of CATEGORIES_DATA) {
+    await upsertCategory(category)
+    console.log(`✔ ${category.name}`)
   }
 
-  console.log('Импорт успешно завершен!')
+  console.log('Импорт завершён.')
 }
 
 main()
-  .catch(e => {
-    console.error(e)
-    process.exit(1)
-  })
+  .catch(console.error)
   .finally(async () => {
     await prisma.$disconnect()
+    await pool.end()
   })

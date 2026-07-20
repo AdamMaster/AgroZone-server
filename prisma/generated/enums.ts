@@ -9,6 +9,16 @@
 * 🟢 You can import this file directly.
 */
 
+export const FeatureType = {
+  TEXT: 'TEXT',
+  NUMBER: 'NUMBER',
+  BOOLEAN: 'BOOLEAN',
+  SELECT: 'SELECT'
+} as const
+
+export type FeatureType = (typeof FeatureType)[keyof typeof FeatureType]
+
+
 export const UserRole = {
   REGULAR: 'REGULAR',
   ADMIN: 'ADMIN',

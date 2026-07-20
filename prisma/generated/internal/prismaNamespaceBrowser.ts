@@ -55,6 +55,7 @@ export const ModelName = {
   Account: 'Account',
   Token: 'Token',
   Category: 'Category',
+  CategoryFeature: 'CategoryFeature',
   Ad: 'Ad',
   Favorite: 'Favorite'
 } as const
@@ -137,12 +138,30 @@ export const CategoryScalarFieldEnum = {
   parentId: 'parentId',
   level: 'level',
   sortOrder: 'sortOrder',
-  availableFeatures: 'availableFeatures',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum]
+
+
+export const CategoryFeatureScalarFieldEnum = {
+  id: 'id',
+  categoryId: 'categoryId',
+  name: 'name',
+  label: 'label',
+  type: 'type',
+  required: 'required',
+  filterable: 'filterable',
+  placeholder: 'placeholder',
+  unit: 'unit',
+  options: 'options',
+  sortOrder: 'sortOrder',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CategoryFeatureScalarFieldEnum = (typeof CategoryFeatureScalarFieldEnum)[keyof typeof CategoryFeatureScalarFieldEnum]
 
 
 export const AdScalarFieldEnum = {

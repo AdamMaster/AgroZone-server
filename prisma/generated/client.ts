@@ -58,6 +58,11 @@ export type Token = Prisma.TokenModel
  */
 export type Category = Prisma.CategoryModel
 /**
+ * Model CategoryFeature
+ * 
+ */
+export type CategoryFeature = Prisma.CategoryFeatureModel
+/**
  * Model Ad
  * 
  */
