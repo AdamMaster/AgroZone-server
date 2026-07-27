@@ -16,18 +16,20 @@ export class SearchService {
       const [categories, ads] = await Promise.all([
         this.prisma.$queryRaw<any[]>`
         SELECT
-          id,
-          name,
-          slug,
-          full_path,
-          similarity(name, ${q}) *
+          c.id,
+          c.name,
+          c.slug,
+          c.full_path,
+          p.name AS parent_name,
+          similarity(c.name, ${q}) *
           CASE
-            WHEN name ILIKE ${q + '%'} THEN 1.5
-            WHEN name ILIKE ${'%' + q + '%'} THEN 1.0
+            WHEN c.name ILIKE ${q + '%'} THEN 1.5
+            WHEN c.name ILIKE ${'%' + q + '%'} THEN 1.0
             ELSE 0.8
           END AS score
-        FROM categories
-        WHERE name % ${q}
+        FROM categories c
+        LEFT JOIN categories p ON p.id = c.parent_id
+        WHERE c.name % ${q}
         ORDER BY score DESC
         LIMIT 5
       `,
@@ -62,7 +64,8 @@ export class SearchService {
         id: category.id,
         type: 'category' as const,
         rawName: category.name,
-        name: `${category.name}`,
+        name: category.name,
+        parentName: category.parent_name,
         slug: category.slug,
         url: `/catalog/${category.full_path || category.slug}`,
         score: Number(category.score || 0)

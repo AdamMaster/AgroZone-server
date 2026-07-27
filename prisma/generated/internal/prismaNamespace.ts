@@ -1021,6 +1021,7 @@ export type TokenScalarFieldEnum = (typeof TokenScalarFieldEnum)[keyof typeof To
 export const CategoryScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  priceUnits: 'priceUnits',
   slug: 'slug',
   path: 'path',
   fullPath: 'fullPath',
@@ -1248,6 +1249,20 @@ export type EnumTokenTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$Prisma
  * Reference to a field of type 'TokenType[]'
  */
 export type ListEnumTokenTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TokenType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'PriceUnit[]'
+ */
+export type ListEnumPriceUnitFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PriceUnit[]'>
+    
+
+
+/**
+ * Reference to a field of type 'PriceUnit'
+ */
+export type EnumPriceUnitFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PriceUnit'>
     
 
 

@@ -85,6 +85,8 @@ model Category {
   id   String @id @default(uuid())
   name String
 
+  priceUnits PriceUnit[] @default([ITEM]) @map("price_units")
+
   slug     String
   path     String[] @default([])
   fullPath String   @unique @map("full_path")
@@ -150,6 +152,7 @@ enum FeatureType {
   NUMBER
   BOOLEAN
   SELECT
+  MULTI_SELECT
 }
 
 model Ad {
@@ -241,4 +244,14 @@ enum AdStatus {
   REJECTED
   ARCHIVED
   EXPIRED
+}
+
+enum PriceUnit {
+  ITEM
+  TON
+  KG
+  LITER
+  M3
+  BAG
+  HEAD
 }

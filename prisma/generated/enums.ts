@@ -13,7 +13,8 @@ export const FeatureType = {
   TEXT: 'TEXT',
   NUMBER: 'NUMBER',
   BOOLEAN: 'BOOLEAN',
-  SELECT: 'SELECT'
+  SELECT: 'SELECT',
+  MULTI_SELECT: 'MULTI_SELECT'
 } as const
 
 export type FeatureType = (typeof FeatureType)[keyof typeof FeatureType]
@@ -67,3 +68,16 @@ export const AdStatus = {
 } as const
 
 export type AdStatus = (typeof AdStatus)[keyof typeof AdStatus]
+
+
+export const PriceUnit = {
+  ITEM: 'ITEM',
+  TON: 'TON',
+  KG: 'KG',
+  LITER: 'LITER',
+  M3: 'M3',
+  BAG: 'BAG',
+  HEAD: 'HEAD'
+} as const
+
+export type PriceUnit = (typeof PriceUnit)[keyof typeof PriceUnit]

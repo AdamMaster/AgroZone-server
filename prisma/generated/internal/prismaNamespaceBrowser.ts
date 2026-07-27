@@ -130,6 +130,7 @@ export type TokenScalarFieldEnum = (typeof TokenScalarFieldEnum)[keyof typeof To
 export const CategoryScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  priceUnits: 'priceUnits',
   slug: 'slug',
   path: 'path',
   fullPath: 'fullPath',

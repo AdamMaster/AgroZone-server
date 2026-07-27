@@ -26,7 +26,8 @@ const featureTypeMap: Record<CategoryFeatureInput['type'], FeatureType> = {
   TEXT: FeatureType.TEXT,
   NUMBER: FeatureType.NUMBER,
   BOOLEAN: FeatureType.BOOLEAN,
-  SELECT: FeatureType.SELECT
+  SELECT: FeatureType.SELECT,
+  MULTI_SELECT: FeatureType.MULTI_SELECT
 }
 
 function generateSlug(text: string) {
