@@ -25,6 +25,7 @@ import { VerifySmsDto } from './dto/verify-sms.dto'
 import { SmsRegisterDto } from './dto/sms-register.dto'
 import { SmsCompleteDto } from './dto/sms-complete.dto'
 import { Throttle, ThrottlerGuard } from '@nestjs/throttler'
+import { randomBytes } from 'crypto'
 
 // Более мягкий лимит для запроса самого кода (SMS/email) — раз в 30 секунд
 // не даёт спамить провайдера SMS/почты, но не мешает нормальному пользователю.
@@ -99,11 +100,20 @@ export class AuthController {
 
   @UseGuards(AuthProviderGuard)
   @Get('/oauth/connect/:provider')
-  async connect(@Param('provider') provider: string) {
+  async connect(@Param('provider') provider: string, @Req() req: Request) {
     const providerInstance = this.providerService.findByService(provider)
 
+    if (!providerInstance) {
+      throw new BadRequestException(`Провайдер "${provider}" не найден.`)
+    }
+
+    // Защита от OAuth login CSRF: генерируем одноразовое значение,
+    // кладём его в сессию и сверяем с тем, что провайдер вернёт в callback.
+    const state = randomBytes(16).toString('hex')
+    req.session.oauthState = state
+
     return {
-      url: providerInstance?.getAuthUrl()
+      url: providerInstance.getAuthUrl(state)
     }
   }
 
@@ -113,10 +123,20 @@ export class AuthController {
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
     @Query('code') code: string,
+    @Query('state') state: string,
     @Param('provider') provider: string
   ) {
     if (!code) {
       throw new BadRequestException('Не был предоставлен код авторизации.')
+    }
+
+    const expectedState = req.session.oauthState
+    delete req.session.oauthState
+
+    if (!expectedState || !state || state !== expectedState) {
+      throw new BadRequestException(
+        'Запрос авторизации недействителен или устарел (несовпадение state). Пожалуйста, попробуйте войти снова.'
+      )
     }
 
     await this.authService.extractProfileFromCode(req, provider, code)
