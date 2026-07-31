@@ -24,8 +24,11 @@ import { FileInterceptor } from '@nestjs/platform-express'
 import { PasswordChangeDto } from './dto/password-change.dto'
 import { PhoneChangeDto } from './dto/phone-change.dto'
 import { ConfirmPhoneChangeDto } from './dto/confirm-phone-change.dto'
-import { ThrottlerGuard } from '@nestjs/throttler'
+import { Throttle, ThrottlerGuard } from '@nestjs/throttler'
 import { AddPhoneDto } from './dto/add-phone.dto'
+
+// Более жёсткий лимит для проверки кода — именно на этом шаге возможен брутфорс.
+const VERIFY_CODE_THROTTLE = { default: { limit: 5, ttl: 60000 } }
 
 @Controller('users')
 export class UserController {
@@ -100,6 +103,8 @@ export class UserController {
 
   @Authorization()
   @HttpCode(HttpStatus.OK)
+  @UseGuards(ThrottlerGuard)
+  @Throttle(VERIFY_CODE_THROTTLE)
   @Patch('profile/change-phone/confirm')
   async confirmPhoneChange(@Authorized('id') userId: string, @Body() dto: ConfirmPhoneChangeDto) {
     return this.userService.confirmPhoneChange(userId, dto.code)
@@ -122,6 +127,8 @@ export class UserController {
 
   @Authorization()
   @HttpCode(HttpStatus.OK)
+  @UseGuards(ThrottlerGuard)
+  @Throttle(VERIFY_CODE_THROTTLE)
   @Patch('profile/phones/confirm')
   async confirmAddPhone(@Authorized('id') userId: string, @Body() dto: ConfirmPhoneChangeDto) {
     return this.userService.confirmAddPhone(userId, dto.code)

@@ -8,6 +8,7 @@ import { ConfigService } from '@nestjs/config'
 import { FileService } from '../file/file.service'
 import { AD_LIMITS } from '@/ads/constants/ads.constants'
 import { normalizePhone } from '@/libs/common/utils/phone.util'
+import { generateSmsCode } from '@/libs/common/utils/generate-code.util'
 
 @Injectable()
 export class UserService {
@@ -215,7 +216,7 @@ export class UserService {
       throw new BadRequestException('Этот номер уже используется другим аккаунтом')
     }
 
-    const smsCode = Math.floor(1000 + Math.random() * 9000).toString()
+    const smsCode = generateSmsCode()
 
     await this.prismaService.token.deleteMany({ where: { userId, type: 'PHONE_CHANGE' } })
     await this.prismaService.token.create({

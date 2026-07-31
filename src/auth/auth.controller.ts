@@ -24,6 +24,14 @@ import { CheckUserDto } from './dto/check-user.dto'
 import { VerifySmsDto } from './dto/verify-sms.dto'
 import { SmsRegisterDto } from './dto/sms-register.dto'
 import { SmsCompleteDto } from './dto/sms-complete.dto'
+import { Throttle, ThrottlerGuard } from '@nestjs/throttler'
+
+// Более мягкий лимит для запроса самого кода (SMS/email) — раз в 30 секунд
+// не даёт спамить провайдера SMS/почты, но не мешает нормальному пользователю.
+const REQUEST_CODE_THROTTLE = { default: { limit: 3, ttl: 60000 } }
+
+// Более жёсткий лимит для проверки кода — именно здесь возможен брутфорс.
+const VERIFY_CODE_THROTTLE = { default: { limit: 5, ttl: 60000 } }
 
 @Controller('auth')
 export class AuthController {
@@ -33,24 +41,32 @@ export class AuthController {
     private readonly configService: ConfigService
   ) {}
 
+  @UseGuards(ThrottlerGuard)
+  @Throttle(REQUEST_CODE_THROTTLE)
   @Post('register/sms/start')
   @HttpCode(HttpStatus.OK)
   async registerSmsStart(@Body() dto: SmsRegisterDto) {
     return this.authService.registerSmsStart(dto)
   }
 
+  @UseGuards(ThrottlerGuard)
+  @Throttle(VERIFY_CODE_THROTTLE)
   @Post('register/sms/complete')
   @HttpCode(HttpStatus.OK)
   async registerSmsComplete(@Req() req: Request, @Body() dto: SmsCompleteDto) {
     return this.authService.registerSmsComplete(req, dto)
   }
 
+  @UseGuards(ThrottlerGuard)
+  @Throttle(VERIFY_CODE_THROTTLE)
   @Post('verify-sms')
   @HttpCode(HttpStatus.OK)
   async verifySms(@Req() req: Request, @Body() dto: VerifySmsDto) {
     return this.authService.verifySms(req, dto)
   }
 
+  @UseGuards(ThrottlerGuard)
+  @Throttle(VERIFY_CODE_THROTTLE)
   @HttpCode(HttpStatus.OK)
   @Post('register/check-code')
   async checkRegisterCode(@Body() dto: VerifySmsDto) {
@@ -64,6 +80,8 @@ export class AuthController {
     return this.authService.register(dto)
   }
 
+  @UseGuards(ThrottlerGuard)
+  @Throttle(VERIFY_CODE_THROTTLE)
   @Post('check-user')
   @HttpCode(HttpStatus.OK)
   async checkUser(@Body() dto: CheckUserDto) {
@@ -71,6 +89,8 @@ export class AuthController {
   }
 
   @Recaptcha()
+  @UseGuards(ThrottlerGuard)
+  @Throttle(VERIFY_CODE_THROTTLE)
   @Post('login')
   @HttpCode(HttpStatus.OK)
   async login(@Req() req: Request, @Body() dto: LoginDto) {

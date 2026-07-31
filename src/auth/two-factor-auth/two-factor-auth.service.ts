@@ -2,6 +2,7 @@ import { MailService } from '@/libs/mail/mail.service'
 import { PrismaService } from '@/prisma/prisma.service'
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
 import { TokenType } from 'prisma/generated/enums'
+import { generateNumericCode } from '@/libs/common/utils/generate-code.util'
 
 @Injectable()
 export class TwoFactorAuthService {
@@ -61,7 +62,7 @@ export class TwoFactorAuthService {
   }
 
   private async generateTwoFactorToken(email: string) {
-    const token = Math.floor(Math.random() * (1000000 - 100000) + 100000).toString()
+    const token = generateNumericCode(6)
     const expiresIn = new Date(new Date().getTime() + 300000)
 
     const existingToken = await this.prismaService.token.findFirst({

@@ -5,7 +5,7 @@ import { IsPasswordsMatchingConstraint } from 'src/libs/common/decorators/is-pas
 export class SmsCompleteDto extends SmsRegisterDto {
   @IsString({ message: 'Код должен быть строкой.' })
   @IsNotEmpty({ message: 'Код обязателен.' })
-  @Length(4, 4, { message: 'Код должен состоять из 4 цифр.' })
+  @Length(6, 6, { message: 'Код должен состоять из 6 цифр.' })
   code!: string
 
   @IsString({ message: 'Имя должно быть строкой.' })

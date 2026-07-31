@@ -23,6 +23,7 @@ import { VerifySmsDto } from './dto/verify-sms.dto'
 import { SmsRegisterDto } from './dto/sms-register.dto'
 import { SmsCompleteDto } from './dto/sms-complete.dto'
 import { normalizePhone } from '@/libs/common/utils/phone.util'
+import { generateSmsCode } from '@/libs/common/utils/generate-code.util'
 
 @Injectable()
 export class AuthService {
@@ -115,7 +116,7 @@ export class AuthService {
   }
 
   async sendSmsCode(phone: string, type: TokenType = TokenType.SMS_VERIFICATION) {
-    const code = Math.floor(1000 + Math.random() * 9000).toString()
+    const code = generateSmsCode()
 
     // Удаляем старые коды для этого номера
     await this.prismaService.token.deleteMany({
