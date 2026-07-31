@@ -395,11 +395,17 @@ export class UserService {
     }
 
     await this.prismaService.$transaction(async tx => {
+      // Самый первый номер пользователя становится основным автоматически —
+      // выбирать в профиле/при создании объявления всё равно не из чего.
+      // Второй и последующие добавленные номера остаются не основными,
+      // как и раньше.
+      const existingPhonesCount = await tx.userPhone.count({ where: { userId } })
+
       await tx.userPhone.create({
         data: {
           phone,
           userId,
-          isPrimary: false,
+          isPrimary: existingPhonesCount === 0,
           isVerified: true
         }
       })

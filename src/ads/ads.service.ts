@@ -27,6 +27,30 @@ export class AdsService {
     private readonly userService: UserService
   ) {}
 
+  // Номер объявления может быть только одним из уже подтверждённых номеров
+  // пользователя. Раньше любой присланный номер молча регистрировался через
+  // userService.addPhone(...) — то есть непроверенный номер, который никто
+  // не подтверждал по SMS, тут же попадал в базу как isVerified: true.
+  private assertPhoneBelongsToUser(user: { phones: { phone: string }[] }, phone: string): void {
+    const isKnown = user.phones.some(p => p.phone === phone)
+
+    if (!isKnown) {
+      throw new BadRequestException(
+        'Этот номер телефона не подтверждён на вашем аккаунте. Сначала добавьте и подтвердите его в профиле.'
+      )
+    }
+  }
+
+  private resolvePrimaryPhoneOrThrow(user: { phones: { phone: string; isPrimary: boolean }[] }): string {
+    const phone = user.phones.find(p => p.isPrimary)?.phone ?? user.phones[0]?.phone
+
+    if (!phone) {
+      throw new BadRequestException('Укажите номер телефона для связи')
+    }
+
+    return phone
+  }
+
   async create(
     createAdDto: CreateAdDto,
     userId: string,
@@ -41,24 +65,13 @@ export class AdsService {
       throw new NotFoundException('Пользователь не найден')
     }
 
-    let phone = createAdDto.phone ? normalizePhone(createAdDto.phone) : null
+    let phone: string
 
-    if (!phone) {
-      phone = user.phones.find(p => p.isPrimary)?.phone ?? null
-    }
-
-    if (!phone) {
-      throw new BadRequestException('Укажите номер телефона для связи')
-    }
-
-    if (!/^\d{10,15}$/.test(phone)) {
-      throw new BadRequestException('Некорректный номер телефона')
-    }
-
-    const userPhone = user.phones.find(p => p.phone === phone)
-
-    if (!userPhone) {
-      await this.userService.addPhone(userId, phone)
+    if (createAdDto.phone) {
+      phone = normalizePhone(createAdDto.phone)
+      this.assertPhoneBelongsToUser(user, phone)
+    } else {
+      phone = this.resolvePrimaryPhoneOrThrow(user)
     }
 
     const images = await this.prepareImages(null, createAdDto.existingImages ?? [], files)
@@ -319,14 +332,14 @@ export class AdsService {
 
     const { existingImages, features, phone, ...rest } = updateAdDto
 
-    let normalizedPhone = phone
+    let normalizedPhone: string | undefined
 
     if (phone !== undefined) {
       normalizedPhone = normalizePhone(phone)
 
-      if (!normalizedPhone) {
-        throw new BadRequestException('Некорректный номер телефона')
-      }
+      const user = await this.userService.findById(userId)
+
+      this.assertPhoneBelongsToUser(user, normalizedPhone)
     }
 
     const nextStatus = ad.status === AdStatus.PUBLISHED ? AdStatus.PENDING : ad.status
@@ -395,20 +408,14 @@ export class AdsService {
 
     if (!ad) throw new NotFoundException('Объявление не найдено')
 
-    const normalizedPhone = updateDto?.phone !== undefined ? normalizePhone(updateDto.phone) : undefined
+    let normalizedPhone: string | undefined
 
-    if (normalizedPhone !== undefined && !normalizedPhone) {
-      throw new BadRequestException('Некорректный номер телефона')
-    }
+    if (updateDto?.phone !== undefined) {
+      normalizedPhone = normalizePhone(updateDto.phone)
 
-    if (normalizedPhone) {
       const user = await this.userService.findById(userId)
 
-      const exists = user?.phones.some(p => p.phone === normalizedPhone)
-
-      if (!exists) {
-        await this.userService.addPhone(userId, normalizedPhone)
-      }
+      this.assertPhoneBelongsToUser(user, normalizedPhone)
     }
 
     const hasChanges =
@@ -562,26 +569,13 @@ export class AdsService {
 
     const { existingImages, features, lat, lng, price, phone, ...rest } = createAdDto
 
-    let normalizedPhone = phone ? normalizePhone(phone) : null
+    let normalizedPhone: string
 
-    if (phone && !normalizedPhone) {
-      throw new BadRequestException('Некорректный номер телефона')
-    }
-
-    if (normalizedPhone) {
-      const userPhone = user.phones.find(p => p.phone === normalizedPhone)
-
-      if (!userPhone) {
-        await this.userService.addPhone(userId, normalizedPhone)
-      }
-    }
-
-    if (!normalizedPhone) {
-      normalizedPhone = user.phones.find(phone => phone.isPrimary)?.phone ?? user.phones[0]?.phone ?? null
-
-      if (!normalizedPhone) {
-        throw new BadRequestException('Укажите номер телефона для связи')
-      }
+    if (phone) {
+      normalizedPhone = normalizePhone(phone)
+      this.assertPhoneBelongsToUser(user, normalizedPhone)
+    } else {
+      normalizedPhone = this.resolvePrimaryPhoneOrThrow(user)
     }
 
     const parsedLat = lat !== undefined ? Number(lat) : 0
