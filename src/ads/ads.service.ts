@@ -15,6 +15,7 @@ import { randomBytes } from 'crypto'
 import slugify from 'slugify'
 import { UserService } from '@/user/user.service'
 import { normalizePhone } from '@/libs/common/utils/phone.util'
+import { assertPhoneBelongsToUser } from '@/libs/common/utils/assert-phone-belongs-to-user.util'
 
 @Injectable()
 export class AdsService {
@@ -26,20 +27,6 @@ export class AdsService {
     private readonly categoriesService: CategoriesService,
     private readonly userService: UserService
   ) {}
-
-  // Номер объявления может быть только одним из уже подтверждённых номеров
-  // пользователя. Раньше любой присланный номер молча регистрировался через
-  // userService.addPhone(...) — то есть непроверенный номер, который никто
-  // не подтверждал по SMS, тут же попадал в базу как isVerified: true.
-  private assertPhoneBelongsToUser(user: { phones: { phone: string }[] }, phone: string): void {
-    const isKnown = user.phones.some(p => p.phone === phone)
-
-    if (!isKnown) {
-      throw new BadRequestException(
-        'Этот номер телефона не подтверждён на вашем аккаунте. Сначала добавьте и подтвердите его в профиле.'
-      )
-    }
-  }
 
   private resolvePrimaryPhoneOrThrow(user: { phones: { phone: string; isPrimary: boolean }[] }): string {
     const phone = user.phones.find(p => p.isPrimary)?.phone ?? user.phones[0]?.phone
@@ -69,7 +56,7 @@ export class AdsService {
 
     if (createAdDto.phone) {
       phone = normalizePhone(createAdDto.phone)
-      this.assertPhoneBelongsToUser(user, phone)
+      assertPhoneBelongsToUser(user, phone)
     } else {
       phone = this.resolvePrimaryPhoneOrThrow(user)
     }
@@ -339,7 +326,7 @@ export class AdsService {
 
       const user = await this.userService.findById(userId)
 
-      this.assertPhoneBelongsToUser(user, normalizedPhone)
+      assertPhoneBelongsToUser(user, normalizedPhone)
     }
 
     const nextStatus = ad.status === AdStatus.PUBLISHED ? AdStatus.PENDING : ad.status
@@ -415,7 +402,7 @@ export class AdsService {
 
       const user = await this.userService.findById(userId)
 
-      this.assertPhoneBelongsToUser(user, normalizedPhone)
+      assertPhoneBelongsToUser(user, normalizedPhone)
     }
 
     const hasChanges =
@@ -573,7 +560,7 @@ export class AdsService {
 
     if (phone) {
       normalizedPhone = normalizePhone(phone)
-      this.assertPhoneBelongsToUser(user, normalizedPhone)
+      assertPhoneBelongsToUser(user, normalizedPhone)
     } else {
       normalizedPhone = this.resolvePrimaryPhoneOrThrow(user)
     }
