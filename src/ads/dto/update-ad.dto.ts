@@ -1,5 +1,5 @@
 import { Transform } from 'class-transformer'
-import { IsArray, IsNotEmpty, IsNumber, IsObject, IsOptional, IsString } from 'class-validator'
+import { IsArray, IsNotEmpty, IsNumber, IsObject, IsOptional, IsString, Matches } from 'class-validator'
 import { Prisma } from 'prisma/generated/client'
 
 export class UpdateAdDto {
@@ -41,6 +41,13 @@ export class UpdateAdDto {
   @Transform(({ value }) => Number(value))
   @IsNumber()
   lng?: number
+
+  @IsOptional()
+  @IsString({ message: 'Номер телефона должен быть строкой.' })
+  @Matches(/^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/, {
+    message: 'Некорректный формат телефона'
+  })
+  phone?: string
 
   @IsOptional()
   @Transform(({ value }) => (typeof value === 'string' ? JSON.parse(value) : value))

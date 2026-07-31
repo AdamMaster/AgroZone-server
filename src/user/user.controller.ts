@@ -25,6 +25,7 @@ import { PasswordChangeDto } from './dto/password-change.dto'
 import { PhoneChangeDto } from './dto/phone-change.dto'
 import { ConfirmPhoneChangeDto } from './dto/confirm-phone-change.dto'
 import { ThrottlerGuard } from '@nestjs/throttler'
+import { AddPhoneDto } from './dto/add-phone.dto'
 
 @Controller('users')
 export class UserController {
@@ -102,5 +103,27 @@ export class UserController {
   @Patch('profile/change-phone/confirm')
   async confirmPhoneChange(@Authorized('id') userId: string, @Body() dto: ConfirmPhoneChangeDto) {
     return this.userService.confirmPhoneChange(userId, dto.code)
+  }
+
+  @Authorization()
+  @HttpCode(HttpStatus.OK)
+  @Post('profile/phones')
+  async addPhone(@Authorized('id') userId: string, @Body() dto: AddPhoneDto) {
+    return this.userService.addPhone(userId, dto.phone)
+  }
+
+  @Authorization()
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(ThrottlerGuard)
+  @Post('profile/phones/request')
+  async requestAddPhone(@Authorized('id') userId: string, @Body() dto: PhoneChangeDto) {
+    return this.userService.requestPhoneChange(userId, dto.newPhone)
+  }
+
+  @Authorization()
+  @HttpCode(HttpStatus.OK)
+  @Patch('profile/phones/confirm')
+  async confirmAddPhone(@Authorized('id') userId: string, @Body() dto: ConfirmPhoneChangeDto) {
+    return this.userService.confirmAddPhone(userId, dto.code)
   }
 }

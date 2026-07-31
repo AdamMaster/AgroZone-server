@@ -9,6 +9,9 @@ import IORedis from 'ioredis'
 import session from 'express-session'
 import { RedisStore } from 'connect-redis'
 import { createClient } from 'redis'
+;(BigInt.prototype as any).toJSON = function () {
+  return Number(this)
+}
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)

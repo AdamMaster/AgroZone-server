@@ -52,6 +52,7 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
+  UserPhone: 'UserPhone',
   Account: 'Account',
   Token: 'Token',
   Category: 'Category',
@@ -78,7 +79,6 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 
 export const UserScalarFieldEnum = {
   id: 'id',
-  phone: 'phone',
   password: 'password',
   email: 'email',
   displayName: 'displayName',
@@ -95,6 +95,18 @@ export const UserScalarFieldEnum = {
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const UserPhoneScalarFieldEnum = {
+  id: 'id',
+  phone: 'phone',
+  isPrimary: 'isPrimary',
+  isVerified: 'isVerified',
+  userId: 'userId',
+  createdAt: 'createdAt'
+} as const
+
+export type UserPhoneScalarFieldEnum = (typeof UserPhoneScalarFieldEnum)[keyof typeof UserPhoneScalarFieldEnum]
 
 
 export const AccountScalarFieldEnum = {
@@ -130,6 +142,7 @@ export type TokenScalarFieldEnum = (typeof TokenScalarFieldEnum)[keyof typeof To
 export const CategoryScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  description: 'description',
   priceUnits: 'priceUnits',
   slug: 'slug',
   path: 'path',
@@ -151,6 +164,7 @@ export const CategoryFeatureScalarFieldEnum = {
   categoryId: 'categoryId',
   name: 'name',
   label: 'label',
+  description: 'description',
   type: 'type',
   required: 'required',
   filterable: 'filterable',
@@ -174,6 +188,7 @@ export const AdScalarFieldEnum = {
   unit: 'unit',
   images: 'images',
   address: 'address',
+  phone: 'phone',
   features: 'features',
   lat: 'lat',
   lng: 'lng',

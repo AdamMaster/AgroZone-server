@@ -1,56 +1,341 @@
+export type CategoryFeatureType = 'TEXT' | 'NUMBER' | 'SELECT' | 'BOOLEAN' | 'MULTI_SELECT'
+export type CategoryStatus = 'active' | 'hidden' | 'archived'
+
 export type CategoryFeatureInput = {
+  id: string
   name: string
   label: string
-  type: 'TEXT' | 'NUMBER' | 'SELECT' | 'BOOLEAN' | 'MULTI_SELECT'
+  type: CategoryFeatureType
   options?: string[]
   required?: boolean
+  placeholder?: string
+  unit?: string
+  units?: string[]
+  min?: number
+  max?: number
+  filterable?: boolean
+  sortOrder?: number
 }
 
+type CategoryFeatureSeed = Omit<CategoryFeatureInput, 'id'> & { id?: string }
+
 export type CategoryInput = {
+  /** Стабильный ID. При переносе или переименовании категории задайте его явно в CATEGORY_TREE. */
+  id: string
+  parentId?: string
+  slug: string
   name: string
+  aliases?: string[]
   iconId?: string
+  sortOrder: number
+  status: CategoryStatus
+  isSelectable: boolean
+  version: number
+  redirectToCategoryId?: string
   children?: CategoryInput[]
   categoryFeatures?: CategoryFeatureInput[]
+}
+
+type CategorySeed = Omit<
+  CategoryInput,
+  'id' | 'parentId' | 'slug' | 'sortOrder' | 'status' | 'isSelectable' | 'version' | 'children' | 'categoryFeatures'
+> & {
+  id?: string
+  slug?: string
+  sortOrder?: number
+  status?: CategoryStatus
+  isSelectable?: boolean
+  version?: number
+  children?: CategorySeed[]
+  categoryFeatures?: CategoryFeatureSeed[]
+}
+
+const CYRILLIC_TO_LATIN: Record<string, string> = {
+  а: 'a',
+  б: 'b',
+  в: 'v',
+  г: 'g',
+  д: 'd',
+  е: 'e',
+  ё: 'e',
+  ж: 'zh',
+  з: 'z',
+  и: 'i',
+  й: 'y',
+  к: 'k',
+  л: 'l',
+  м: 'm',
+  н: 'n',
+  о: 'o',
+  п: 'p',
+  р: 'r',
+  с: 's',
+  т: 't',
+  у: 'u',
+  ф: 'f',
+  х: 'h',
+  ц: 'c',
+  ч: 'ch',
+  ш: 'sh',
+  щ: 'sch',
+  ъ: '',
+  ы: 'y',
+  ь: '',
+  э: 'e',
+  ю: 'yu',
+  я: 'ya'
+}
+
+function slugify(value: string): string {
+  const transliterated = value
+    .toLowerCase()
+    .split('')
+    .map(char => CYRILLIC_TO_LATIN[char] ?? char)
+    .join('')
+
+  return transliterated
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .replace(/-{2,}/g, '-')
+}
+
+/** Небольшой детерминированный хэш без внешних зависимостей. */
+function stableHash(value: string): string {
+  let hash = 2166136261
+  for (let index = 0; index < value.length; index += 1) {
+    hash ^= value.charCodeAt(index)
+    hash = Math.imul(hash, 16777619)
+  }
+  return (hash >>> 0).toString(36).padStart(7, '0')
+}
+
+function materializeFeature(feature: CategoryFeatureSeed): CategoryFeatureInput {
+  return {
+    ...feature,
+    id: feature.id ?? `feature_${stableHash(`${feature.name}:${feature.type}:${feature.label}`)}`,
+    filterable: feature.filterable ?? true
+  }
+}
+
+function materializeCategories(
+  categories: CategorySeed[],
+  parentPath: string[] = [],
+  parentId?: string
+): CategoryInput[] {
+  return categories.map((category, index) => {
+    const path = [...parentPath, category.name]
+    const id = category.id ?? `cat_${stableHash(path.join(' > '))}`
+    const children = category.children?.length ? materializeCategories(category.children, path, id) : []
+
+    return {
+      ...category,
+      id,
+      parentId,
+      slug: category.slug ?? slugify(category.name),
+      sortOrder: category.sortOrder ?? index,
+      status: category.status ?? 'active',
+      isSelectable: category.isSelectable ?? children.length === 0,
+      version: category.version ?? 1,
+      children,
+      categoryFeatures: category.categoryFeatures?.map(materializeFeature)
+    }
+  })
+}
+
+export type CategoryValidationIssue = {
+  severity: 'error' | 'warning'
+  code:
+    | 'DUPLICATE_CATEGORY_NAME'
+    | 'DUPLICATE_CATEGORY_SLUG'
+    | 'DUPLICATE_CATEGORY_ID'
+    | 'EMPTY_SLUG'
+    | 'MISSING_FEATURES'
+    | 'SELECT_WITHOUT_OPTIONS'
+    | 'DUPLICATE_FEATURE_OPTION'
+    | 'FEATURE_TYPE_CONFLICT'
+    | 'NUMBER_WITHOUT_UNIT'
+  path: string
+  message: string
+}
+
+/** Проверяет дерево при сборке, в тестах или в миграционном скрипте. */
+export function validateCategories(categories: CategoryInput[]): CategoryValidationIssue[] {
+  const issues: CategoryValidationIssue[] = []
+  const categoryIds = new Set<string>()
+  const featureTypes = new Map<string, CategoryFeatureType>()
+
+  const walk = (nodes: CategoryInput[], parentPath: string[] = []): void => {
+    const names = new Set<string>()
+    const slugs = new Set<string>()
+
+    for (const category of nodes) {
+      const path = [...parentPath, category.name]
+      const pathLabel = path.join(' > ')
+      const normalizedName = category.name.trim().toLocaleLowerCase('ru-RU')
+
+      if (names.has(normalizedName)) {
+        issues.push({
+          severity: 'error',
+          code: 'DUPLICATE_CATEGORY_NAME',
+          path: pathLabel,
+          message: `Повтор категории «${category.name}» внутри одного родителя.`
+        })
+      }
+      names.add(normalizedName)
+
+      if (!category.slug) {
+        issues.push({ severity: 'error', code: 'EMPTY_SLUG', path: pathLabel, message: 'Пустой slug категории.' })
+      } else if (slugs.has(category.slug)) {
+        issues.push({
+          severity: 'error',
+          code: 'DUPLICATE_CATEGORY_SLUG',
+          path: pathLabel,
+          message: `Повтор slug «${category.slug}» внутри одного родителя.`
+        })
+      }
+      slugs.add(category.slug)
+
+      if (categoryIds.has(category.id)) {
+        issues.push({
+          severity: 'error',
+          code: 'DUPLICATE_CATEGORY_ID',
+          path: pathLabel,
+          message: `Повтор ID категории «${category.id}».`
+        })
+      }
+      categoryIds.add(category.id)
+
+      const isLeaf = !category.children?.length
+      if (isLeaf && !category.categoryFeatures?.length) {
+        issues.push({
+          severity: 'warning',
+          code: 'MISSING_FEATURES',
+          path: pathLabel,
+          message: 'У листовой категории отсутствуют характеристики.'
+        })
+      }
+
+      for (const feature of category.categoryFeatures ?? []) {
+        if ((feature.type === 'SELECT' || feature.type === 'MULTI_SELECT') && !feature.options?.length) {
+          issues.push({
+            severity: 'error',
+            code: 'SELECT_WITHOUT_OPTIONS',
+            path: pathLabel,
+            message: `У характеристики «${feature.label}» отсутствуют варианты.`
+          })
+        }
+
+        if (feature.options?.length) {
+          const normalizedOptions = feature.options.map(option => option.trim().toLocaleLowerCase('ru-RU'))
+          if (new Set(normalizedOptions).size !== normalizedOptions.length) {
+            issues.push({
+              severity: 'error',
+              code: 'DUPLICATE_FEATURE_OPTION',
+              path: pathLabel,
+              message: `У характеристики «${feature.label}» повторяются варианты.`
+            })
+          }
+        }
+
+        const knownType = featureTypes.get(feature.name)
+        if (knownType && knownType !== feature.type) {
+          issues.push({
+            severity: 'warning',
+            code: 'FEATURE_TYPE_CONFLICT',
+            path: pathLabel,
+            message: `Ключ «${feature.name}» используется с типами ${knownType} и ${feature.type}.`
+          })
+        } else {
+          featureTypes.set(feature.name, feature.type)
+        }
+
+        if (feature.type === 'NUMBER' && !feature.unit && !feature.units?.length) {
+          issues.push({
+            severity: 'warning',
+            code: 'NUMBER_WITHOUT_UNIT',
+            path: pathLabel,
+            message: `Для числовой характеристики «${feature.label}» не задана единица измерения.`
+          })
+        }
+      }
+
+      if (category.children?.length) walk(category.children, path)
+    }
+  }
+
+  walk(categories)
+  return issues
+}
+
+export function assertCategoriesValid(categories: CategoryInput[]): void {
+  const errors = validateCategories(categories).filter(issue => issue.severity === 'error')
+  if (errors.length) {
+    throw new Error(errors.map(issue => `${issue.path}: ${issue.message}`).join('\n'))
+  }
 }
 
 const AGRO_CHEM_STANDARD = [
   {
     name: 'form',
     label: 'Форма выпуска',
-    type: 'MULTI_SELECT',
-    options: ['Жидкая', 'Порошкообразная', 'Гранулированная', 'Гель', 'Таблетки', 'Газ']
+    type: 'SELECT',
+    options: ['Жидкая', 'Порошкообразная', 'Гранулированная', 'Гель', 'Таблетки', 'Газ'],
+    required: true
+  },
+  { name: 'active_ingredient', label: 'Действующее вещество', type: 'TEXT', required: true },
+  { name: 'concentration', label: 'Концентрация', type: 'TEXT' },
+  { name: 'application_purpose', label: 'Назначение', type: 'TEXT', filterable: false },
+  { name: 'crop', label: 'Культура применения', type: 'TEXT', filterable: false },
+  { name: 'manufacturer', label: 'Производитель', type: 'TEXT' },
+  { name: 'registration_number', label: 'Регистрационный номер', type: 'TEXT' },
+  {
+    name: 'hazard_class',
+    label: 'Класс опасности',
+    type: 'SELECT',
+    options: ['1 класс', '2 класс', '3 класс', '4 класс', 'Не указан']
   },
   {
-    name: 'packing',
+    name: 'packaging_type',
     label: 'Упаковка/Тара',
-    type: 'MULTI_SELECT',
+    type: 'SELECT',
     options: ['Канистра', 'Еврокуб (IBC)', 'Флакон/Бутылка', 'Мешки', 'Биг-бэг', 'Цистерна/Навалом']
-  }
-] as CategoryFeatureInput[]
+  },
+  { name: 'package_size', label: 'Масса/объём упаковки', type: 'NUMBER', units: ['мл', 'л', 'г', 'кг'] }
+] satisfies CategoryFeatureSeed[]
 
 const AGRO_SOIL_FEATURES = [
+  { name: 'soil_type', label: 'Тип грунта/субстрата', type: 'TEXT' },
+  { name: 'composition', label: 'Состав', type: 'TEXT', filterable: false },
+  { name: 'acidity', label: 'Кислотность (pH)', type: 'NUMBER', unit: 'pH', min: 0, max: 14 },
   {
-    name: 'packing',
-    label: 'Упаковка/Объем',
-    type: 'MULTI_SELECT',
+    name: 'packaging_type',
+    label: 'Упаковка',
+    type: 'SELECT',
     options: ['Мешки', 'Биг-бэг/Биг-бэйл', 'Навалом/Самосвал']
-  }
-] as CategoryFeatureInput[]
+  },
+  { name: 'package_volume', label: 'Объём упаковки', type: 'NUMBER', units: ['л', 'м³'] }
+] satisfies CategoryFeatureSeed[]
 
 const AGRO_CLEAN_FEATURES = [
   {
     name: 'form',
     label: 'Форма выпуска',
-    type: 'MULTI_SELECT',
-    options: ['Жидкая (концентрат)', 'Жидкая (готовый раствор)', 'Порошок', 'Таблетки/Брикеты']
+    type: 'SELECT',
+    options: ['Жидкая (концентрат)', 'Жидкая (готовый раствор)', 'Порошок', 'Таблетки/Брикеты'],
+    required: true
   },
+  { name: 'active_ingredient', label: 'Действующее вещество', type: 'TEXT' },
+  { name: 'concentration', label: 'Концентрация', type: 'TEXT' },
+  { name: 'application_purpose', label: 'Назначение/объект обработки', type: 'TEXT', filterable: false },
+  { name: 'manufacturer', label: 'Производитель', type: 'TEXT' },
   {
-    name: 'packing',
+    name: 'packaging_type',
     label: 'Упаковка/Тара',
-    type: 'MULTI_SELECT',
+    type: 'SELECT',
     options: ['Флакон/Бутылка', 'Канистра', 'Бочка', 'Еврокуб', 'Мешок/Коробка']
-  }
-] as CategoryFeatureInput[]
+  },
+  { name: 'package_size', label: 'Масса/объём упаковки', type: 'NUMBER', units: ['мл', 'л', 'г', 'кг'] }
+] satisfies CategoryFeatureSeed[]
 
 const FEED_HIGH_PROTEIN = [
   {
@@ -59,22 +344,29 @@ const FEED_HIGH_PROTEIN = [
     type: 'MULTI_SELECT',
     options: ['Коровы, быки', 'Овцы, козы', 'Лошади', 'Свиньи', 'Птица', 'Рыба', 'Универсальный']
   },
+  { name: 'protein', label: 'Сырой протеин', type: 'NUMBER', unit: '%', min: 0, max: 100 },
+  { name: 'moisture', label: 'Влажность', type: 'NUMBER', unit: '%', min: 0, max: 100 },
+  { name: 'manufacturer', label: 'Производитель', type: 'TEXT' },
   {
-    name: 'packing',
+    name: 'packaging_options',
     label: 'Упаковка',
     type: 'MULTI_SELECT',
     options: ['Мешки', 'Биг-бэг', 'Навалом/Автоцистерна', 'Канистра/Бочка']
-  }
-] as CategoryFeatureInput[]
+  },
+  { name: 'batch_weight', label: 'Объём партии', type: 'NUMBER', units: ['кг', 'т'] }
+] satisfies CategoryFeatureSeed[]
 
 const FEED_BULK_FEATURES = [
+  { name: 'harvest_year', label: 'Год заготовки/урожая', type: 'NUMBER', unit: 'год' },
+  { name: 'moisture', label: 'Влажность', type: 'NUMBER', unit: '%', min: 0, max: 100 },
   {
-    name: 'packing',
+    name: 'packaging_options',
     label: 'Упаковка/Форма',
     type: 'MULTI_SELECT',
     options: ['Рулоны', 'Тюки', 'Навалом/Кузов', 'В рукаве/Траншея']
-  }
-] as CategoryFeatureInput[]
+  },
+  { name: 'batch_weight', label: 'Объём партии', type: 'NUMBER', units: ['кг', 'т'] }
+] satisfies CategoryFeatureSeed[]
 
 const FEED_ADDITIVES = [
   {
@@ -83,28 +375,42 @@ const FEED_ADDITIVES = [
     type: 'MULTI_SELECT',
     options: ['Коровы, быки', 'Овцы, козы', 'Лошади', 'Свиньи', 'Птица', 'Рыба', 'Универсальный']
   },
+  { name: 'active_ingredient', label: 'Состав/действующее вещество', type: 'TEXT' },
   {
-    name: 'packing',
+    name: 'form',
+    label: 'Форма',
+    type: 'SELECT',
+    options: ['Порошок', 'Гранулы', 'Жидкость', 'Блок/Лизунец', 'Паста', 'Другое']
+  },
+  { name: 'manufacturer', label: 'Производитель', type: 'TEXT' },
+  {
+    name: 'packaging_type',
     label: 'Упаковка',
-    type: 'MULTI_SELECT',
+    type: 'SELECT',
     options: ['Мешки', 'Биг-бэг', 'Блоки/Лизунцы', 'Флаконы/Канистры']
-  }
-] as CategoryFeatureInput[]
+  },
+  { name: 'package_weight', label: 'Масса/объём упаковки', type: 'NUMBER', units: ['г', 'кг', 'мл', 'л'] }
+] satisfies CategoryFeatureSeed[]
 
 const ENSILAGE_FEATURES = [
   {
     name: 'form',
     label: 'Форма выпуска',
-    type: 'MULTI_SELECT',
-    options: ['Сухая (порошок/гранулы)', 'Жидкая (концентрат)']
+    type: 'SELECT',
+    options: ['Сухая (порошок/гранулы)', 'Жидкая (концентрат)'],
+    required: true
   },
+  { name: 'culture', label: 'Для какой культуры', type: 'TEXT' },
+  { name: 'dosage', label: 'Норма внесения', type: 'TEXT' },
+  { name: 'manufacturer', label: 'Производитель', type: 'TEXT' },
   {
-    name: 'packing',
+    name: 'packaging_type',
     label: 'Упаковка/Тара',
-    type: 'MULTI_SELECT',
+    type: 'SELECT',
     options: ['Канистра/Флакон', 'Пакет/Коробка', 'Ведро']
-  }
-] as CategoryFeatureInput[]
+  },
+  { name: 'package_size', label: 'Масса/объём упаковки', type: 'NUMBER', units: ['г', 'кг', 'мл', 'л'] }
+] satisfies CategoryFeatureSeed[]
 
 const ANIMAL_FEED_EXTENDED = [
   {
@@ -116,72 +422,89 @@ const ANIMAL_FEED_EXTENDED = [
   {
     name: 'feed_form',
     label: 'Форма корма',
-    type: 'MULTI_SELECT',
+    type: 'SELECT',
     options: ['Сухой корм', 'Влажный (паучи, консервы)', 'Лакомства', 'Заменитель молока']
   },
   {
     name: 'age_group',
-    label: 'Возраст',
-    type: 'MULTI_SELECT',
+    label: 'Возрастная группа',
+    type: 'SELECT',
     options: ['Для котят/щенков', 'Для взрослых', 'Для пожилых', 'Универсальный']
-  }
-] as CategoryFeatureInput[]
+  },
+  { name: 'brand', label: 'Бренд', type: 'TEXT' },
+  { name: 'package_weight', label: 'Масса упаковки', type: 'NUMBER', units: ['г', 'кг'] }
+] satisfies CategoryFeatureSeed[]
 
 const FEED_LIQUID_FEATURES = [
+  { name: 'composition', label: 'Состав', type: 'TEXT', filterable: false },
+  { name: 'dry_matter', label: 'Сухое вещество', type: 'NUMBER', unit: '%', min: 0, max: 100 },
   {
-    name: 'packing',
+    name: 'packaging_type',
     label: 'Упаковка/Тара',
-    type: 'MULTI_SELECT',
+    type: 'SELECT',
     options: ['Автоцистерна', 'Еврокуб', 'Бочка', 'Канистра', 'Навалом/Налив']
-  }
-] as CategoryFeatureInput[]
+  },
+  { name: 'batch_volume', label: 'Объём партии', type: 'NUMBER', units: ['л', 'м³', 'т'] }
+] satisfies CategoryFeatureSeed[]
 
 export const EQUIP_BASE = [
+  { name: 'brand', label: 'Производитель/бренд', type: 'TEXT' },
+  { name: 'model', label: 'Модель', type: 'TEXT' },
   {
     name: 'condition',
     label: 'Состояние',
     type: 'SELECT',
-    options: ['Новое', 'Б/у']
+    options: ['Новое', 'Б/у', 'Восстановленное'],
+    required: true
   },
-  {
-    name: 'year',
-    label: 'Год выпуска',
-    type: 'NUMBER'
-  }
-] as CategoryFeatureInput[]
+  { name: 'year', label: 'Год выпуска', type: 'NUMBER', unit: 'год', min: 1900, max: 2100 },
+  { name: 'country', label: 'Страна производства', type: 'TEXT' },
+  { name: 'power', label: 'Мощность', type: 'NUMBER', units: ['кВт', 'л.с.'] },
+  { name: 'performance', label: 'Производительность', type: 'TEXT' },
+  { name: 'operating_hours', label: 'Наработка', type: 'NUMBER', unit: 'моточас' },
+  { name: 'warranty', label: 'Гарантия', type: 'NUMBER', units: ['мес.', 'год'] },
+  { name: 'commissioning', label: 'Пусконаладка', type: 'BOOLEAN' }
+] satisfies CategoryFeatureSeed[]
 
 const EQUIP_PARTS = [
+  { name: 'compatible_brand', label: 'Совместимая марка', type: 'TEXT', required: true },
+  { name: 'compatible_model', label: 'Совместимая модель', type: 'TEXT' },
+  { name: 'part_number', label: 'Каталожный номер/артикул', type: 'TEXT' },
+  {
+    name: 'part_origin',
+    label: 'Тип запчасти',
+    type: 'SELECT',
+    options: ['Оригинал', 'Аналог', 'Восстановленная', 'Не указано']
+  },
   {
     name: 'condition',
     label: 'Состояние',
     type: 'SELECT',
-    options: ['Новое', 'Б/у']
-  }
-] as CategoryFeatureInput[]
+    options: ['Новое', 'Б/у', 'Восстановленное'],
+    required: true
+  },
+  { name: 'manufacturer', label: 'Производитель', type: 'TEXT' }
+] satisfies CategoryFeatureSeed[]
 
 const FOOD_GROCERY = [
+  { name: 'manufacturer', label: 'Производитель', type: 'TEXT' },
+  { name: 'country', label: 'Страна происхождения', type: 'TEXT' },
   {
-    name: 'packing',
+    name: 'packaging_options',
     label: 'Тип упаковки',
     type: 'MULTI_SELECT',
     options: ['Мешок', 'Биг-бэг', 'Пакет/Пачка', 'Коробка', 'Навалом/Бункер']
   },
-  {
-    name: 'shelf_life',
-    label: 'Срок годности (мес)',
-    type: 'NUMBER'
-  },
-  {
-    name: 'gost',
-    label: 'ГОСТ/ТУ/СТО',
-    type: 'TEXT'
-  }
-] as CategoryFeatureInput[]
+  { name: 'package_weight', label: 'Масса упаковки', type: 'NUMBER', units: ['г', 'кг', 'т'] },
+  { name: 'shelf_life', label: 'Срок годности', type: 'NUMBER', units: ['дн.', 'мес.'] },
+  { name: 'gost', label: 'ГОСТ/ТУ/СТО', type: 'TEXT' }
+] satisfies CategoryFeatureSeed[]
 
 const FOOD_DAIRY = [
-  { name: 'fat', label: 'Жирность (%)', type: 'NUMBER', placeholder: '%' },
+  { name: 'manufacturer', label: 'Производитель', type: 'TEXT' },
+  { name: 'fat', label: 'Жирность', type: 'NUMBER', unit: '%', min: 0, max: 100 },
   {
-    name: 'packing',
+    name: 'packaging_options',
     label: 'Тип упаковки',
     type: 'MULTI_SELECT',
     options: [
@@ -190,77 +513,81 @@ const FOOD_DAIRY = [
       'Пластиковая тара/Стакан',
       'Фляга/Цистерна',
       'Коробка/Монолит',
-      'Вакуум/Пленка',
+      'Вакуум/Плёнка',
       'Мешок/Биг-бэг'
     ]
   },
-  {
-    name: 'shelf_life',
-    label: 'Срок годности (мес.)',
-    type: 'NUMBER',
-    placeholder: 'например, 1'
-  },
-  { name: 'gost', label: 'ГОСТ/ТУ/СТО', type: 'TEXT', placeholder: 'например, ГОСТ 31450-2013' }
-] as CategoryFeatureInput[]
+  { name: 'package_size', label: 'Масса/объём упаковки', type: 'NUMBER', units: ['мл', 'л', 'г', 'кг'] },
+  { name: 'shelf_life', label: 'Срок годности', type: 'NUMBER', units: ['дн.', 'мес.'] },
+  { name: 'gost', label: 'ГОСТ/ТУ/СТО', type: 'TEXT', placeholder: 'Например, ГОСТ 31450-2013' }
+] satisfies CategoryFeatureSeed[]
 
 export const FOOD_BASE = [
+  { name: 'manufacturer', label: 'Производитель', type: 'TEXT' },
+  { name: 'country', label: 'Страна происхождения', type: 'TEXT' },
   {
-    name: 'packing',
+    name: 'packaging_options',
     label: 'Тип упаковки',
     type: 'MULTI_SELECT',
     options: ['Короб', 'Пакет/Мешок', 'Вакуум', 'Лоток/Коррекс', 'Навалом/Монолит']
   },
-  {
-    name: 'shelf_life',
-    label: 'Срок годности (мес.)',
-    type: 'NUMBER',
-    placeholder: 'например, 12'
-  },
-  {
-    name: 'gost',
-    label: 'ГОСТ/ТУ/СТО',
-    type: 'TEXT',
-    placeholder: 'например, ГОСТ 32125-2013'
-  }
-] as CategoryFeatureInput[]
+  { name: 'package_weight', label: 'Масса упаковки/партии', type: 'NUMBER', units: ['г', 'кг', 'т'] },
+  { name: 'shelf_life', label: 'Срок годности', type: 'NUMBER', units: ['дн.', 'мес.'] },
+  { name: 'gost', label: 'ГОСТ/ТУ/СТО', type: 'TEXT', placeholder: 'Например, ГОСТ 32125-2013' }
+] satisfies CategoryFeatureSeed[]
 
-export const FOOD_MEAT_FISH = [
+export const FOOD_MEAT = [
+  { name: 'animal_species', label: 'Вид животного', type: 'TEXT' },
+  { name: 'cut_type', label: 'Отруб/часть туши', type: 'TEXT' },
   {
-    name: 'state',
+    name: 'thermal_state',
     label: 'Термическое состояние',
     type: 'SELECT',
-    options: ['Охлажденное', 'Замороженное', 'Парное / Живая (для рыбы)', 'Вяленое / Копченое', 'Соленое']
+    options: ['Парное', 'Охлаждённое', 'Замороженное', 'Вяленое/Копчёное', 'Солёное'],
+    required: true
   },
   {
-    name: 'packing',
+    name: 'packaging_options',
     label: 'Тип упаковки',
     type: 'MULTI_SELECT',
     options: [
-      'В тушах/Полутушах / Четвертинах',
+      'В тушах/Полутушах/Четвертинах',
       'Навалом/Монолитный блок',
       'Вакуумная упаковка',
-      'Лоток/ГАЗ (МГС)',
+      'Лоток/МГС',
       'Короб/Гофрокороб',
-      'Пленка/Мешок'
+      'Плёнка/Мешок'
     ]
   },
+  { name: 'batch_weight', label: 'Масса партии', type: 'NUMBER', units: ['кг', 'т'] },
+  { name: 'shelf_life', label: 'Срок годности', type: 'NUMBER', units: ['дн.', 'мес.'] },
+  { name: 'gost', label: 'ГОСТ/ТУ/СТО', type: 'TEXT' }
+] satisfies CategoryFeatureSeed[]
+
+export const FOOD_FISH = [
+  { name: 'fish_species', label: 'Вид рыбы/морепродукта', type: 'TEXT', required: true },
   {
-    name: 'shelf_life',
-    label: 'Срок годности (мес.)',
-    type: 'NUMBER',
-    placeholder: 'например, 12'
+    name: 'thermal_state',
+    label: 'Состояние',
+    type: 'SELECT',
+    options: ['Живая', 'Охлаждённая', 'Замороженная', 'Вяленая/Сушёная', 'Копчёная', 'Солёная', 'Готовый продукт'],
+    required: true
   },
   {
-    name: 'gost',
-    label: 'ГОСТ/ТУ/СТО',
-    type: 'TEXT',
-    placeholder: 'например, ГОСТ 31777-2012'
-  }
-] as CategoryFeatureInput[]
+    name: 'packaging_options',
+    label: 'Тип упаковки',
+    type: 'MULTI_SELECT',
+    options: ['Лёд/Контейнер', 'Вакуум', 'Лоток/МГС', 'Короб', 'Блок', 'Банка/Ведро', 'Навалом']
+  },
+  { name: 'batch_weight', label: 'Масса партии', type: 'NUMBER', units: ['кг', 'т'] },
+  { name: 'shelf_life', label: 'Срок годности', type: 'NUMBER', units: ['дн.', 'мес.'] },
+  { name: 'gost', label: 'ГОСТ/ТУ/СТО', type: 'TEXT' }
+] satisfies CategoryFeatureSeed[]
 
 export const FOOD_CANNED = [
+  { name: 'manufacturer', label: 'Производитель', type: 'TEXT' },
   {
-    name: 'packing',
+    name: 'packaging_options',
     label: 'Тип упаковки',
     type: 'MULTI_SELECT',
     options: [
@@ -272,23 +599,15 @@ export const FOOD_CANNED = [
       'Бутылка'
     ]
   },
-  {
-    name: 'shelf_life',
-    label: 'Срок годности (мес.)',
-    type: 'NUMBER',
-    placeholder: 'Например, 24'
-  },
-  {
-    name: 'gost',
-    label: 'ГОСТ / ТУ / СТО',
-    type: 'TEXT',
-    placeholder: 'Например, ГОСТ 32125-2013'
-  }
-] as CategoryFeatureInput[]
+  { name: 'package_weight', label: 'Масса/объём упаковки', type: 'NUMBER', units: ['мл', 'л', 'г', 'кг'] },
+  { name: 'shelf_life', label: 'Срок годности', type: 'NUMBER', units: ['дн.', 'мес.'] },
+  { name: 'gost', label: 'ГОСТ/ТУ/СТО', type: 'TEXT' }
+] satisfies CategoryFeatureSeed[]
 
 const FOOD_READY = [
+  { name: 'manufacturer', label: 'Производитель', type: 'TEXT' },
   {
-    name: 'packing',
+    name: 'packaging_options',
     label: 'Тип упаковки',
     type: 'MULTI_SELECT',
     options: [
@@ -296,44 +615,60 @@ const FOOD_READY = [
       'Бутылка/Банка',
       'Навалом',
       'Шоу-бокс/Дисплей',
-      'Пленка/Флоу-пак',
-      'Пластиковое ведро / Контейнер',
-      'Пакет / Дой-пак'
+      'Плёнка/Флоу-пак',
+      'Ведро/Контейнер',
+      'Дой-пак'
     ]
   },
-  { name: 'shelf_life', label: 'Срок годности (мес)', type: 'NUMBER' },
-  { name: 'gost', label: 'ГОСТ/ТУ', type: 'TEXT' }
-] as CategoryFeatureInput[]
+  { name: 'package_weight', label: 'Масса/объём упаковки', type: 'NUMBER', units: ['мл', 'л', 'г', 'кг'] },
+  { name: 'shelf_life', label: 'Срок годности', type: 'NUMBER', units: ['дн.', 'мес.'] },
+  { name: 'gost', label: 'ГОСТ/ТУ/СТО', type: 'TEXT' }
+] satisfies CategoryFeatureSeed[]
 
 export const AGRO_RAW_FEATURES = [
+  { name: 'variety', label: 'Сорт/гибрид', type: 'TEXT' },
+  { name: 'quality_grade', label: 'Класс/сорт качества', type: 'TEXT' },
+  { name: 'harvest_year', label: 'Год урожая', type: 'NUMBER', unit: 'год' },
+  { name: 'moisture', label: 'Влажность', type: 'NUMBER', unit: '%', min: 0, max: 100 },
   {
-    name: 'packing',
+    name: 'packaging_options',
     label: 'Упаковка',
     type: 'MULTI_SELECT',
     options: ['Навалом/Насыпью', 'Биг-бэг', 'Мешки', 'Флекситанк/Цистерна']
   },
-  {
-    name: 'gost',
-    label: 'ГОСТ/ТУ',
-    type: 'TEXT'
-  }
-] as CategoryFeatureInput[]
+  { name: 'batch_weight', label: 'Объём партии', type: 'NUMBER', units: ['кг', 'т'] },
+  { name: 'gost', label: 'ГОСТ/ТУ', type: 'TEXT' }
+] satisfies CategoryFeatureSeed[]
 
 const AGRO_FRESH_FEATURES = [
-  { name: 'caliber', label: 'Калибр / Размер (мм)', type: 'TEXT' },
+  { name: 'variety', label: 'Сорт/гибрид', type: 'TEXT' },
+  { name: 'origin_country', label: 'Страна происхождения', type: 'TEXT' },
+  { name: 'origin_region', label: 'Регион происхождения', type: 'TEXT' },
   {
-    name: 'packing',
+    name: 'quality_class',
+    label: 'Класс качества',
+    type: 'SELECT',
+    options: ['Экстра', '1 класс', '2 класс', 'Некалиброванное']
+  },
+  { name: 'harvest_year', label: 'Год урожая', type: 'NUMBER', unit: 'год' },
+  { name: 'caliber', label: 'Калибр/размер', type: 'NUMBER', unit: 'мм' },
+  {
+    name: 'packaging_options',
     label: 'Упаковка/Тара',
     type: 'MULTI_SELECT',
     options: ['Ящики', 'Сетки', 'Коробки', 'Навалом', 'Поддоны']
-  }
-] as CategoryFeatureInput[]
+  },
+  { name: 'batch_weight', label: 'Доступный объём', type: 'NUMBER', units: ['кг', 'т'] },
+  { name: 'minimum_order', label: 'Минимальная партия', type: 'NUMBER', units: ['кг', 'т'] },
+  { name: 'certified', label: 'Есть сертификаты/декларации', type: 'BOOLEAN' },
+  { name: 'organic', label: 'Органическая продукция', type: 'BOOLEAN' }
+] satisfies CategoryFeatureSeed[]
 
 const AGRO_HONEY_FEATURES = [
   {
     name: 'honey_type',
     label: 'Вид мёда',
-    type: 'MULTI_SELECT',
+    type: 'SELECT',
     options: [
       'Липовый',
       'Гречишный',
@@ -347,24 +682,41 @@ const AGRO_HONEY_FEATURES = [
       'Прочий'
     ]
   },
+  { name: 'collection_year', label: 'Год сбора', type: 'NUMBER', unit: 'год' },
   {
-    name: 'collection_year',
-    label: 'Год сбора',
-    type: 'NUMBER'
-  },
-  {
-    name: 'state',
+    name: 'physical_state',
     label: 'Состояние',
-    type: 'MULTI_SELECT',
+    type: 'SELECT',
     options: ['Жидкий', 'Кристаллизованный (севший)', 'Крем-мёд']
   },
   {
-    name: 'packing',
+    name: 'packaging_type',
     label: 'Упаковка/Тара',
-    type: 'MULTI_SELECT',
+    type: 'SELECT',
     options: ['Пластиковое ведро', 'Стеклянная банка', 'Фляга/Барабан', 'Куботейнер', 'В сотах (рамка)']
-  }
-] as CategoryFeatureInput[]
+  },
+  { name: 'package_weight', label: 'Масса упаковки', type: 'NUMBER', units: ['г', 'кг'] }
+] satisfies CategoryFeatureSeed[]
+
+const BEE_PRODUCT_FEATURES = [
+  { name: 'collection_year', label: 'Год сбора/производства', type: 'NUMBER', unit: 'год' },
+  { name: 'product_state', label: 'Форма/состояние продукта', type: 'TEXT' },
+  { name: 'packaging_description', label: 'Упаковка', type: 'TEXT' },
+  { name: 'package_weight', label: 'Масса упаковки', type: 'NUMBER', units: ['г', 'кг'] },
+  { name: 'laboratory_report', label: 'Есть лабораторный протокол', type: 'BOOLEAN' }
+] satisfies CategoryFeatureSeed[]
+
+const BEE_WAX_FEATURES = [
+  {
+    name: 'wax_form',
+    label: 'Форма воска',
+    type: 'SELECT',
+    options: ['Воск-сырец', 'Слиток', 'Гранулы', 'Вощина', 'Другое']
+  },
+  { name: 'grade', label: 'Сорт/качество', type: 'TEXT' },
+  { name: 'packaging_description', label: 'Упаковка', type: 'TEXT' },
+  { name: 'batch_weight', label: 'Масса партии', type: 'NUMBER', units: ['кг', 'т'] }
+] satisfies CategoryFeatureSeed[]
 
 export const AGRO_GREEN_FEATURES = [
   {
@@ -374,7 +726,7 @@ export const AGRO_GREEN_FEATURES = [
     options: ['Свежесрезанная', 'В горшочках (с корневой системой)', 'Замороженная', 'Сушеная']
   },
   {
-    name: 'packing',
+    name: 'packaging_options',
     label: 'Упаковка / Тара',
     type: 'MULTI_SELECT',
     options: [
@@ -386,126 +738,175 @@ export const AGRO_GREEN_FEATURES = [
       'Навалом'
     ]
   }
-] as CategoryFeatureInput[]
+] satisfies CategoryFeatureSeed[]
 
 export const AGRO_MUSHROOM_FEATURES = [
   {
-    name: 'state',
+    name: 'physical_state',
     label: 'Состояние',
-    type: 'MULTI_SELECT',
-    options: ['Свежие', 'Замороженные (шоковая заморозка)', 'Сушеные', 'Соленые/Маринованные']
+    type: 'SELECT',
+    options: ['Свежие', 'Замороженные (шоковая заморозка)', 'Сушёные', 'Солёные/Маринованные']
   },
   {
     name: 'origin_type',
     label: 'Происхождение',
-    type: 'MULTI_SELECT',
+    type: 'SELECT',
     options: ['Культивируемые (фермерские)', 'Дикорастущие (дикоросы)']
   },
+  { name: 'species', label: 'Вид/сорт грибов', type: 'TEXT' },
   {
-    name: 'packing',
-    label: 'Упаковка / Тара',
+    name: 'packaging_options',
+    label: 'Упаковка/Тара',
     type: 'MULTI_SELECT',
-    options: [
-      'Ящики (дерево / пластик)',
-      'Коробки/Картон',
-      'Коррекс/Пинетка',
-      'Мешки/Пакеты (для сушеных/заморозки)',
-      'Бочки/Банки'
-    ]
-  }
-] as CategoryFeatureInput[]
+    options: ['Ящики', 'Коробки/Картон', 'Коррекс/Пинетка', 'Мешки/Пакеты', 'Бочки/Банки']
+  },
+  { name: 'batch_weight', label: 'Масса партии', type: 'NUMBER', units: ['кг', 'т'] }
+] satisfies CategoryFeatureSeed[]
 
 const ANIMAL_FEATURES = [
-  { name: 'age', label: 'Возраст (мес)', type: 'NUMBER' },
-  { name: 'weight', label: 'Вес (кг)', type: 'NUMBER' },
   { name: 'breed', label: 'Порода', type: 'TEXT' },
-  { name: 'vaccination', label: 'Вакцинация', type: 'BOOLEAN' }
-] as CategoryFeatureInput[]
+  { name: 'sex', label: 'Пол', type: 'SELECT', options: ['Самец', 'Самка', 'Смешанная группа', 'Не указан'] },
+  { name: 'age', label: 'Возраст', type: 'NUMBER', units: ['дн.', 'мес.', 'год'] },
+  { name: 'weight', label: 'Средний вес одной головы', type: 'NUMBER', unit: 'кг' },
+  { name: 'quantity', label: 'Количество голов', type: 'NUMBER', unit: 'шт.', min: 1 },
+  {
+    name: 'animal_purpose',
+    label: 'Назначение',
+    type: 'SELECT',
+    options: ['Племенное', 'Молочное', 'Мясное', 'Рабочее', 'Откорм', 'Другое']
+  },
+  { name: 'vaccination', label: 'Вакцинация проведена', type: 'BOOLEAN' },
+  { name: 'veterinary_documents', label: 'Ветеринарные документы', type: 'BOOLEAN' },
+  { name: 'pedigree_documents', label: 'Племенные документы', type: 'BOOLEAN' },
+  { name: 'delivery', label: 'Возможна доставка', type: 'BOOLEAN' }
+] satisfies CategoryFeatureSeed[]
 
 export const POULTRY_FEATURES = [
-  { name: 'breed', label: 'Порода/Кросс', type: 'TEXT' },
+  { name: 'breed', label: 'Порода/кросс', type: 'TEXT' },
   {
-    name: 'purpose',
-    label: 'Тип/Назначение',
-    type: 'MULTI_SELECT',
-    options: ['Суточные цыплята', 'Молодняк/Подрощенные', 'Несушки', 'Бройлеры', 'Инкубационное яйцо']
+    name: 'item_type',
+    label: 'Тип предложения',
+    type: 'SELECT',
+    options: ['Суточные цыплята', 'Молодняк/Подрощенные', 'Несушки', 'Бройлеры', 'Инкубационное яйцо'],
+    required: true
   },
-  { name: 'vaccination', label: 'Вакцинация', type: 'BOOLEAN' }
-] as CategoryFeatureInput[]
+  { name: 'age', label: 'Возраст', type: 'NUMBER', units: ['дн.', 'нед.', 'мес.'] },
+  { name: 'quantity', label: 'Количество', type: 'NUMBER', unit: 'шт.', min: 1 },
+  { name: 'vaccination', label: 'Вакцинация проведена', type: 'BOOLEAN' },
+  { name: 'veterinary_documents', label: 'Ветеринарные документы', type: 'BOOLEAN' },
+  { name: 'delivery', label: 'Возможна доставка', type: 'BOOLEAN' }
+] satisfies CategoryFeatureSeed[]
 
 export const BEES_FEATURES = [
   {
-    name: 'breed',
+    name: 'bee_breed',
     label: 'Порода пчёл',
-    type: 'MULTI_SELECT',
+    type: 'SELECT',
     options: ['Карпатская', 'Карника', 'Среднерусская', 'Бакфаст', 'Кавказская', 'Прочая']
   },
   {
     name: 'item_type',
-    label: 'Тип товара',
-    type: 'MULTI_SELECT',
-    options: ['Пчелопакет', 'Пчелосемья (с ульем)', 'Пчеломатка', 'Рой']
-  }
-] as CategoryFeatureInput[]
+    label: 'Тип предложения',
+    type: 'SELECT',
+    options: ['Пчелопакет', 'Пчелосемья (с ульем)', 'Пчеломатка', 'Рой'],
+    required: true
+  },
+  { name: 'quantity', label: 'Количество', type: 'NUMBER', unit: 'шт.', min: 1 },
+  { name: 'queen_year', label: 'Год вывода матки', type: 'NUMBER', unit: 'год' },
+  { name: 'veterinary_documents', label: 'Ветеринарные документы', type: 'BOOLEAN' },
+  { name: 'delivery', label: 'Возможна доставка', type: 'BOOLEAN' }
+] satisfies CategoryFeatureSeed[]
 
 export const FISH_FEATURES = [
-  { name: 'fish_species', label: 'Вид рыбы', type: 'TEXT', placeholder: 'Карп, Форель, Осётр...' },
-  { name: 'weight_g', label: 'Средняя навеска/вес 1 шт (грамм)', type: 'NUMBER' },
-  { name: 'stage', label: 'Стадия', type: 'SELECT', options: ['Икра', 'Личинка', 'Малек', 'Годовик', 'Товарная рыба'] }
-] as CategoryFeatureInput[]
+  { name: 'fish_species', label: 'Вид рыбы', type: 'TEXT', placeholder: 'Карп, форель, осётр…', required: true },
+  { name: 'weight', label: 'Средняя навеска/вес одной особи', type: 'NUMBER', units: ['г', 'кг'] },
+  { name: 'stage', label: 'Стадия', type: 'SELECT', options: ['Икра', 'Личинка', 'Малёк', 'Годовик', 'Товарная рыба'] },
+  { name: 'quantity', label: 'Количество', type: 'NUMBER', unit: 'шт.', min: 1 },
+  { name: 'veterinary_documents', label: 'Ветеринарные документы', type: 'BOOLEAN' },
+  { name: 'delivery', label: 'Возможна доставка', type: 'BOOLEAN' }
+] satisfies CategoryFeatureSeed[]
 
 const DEFAULT_FEATURES = [
-  { name: 'condition', label: 'Состояние/Сорт', type: 'TEXT' },
-  { name: 'volume', label: 'Объем партии', type: 'NUMBER' }
-] as CategoryFeatureInput[]
+  { name: 'grade', label: 'Состояние/сорт', type: 'TEXT' },
+  { name: 'batch_weight', label: 'Объём партии', type: 'NUMBER', units: ['кг', 'т'] }
+] satisfies CategoryFeatureSeed[]
 
 const TECH_ATTACHED = [
-  { name: 'year', label: 'Год выпуска', type: 'NUMBER' },
-  { name: 'condition', label: 'Состояние', type: 'SELECT', options: ['Новое', 'Б/у'] }
-] as CategoryFeatureInput[]
+  { name: 'brand', label: 'Производитель/бренд', type: 'TEXT' },
+  { name: 'model', label: 'Модель', type: 'TEXT' },
+  { name: 'year', label: 'Год выпуска', type: 'NUMBER', unit: 'год', min: 1900, max: 2100 },
+  {
+    name: 'condition',
+    label: 'Состояние',
+    type: 'SELECT',
+    options: ['Новое', 'Б/у', 'Восстановленное'],
+    required: true
+  },
+  { name: 'working_width', label: 'Рабочая ширина', type: 'NUMBER', units: ['мм', 'м'] },
+  { name: 'required_power', label: 'Требуемая мощность', type: 'NUMBER', units: ['кВт', 'л.с.'] },
+  { name: 'operating_hours', label: 'Наработка', type: 'NUMBER', unit: 'моточас' }
+] satisfies CategoryFeatureSeed[]
 
 const TECH_PARTS = [
-  { name: 'condition', label: 'Состояние', type: 'SELECT', options: ['Новое', 'Б/у'] }
-] as CategoryFeatureInput[]
+  { name: 'compatible_brand', label: 'Совместимая марка техники', type: 'TEXT', required: true },
+  { name: 'compatible_model', label: 'Совместимая модель', type: 'TEXT' },
+  { name: 'part_number', label: 'Каталожный номер/артикул', type: 'TEXT' },
+  {
+    name: 'part_origin',
+    label: 'Тип запчасти',
+    type: 'SELECT',
+    options: ['Оригинал', 'Аналог', 'Восстановленная', 'Не указано']
+  },
+  {
+    name: 'condition',
+    label: 'Состояние',
+    type: 'SELECT',
+    options: ['Новое', 'Б/у', 'Восстановленное'],
+    required: true
+  },
+  { name: 'manufacturer', label: 'Производитель', type: 'TEXT' }
+] satisfies CategoryFeatureSeed[]
 
 const PACKAGING_MATERIAL_FEATURES = [
   {
-    name: 'material',
+    name: 'material_type',
     label: 'Материал',
     type: 'SELECT',
-    options: ['Пластик', 'Полиэтилен/Пленка', 'Бумага/Картон', 'Дерево', 'Стекло', 'Металл', 'Ткань/Джут']
+    options: ['Пластик', 'Полиэтилен/Плёнка', 'Бумага/Картон', 'Дерево', 'Стекло', 'Металл', 'Ткань/Джут']
   },
-  { name: 'dimensions', label: 'Размеры (ДхШхВ, мм)', type: 'TEXT' },
-  { name: 'volume_weight', label: 'Объем / Вместимость (л/кг)', type: 'NUMBER' }
-] as CategoryFeatureInput[]
+  { name: 'dimensions', label: 'Размеры (Д×Ш×В)', type: 'TEXT', placeholder: 'Например, 1200×800×1000 мм' },
+  { name: 'capacity', label: 'Вместимость', type: 'NUMBER', units: ['мл', 'л', 'м³'] },
+  { name: 'load_capacity', label: 'Допустимая масса', type: 'NUMBER', units: ['кг', 'т'] },
+  { name: 'new_or_used', label: 'Состояние', type: 'SELECT', options: ['Новое', 'Б/у'] }
+] satisfies CategoryFeatureSeed[]
 
 const MATERIAL_FEATURES = [
   { name: 'material_type', label: 'Материал', type: 'TEXT' },
   { name: 'dimensions', label: 'Размеры (мм)', type: 'TEXT' },
   { name: 'volume', label: 'Объем/Вес (кг)', type: 'NUMBER' }
-] as CategoryFeatureInput[]
+] satisfies CategoryFeatureSeed[]
 
 const OTHER_FUEL_FEATURES = [
   { name: 'fuel_type', label: 'Тип/Марка', type: 'TEXT' },
   {
-    name: 'packing',
+    name: 'packaging_type',
     label: 'Упаковка',
     type: 'SELECT',
     options: ['Биг-бэг', 'Навалом', 'Сетки/Пакеты', 'Канистра/Бочка', 'В кузове']
   }
-] as CategoryFeatureInput[]
+] satisfies CategoryFeatureSeed[]
 
 const OTHER_GOODS_FEATURES = [
-  { name: 'material', label: 'Материал', type: 'TEXT' },
+  { name: 'material_description', label: 'Материал', type: 'TEXT' },
   { name: 'dimensions', label: 'Размеры / Толщина', type: 'TEXT' },
   { name: 'origin', label: 'Производитель', type: 'TEXT' }
-] as CategoryFeatureInput[]
+] satisfies CategoryFeatureSeed[]
 
 const OTHER_WASTE_FEATURES = [
   { name: 'raw_type', label: 'Тип сырья', type: 'TEXT' },
-  { name: 'volume', label: 'Объем партии', type: 'NUMBER' },
-  { name: 'packing', label: 'Упаковка', type: 'SELECT', options: ['Навалом', 'Биг-бэг', 'Мешки'] }
-] as CategoryFeatureInput[]
+  { name: 'batch_volume', label: 'Объём партии', type: 'NUMBER', units: ['кг', 'т', 'м³'] },
+  { name: 'packaging_type', label: 'Упаковка', type: 'SELECT', options: ['Навалом', 'Биг-бэг', 'Мешки'] }
+] satisfies CategoryFeatureSeed[]
 
 const AGRO_TECHNICAL_FEATURES = [
   {
@@ -522,12 +923,12 @@ const AGRO_TECHNICAL_FEATURES = [
     ]
   },
   {
-    name: 'packing',
+    name: 'packaging_options',
     label: 'Упаковка/Тара',
     type: 'MULTI_SELECT',
     options: ['Биг-бэг', 'Мешки', 'Кипы/Киповые прессы', 'Картонные короба', 'Вакуумная упаковка/Фольга', 'Навалом']
   }
-] as CategoryFeatureInput[]
+] satisfies CategoryFeatureSeed[]
 
 const AGRO_INDUSTRIAL_RAW_FEATURES = [
   {
@@ -541,7 +942,7 @@ const AGRO_INDUSTRIAL_RAW_FEATURES = [
     label: 'Способ обработки / Состояние',
     type: 'SELECT',
     options: [
-      'Необработанное (сырье)',
+      'Необработанное (сырьё)',
       'Мытое / Очищенное',
       'Мокросоленое',
       'Сухосоленое',
@@ -549,36 +950,38 @@ const AGRO_INDUSTRIAL_RAW_FEATURES = [
     ]
   },
   {
-    name: 'packing',
+    name: 'packaging_type',
     label: 'Упаковка / Тара',
     type: 'SELECT',
     options: ['Прессованные тюки', 'Мешки (ПП/джут)', 'В бочках / Рассоле', 'Пакеты / Коробки', 'Навалом']
   }
-] as CategoryFeatureInput[]
+] satisfies CategoryFeatureSeed[]
 
 const AGRO_SEED_FEATURES = [
+  { name: 'crop', label: 'Культура', type: 'TEXT', required: true },
+  { name: 'variety', label: 'Сорт/гибрид', type: 'TEXT' },
+  { name: 'reproduction', label: 'Репродукция/поколение', type: 'TEXT' },
+  { name: 'harvest_year', label: 'Год урожая/производства', type: 'NUMBER', unit: 'год' },
+  { name: 'germination', label: 'Всхожесть', type: 'NUMBER', unit: '%', min: 0, max: 100 },
+  { name: 'purity', label: 'Чистота', type: 'NUMBER', unit: '%', min: 0, max: 100 },
+  { name: 'thousand_seed_weight', label: 'Масса 1000 семян', type: 'NUMBER', unit: 'г' },
+  { name: 'treated', label: 'Протравлено/обработано', type: 'BOOLEAN' },
+  { name: 'certificate', label: 'Есть сертификат', type: 'BOOLEAN' },
   {
-    name: 'packing',
-    label: 'Упаковка / Тара',
+    name: 'packaging_options',
+    label: 'Упаковка/Тара',
     type: 'MULTI_SELECT',
-    options: [
-      'Биг-бэги',
-      'Мешки (бумажные/ПП)',
-      'Навалом / Насыпью',
-      'Кассеты/Горшки',
-      'ОКС (открытая корневая)',
-      'ЗКС (закрытая корневая)',
-      'Пакеты (фасовка)'
-    ]
-  }
-] as CategoryFeatureInput[]
+    options: ['Биг-бэги', 'Мешки (бумажные/ПП)', 'Навалом/Насыпью', 'Кассеты/Горшки', 'ОКС', 'ЗКС', 'Пакеты (фасовка)']
+  },
+  { name: 'batch_weight', label: 'Масса/количество партии', type: 'NUMBER', units: ['г', 'кг', 'т', 'шт.'] }
+] satisfies CategoryFeatureSeed[]
 
 const OTHER_DEFAULT_FEATURES = [
   { name: 'usage', label: 'Назначение', type: 'TEXT' },
   { name: 'origin', label: 'Производитель/Бренд', type: 'TEXT' }
-] as CategoryFeatureInput[]
+] satisfies CategoryFeatureSeed[]
 
-export const CATEGORIES_DATA: CategoryInput[] = [
+const CATEGORY_TREE = [
   {
     name: 'Агрохимия',
     iconId: 'FlaskConical',
@@ -596,7 +999,8 @@ export const CATEGORIES_DATA: CategoryInput[] = [
     ]
   },
   {
-    name: 'С/х животные и птица',
+    name: 'Сельскохозяйственные животные, птица и аквакультура',
+    aliases: ['С/х животные и птица', 'Сельхозживотные'],
     iconId: 'Bird',
     children: [
       { name: 'Крупный рогатый скот (КРС)', children: [], categoryFeatures: ANIMAL_FEATURES },
@@ -606,40 +1010,86 @@ export const CATEGORIES_DATA: CategoryInput[] = [
       { name: 'Лошади', children: [], categoryFeatures: ANIMAL_FEATURES },
       { name: 'Сельхозптица', children: [], categoryFeatures: POULTRY_FEATURES },
       { name: 'Кролики', children: [], categoryFeatures: ANIMAL_FEATURES },
-      { name: 'Пчеловодство (пчелопакеты, матки)', children: [], categoryFeatures: BEES_FEATURES },
+      {
+        name: 'Пчёлы, пчелосемьи и пчеломатки',
+        aliases: ['Пчеловодство', 'Пчелопакеты', 'Пчеломатки'],
+        children: [],
+        categoryFeatures: BEES_FEATURES
+      },
       { name: 'Рыбопосадочный материал и малёк', children: [], categoryFeatures: FISH_FEATURES },
-      { name: 'Другие с/х животные', children: [], categoryFeatures: ANIMAL_FEATURES }
+      {
+        name: 'Другие сельскохозяйственные животные',
+        aliases: ['Другие с/х животные'],
+        children: [],
+        categoryFeatures: ANIMAL_FEATURES
+      }
     ]
   },
   {
-    name: 'Корма для животных',
+    name: 'Корма и кормовые компоненты',
+    aliases: ['Корма для животных'],
     iconId: 'Wheat',
     children: [
-      { name: 'Барда, пивная дробина', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
-      { name: 'Жмых, шрот, жом, патока', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
-      { name: 'Зерно фуражное', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
-      { name: 'Комбикорма, зерносмеси', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
-      { name: 'Корма для кошек, собак', children: [], categoryFeatures: ANIMAL_FEED_EXTENDED },
-      { name: 'Кормовые добавки', children: [], categoryFeatures: FEED_ADDITIVES },
-      { name: 'Мука мясокостная', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
-      { name: 'Отруби', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
-      { name: 'Сено, солома, силос', children: [], categoryFeatures: FEED_BULK_FEATURES },
-      { name: 'Жидкие корма', children: [], categoryFeatures: FEED_LIQUID_FEATURES },
-      { name: 'Заменители цельного молока', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
-      { name: 'Ингредиенты для кормов', children: [], categoryFeatures: FEED_ADDITIVES },
-      { name: 'Для силосования', children: [], categoryFeatures: ENSILAGE_FEATURES },
-      { name: 'Корма для рыб', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
-      { name: 'Корма экструдированные', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
-      { name: 'Кормовые дрожжи', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
-      { name: 'Кормовые корнеплоды', children: [], categoryFeatures: FEED_BULK_FEATURES },
-      { name: 'Мука кровяная', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
-      { name: 'Мука мясная', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
-      { name: 'Мука перьевая', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
-      { name: 'Мука рыбная', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
-      { name: 'Мука травяная', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
-      { name: 'Некондиционные продукты на корм', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
-      { name: 'Пробиотики', children: [], categoryFeatures: FEED_ADDITIVES },
-      { name: 'Соль кормовая', children: [], categoryFeatures: FEED_ADDITIVES },
+      {
+        name: 'Готовые корма и комбикорма',
+        children: [
+          { name: 'Комбикорма, зерносмеси', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
+          { name: 'Корма для рыб', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
+          {
+            name: 'Корма для кошек и собак',
+            aliases: ['Корма для кошек, собак'],
+            children: [],
+            categoryFeatures: ANIMAL_FEED_EXTENDED
+          },
+          { name: 'Корма экструдированные', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
+          { name: 'Жидкие корма', children: [], categoryFeatures: FEED_LIQUID_FEATURES },
+          { name: 'Заменители цельного молока', children: [], categoryFeatures: FEED_HIGH_PROTEIN }
+        ]
+      },
+      {
+        name: 'Кормовое сырьё',
+        children: [
+          { name: 'Барда, пивная дробина', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
+          { name: 'Жмых, шрот, жом, патока', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
+          { name: 'Зерно фуражное', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
+          { name: 'Отруби', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
+          { name: 'Сено, солома, силос', children: [], categoryFeatures: FEED_BULK_FEATURES },
+          { name: 'Кормовые корнеплоды', children: [], categoryFeatures: FEED_BULK_FEATURES },
+          { name: 'Некондиционные продукты на корм', children: [], categoryFeatures: FEED_HIGH_PROTEIN }
+        ]
+      },
+      {
+        name: 'Белковые и минеральные компоненты',
+        children: [
+          { name: 'Мука мясокостная', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
+          { name: 'Мука кровяная', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
+          { name: 'Мука мясная', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
+          { name: 'Мука перьевая', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
+          { name: 'Мука рыбная', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
+          { name: 'Мука травяная', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
+          { name: 'Кормовые дрожжи', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
+          { name: 'Соль кормовая', children: [], categoryFeatures: FEED_ADDITIVES }
+        ]
+      },
+      {
+        name: 'Добавки, премиксы и пробиотики',
+        children: [
+          { name: 'Кормовые добавки', children: [], categoryFeatures: FEED_ADDITIVES },
+          { name: 'Ингредиенты для кормов', children: [], categoryFeatures: FEED_ADDITIVES },
+          { name: 'Пробиотики', children: [], categoryFeatures: FEED_ADDITIVES }
+        ]
+      },
+      {
+        name: 'Силосование и консервация кормов',
+        children: [
+          {
+            name: 'Средства для силосования',
+            aliases: ['Для силосования'],
+            children: [],
+            categoryFeatures: ENSILAGE_FEATURES
+          }
+        ]
+      },
       { name: 'Прочие корма', children: [], categoryFeatures: FEED_HIGH_PROTEIN }
     ]
   },
@@ -666,7 +1116,7 @@ export const CATEGORIES_DATA: CategoryInput[] = [
         children: [
           { name: 'Блокорезки', children: [], categoryFeatures: EQUIP_BASE },
           { name: 'Волчки', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Запчасти и расходные материалы', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Запчасти и расходные материалы', children: [], categoryFeatures: EQUIP_PARTS },
           { name: 'Инъекторы', children: [], categoryFeatures: EQUIP_BASE },
           { name: 'Клипсаторы, перекрутчики', children: [], categoryFeatures: EQUIP_BASE },
           { name: 'Коптильни, термокамеры, рамы', children: [], categoryFeatures: EQUIP_BASE },
@@ -676,7 +1126,7 @@ export const CATEGORIES_DATA: CategoryInput[] = [
           { name: 'Льдогенераторы', children: [], categoryFeatures: EQUIP_BASE },
           { name: 'Массажеры', children: [], categoryFeatures: EQUIP_BASE },
           { name: 'Машины для нарезки', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Модульные мясные цеха и mini-заводы', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Модульные мясные цеха и мини-заводы', children: [], categoryFeatures: EQUIP_BASE },
           { name: 'Мясорубки', children: [], categoryFeatures: EQUIP_BASE },
           { name: 'Для обработки субпродуктов', children: [], categoryFeatures: EQUIP_BASE },
           { name: 'Оборудование для убоя', children: [], categoryFeatures: EQUIP_BASE },
@@ -698,10 +1148,10 @@ export const CATEGORIES_DATA: CategoryInput[] = [
           { name: 'Весы для взвешивания животных', children: [], categoryFeatures: EQUIP_BASE },
           { name: 'Ветеринарное оборудование', children: [], categoryFeatures: EQUIP_BASE },
           { name: 'Доильное оборудование', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Домики и загоны для телят', children: [], categoryFeatures: EQUIP_PARTS },
+          { name: 'Домики и загоны для телят', children: [], categoryFeatures: EQUIP_BASE },
           { name: 'Клеточное оборудование', children: [], categoryFeatures: EQUIP_BASE },
           { name: 'Климатическое оборудование', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Машинки для стрижки животных', children: [], categoryFeatures: EQUIP_PARTS },
+          { name: 'Машинки для стрижки животных', children: [], categoryFeatures: EQUIP_BASE },
           { name: 'Навозоуборочное оборудование', children: [], categoryFeatures: EQUIP_BASE },
           { name: 'Для кормления и поения', children: [], categoryFeatures: EQUIP_BASE },
           { name: 'Стойловое оборудование', children: [], categoryFeatures: EQUIP_BASE },
@@ -763,11 +1213,11 @@ export const CATEGORIES_DATA: CategoryInput[] = [
         name: 'Для растениеводства',
         children: [
           { name: 'Климатические шкафы', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Лабораторное оборудование', children: [], categoryFeatures: EQUIP_PARTS },
+          { name: 'Лабораторное оборудование', children: [], categoryFeatures: EQUIP_BASE },
           { name: 'Машины семяочистительные', children: [], categoryFeatures: EQUIP_BASE },
           { name: 'Для гидропоники', children: [], categoryFeatures: EQUIP_BASE },
           { name: 'Для грибоводства', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Для контроля окружающей среды', children: [], categoryFeatures: EQUIP_PARTS },
+          { name: 'Для контроля окружающей среды', children: [], categoryFeatures: EQUIP_BASE },
           { name: 'Для полива и орошения', children: [], categoryFeatures: EQUIP_BASE },
           { name: 'Для приготовления растворов удобрений', children: [], categoryFeatures: EQUIP_BASE },
           { name: 'Для садоводства', children: [], categoryFeatures: EQUIP_BASE },
@@ -801,7 +1251,14 @@ export const CATEGORIES_DATA: CategoryInput[] = [
       { name: 'Моечное и санитарно-гигиеническое', children: [], categoryFeatures: EQUIP_BASE },
       { name: 'Для переработки с/х отходов', children: [], categoryFeatures: EQUIP_BASE },
       { name: 'Для птицеводства', children: [], categoryFeatures: EQUIP_BASE },
-      { name: 'Для пчеловодства', children: [], categoryFeatures: EQUIP_PARTS },
+      {
+        name: 'Для пчеловодства',
+        children: [
+          { name: 'Ульи и комплектующие', children: [], categoryFeatures: OTHER_GOODS_FEATURES },
+          { name: 'Медогонки и оборудование для переработки мёда', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Прочее оборудование для пчеловодства', children: [], categoryFeatures: EQUIP_BASE }
+        ]
+      },
       { name: 'Для рыбоводства', children: [], categoryFeatures: EQUIP_BASE },
       { name: 'Для складов и хранилищ', children: [], categoryFeatures: EQUIP_BASE },
       { name: 'Сушильное', children: [], categoryFeatures: EQUIP_BASE },
@@ -811,7 +1268,6 @@ export const CATEGORIES_DATA: CategoryInput[] = [
       { name: 'Упаковочное и фасовочное оборудование', children: [], categoryFeatures: EQUIP_BASE }
     ]
   },
-  // Тут
   {
     name: 'Продукты переработки',
     iconId: 'Factory',
@@ -820,7 +1276,7 @@ export const CATEGORIES_DATA: CategoryInput[] = [
       {
         name: 'Консервированные продукты',
         children: [
-          { name: 'Грибы соленые, солено-отварные, маринованные', children: [], categoryFeatures: FOOD_CANNED },
+          { name: 'Грибы солёные, солено-отварные, маринованные', children: [], categoryFeatures: FOOD_CANNED },
           { name: 'Консервы молочные', children: [], categoryFeatures: FOOD_CANNED },
           { name: 'Консервы мясные', children: [], categoryFeatures: FOOD_CANNED },
           { name: 'Консервы мясорастительные', children: [], categoryFeatures: FOOD_CANNED },
@@ -854,7 +1310,8 @@ export const CATEGORIES_DATA: CategoryInput[] = [
         name: 'Молоко, молочные продукты',
         children: [
           { name: 'Йогурт', children: [], categoryFeatures: FOOD_DAIRY },
-          { name: 'Кефир, ряженка, кумыс', children: [], categoryFeatures: FOOD_DAIRY },
+          { name: 'Кефир', children: [], categoryFeatures: FOOD_DAIRY },
+          { name: 'Кумыс', children: [], categoryFeatures: FOOD_DAIRY },
           { name: 'Кисломолочные продукты', children: [], categoryFeatures: FOOD_DAIRY },
           { name: 'Масло сливочное, пасты масляные', children: [], categoryFeatures: FOOD_DAIRY },
           { name: 'Молоко', children: [], categoryFeatures: FOOD_DAIRY },
@@ -878,22 +1335,22 @@ export const CATEGORIES_DATA: CategoryInput[] = [
       {
         name: 'Мясо и мясные продукты',
         children: [
-          { name: 'Баранина', children: [], categoryFeatures: FOOD_MEAT_FISH },
-          { name: 'Говядина', children: [], categoryFeatures: FOOD_MEAT_FISH },
-          { name: 'Готовые мясные продукты, полуфабрикаты', children: [], categoryFeatures: FOOD_MEAT_FISH },
-          { name: 'Козлятина', children: [], categoryFeatures: FOOD_MEAT_FISH },
-          { name: 'Конина', children: [], categoryFeatures: FOOD_MEAT_FISH },
-          { name: 'Колбасные изделия и мясные деликатесы', children: [], categoryFeatures: FOOD_MEAT_FISH },
-          { name: 'Кролик', children: [], categoryFeatures: FOOD_MEAT_FISH },
-          { name: 'Птица', children: [], categoryFeatures: FOOD_MEAT_FISH },
-          { name: 'Свинина', children: [], categoryFeatures: FOOD_MEAT_FISH },
-          { name: 'Субпродукты', children: [], categoryFeatures: FOOD_MEAT_FISH },
-          { name: 'Сырое сало (шпик), жир-сырец', children: [], categoryFeatures: FOOD_MEAT_FISH },
-          { name: 'Фарш', children: [], categoryFeatures: FOOD_MEAT_FISH }
+          { name: 'Баранина', children: [], categoryFeatures: FOOD_MEAT },
+          { name: 'Говядина', children: [], categoryFeatures: FOOD_MEAT },
+          { name: 'Готовые мясные продукты, полуфабрикаты', children: [], categoryFeatures: FOOD_MEAT },
+          { name: 'Козлятина', children: [], categoryFeatures: FOOD_MEAT },
+          { name: 'Конина', children: [], categoryFeatures: FOOD_MEAT },
+          { name: 'Колбасные изделия и мясные деликатесы', children: [], categoryFeatures: FOOD_MEAT },
+          { name: 'Кролик', children: [], categoryFeatures: FOOD_MEAT },
+          { name: 'Птица', children: [], categoryFeatures: FOOD_MEAT },
+          { name: 'Свинина', children: [], categoryFeatures: FOOD_MEAT },
+          { name: 'Субпродукты', children: [], categoryFeatures: FOOD_MEAT },
+          { name: 'Сырое сало (шпик), жир-сырец', children: [], categoryFeatures: FOOD_MEAT },
+          { name: 'Фарш', children: [], categoryFeatures: FOOD_MEAT }
         ]
       },
       { name: 'Пряности, специи, приправы', children: [], categoryFeatures: FOOD_GROCERY },
-      { name: 'Сушеные овощи, фрукты, сухофрукты', children: [], categoryFeatures: FOOD_GROCERY },
+      { name: 'Сушёные овощи, фрукты, сухофрукты', children: [], categoryFeatures: FOOD_GROCERY },
       { name: 'Чай, кофе, какао-напитки', children: [], categoryFeatures: FOOD_GROCERY },
       { name: 'Экстракты растительные пищевые', children: [], categoryFeatures: FOOD_GROCERY },
       { name: 'Безалкогольные напитки, соки, воды', children: [], categoryFeatures: FOOD_CANNED },
@@ -929,18 +1386,18 @@ export const CATEGORIES_DATA: CategoryInput[] = [
       {
         name: 'Рыба и морепродукты',
         children: [
-          { name: 'Готовые рыбные продукты и полуфабрикаты', children: [], categoryFeatures: FOOD_BASE },
-          { name: 'Икра рыбы', children: [], categoryFeatures: FOOD_BASE },
-          { name: 'Моллюски и ракообразные', children: [], categoryFeatures: FOOD_BASE },
-          { name: 'Морская капуста, водоросли', children: [], categoryFeatures: FOOD_BASE },
-          { name: 'Прочее морепродукты', children: [], categoryFeatures: FOOD_BASE },
-          { name: 'Рыба вяленая, сушеная', children: [], categoryFeatures: FOOD_BASE },
-          { name: 'Рыба живая, охлажденная', children: [], categoryFeatures: FOOD_BASE },
-          { name: 'Рыба копченая', children: [], categoryFeatures: FOOD_BASE },
-          { name: 'Рыба свежемороженая', children: [], categoryFeatures: FOOD_BASE },
-          { name: 'Рыба соленая', children: [], categoryFeatures: FOOD_BASE },
-          { name: 'Рыбные субпродукты', children: [], categoryFeatures: FOOD_BASE },
-          { name: 'Фарш рыбный', children: [], categoryFeatures: FOOD_BASE }
+          { name: 'Готовые рыбные продукты и полуфабрикаты', children: [], categoryFeatures: FOOD_FISH },
+          { name: 'Икра рыбы', children: [], categoryFeatures: FOOD_FISH },
+          { name: 'Моллюски и ракообразные', children: [], categoryFeatures: FOOD_FISH },
+          { name: 'Морская капуста, водоросли', children: [], categoryFeatures: FOOD_FISH },
+          { name: 'Прочие морепродукты', children: [], categoryFeatures: FOOD_FISH },
+          { name: 'Рыба вяленая, сушеная', children: [], categoryFeatures: FOOD_FISH },
+          { name: 'Рыба живая, охлаждённая', children: [], categoryFeatures: FOOD_FISH },
+          { name: 'Рыба копчёная', children: [], categoryFeatures: FOOD_FISH },
+          { name: 'Рыба свежемороженая', children: [], categoryFeatures: FOOD_FISH },
+          { name: 'Рыба соленая', children: [], categoryFeatures: FOOD_FISH },
+          { name: 'Рыбные субпродукты', children: [], categoryFeatures: FOOD_FISH },
+          { name: 'Фарш рыбный', children: [], categoryFeatures: FOOD_FISH }
         ]
       },
       { name: 'Сахар', children: [], categoryFeatures: FOOD_GROCERY },
@@ -952,7 +1409,8 @@ export const CATEGORIES_DATA: CategoryInput[] = [
     ]
   },
   {
-    name: 'Продукты питания',
+    name: 'Свежая сельхозпродукция',
+    aliases: ['Продукты питания', 'Свежие продукты'],
     iconId: 'Apple',
     children: [
       { name: 'Грибы пищевые', children: [], categoryFeatures: AGRO_MUSHROOM_FEATURES },
@@ -961,7 +1419,7 @@ export const CATEGORIES_DATA: CategoryInput[] = [
         children: [
           { name: 'Базилик', children: [], categoryFeatures: AGRO_GREEN_FEATURES },
           { name: 'Кинза', children: [], categoryFeatures: AGRO_GREEN_FEATURES },
-          { name: 'Лук зеленое перо', children: [], categoryFeatures: AGRO_GREEN_FEATURES },
+          { name: 'Лук зелёный (перо)', children: [], categoryFeatures: AGRO_GREEN_FEATURES },
           { name: 'Микрозелень', children: [], categoryFeatures: AGRO_GREEN_FEATURES },
           { name: 'Петрушка', children: [], categoryFeatures: AGRO_GREEN_FEATURES },
           { name: 'Рукола', children: [], categoryFeatures: AGRO_GREEN_FEATURES },
@@ -1064,7 +1522,6 @@ export const CATEGORIES_DATA: CategoryInput[] = [
           { name: 'Персики', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
           { name: 'Облепиха', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
           { name: 'Папайя', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Персики', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
           { name: 'Помело', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
           { name: 'Рябина', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
           { name: 'Сливы', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
@@ -1084,24 +1541,31 @@ export const CATEGORIES_DATA: CategoryInput[] = [
         name: 'Яйцо',
         children: [],
         categoryFeatures: [
-          { name: 'category', label: 'Категория', type: 'MULTI_SELECT', options: ['С0', 'С1', 'С2', 'СВ', 'СП'] }
+          {
+            name: 'egg_category',
+            label: 'Категория яйца',
+            type: 'SELECT',
+            options: ['С0', 'С1', 'С2', 'СВ', 'СП'],
+            required: true
+          }
         ]
       },
       {
-        name: 'Мед, продукция пчеловодства',
+        name: 'Мёд и продукция пчеловодства',
         children: [
-          { name: 'Мед натуральный (монофлорный, полифлорный)', children: [], categoryFeatures: AGRO_HONEY_FEATURES },
-          { name: 'Мед в сотах', children: [], categoryFeatures: AGRO_HONEY_FEATURES },
-          { name: 'Перга, пыльца (обножка)', children: [], categoryFeatures: AGRO_HONEY_FEATURES },
-          { name: 'Прополис', children: [], categoryFeatures: AGRO_HONEY_FEATURES },
-          { name: 'Маточное молочко, трутневый гомогенат', children: [], categoryFeatures: AGRO_HONEY_FEATURES },
-          { name: 'Воск пчелиный', children: [], categoryFeatures: AGRO_HONEY_FEATURES }
+          { name: 'Мёд натуральный (монофлорный, полифлорный)', children: [], categoryFeatures: AGRO_HONEY_FEATURES },
+          { name: 'Мёд в сотах', children: [], categoryFeatures: AGRO_HONEY_FEATURES },
+          { name: 'Перга, пыльца (обножка)', children: [], categoryFeatures: BEE_PRODUCT_FEATURES },
+          { name: 'Прополис', children: [], categoryFeatures: BEE_PRODUCT_FEATURES },
+          { name: 'Маточное молочко, трутневый гомогенат', children: [], categoryFeatures: BEE_PRODUCT_FEATURES },
+          { name: 'Воск пчелиный', children: [], categoryFeatures: BEE_WAX_FEATURES }
         ]
       }
     ]
   },
   {
-    name: 'Сельхозсырье и агрокультуры',
+    name: 'Сельхозпродукция и растительное сырьё',
+    aliases: ['Сельхозсырьё и агрокультуры', 'Агрокультуры'],
     iconId: 'Sprout',
     children: [
       {
@@ -1136,7 +1600,7 @@ export const CATEGORIES_DATA: CategoryInput[] = [
           { name: 'Конопля техническая', children: [], categoryFeatures: AGRO_TECHNICAL_FEATURES },
           { name: 'Кориандр', children: [], categoryFeatures: AGRO_TECHNICAL_FEATURES },
           { name: 'Лавровый лист', children: [], categoryFeatures: AGRO_TECHNICAL_FEATURES },
-          { name: 'Лекарственное растительное сырье', children: [], categoryFeatures: AGRO_TECHNICAL_FEATURES },
+          { name: 'Лекарственное растительное сырьё', children: [], categoryFeatures: AGRO_TECHNICAL_FEATURES },
           { name: 'Лён технический/Лён-долгунец', children: [], categoryFeatures: AGRO_TECHNICAL_FEATURES },
           { name: 'Мак', children: [], categoryFeatures: AGRO_TECHNICAL_FEATURES },
           { name: 'Мята', children: [], categoryFeatures: AGRO_TECHNICAL_FEATURES },
@@ -1171,17 +1635,16 @@ export const CATEGORIES_DATA: CategoryInput[] = [
         ]
       },
       {
-        name: 'Прочее сырье растительного происхождения',
+        name: 'Прочее сырьё растительного происхождения',
         children: [
           { name: 'Лекарственные травы, дикоросы', children: [], categoryFeatures: AGRO_RAW_FEATURES },
-          { name: 'Саженцы, рассада, мицелий грибов', children: [], categoryFeatures: DEFAULT_FEATURES },
           {
             name: 'Семена цветов, газонных трав, декоративных культур',
             children: [],
             categoryFeatures: AGRO_RAW_FEATURES
           },
           {
-            name: 'Сушеные цветы для кондитерского производства и производства чая',
+            name: 'Сушёные цветы для кондитерского производства и производства чая',
             children: [],
             categoryFeatures: DEFAULT_FEATURES
           }
@@ -1321,20 +1784,17 @@ export const CATEGORIES_DATA: CategoryInput[] = [
     children: [
       { name: 'Пластиковые емкости крупногабаритные', children: [], categoryFeatures: PACKAGING_MATERIAL_FEATURES },
       { name: 'Тара, упаковка', children: [], categoryFeatures: PACKAGING_MATERIAL_FEATURES },
-      { name: 'Упаковочные материалы и сырье', children: [], categoryFeatures: PACKAGING_MATERIAL_FEATURES }
+      { name: 'Упаковочные материалы и сырьё', children: [], categoryFeatures: PACKAGING_MATERIAL_FEATURES }
     ]
   },
   {
-    name: 'Техническое сырье',
+    name: 'Сырьё животного происхождения',
+    iconId: 'Shell',
+    aliases: ['Техническое сырьё'],
     children: [
       { name: 'Натуральные оболочки', children: [], categoryFeatures: AGRO_INDUSTRIAL_RAW_FEATURES },
       { name: 'Овечьи шкуры', children: [], categoryFeatures: AGRO_INDUSTRIAL_RAW_FEATURES },
       { name: 'Перо, пух', children: [], categoryFeatures: AGRO_INDUSTRIAL_RAW_FEATURES },
-      {
-        name: 'Сушеные цветы для кондитерского производства и производства чая',
-        children: [],
-        categoryFeatures: AGRO_INDUSTRIAL_RAW_FEATURES
-      },
       { name: 'Шерсть', children: [], categoryFeatures: AGRO_INDUSTRIAL_RAW_FEATURES },
       { name: 'Шкуры', children: [], categoryFeatures: AGRO_INDUSTRIAL_RAW_FEATURES }
     ]
@@ -1356,7 +1816,6 @@ export const CATEGORIES_DATA: CategoryInput[] = [
         children: [],
         categoryFeatures: [{ name: 'version', label: 'Версия', type: 'TEXT' }]
       },
-      { name: 'Прочая спецтехника', children: [], categoryFeatures: OTHER_DEFAULT_FEATURES },
       { name: 'Прочие с/х товары', children: [], categoryFeatures: OTHER_DEFAULT_FEATURES },
       { name: 'Различные товары для пищевой промышленности', children: [], categoryFeatures: OTHER_DEFAULT_FEATURES },
       {
@@ -1371,11 +1830,10 @@ export const CATEGORIES_DATA: CategoryInput[] = [
           { name: 'Органический материал для мульчирования', children: [], categoryFeatures: OTHER_WASTE_FEATURES },
           { name: 'Подстилки для с/х животных', children: [], categoryFeatures: OTHER_WASTE_FEATURES },
           {
-            name: 'Полимерные рукава для хранение с.х. продукции',
+            name: 'Полимерные рукава для хранения сельхозпродукции',
             children: [],
             categoryFeatures: OTHER_GOODS_FEATURES
           },
-          { name: 'Пчелоинвентарь', children: [], categoryFeatures: OTHER_GOODS_FEATURES },
           { name: 'Расходные материалы', children: [], categoryFeatures: OTHER_DEFAULT_FEATURES },
           { name: 'Садовый инвентарь', children: [], categoryFeatures: OTHER_GOODS_FEATURES },
           { name: 'Сеялки ручные', children: [], categoryFeatures: OTHER_GOODS_FEATURES },
@@ -1393,4 +1851,9 @@ export const CATEGORIES_DATA: CategoryInput[] = [
       }
     ]
   }
-]
+] satisfies CategorySeed[]
+
+export const CATEGORIES_DATA: CategoryInput[] = materializeCategories(CATEGORY_TREE)
+
+/** Используйте в тестах/CI; ошибок уровня error после текущих исправлений быть не должно. */
+export const CATEGORY_VALIDATION_ISSUES = validateCategories(CATEGORIES_DATA)

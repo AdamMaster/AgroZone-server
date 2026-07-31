@@ -5,7 +5,7 @@ import { ConfigService } from '@nestjs/config'
 import 'multer'
 import { AD_LIMITS } from './constants/ads.constants'
 import { CreateAdDto } from './dto/create-ad.dto'
-import { AdStatus, Prisma } from 'prisma/generated/client'
+import { AdStatus, PriceUnit, Prisma } from 'prisma/generated/client'
 import { UpdateAdDto } from './dto/update-ad.dto'
 import { AdStateMachineService } from './ad-state-machine.service'
 import { FindAdsQueryDto } from './dto/find-ads-query.dto'
@@ -13,6 +13,8 @@ import { FindMyAdsQueryDto } from './dto/find-my-ads-query.dto'
 import { CategoriesService } from '@/categories/categories.service'
 import { randomBytes } from 'crypto'
 import slugify from 'slugify'
+import { UserService } from '@/user/user.service'
+import { normalizePhone } from '@/libs/common/utils/phone.util'
 
 @Injectable()
 export class AdsService {
@@ -21,7 +23,8 @@ export class AdsService {
     private readonly fileService: FileService,
     private readonly configService: ConfigService,
     private readonly adStateMachine: AdStateMachineService,
-    private readonly categoriesService: CategoriesService
+    private readonly categoriesService: CategoriesService,
+    private readonly userService: UserService
   ) {}
 
   async create(
@@ -32,28 +35,62 @@ export class AdsService {
   ) {
     await this.validateFileLimits(userId, files)
 
-    const images = await this.prepareImages(null, [], files)
+    const user = await this.userService.findById(userId)
+
+    if (!user) {
+      throw new NotFoundException('Пользователь не найден')
+    }
+
+    let phone = createAdDto.phone ? normalizePhone(createAdDto.phone) : null
+
+    if (!phone) {
+      phone = user.phones.find(p => p.isPrimary)?.phone ?? null
+    }
+
+    if (!phone) {
+      throw new BadRequestException('Укажите номер телефона для связи')
+    }
+
+    if (!/^\d{10,15}$/.test(phone)) {
+      throw new BadRequestException('Некорректный номер телефона')
+    }
+
+    const userPhone = user.phones.find(p => p.phone === phone)
+
+    if (!userPhone) {
+      await this.userService.addPhone(userId, phone)
+    }
+
+    const images = await this.prepareImages(null, createAdDto.existingImages ?? [], files)
 
     const categoryPath = await this.categoriesService.getCategoryPath(createAdDto.categoryId)
 
-    const baseSlug = slugify(createAdDto.title, {
-      lower: true,
-      strict: true
-    })
+    const baseSlug =
+      slugify(createAdDto.title, {
+        lower: true,
+        strict: true,
+        locale: 'ru'
+      }) || 'ad'
+
     const uniqueHash = randomBytes(3).toString('hex')
     const slug = `${baseSlug}-${uniqueHash}`
     const seoPath = this.categoriesService.buildSeoPath(categoryPath, slug)
 
+    const { existingImages, price, features, ...restDto } = createAdDto
+
     return this.prisma.ad.create({
       data: {
-        ...createAdDto,
+        ...restDto,
+        phone,
+        price: price !== undefined && price !== null ? BigInt(Math.round(price)) : null,
+        unit: createAdDto.unit ?? PriceUnit.ITEM,
         images,
         userId,
         status,
         categoryPath,
         seoPath,
         slug,
-        features: (createAdDto.features ?? {}) as Prisma.InputJsonValue
+        features: (features ?? {}) as Prisma.InputJsonValue
       }
     })
   }
@@ -65,11 +102,9 @@ export class AdsService {
 
     const now = new Date()
 
-    // 1. Собираем массив ID категорий для фильтрации
     let categoryIds: string[] | undefined = undefined
 
     if (query.categoryId) {
-      // Рекурсивно собираем ID выбранной категории и всех её потомков
       const result = await this.prisma.$queryRaw<{ id: string }[]>`
       WITH RECURSIVE category_tree AS (
         SELECT id FROM categories WHERE id = ${query.categoryId}
@@ -83,15 +118,12 @@ export class AdsService {
       categoryIds = result.map(row => row.id)
     }
 
-    // 2. Делаем основной запрос к объявлениям
     const ads = await this.prisma.ad.findMany({
       where: {
         status: AdStatus.PUBLISHED,
         expiresAt: { gt: now },
-        // Если отфильтровано по категории, ищем совпадения по всему дереву ID
         ...(categoryIds ? { categoryId: { in: categoryIds } } : {}),
 
-        // Наш поиск по подстроке (работает, если query.search не пустой)
         ...(query.search
           ? {
               OR: [
@@ -102,6 +134,12 @@ export class AdsService {
           : {})
       },
       include: {
+        user: {
+          select: {
+            id: true,
+            displayName: true
+          }
+        },
         category: true,
         favorites: userId
           ? {
@@ -156,8 +194,8 @@ export class AdsService {
         user: {
           select: {
             id: true,
-            name: true,
-            avatar: true,
+            displayName: true,
+            picture: true,
             createdAt: true
           }
         }
@@ -251,6 +289,8 @@ export class AdsService {
   }
 
   async update(id: string, updateAdDto: UpdateAdDto, userId: string, files?: Express.Multer.File[]) {
+    await this.validateFileLimits(userId, files ?? [])
+
     const ad = await this.getUserAdOrThrow(id, userId)
 
     if (!ad) {
@@ -277,7 +317,17 @@ export class AdsService {
       images = [...images, ...uploaded.map(r => r.url)]
     }
 
-    const { existingImages, features, ...rest } = updateAdDto
+    const { existingImages, features, phone, ...rest } = updateAdDto
+
+    let normalizedPhone = phone
+
+    if (phone !== undefined) {
+      normalizedPhone = normalizePhone(phone)
+
+      if (!normalizedPhone) {
+        throw new BadRequestException('Некорректный номер телефона')
+      }
+    }
 
     const nextStatus = ad.status === AdStatus.PUBLISHED ? AdStatus.PENDING : ad.status
 
@@ -288,6 +338,9 @@ export class AdsService {
         status: nextStatus,
         rejectionReason: null,
         images,
+        ...(normalizedPhone !== undefined && {
+          phone: normalizedPhone
+        }),
         features: features ? (features as Prisma.InputJsonValue) : undefined
       }
     })
@@ -339,13 +392,31 @@ export class AdsService {
 
   async republish(id: string, userId: string, updateDto?: UpdateAdDto) {
     const ad = await this.getUserAdOrThrow(id, userId)
+
     if (!ad) throw new NotFoundException('Объявление не найдено')
+
+    const normalizedPhone = updateDto?.phone !== undefined ? normalizePhone(updateDto.phone) : undefined
+
+    if (normalizedPhone !== undefined && !normalizedPhone) {
+      throw new BadRequestException('Некорректный номер телефона')
+    }
+
+    if (normalizedPhone) {
+      const user = await this.userService.findById(userId)
+
+      const exists = user?.phones.some(p => p.phone === normalizedPhone)
+
+      if (!exists) {
+        await this.userService.addPhone(userId, normalizedPhone)
+      }
+    }
 
     const hasChanges =
       updateDto &&
       ((updateDto.title !== undefined && updateDto.title !== ad.title) ||
         (updateDto.description !== undefined && updateDto.description !== ad.description) ||
-        (updateDto.price !== undefined && Number(updateDto.price) !== Number(ad.price)))
+        (updateDto.price !== undefined && Number(updateDto.price) !== Number(ad.price)) ||
+        (normalizedPhone !== undefined && normalizedPhone !== ad.phone))
 
     const now = new Date()
 
@@ -359,9 +430,12 @@ export class AdsService {
         expiresAt: this.getExpirationDateFrom(now, 30),
         rejectionReason: null,
         ...(hasChanges && {
-          title: updateDto.title,
-          description: updateDto.description,
-          price: updateDto.price
+          title: updateDto?.title,
+          description: updateDto?.description,
+          price: updateDto?.price !== undefined ? BigInt(Math.round(updateDto.price)) : undefined,
+          ...(normalizedPhone !== undefined && {
+            phone: normalizedPhone
+          })
         })
       }
     })
@@ -410,7 +484,15 @@ export class AdsService {
             id: true,
             displayName: true,
             email: true,
-            phone: true
+            phones: {
+              where: {
+                isPrimary: true
+              },
+              take: 1,
+              select: {
+                phone: true
+              }
+            }
           }
         }
       },
@@ -459,7 +541,7 @@ export class AdsService {
       where: { id },
       data: {
         status,
-        rejectionReason: null // Очищаем причину, так как статус изменился
+        rejectionReason: null
       }
     })
   }
@@ -471,32 +553,61 @@ export class AdsService {
     id?: string
   ) {
     await this.validateFileLimits(userId, files)
-    const { existingImages, features, lat, lng, price, ...rest } = createAdDto
 
-    // Безопасно приводим к числам, чтобы Prisma не ругалась
-    const parsedLat = lat ? Number(lat) : 0
-    const parsedLng = lng ? Number(lng) : 0
-    const parsedPrice = price ? Number(price) : undefined
+    const user = await this.userService.findById(userId)
+
+    if (!user) {
+      throw new NotFoundException('Пользователь не найден')
+    }
+
+    const { existingImages, features, lat, lng, price, phone, ...rest } = createAdDto
+
+    let normalizedPhone = phone ? normalizePhone(phone) : null
+
+    if (phone && !normalizedPhone) {
+      throw new BadRequestException('Некорректный номер телефона')
+    }
+
+    if (normalizedPhone) {
+      const userPhone = user.phones.find(p => p.phone === normalizedPhone)
+
+      if (!userPhone) {
+        await this.userService.addPhone(userId, normalizedPhone)
+      }
+    }
+
+    if (!normalizedPhone) {
+      normalizedPhone = user.phones.find(phone => phone.isPrimary)?.phone ?? user.phones[0]?.phone ?? null
+
+      if (!normalizedPhone) {
+        throw new BadRequestException('Укажите номер телефона для связи')
+      }
+    }
+
+    const parsedLat = lat !== undefined ? Number(lat) : 0
+    const parsedLng = lng !== undefined ? Number(lng) : 0
+
+    const parsedPrice = price !== undefined && price !== null ? BigInt(Math.round(Number(price))) : undefined
 
     if (id) {
       const ad = await this.getUserAdOrThrow(id, userId)
-      const images = await this.prepareImages(ad, existingImages || [], files)
-      const categoryPath = await this.categoriesService.getCategoryPath(rest.categoryId)
 
-      const slug = slugify(createAdDto.title, {
-        lower: true,
-        strict: true
-      })
+      const images = await this.prepareImages(ad, existingImages ?? ad.images, files)
 
-      const seoPath = this.categoriesService.buildSeoPath(categoryPath, slug)
+      const categoryPath = rest.categoryId
+        ? await this.categoriesService.getCategoryPath(rest.categoryId)
+        : ad.categoryPath
+
+      const seoPath = this.categoriesService.buildSeoPath(categoryPath, ad.slug)
 
       return this.prisma.ad.update({
         where: { id },
         data: {
           ...rest,
+          phone: normalizedPhone,
           lat: parsedLat,
           lng: parsedLng,
-          price: parsedPrice,
+          price: price !== undefined ? parsedPrice : undefined,
           images,
           status: AdStatus.DRAFT,
           rejectionReason: null,
@@ -508,18 +619,24 @@ export class AdsService {
     }
 
     const images = await this.prepareImages(null, [], files)
+
     const categoryPath = await this.categoriesService.getCategoryPath(rest.categoryId)
 
-    const slug = slugify(createAdDto.title, {
-      lower: true,
-      strict: true
-    })
+    const baseSlug =
+      slugify(createAdDto.title ?? '', {
+        lower: true,
+        strict: true,
+        locale: 'ru'
+      }) || 'ad'
+
+    const slug = `${baseSlug}-${randomBytes(3).toString('hex')}`
 
     const seoPath = this.categoriesService.buildSeoPath(categoryPath, slug)
 
     return this.prisma.ad.create({
       data: {
         ...rest,
+        phone: normalizedPhone,
         lat: parsedLat,
         lng: parsedLng,
         price: parsedPrice,
@@ -537,16 +654,16 @@ export class AdsService {
   async publishDraft(id: string, userId: string) {
     const ad = await this.getUserAdOrThrow(id, userId)
 
-    if (!ad) {
-      throw new NotFoundException('Объявление не найдено')
-    }
-
     const status = this.adStateMachine.transition(ad.status, 'PUBLISH')
+
+    const now = new Date()
 
     return this.prisma.ad.update({
       where: { id },
       data: {
         status,
+        publishedAt: now,
+        expiresAt: this.getExpirationDateFrom(now, 30),
         rejectionReason: null
       }
     })

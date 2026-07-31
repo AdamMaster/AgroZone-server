@@ -16,7 +16,7 @@ import {
 } from '@nestjs/common'
 import { AdsService } from './ads.service'
 import { CreateAdDto } from './dto/create-ad.dto'
-import { AuthGuard, OptionalAuthGuard } from '../auth/guards/auth.guard'
+import { AuthGuard } from '../auth/guards/auth.guard'
 import { Request } from 'express'
 import { UseInterceptors, UploadedFiles } from '@nestjs/common'
 import { FilesInterceptor } from '@nestjs/platform-express'
@@ -93,21 +93,24 @@ export class AdsController {
   @Get('pending')
   @Roles(UserRole.ADMIN)
   @UseGuards(AuthGuard, RolesGuard)
-  findPending(@Query('page') page?: number, @Query('limit') limit?: number) {
+  findPending(
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query('limit', new DefaultValuePipe(20), ParseIntPipe) limit: number
+  ) {
     return this.adsService.findPending(page, limit)
   }
 
   @Patch(':id/publish')
   @Roles(UserRole.ADMIN)
   @UseGuards(AuthGuard, RolesGuard)
-  publish(@Param('id') id: string) {
+  publish(@Param('id', ParseUUIDPipe) id: string) {
     return this.adsService.publish(id)
   }
 
   @Patch(':id/reject')
   @Roles(UserRole.ADMIN)
   @UseGuards(AuthGuard, RolesGuard)
-  reject(@Param('id') id: string, @Body() { reason }: ModerateAdDto) {
+  reject(@Param('id', ParseUUIDPipe) id: string, @Body() { reason }: ModerateAdDto) {
     return this.adsService.reject(id, reason)
   }
 

@@ -1,6 +1,6 @@
-import { IsNotEmpty, IsNumber, IsObject, IsOptional, IsString, IsArray } from 'class-validator'
+import { IsNotEmpty, IsNumber, IsObject, IsOptional, IsString, IsArray, IsEnum, Matches, Length } from 'class-validator'
 import { Transform } from 'class-transformer'
-import { Prisma } from 'prisma/generated/client'
+import { PriceUnit, Prisma } from 'prisma/generated/client'
 
 export class CreateAdDto {
   @IsString()
@@ -11,10 +11,14 @@ export class CreateAdDto {
   @IsNotEmpty()
   description!: string
 
-  @Transform(({ value }) => Number(value))
+  @Transform(({ value }) => (value !== '' && value !== null && value !== undefined ? Number(value) : undefined))
   @IsNumber()
   @IsOptional()
   price?: number
+
+  @IsOptional()
+  @IsEnum(PriceUnit)
+  unit?: PriceUnit
 
   @IsArray()
   @IsString({ each: true })
@@ -41,6 +45,11 @@ export class CreateAdDto {
   @Transform(({ value }) => Number(value))
   @IsNumber()
   lng!: number
+
+  @IsOptional()
+  @IsString({ message: 'Номер телефона должен быть строкой.' })
+  @Matches(/^\d{10,15}$/, { message: 'Некорректный номер телефона.' })
+  phone?: string
 
   @IsString()
   @IsNotEmpty()

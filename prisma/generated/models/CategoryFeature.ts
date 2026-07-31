@@ -39,6 +39,7 @@ export type CategoryFeatureMinAggregateOutputType = {
   categoryId: string | null
   name: string | null
   label: string | null
+  description: string | null
   type: $Enums.FeatureType | null
   required: boolean | null
   filterable: boolean | null
@@ -54,6 +55,7 @@ export type CategoryFeatureMaxAggregateOutputType = {
   categoryId: string | null
   name: string | null
   label: string | null
+  description: string | null
   type: $Enums.FeatureType | null
   required: boolean | null
   filterable: boolean | null
@@ -69,6 +71,7 @@ export type CategoryFeatureCountAggregateOutputType = {
   categoryId: number
   name: number
   label: number
+  description: number
   type: number
   required: number
   filterable: number
@@ -95,6 +98,7 @@ export type CategoryFeatureMinAggregateInputType = {
   categoryId?: true
   name?: true
   label?: true
+  description?: true
   type?: true
   required?: true
   filterable?: true
@@ -110,6 +114,7 @@ export type CategoryFeatureMaxAggregateInputType = {
   categoryId?: true
   name?: true
   label?: true
+  description?: true
   type?: true
   required?: true
   filterable?: true
@@ -125,6 +130,7 @@ export type CategoryFeatureCountAggregateInputType = {
   categoryId?: true
   name?: true
   label?: true
+  description?: true
   type?: true
   required?: true
   filterable?: true
@@ -228,6 +234,7 @@ export type CategoryFeatureGroupByOutputType = {
   categoryId: string
   name: string
   label: string
+  description: string | null
   type: $Enums.FeatureType
   required: boolean
   filterable: boolean
@@ -267,6 +274,7 @@ export type CategoryFeatureWhereInput = {
   categoryId?: Prisma.StringFilter<"CategoryFeature"> | string
   name?: Prisma.StringFilter<"CategoryFeature"> | string
   label?: Prisma.StringFilter<"CategoryFeature"> | string
+  description?: Prisma.StringNullableFilter<"CategoryFeature"> | string | null
   type?: Prisma.EnumFeatureTypeFilter<"CategoryFeature"> | $Enums.FeatureType
   required?: Prisma.BoolFilter<"CategoryFeature"> | boolean
   filterable?: Prisma.BoolFilter<"CategoryFeature"> | boolean
@@ -284,6 +292,7 @@ export type CategoryFeatureOrderByWithRelationInput = {
   categoryId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   label?: Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
   type?: Prisma.SortOrder
   required?: Prisma.SortOrder
   filterable?: Prisma.SortOrder
@@ -304,6 +313,7 @@ export type CategoryFeatureWhereUniqueInput = Prisma.AtLeast<{
   categoryId?: Prisma.StringFilter<"CategoryFeature"> | string
   name?: Prisma.StringFilter<"CategoryFeature"> | string
   label?: Prisma.StringFilter<"CategoryFeature"> | string
+  description?: Prisma.StringNullableFilter<"CategoryFeature"> | string | null
   type?: Prisma.EnumFeatureTypeFilter<"CategoryFeature"> | $Enums.FeatureType
   required?: Prisma.BoolFilter<"CategoryFeature"> | boolean
   filterable?: Prisma.BoolFilter<"CategoryFeature"> | boolean
@@ -321,6 +331,7 @@ export type CategoryFeatureOrderByWithAggregationInput = {
   categoryId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   label?: Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
   type?: Prisma.SortOrder
   required?: Prisma.SortOrder
   filterable?: Prisma.SortOrder
@@ -345,6 +356,7 @@ export type CategoryFeatureScalarWhereWithAggregatesInput = {
   categoryId?: Prisma.StringWithAggregatesFilter<"CategoryFeature"> | string
   name?: Prisma.StringWithAggregatesFilter<"CategoryFeature"> | string
   label?: Prisma.StringWithAggregatesFilter<"CategoryFeature"> | string
+  description?: Prisma.StringNullableWithAggregatesFilter<"CategoryFeature"> | string | null
   type?: Prisma.EnumFeatureTypeWithAggregatesFilter<"CategoryFeature"> | $Enums.FeatureType
   required?: Prisma.BoolWithAggregatesFilter<"CategoryFeature"> | boolean
   filterable?: Prisma.BoolWithAggregatesFilter<"CategoryFeature"> | boolean
@@ -360,6 +372,7 @@ export type CategoryFeatureCreateInput = {
   id?: string
   name: string
   label: string
+  description?: string | null
   type: $Enums.FeatureType
   required?: boolean
   filterable?: boolean
@@ -377,6 +390,7 @@ export type CategoryFeatureUncheckedCreateInput = {
   categoryId: string
   name: string
   label: string
+  description?: string | null
   type: $Enums.FeatureType
   required?: boolean
   filterable?: boolean
@@ -392,6 +406,7 @@ export type CategoryFeatureUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumFeatureTypeFieldUpdateOperationsInput | $Enums.FeatureType
   required?: Prisma.BoolFieldUpdateOperationsInput | boolean
   filterable?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -409,6 +424,7 @@ export type CategoryFeatureUncheckedUpdateInput = {
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumFeatureTypeFieldUpdateOperationsInput | $Enums.FeatureType
   required?: Prisma.BoolFieldUpdateOperationsInput | boolean
   filterable?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -425,6 +441,7 @@ export type CategoryFeatureCreateManyInput = {
   categoryId: string
   name: string
   label: string
+  description?: string | null
   type: $Enums.FeatureType
   required?: boolean
   filterable?: boolean
@@ -440,6 +457,7 @@ export type CategoryFeatureUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumFeatureTypeFieldUpdateOperationsInput | $Enums.FeatureType
   required?: Prisma.BoolFieldUpdateOperationsInput | boolean
   filterable?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -456,6 +474,7 @@ export type CategoryFeatureUncheckedUpdateManyInput = {
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumFeatureTypeFieldUpdateOperationsInput | $Enums.FeatureType
   required?: Prisma.BoolFieldUpdateOperationsInput | boolean
   filterable?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -482,6 +501,7 @@ export type CategoryFeatureCountOrderByAggregateInput = {
   categoryId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   label?: Prisma.SortOrder
+  description?: Prisma.SortOrder
   type?: Prisma.SortOrder
   required?: Prisma.SortOrder
   filterable?: Prisma.SortOrder
@@ -502,6 +522,7 @@ export type CategoryFeatureMaxOrderByAggregateInput = {
   categoryId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   label?: Prisma.SortOrder
+  description?: Prisma.SortOrder
   type?: Prisma.SortOrder
   required?: Prisma.SortOrder
   filterable?: Prisma.SortOrder
@@ -517,6 +538,7 @@ export type CategoryFeatureMinOrderByAggregateInput = {
   categoryId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   label?: Prisma.SortOrder
+  description?: Prisma.SortOrder
   type?: Prisma.SortOrder
   required?: Prisma.SortOrder
   filterable?: Prisma.SortOrder
@@ -581,6 +603,7 @@ export type CategoryFeatureCreateWithoutCategoryInput = {
   id?: string
   name: string
   label: string
+  description?: string | null
   type: $Enums.FeatureType
   required?: boolean
   filterable?: boolean
@@ -596,6 +619,7 @@ export type CategoryFeatureUncheckedCreateWithoutCategoryInput = {
   id?: string
   name: string
   label: string
+  description?: string | null
   type: $Enums.FeatureType
   required?: boolean
   filterable?: boolean
@@ -641,6 +665,7 @@ export type CategoryFeatureScalarWhereInput = {
   categoryId?: Prisma.StringFilter<"CategoryFeature"> | string
   name?: Prisma.StringFilter<"CategoryFeature"> | string
   label?: Prisma.StringFilter<"CategoryFeature"> | string
+  description?: Prisma.StringNullableFilter<"CategoryFeature"> | string | null
   type?: Prisma.EnumFeatureTypeFilter<"CategoryFeature"> | $Enums.FeatureType
   required?: Prisma.BoolFilter<"CategoryFeature"> | boolean
   filterable?: Prisma.BoolFilter<"CategoryFeature"> | boolean
@@ -656,6 +681,7 @@ export type CategoryFeatureCreateManyCategoryInput = {
   id?: string
   name: string
   label: string
+  description?: string | null
   type: $Enums.FeatureType
   required?: boolean
   filterable?: boolean
@@ -671,6 +697,7 @@ export type CategoryFeatureUpdateWithoutCategoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumFeatureTypeFieldUpdateOperationsInput | $Enums.FeatureType
   required?: Prisma.BoolFieldUpdateOperationsInput | boolean
   filterable?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -686,6 +713,7 @@ export type CategoryFeatureUncheckedUpdateWithoutCategoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumFeatureTypeFieldUpdateOperationsInput | $Enums.FeatureType
   required?: Prisma.BoolFieldUpdateOperationsInput | boolean
   filterable?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -701,6 +729,7 @@ export type CategoryFeatureUncheckedUpdateManyWithoutCategoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   label?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumFeatureTypeFieldUpdateOperationsInput | $Enums.FeatureType
   required?: Prisma.BoolFieldUpdateOperationsInput | boolean
   filterable?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -719,6 +748,7 @@ export type CategoryFeatureSelect<ExtArgs extends runtime.Types.Extensions.Inter
   categoryId?: boolean
   name?: boolean
   label?: boolean
+  description?: boolean
   type?: boolean
   required?: boolean
   filterable?: boolean
@@ -736,6 +766,7 @@ export type CategoryFeatureSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   categoryId?: boolean
   name?: boolean
   label?: boolean
+  description?: boolean
   type?: boolean
   required?: boolean
   filterable?: boolean
@@ -753,6 +784,7 @@ export type CategoryFeatureSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   categoryId?: boolean
   name?: boolean
   label?: boolean
+  description?: boolean
   type?: boolean
   required?: boolean
   filterable?: boolean
@@ -770,6 +802,7 @@ export type CategoryFeatureSelectScalar = {
   categoryId?: boolean
   name?: boolean
   label?: boolean
+  description?: boolean
   type?: boolean
   required?: boolean
   filterable?: boolean
@@ -781,7 +814,7 @@ export type CategoryFeatureSelectScalar = {
   updatedAt?: boolean
 }
 
-export type CategoryFeatureOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "categoryId" | "name" | "label" | "type" | "required" | "filterable" | "placeholder" | "unit" | "options" | "sortOrder" | "createdAt" | "updatedAt", ExtArgs["result"]["categoryFeature"]>
+export type CategoryFeatureOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "categoryId" | "name" | "label" | "description" | "type" | "required" | "filterable" | "placeholder" | "unit" | "options" | "sortOrder" | "createdAt" | "updatedAt", ExtArgs["result"]["categoryFeature"]>
 export type CategoryFeatureInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>
 }
@@ -802,6 +835,7 @@ export type $CategoryFeaturePayload<ExtArgs extends runtime.Types.Extensions.Int
     categoryId: string
     name: string
     label: string
+    description: string | null
     type: $Enums.FeatureType
     required: boolean
     filterable: boolean
@@ -1239,6 +1273,7 @@ export interface CategoryFeatureFieldRefs {
   readonly categoryId: Prisma.FieldRef<"CategoryFeature", 'String'>
   readonly name: Prisma.FieldRef<"CategoryFeature", 'String'>
   readonly label: Prisma.FieldRef<"CategoryFeature", 'String'>
+  readonly description: Prisma.FieldRef<"CategoryFeature", 'String'>
   readonly type: Prisma.FieldRef<"CategoryFeature", 'FeatureType'>
   readonly required: Prisma.FieldRef<"CategoryFeature", 'Boolean'>
   readonly filterable: Prisma.FieldRef<"CategoryFeature", 'Boolean'>

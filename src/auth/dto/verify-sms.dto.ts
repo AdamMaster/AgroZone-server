@@ -2,7 +2,7 @@ import { IsNotEmpty, IsPhoneNumber, IsString, Matches } from 'class-validator'
 
 export class VerifySmsDto {
   @IsNotEmpty({ message: 'Номер телефона обязателен' })
-  @IsPhoneNumber('RU', { message: 'Введите корректный номер телефона' })
+  @IsString({ message: 'Номер телефона должен быть строкой' })
   phone!: string
 
   @IsNotEmpty({ message: 'Код подтверждения обязателен' })

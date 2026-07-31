@@ -77,7 +77,11 @@ export const PriceUnit = {
   LITER: 'LITER',
   M3: 'M3',
   BAG: 'BAG',
-  HEAD: 'HEAD'
+  HEAD: 'HEAD',
+  DOSE: 'DOSE',
+  RUNNING_METER: 'RUNNING_METER',
+  HA: 'HA',
+  HOUR: 'HOUR'
 } as const
 
 export type PriceUnit = (typeof PriceUnit)[keyof typeof PriceUnit]

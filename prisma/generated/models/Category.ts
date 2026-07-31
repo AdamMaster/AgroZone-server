@@ -39,6 +39,7 @@ export type CategorySumAggregateOutputType = {
 export type CategoryMinAggregateOutputType = {
   id: string | null
   name: string | null
+  description: string | null
   slug: string | null
   fullPath: string | null
   code: string | null
@@ -53,6 +54,7 @@ export type CategoryMinAggregateOutputType = {
 export type CategoryMaxAggregateOutputType = {
   id: string | null
   name: string | null
+  description: string | null
   slug: string | null
   fullPath: string | null
   code: string | null
@@ -67,6 +69,7 @@ export type CategoryMaxAggregateOutputType = {
 export type CategoryCountAggregateOutputType = {
   id: number
   name: number
+  description: number
   priceUnits: number
   slug: number
   path: number
@@ -95,6 +98,7 @@ export type CategorySumAggregateInputType = {
 export type CategoryMinAggregateInputType = {
   id?: true
   name?: true
+  description?: true
   slug?: true
   fullPath?: true
   code?: true
@@ -109,6 +113,7 @@ export type CategoryMinAggregateInputType = {
 export type CategoryMaxAggregateInputType = {
   id?: true
   name?: true
+  description?: true
   slug?: true
   fullPath?: true
   code?: true
@@ -123,6 +128,7 @@ export type CategoryMaxAggregateInputType = {
 export type CategoryCountAggregateInputType = {
   id?: true
   name?: true
+  description?: true
   priceUnits?: true
   slug?: true
   path?: true
@@ -226,6 +232,7 @@ export type CategoryGroupByArgs<ExtArgs extends runtime.Types.Extensions.Interna
 export type CategoryGroupByOutputType = {
   id: string
   name: string
+  description: string | null
   priceUnits: $Enums.PriceUnit[]
   slug: string
   path: string[]
@@ -265,6 +272,7 @@ export type CategoryWhereInput = {
   NOT?: Prisma.CategoryWhereInput | Prisma.CategoryWhereInput[]
   id?: Prisma.StringFilter<"Category"> | string
   name?: Prisma.StringFilter<"Category"> | string
+  description?: Prisma.StringNullableFilter<"Category"> | string | null
   priceUnits?: Prisma.EnumPriceUnitNullableListFilter<"Category">
   slug?: Prisma.StringFilter<"Category"> | string
   path?: Prisma.StringNullableListFilter<"Category">
@@ -285,6 +293,7 @@ export type CategoryWhereInput = {
 export type CategoryOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
   priceUnits?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   path?: Prisma.SortOrder
@@ -311,6 +320,7 @@ export type CategoryWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.CategoryWhereInput[]
   NOT?: Prisma.CategoryWhereInput | Prisma.CategoryWhereInput[]
   name?: Prisma.StringFilter<"Category"> | string
+  description?: Prisma.StringNullableFilter<"Category"> | string | null
   priceUnits?: Prisma.EnumPriceUnitNullableListFilter<"Category">
   slug?: Prisma.StringFilter<"Category"> | string
   path?: Prisma.StringNullableListFilter<"Category">
@@ -329,6 +339,7 @@ export type CategoryWhereUniqueInput = Prisma.AtLeast<{
 export type CategoryOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
   priceUnits?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   path?: Prisma.SortOrder
@@ -353,6 +364,7 @@ export type CategoryScalarWhereWithAggregatesInput = {
   NOT?: Prisma.CategoryScalarWhereWithAggregatesInput | Prisma.CategoryScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Category"> | string
   name?: Prisma.StringWithAggregatesFilter<"Category"> | string
+  description?: Prisma.StringNullableWithAggregatesFilter<"Category"> | string | null
   priceUnits?: Prisma.EnumPriceUnitNullableListFilter<"Category">
   slug?: Prisma.StringWithAggregatesFilter<"Category"> | string
   path?: Prisma.StringNullableListFilter<"Category">
@@ -369,6 +381,7 @@ export type CategoryScalarWhereWithAggregatesInput = {
 export type CategoryCreateInput = {
   id?: string
   name: string
+  description?: string | null
   priceUnits?: Prisma.CategoryCreatepriceUnitsInput | $Enums.PriceUnit[]
   slug: string
   path?: Prisma.CategoryCreatepathInput | string[]
@@ -388,6 +401,7 @@ export type CategoryCreateInput = {
 export type CategoryUncheckedCreateInput = {
   id?: string
   name: string
+  description?: string | null
   priceUnits?: Prisma.CategoryCreatepriceUnitsInput | $Enums.PriceUnit[]
   slug: string
   path?: Prisma.CategoryCreatepathInput | string[]
@@ -407,6 +421,7 @@ export type CategoryUncheckedCreateInput = {
 export type CategoryUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   priceUnits?: Prisma.CategoryUpdatepriceUnitsInput | $Enums.PriceUnit[]
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.CategoryUpdatepathInput | string[]
@@ -426,6 +441,7 @@ export type CategoryUpdateInput = {
 export type CategoryUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   priceUnits?: Prisma.CategoryUpdatepriceUnitsInput | $Enums.PriceUnit[]
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.CategoryUpdatepathInput | string[]
@@ -445,6 +461,7 @@ export type CategoryUncheckedUpdateInput = {
 export type CategoryCreateManyInput = {
   id?: string
   name: string
+  description?: string | null
   priceUnits?: Prisma.CategoryCreatepriceUnitsInput | $Enums.PriceUnit[]
   slug: string
   path?: Prisma.CategoryCreatepathInput | string[]
@@ -461,6 +478,7 @@ export type CategoryCreateManyInput = {
 export type CategoryUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   priceUnits?: Prisma.CategoryUpdatepriceUnitsInput | $Enums.PriceUnit[]
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.CategoryUpdatepathInput | string[]
@@ -476,6 +494,7 @@ export type CategoryUpdateManyMutationInput = {
 export type CategoryUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   priceUnits?: Prisma.CategoryUpdatepriceUnitsInput | $Enums.PriceUnit[]
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.CategoryUpdatepathInput | string[]
@@ -528,6 +547,7 @@ export type CategoryParentIdSlugCompoundUniqueInput = {
 export type CategoryCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  description?: Prisma.SortOrder
   priceUnits?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   path?: Prisma.SortOrder
@@ -549,6 +569,7 @@ export type CategoryAvgOrderByAggregateInput = {
 export type CategoryMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  description?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   fullPath?: Prisma.SortOrder
   code?: Prisma.SortOrder
@@ -563,6 +584,7 @@ export type CategoryMaxOrderByAggregateInput = {
 export type CategoryMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  description?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   fullPath?: Prisma.SortOrder
   code?: Prisma.SortOrder
@@ -691,6 +713,7 @@ export type CategoryUpdateOneRequiredWithoutAdsNestedInput = {
 export type CategoryCreateWithoutChildrenInput = {
   id?: string
   name: string
+  description?: string | null
   priceUnits?: Prisma.CategoryCreatepriceUnitsInput | $Enums.PriceUnit[]
   slug: string
   path?: Prisma.CategoryCreatepathInput | string[]
@@ -709,6 +732,7 @@ export type CategoryCreateWithoutChildrenInput = {
 export type CategoryUncheckedCreateWithoutChildrenInput = {
   id?: string
   name: string
+  description?: string | null
   priceUnits?: Prisma.CategoryCreatepriceUnitsInput | $Enums.PriceUnit[]
   slug: string
   path?: Prisma.CategoryCreatepathInput | string[]
@@ -732,6 +756,7 @@ export type CategoryCreateOrConnectWithoutChildrenInput = {
 export type CategoryCreateWithoutParentInput = {
   id?: string
   name: string
+  description?: string | null
   priceUnits?: Prisma.CategoryCreatepriceUnitsInput | $Enums.PriceUnit[]
   slug: string
   path?: Prisma.CategoryCreatepathInput | string[]
@@ -750,6 +775,7 @@ export type CategoryCreateWithoutParentInput = {
 export type CategoryUncheckedCreateWithoutParentInput = {
   id?: string
   name: string
+  description?: string | null
   priceUnits?: Prisma.CategoryCreatepriceUnitsInput | $Enums.PriceUnit[]
   slug: string
   path?: Prisma.CategoryCreatepathInput | string[]
@@ -789,6 +815,7 @@ export type CategoryUpdateToOneWithWhereWithoutChildrenInput = {
 export type CategoryUpdateWithoutChildrenInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   priceUnits?: Prisma.CategoryUpdatepriceUnitsInput | $Enums.PriceUnit[]
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.CategoryUpdatepathInput | string[]
@@ -807,6 +834,7 @@ export type CategoryUpdateWithoutChildrenInput = {
 export type CategoryUncheckedUpdateWithoutChildrenInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   priceUnits?: Prisma.CategoryUpdatepriceUnitsInput | $Enums.PriceUnit[]
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.CategoryUpdatepathInput | string[]
@@ -844,6 +872,7 @@ export type CategoryScalarWhereInput = {
   NOT?: Prisma.CategoryScalarWhereInput | Prisma.CategoryScalarWhereInput[]
   id?: Prisma.StringFilter<"Category"> | string
   name?: Prisma.StringFilter<"Category"> | string
+  description?: Prisma.StringNullableFilter<"Category"> | string | null
   priceUnits?: Prisma.EnumPriceUnitNullableListFilter<"Category">
   slug?: Prisma.StringFilter<"Category"> | string
   path?: Prisma.StringNullableListFilter<"Category">
@@ -860,6 +889,7 @@ export type CategoryScalarWhereInput = {
 export type CategoryCreateWithoutCategoryFeaturesInput = {
   id?: string
   name: string
+  description?: string | null
   priceUnits?: Prisma.CategoryCreatepriceUnitsInput | $Enums.PriceUnit[]
   slug: string
   path?: Prisma.CategoryCreatepathInput | string[]
@@ -878,6 +908,7 @@ export type CategoryCreateWithoutCategoryFeaturesInput = {
 export type CategoryUncheckedCreateWithoutCategoryFeaturesInput = {
   id?: string
   name: string
+  description?: string | null
   priceUnits?: Prisma.CategoryCreatepriceUnitsInput | $Enums.PriceUnit[]
   slug: string
   path?: Prisma.CategoryCreatepathInput | string[]
@@ -912,6 +943,7 @@ export type CategoryUpdateToOneWithWhereWithoutCategoryFeaturesInput = {
 export type CategoryUpdateWithoutCategoryFeaturesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   priceUnits?: Prisma.CategoryUpdatepriceUnitsInput | $Enums.PriceUnit[]
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.CategoryUpdatepathInput | string[]
@@ -930,6 +962,7 @@ export type CategoryUpdateWithoutCategoryFeaturesInput = {
 export type CategoryUncheckedUpdateWithoutCategoryFeaturesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   priceUnits?: Prisma.CategoryUpdatepriceUnitsInput | $Enums.PriceUnit[]
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.CategoryUpdatepathInput | string[]
@@ -948,6 +981,7 @@ export type CategoryUncheckedUpdateWithoutCategoryFeaturesInput = {
 export type CategoryCreateWithoutAdsInput = {
   id?: string
   name: string
+  description?: string | null
   priceUnits?: Prisma.CategoryCreatepriceUnitsInput | $Enums.PriceUnit[]
   slug: string
   path?: Prisma.CategoryCreatepathInput | string[]
@@ -966,6 +1000,7 @@ export type CategoryCreateWithoutAdsInput = {
 export type CategoryUncheckedCreateWithoutAdsInput = {
   id?: string
   name: string
+  description?: string | null
   priceUnits?: Prisma.CategoryCreatepriceUnitsInput | $Enums.PriceUnit[]
   slug: string
   path?: Prisma.CategoryCreatepathInput | string[]
@@ -1000,6 +1035,7 @@ export type CategoryUpdateToOneWithWhereWithoutAdsInput = {
 export type CategoryUpdateWithoutAdsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   priceUnits?: Prisma.CategoryUpdatepriceUnitsInput | $Enums.PriceUnit[]
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.CategoryUpdatepathInput | string[]
@@ -1018,6 +1054,7 @@ export type CategoryUpdateWithoutAdsInput = {
 export type CategoryUncheckedUpdateWithoutAdsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   priceUnits?: Prisma.CategoryUpdatepriceUnitsInput | $Enums.PriceUnit[]
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.CategoryUpdatepathInput | string[]
@@ -1036,6 +1073,7 @@ export type CategoryUncheckedUpdateWithoutAdsInput = {
 export type CategoryCreateManyParentInput = {
   id?: string
   name: string
+  description?: string | null
   priceUnits?: Prisma.CategoryCreatepriceUnitsInput | $Enums.PriceUnit[]
   slug: string
   path?: Prisma.CategoryCreatepathInput | string[]
@@ -1051,6 +1089,7 @@ export type CategoryCreateManyParentInput = {
 export type CategoryUpdateWithoutParentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   priceUnits?: Prisma.CategoryUpdatepriceUnitsInput | $Enums.PriceUnit[]
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.CategoryUpdatepathInput | string[]
@@ -1069,6 +1108,7 @@ export type CategoryUpdateWithoutParentInput = {
 export type CategoryUncheckedUpdateWithoutParentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   priceUnits?: Prisma.CategoryUpdatepriceUnitsInput | $Enums.PriceUnit[]
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.CategoryUpdatepathInput | string[]
@@ -1087,6 +1127,7 @@ export type CategoryUncheckedUpdateWithoutParentInput = {
 export type CategoryUncheckedUpdateManyWithoutParentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   priceUnits?: Prisma.CategoryUpdatepriceUnitsInput | $Enums.PriceUnit[]
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   path?: Prisma.CategoryUpdatepathInput | string[]
@@ -1151,6 +1192,7 @@ export type CategoryCountOutputTypeCountAdsArgs<ExtArgs extends runtime.Types.Ex
 export type CategorySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  description?: boolean
   priceUnits?: boolean
   slug?: boolean
   path?: boolean
@@ -1172,6 +1214,7 @@ export type CategorySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
 export type CategorySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  description?: boolean
   priceUnits?: boolean
   slug?: boolean
   path?: boolean
@@ -1189,6 +1232,7 @@ export type CategorySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type CategorySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  description?: boolean
   priceUnits?: boolean
   slug?: boolean
   path?: boolean
@@ -1206,6 +1250,7 @@ export type CategorySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type CategorySelectScalar = {
   id?: boolean
   name?: boolean
+  description?: boolean
   priceUnits?: boolean
   slug?: boolean
   path?: boolean
@@ -1219,7 +1264,7 @@ export type CategorySelectScalar = {
   updatedAt?: boolean
 }
 
-export type CategoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "priceUnits" | "slug" | "path" | "fullPath" | "code" | "iconId" | "parentId" | "level" | "sortOrder" | "createdAt" | "updatedAt", ExtArgs["result"]["category"]>
+export type CategoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "priceUnits" | "slug" | "path" | "fullPath" | "code" | "iconId" | "parentId" | "level" | "sortOrder" | "createdAt" | "updatedAt", ExtArgs["result"]["category"]>
 export type CategoryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   parent?: boolean | Prisma.Category$parentArgs<ExtArgs>
   children?: boolean | Prisma.Category$childrenArgs<ExtArgs>
@@ -1245,6 +1290,7 @@ export type $CategoryPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
+    description: string | null
     priceUnits: $Enums.PriceUnit[]
     slug: string
     path: string[]
@@ -1685,6 +1731,7 @@ export interface Prisma__CategoryClient<T, Null = never, ExtArgs extends runtime
 export interface CategoryFieldRefs {
   readonly id: Prisma.FieldRef<"Category", 'String'>
   readonly name: Prisma.FieldRef<"Category", 'String'>
+  readonly description: Prisma.FieldRef<"Category", 'String'>
   readonly priceUnits: Prisma.FieldRef<"Category", 'PriceUnit[]'>
   readonly slug: Prisma.FieldRef<"Category", 'String'>
   readonly path: Prisma.FieldRef<"Category", 'String[]'>

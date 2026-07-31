@@ -6,11 +6,6 @@ export class UpdateUserDto {
   name?: string
 
   @IsOptional()
-  @IsString({ message: 'Телефон должен быть строкой.' })
-  @Matches(/^\d{10,15}$/, { message: 'Номер телефона должен содержать только цифры (10-15 знаков).' })
-  phone?: string
-
-  @IsOptional()
   @IsString({ message: 'Email должен быть строкой.' })
   @IsEmail({}, { message: 'Некорректный формат email.' })
   email?: string
@@ -18,8 +13,4 @@ export class UpdateUserDto {
   @IsOptional()
   @IsBoolean({ message: 'isTwoFactorEnabled должно быть булевым значением.' })
   isTwoFactorEnabled?: boolean
-
-  @IsOptional()
-  @IsString()
-  picture?: string
 }

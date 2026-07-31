@@ -9,7 +9,6 @@ export class RegisterDto {
 
   @IsOptional()
   @IsString({ message: 'Телефон должен быть строкой.' })
-  @Matches(/^\d{10,15}$/, { message: 'Номер телефона должен содержать от 10 до 18 цифр.' })
   phone?: string
 
   @IsOptional()

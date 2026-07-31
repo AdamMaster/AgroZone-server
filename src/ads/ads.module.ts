@@ -8,6 +8,7 @@ import { AdStateMachineService } from './ad-state-machine.service'
 import { BullModule } from '@nestjs/bullmq'
 import { AdsExpirationWorker } from './workers/ads-expiration.worker'
 import { CategoriesModule } from '@/categories/categories.module'
+import { AuthModule } from '@/auth/auth.module'
 
 @Module({
   imports: [
@@ -16,7 +17,8 @@ import { CategoriesModule } from '@/categories/categories.module'
     BullModule.registerQueue({
       name: 'ads'
     }),
-    CategoriesModule
+    CategoriesModule,
+    AuthModule
   ],
   controllers: [AdsController],
   providers: [AdsService, PrismaService, AdStateMachineService, AdsExpirationWorker]

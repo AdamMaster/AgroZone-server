@@ -385,6 +385,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 export const ModelName = {
   User: 'User',
+  UserPhone: 'UserPhone',
   Account: 'Account',
   Token: 'Token',
   Category: 'Category',
@@ -406,7 +407,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "account" | "token" | "category" | "categoryFeature" | "ad" | "favorite"
+    modelProps: "user" | "userPhone" | "account" | "token" | "category" | "categoryFeature" | "ad" | "favorite"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -481,6 +482,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.UserCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.UserCountAggregateOutputType> | number
+        }
+      }
+    }
+    UserPhone: {
+      payload: Prisma.$UserPhonePayload<ExtArgs>
+      fields: Prisma.UserPhoneFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.UserPhoneFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPhonePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.UserPhoneFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPhonePayload>
+        }
+        findFirst: {
+          args: Prisma.UserPhoneFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPhonePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.UserPhoneFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPhonePayload>
+        }
+        findMany: {
+          args: Prisma.UserPhoneFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPhonePayload>[]
+        }
+        create: {
+          args: Prisma.UserPhoneCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPhonePayload>
+        }
+        createMany: {
+          args: Prisma.UserPhoneCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.UserPhoneCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPhonePayload>[]
+        }
+        delete: {
+          args: Prisma.UserPhoneDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPhonePayload>
+        }
+        update: {
+          args: Prisma.UserPhoneUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPhonePayload>
+        }
+        deleteMany: {
+          args: Prisma.UserPhoneDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.UserPhoneUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.UserPhoneUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPhonePayload>[]
+        }
+        upsert: {
+          args: Prisma.UserPhoneUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserPhonePayload>
+        }
+        aggregate: {
+          args: Prisma.UserPhoneAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateUserPhone>
+        }
+        groupBy: {
+          args: Prisma.UserPhoneGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserPhoneGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.UserPhoneCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserPhoneCountAggregateOutputType> | number
         }
       }
     }
@@ -969,7 +1044,6 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 
 export const UserScalarFieldEnum = {
   id: 'id',
-  phone: 'phone',
   password: 'password',
   email: 'email',
   displayName: 'displayName',
@@ -986,6 +1060,18 @@ export const UserScalarFieldEnum = {
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const UserPhoneScalarFieldEnum = {
+  id: 'id',
+  phone: 'phone',
+  isPrimary: 'isPrimary',
+  isVerified: 'isVerified',
+  userId: 'userId',
+  createdAt: 'createdAt'
+} as const
+
+export type UserPhoneScalarFieldEnum = (typeof UserPhoneScalarFieldEnum)[keyof typeof UserPhoneScalarFieldEnum]
 
 
 export const AccountScalarFieldEnum = {
@@ -1021,6 +1107,7 @@ export type TokenScalarFieldEnum = (typeof TokenScalarFieldEnum)[keyof typeof To
 export const CategoryScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  description: 'description',
   priceUnits: 'priceUnits',
   slug: 'slug',
   path: 'path',
@@ -1042,6 +1129,7 @@ export const CategoryFeatureScalarFieldEnum = {
   categoryId: 'categoryId',
   name: 'name',
   label: 'label',
+  description: 'description',
   type: 'type',
   required: 'required',
   filterable: 'filterable',
@@ -1065,6 +1153,7 @@ export const AdScalarFieldEnum = {
   unit: 'unit',
   images: 'images',
   address: 'address',
+  phone: 'phone',
   features: 'features',
   lat: 'lat',
   lng: 'lng',
@@ -1295,6 +1384,20 @@ export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$Prisma
 
 
 /**
+ * Reference to a field of type 'BigInt'
+ */
+export type BigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt'>
+    
+
+
+/**
+ * Reference to a field of type 'BigInt[]'
+ */
+export type ListBigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt[]'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -1417,6 +1520,7 @@ export type PrismaClientOptions = ({
 }
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
+  userPhone?: Prisma.UserPhoneOmit
   account?: Prisma.AccountOmit
   token?: Prisma.TokenOmit
   category?: Prisma.CategoryOmit

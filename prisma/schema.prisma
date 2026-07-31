@@ -10,11 +10,11 @@ datasource db {
 }
 
 model User {
-  id          String  @id @default(uuid())
-  phone       String? @unique
+  id          String      @id @default(uuid())
+  phones      UserPhone[]
   password    String?
-  email       String? @unique
-  displayName String? @map("display_name")
+  email       String?     @unique
+  displayName String?     @map("display_name")
   picture     String?
 
   type     UserType @default(INDIVIDUAL)
@@ -37,6 +37,24 @@ model User {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("users")
+}
+
+model UserPhone {
+  id String @id @default(uuid())
+
+  phone String @unique
+
+  isPrimary Boolean @default(false)
+
+  isVerified Boolean @default(false)
+
+  userId String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@map("user_phones")
 }
 
 model Account {
@@ -82,8 +100,9 @@ model Token {
 }
 
 model Category {
-  id   String @id @default(uuid())
-  name String
+  id          String  @id @default(uuid())
+  name        String
+  description String? // 👈 Новое поле
 
   priceUnits PriceUnit[] @default([ITEM]) @map("price_units")
 
@@ -123,8 +142,9 @@ model CategoryFeature {
   categoryId String
   category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
-  name  String
-  label String
+  name        String
+  label       String
+  description String?
 
   type FeatureType
 
@@ -156,15 +176,16 @@ enum FeatureType {
 }
 
 model Ad {
-  id          String   @id @default(uuid())
-  slug        String   @unique @default("")
+  id          String    @id @default(uuid())
+  slug        String    @unique @default("")
   title       String
-  description String   @db.Text
-  price       Int?
-  unit        String   @default("pcs")
+  description String    @db.Text
+  price       BigInt?
+  unit        PriceUnit @default(ITEM)
   images      String[]
   address     String
-  features    Json     @default("{}")
+  phone       String
+  features    Json      @default("{}")
   lat         Float
   lng         Float
 
@@ -191,6 +212,7 @@ model Ad {
   @@index([status, expiresAt])
   @@index([userId])
   @@index([categoryId])
+  @@index([phone])
   @@map("ads")
 }
 
@@ -254,4 +276,8 @@ enum PriceUnit {
   M3
   BAG
   HEAD
+  DOSE
+  RUNNING_METER
+  HA
+  HOUR
 }

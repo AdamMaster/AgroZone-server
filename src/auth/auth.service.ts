@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common'
 import { RegisterDto } from './dto/register.dto'
 import { UserService } from '@/user/user.service'
-import { AuthMethod } from 'prisma/generated/enums'
+import { AuthMethod, TokenType } from 'prisma/generated/enums'
 import { User } from 'prisma/generated/client'
 import { Request, Response } from 'express'
 import { LoginDto } from './dto/login.dto'
@@ -22,6 +22,7 @@ import { TwoFactorAuthService } from './two-factor-auth/two-factor-auth.service'
 import { VerifySmsDto } from './dto/verify-sms.dto'
 import { SmsRegisterDto } from './dto/sms-register.dto'
 import { SmsCompleteDto } from './dto/sms-complete.dto'
+import { normalizePhone } from '@/libs/common/utils/phone.util'
 
 @Injectable()
 export class AuthService {
@@ -35,21 +36,24 @@ export class AuthService {
   ) {}
 
   async registerSmsStart(dto: SmsRegisterDto) {
-    const isExists = await this.userService.findByPhone(dto.phone)
+    const phone = normalizePhone(dto.phone)
+
+    const isExists = await this.userService.findByPhone(phone)
 
     if (isExists) {
       throw new ConflictException('Пользователь с таким номером телефона уже зарегистрирован.')
     }
 
-    return await this.sendSmsCode(dto.phone)
+    return this.sendSmsCode(phone)
   }
 
   async registerSmsComplete(req: Request, dto: SmsCompleteDto) {
+    const phone = normalizePhone(dto.phone)
     const smsToken = await this.prismaService.token.findFirst({
       where: {
-        phone: dto.phone,
+        phone: phone,
         token: dto.code,
-        type: 'SMS_VERIFICATION'
+        type: TokenType.SMS_VERIFICATION
       }
     })
 
@@ -62,15 +66,7 @@ export class AuthService {
       throw new BadRequestException('Срок действия кода истек. Запросите новый.')
     }
 
-    const newUser = await this.userService.create(
-      null, // email
-      dto.password, // пароль
-      dto.name, // имя
-      dto.phone, // телефон
-      '', // picture
-      AuthMethod.CREDENTIALS,
-      true // isVerified сразу ставим true, так как код подошел
-    )
+    const newUser = await this.userService.create(null, dto.password, dto.name, phone, '', AuthMethod.CREDENTIALS, true)
 
     await this.prismaService.token.delete({ where: { id: smsToken.id } })
 
@@ -82,19 +78,21 @@ export class AuthService {
       throw new BadRequestException('Укажите Email или номер телефона для регистрации')
     }
 
-    const isExists = dto.email
-      ? await this.userService.findByEmail(dto.email)
-      : await this.userService.findByPhone(dto.phone!)
+    const phone = dto.phone ? normalizePhone(dto.phone) : null
 
-    if (isExists) {
-      throw new ConflictException(`Пользователь с таким ${dto.email ? 'email' : 'номером телефона'} уже существует.`)
+    const emailExists = dto.email ? await this.userService.findByEmail(dto.email) : null
+
+    const phoneExists = phone ? await this.userService.findByPhone(phone) : null
+
+    if (emailExists || phoneExists) {
+      throw new ConflictException('Пользователь с таким email или номером телефона уже существует.')
     }
 
     const newUser = await this.userService.create(
       dto.email ?? null,
       dto.password,
       dto.name,
-      dto.phone ?? null,
+      phone,
       '',
       AuthMethod.CREDENTIALS,
       false
@@ -105,8 +103,8 @@ export class AuthService {
       return { message: 'Пожалуйста, подтвердите ваш email.' }
     }
 
-    if (newUser.phone) {
-      await this.sendSmsCode(newUser.phone)
+    if (newUser.phones.length) {
+      await this.sendSmsCode(newUser.phones[0].phone)
       return { message: 'Код подтверждения отправлен на ваш телефон.' }
     }
 
@@ -116,12 +114,15 @@ export class AuthService {
     }
   }
 
-  async sendSmsCode(phone: string) {
+  async sendSmsCode(phone: string, type: TokenType = TokenType.SMS_VERIFICATION) {
     const code = Math.floor(1000 + Math.random() * 9000).toString()
 
     // Удаляем старые коды для этого номера
     await this.prismaService.token.deleteMany({
-      where: { phone, type: 'SMS_VERIFICATION' }
+      where: {
+        phone,
+        type
+      }
     })
 
     const user = await this.userService.findByPhone(phone)
@@ -130,7 +131,7 @@ export class AuthService {
       data: {
         phone,
         token: code,
-        type: 'SMS_VERIFICATION',
+        type,
         expiresIn: new Date(Date.now() + 5 * 60 * 1000),
         ...(user ? { user: { connect: { id: user.id } } } : {})
       }
@@ -144,13 +145,81 @@ export class AuthService {
     return { message: 'Код подтверждения отправлен на ваш телефон' }
   }
 
+  async sendPhoneChangeCode(phone: string, userId: string) {
+    phone = normalizePhone(phone)
+
+    const exists = await this.userService.findByPhone(phone)
+
+    if (exists && exists.id !== userId) {
+      throw new ConflictException('Этот номер уже используется.')
+    }
+
+    return this.sendSmsCode(phone, TokenType.PHONE_CHANGE)
+  }
+
+  async confirmPhoneChange(userId: string, phone: string, code: string) {
+    phone = normalizePhone(phone)
+
+    const token = await this.prismaService.token.findFirst({
+      where: {
+        phone,
+        token: code,
+        type: TokenType.PHONE_CHANGE
+      }
+    })
+
+    if (!token) {
+      throw new BadRequestException('Неверный код подтверждения')
+    }
+
+    if (new Date() > token.expiresIn) {
+      await this.prismaService.token.delete({
+        where: { id: token.id }
+      })
+
+      throw new BadRequestException('Срок действия кода истек')
+    }
+
+    const exists = await this.userService.findByPhone(phone)
+
+    if (exists && exists.id !== userId) {
+      throw new ConflictException('Этот номер уже используется.')
+    }
+
+    await this.prismaService.userPhone.deleteMany({
+      where: {
+        userId
+      }
+    })
+
+    await this.prismaService.userPhone.create({
+      data: {
+        phone,
+        userId,
+        isPrimary: true,
+        isVerified: true
+      }
+    })
+
+    await this.prismaService.token.delete({
+      where: {
+        id: token.id
+      }
+    })
+
+    return {
+      success: true
+    }
+  }
+
   async verifySms(req: Request, dto: VerifySmsDto) {
-    // 1. Ищем токен в базе
+    const phone = normalizePhone(dto.phone)
+
     const smsToken = await this.prismaService.token.findFirst({
       where: {
-        phone: dto.phone,
+        phone,
         token: dto.code,
-        type: 'SMS_VERIFICATION'
+        type: TokenType.SMS_VERIFICATION
       }
     })
 
@@ -163,7 +232,7 @@ export class AuthService {
       throw new BadRequestException('Срок действия кода истек. Запросите новый.')
     }
 
-    const user = await this.userService.findByPhone(dto.phone)
+    const user = await this.userService.findByPhone(phone)
 
     if (!user) {
       throw new NotFoundException('Пользователь с таким номером не найден')
@@ -180,11 +249,13 @@ export class AuthService {
   }
 
   async checkRegisterCode(dto: { phone: string; code: string }) {
+    const phone = normalizePhone(dto.phone)
+
     const smsToken = await this.prismaService.token.findFirst({
       where: {
-        phone: dto.phone,
+        phone,
         token: dto.code,
-        type: 'SMS_VERIFICATION'
+        type: TokenType.SMS_VERIFICATION
       }
     })
 
@@ -207,7 +278,7 @@ export class AuthService {
     if (isEmail) {
       user = await this.userService.findByEmail(dto.identifier)
     } else {
-      const phone = dto.identifier.replace(/\D/g, '')
+      const phone = normalizePhone(dto.identifier)
       user = await this.userService.findByPhone(phone)
     }
 
@@ -291,12 +362,7 @@ export class AuthService {
     if (isEmail) {
       user = await this.userService.findByEmail(dto.login)
     } else {
-      // Очищаем телефон от пробелов, тире и скобок, оставляя только цифры
-      let phone = dto.login.replace(/\D/g, '')
-
-      if (phone.length === 11 && phone.startsWith('8')) {
-        phone = '7' + phone.slice(1)
-      }
+      const phone = normalizePhone(dto.login)
 
       user = await this.userService.findByPhone(phone)
     }

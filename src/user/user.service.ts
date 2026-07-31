@@ -1,12 +1,13 @@
 import { PrismaService } from '@/prisma/prisma.service'
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
 import { hash, verify } from 'argon2'
-import { AuthMethod } from 'prisma/generated/enums'
+import { AuthMethod, TokenType } from 'prisma/generated/enums'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { PasswordChangeDto } from './dto/password-change.dto'
 import { ConfigService } from '@nestjs/config'
 import { FileService } from '../file/file.service'
 import { AD_LIMITS } from '@/ads/constants/ads.constants'
+import { normalizePhone } from '@/libs/common/utils/phone.util'
 
 @Injectable()
 export class UserService {
@@ -22,7 +23,8 @@ export class UserService {
         id
       },
       include: {
-        accounts: true
+        accounts: true,
+        phones: true
       }
     })
 
@@ -36,23 +38,31 @@ export class UserService {
   async getProfileForClient(userId: string) {
     const user = await this.findById(userId)
 
+    const primaryPhone = user.phones.find(phone => phone.isPrimary)?.phone ?? null
+
     return {
       ...user,
+      primaryPhone,
       maxUploadLimit: user.role === 'PREMIUM' ? AD_LIMITS.PREMIUM : AD_LIMITS.REGULAR
     }
   }
 
   async findByPhone(phone: string) {
-    const user = await this.prismaService.user.findUnique({
+    const userPhone = await this.prismaService.userPhone.findUnique({
       where: {
         phone
       },
       include: {
-        accounts: true
+        user: {
+          include: {
+            accounts: true,
+            phones: true
+          }
+        }
       }
     })
 
-    return user
+    return userPhone?.user ?? null
   }
 
   async findByEmail(email: string) {
@@ -61,7 +71,8 @@ export class UserService {
         email
       },
       include: {
-        accounts: true
+        accounts: true,
+        phones: true
       }
     })
 
@@ -77,18 +88,30 @@ export class UserService {
     method: AuthMethod,
     isVerified: boolean
   ) {
+    const normalizedPhone = phone ? normalizePhone(phone) : null
+
     const user = await this.prismaService.user.create({
       data: {
-        phone,
         email,
         password: password ? await hash(password) : null,
         displayName,
         picture,
         method,
-        isVerified
+        isVerified,
+
+        ...(normalizedPhone && {
+          phones: {
+            create: {
+              phone: normalizedPhone,
+              isPrimary: true,
+              isVerified
+            }
+          }
+        })
       },
       include: {
-        accounts: true
+        accounts: true,
+        phones: true
       }
     })
 
@@ -103,10 +126,7 @@ export class UserService {
         id: user.id
       },
       data: {
-        email: dto.email,
-        displayName: dto.name,
-        phone: dto.phone,
-        isTwoFactorEnabled: dto.isTwoFactorEnabled
+        displayName: dto.name
       }
     })
 
@@ -166,8 +186,8 @@ export class UserService {
   async toggleTwoFactor(userId: string) {
     const user = await this.findById(userId)
 
-    if (!user.isVerified && !user.isTwoFactorEnabled) {
-      throw new BadRequestException('Сначала подтвердите почту')
+    if (!user.isVerified) {
+      throw new BadRequestException('Сначала подтвердите аккаунт')
     }
 
     return this.prismaService.user.update({
@@ -179,9 +199,21 @@ export class UserService {
   }
 
   async requestPhoneChange(userId: string, newPhone: string) {
-    // Проверяем занятость номера
-    const exists = await this.prismaService.user.findUnique({ where: { phone: newPhone } })
-    if (exists) throw new BadRequestException('Номер уже занят')
+    newPhone = normalizePhone(newPhone)
+
+    const exists = await this.prismaService.userPhone.findUnique({
+      where: {
+        phone: newPhone
+      }
+    })
+
+    if (exists) {
+      if (exists.userId === userId) {
+        throw new BadRequestException('Этот номер уже добавлен в ваш аккаунт')
+      }
+
+      throw new BadRequestException('Этот номер уже используется другим аккаунтом')
+    }
 
     const smsCode = Math.floor(1000 + Math.random() * 9000).toString()
 
@@ -205,31 +237,182 @@ export class UserService {
       where: {
         token: smsCode,
         userId,
-        type: 'PHONE_CHANGE'
+        type: TokenType.PHONE_CHANGE
       }
     })
 
-    // 2. Проверяем, существует ли он и не протух ли по времени
     if (!tokenRecord || new Date() > tokenRecord.expiresIn) {
       throw new BadRequestException('Неверный код или срок его действия истек')
     }
 
-    const phoneExists = await this.prismaService.user.findUnique({
-      where: { phone: tokenRecord.phone! }
-    })
-    if (phoneExists && phoneExists.id !== userId) {
-      throw new BadRequestException('Этот номер телефона уже используется другим аккаунтом')
+    if (!tokenRecord.phone) {
+      throw new BadRequestException('Номер телефона отсутствует')
     }
 
-    await this.prismaService.user.update({
-      where: { id: userId },
-      data: { phone: tokenRecord.phone }
+    const phone = tokenRecord.phone
+
+    const phoneExists = await this.prismaService.userPhone.findUnique({
+      where: {
+        phone
+      }
     })
 
-    await this.prismaService.token.delete({
-      where: { id: tokenRecord.id }
+    if (phoneExists) {
+      if (phoneExists.userId !== userId) {
+        throw new BadRequestException('Этот номер телефона уже используется другим аккаунтом')
+      }
+
+      await this.prismaService.$transaction(async tx => {
+        await tx.userPhone.updateMany({
+          where: {
+            userId,
+            isPrimary: true
+          },
+          data: {
+            isPrimary: false
+          }
+        })
+
+        await tx.userPhone.update({
+          where: {
+            id: phoneExists.id
+          },
+          data: {
+            isPrimary: true,
+            isVerified: true
+          }
+        })
+
+        await tx.token.delete({
+          where: {
+            id: tokenRecord.id
+          }
+        })
+      })
+
+      return {
+        success: true,
+        message: 'Основной номер изменен'
+      }
+    }
+
+    await this.prismaService.$transaction(async tx => {
+      await tx.userPhone.updateMany({
+        where: {
+          userId,
+          isPrimary: true
+        },
+        data: {
+          isPrimary: false
+        }
+      })
+
+      await tx.userPhone.create({
+        data: {
+          phone,
+          userId,
+          isPrimary: true,
+          isVerified: true
+        }
+      })
+
+      await tx.token.delete({
+        where: {
+          id: tokenRecord.id
+        }
+      })
     })
 
-    return { success: true, message: 'Номер телефона успешно изменен' }
+    return {
+      success: true,
+      message: 'Номер телефона успешно изменен'
+    }
+  }
+
+  async addPhone(userId: string, phone: string) {
+    const normalizedPhone = normalizePhone(phone)
+
+    if (!normalizedPhone) {
+      throw new BadRequestException('Некорректный номер телефона')
+    }
+
+    const exists = await this.prismaService.userPhone.findUnique({
+      where: {
+        phone: normalizedPhone
+      }
+    })
+
+    if (exists) {
+      if (exists.userId !== userId) {
+        throw new BadRequestException('Этот номер уже используется другим аккаунтом')
+      }
+
+      return exists
+    }
+
+    return this.prismaService.userPhone.create({
+      data: {
+        phone: normalizedPhone,
+        userId,
+        isPrimary: false,
+        isVerified: true
+      }
+    })
+  }
+
+  async confirmAddPhone(userId: string, smsCode: string) {
+    const tokenRecord = await this.prismaService.token.findFirst({
+      where: {
+        token: smsCode,
+        userId,
+        type: TokenType.PHONE_CHANGE
+      }
+    })
+
+    if (!tokenRecord || new Date() > tokenRecord.expiresIn) {
+      throw new BadRequestException('Неверный код или срок его действия истек')
+    }
+
+    if (!tokenRecord.phone) {
+      throw new BadRequestException('Номер телефона отсутствует')
+    }
+
+    const phone = normalizePhone(tokenRecord.phone)
+
+    const exists = await this.prismaService.userPhone.findUnique({
+      where: {
+        phone
+      }
+    })
+
+    if (exists) {
+      if (exists.userId === userId) {
+        throw new BadRequestException('Этот номер уже добавлен в ваш аккаунт')
+      }
+
+      throw new BadRequestException('Этот номер уже используется другим аккаунтом')
+    }
+
+    await this.prismaService.$transaction(async tx => {
+      await tx.userPhone.create({
+        data: {
+          phone,
+          userId,
+          isPrimary: false,
+          isVerified: true
+        }
+      })
+
+      await tx.token.delete({
+        where: {
+          id: tokenRecord.id
+        }
+      })
+    })
+
+    return {
+      success: true,
+      phone
+    }
   }
 }

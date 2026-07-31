@@ -33,7 +33,7 @@ export type AdAvgAggregateOutputType = {
 }
 
 export type AdSumAggregateOutputType = {
-  price: number | null
+  price: bigint | null
   lat: number | null
   lng: number | null
 }
@@ -43,9 +43,10 @@ export type AdMinAggregateOutputType = {
   slug: string | null
   title: string | null
   description: string | null
-  price: number | null
-  unit: string | null
+  price: bigint | null
+  unit: $Enums.PriceUnit | null
   address: string | null
+  phone: string | null
   lat: number | null
   lng: number | null
   seoPath: string | null
@@ -64,9 +65,10 @@ export type AdMaxAggregateOutputType = {
   slug: string | null
   title: string | null
   description: string | null
-  price: number | null
-  unit: string | null
+  price: bigint | null
+  unit: $Enums.PriceUnit | null
   address: string | null
+  phone: string | null
   lat: number | null
   lng: number | null
   seoPath: string | null
@@ -89,6 +91,7 @@ export type AdCountAggregateOutputType = {
   unit: number
   images: number
   address: number
+  phone: number
   features: number
   lat: number
   lng: number
@@ -126,6 +129,7 @@ export type AdMinAggregateInputType = {
   price?: true
   unit?: true
   address?: true
+  phone?: true
   lat?: true
   lng?: true
   seoPath?: true
@@ -147,6 +151,7 @@ export type AdMaxAggregateInputType = {
   price?: true
   unit?: true
   address?: true
+  phone?: true
   lat?: true
   lng?: true
   seoPath?: true
@@ -169,6 +174,7 @@ export type AdCountAggregateInputType = {
   unit?: true
   images?: true
   address?: true
+  phone?: true
   features?: true
   lat?: true
   lng?: true
@@ -276,10 +282,11 @@ export type AdGroupByOutputType = {
   slug: string
   title: string
   description: string
-  price: number | null
-  unit: string
+  price: bigint | null
+  unit: $Enums.PriceUnit
   images: string[]
   address: string
+  phone: string
   features: runtime.JsonValue
   lat: number
   lng: number
@@ -323,10 +330,11 @@ export type AdWhereInput = {
   slug?: Prisma.StringFilter<"Ad"> | string
   title?: Prisma.StringFilter<"Ad"> | string
   description?: Prisma.StringFilter<"Ad"> | string
-  price?: Prisma.IntNullableFilter<"Ad"> | number | null
-  unit?: Prisma.StringFilter<"Ad"> | string
+  price?: Prisma.BigIntNullableFilter<"Ad"> | bigint | number | null
+  unit?: Prisma.EnumPriceUnitFilter<"Ad"> | $Enums.PriceUnit
   images?: Prisma.StringNullableListFilter<"Ad">
   address?: Prisma.StringFilter<"Ad"> | string
+  phone?: Prisma.StringFilter<"Ad"> | string
   features?: Prisma.JsonFilter<"Ad">
   lat?: Prisma.FloatFilter<"Ad"> | number
   lng?: Prisma.FloatFilter<"Ad"> | number
@@ -354,6 +362,7 @@ export type AdOrderByWithRelationInput = {
   unit?: Prisma.SortOrder
   images?: Prisma.SortOrder
   address?: Prisma.SortOrder
+  phone?: Prisma.SortOrder
   features?: Prisma.SortOrder
   lat?: Prisma.SortOrder
   lng?: Prisma.SortOrder
@@ -380,10 +389,11 @@ export type AdWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.AdWhereInput | Prisma.AdWhereInput[]
   title?: Prisma.StringFilter<"Ad"> | string
   description?: Prisma.StringFilter<"Ad"> | string
-  price?: Prisma.IntNullableFilter<"Ad"> | number | null
-  unit?: Prisma.StringFilter<"Ad"> | string
+  price?: Prisma.BigIntNullableFilter<"Ad"> | bigint | number | null
+  unit?: Prisma.EnumPriceUnitFilter<"Ad"> | $Enums.PriceUnit
   images?: Prisma.StringNullableListFilter<"Ad">
   address?: Prisma.StringFilter<"Ad"> | string
+  phone?: Prisma.StringFilter<"Ad"> | string
   features?: Prisma.JsonFilter<"Ad">
   lat?: Prisma.FloatFilter<"Ad"> | number
   lng?: Prisma.FloatFilter<"Ad"> | number
@@ -411,6 +421,7 @@ export type AdOrderByWithAggregationInput = {
   unit?: Prisma.SortOrder
   images?: Prisma.SortOrder
   address?: Prisma.SortOrder
+  phone?: Prisma.SortOrder
   features?: Prisma.SortOrder
   lat?: Prisma.SortOrder
   lng?: Prisma.SortOrder
@@ -439,10 +450,11 @@ export type AdScalarWhereWithAggregatesInput = {
   slug?: Prisma.StringWithAggregatesFilter<"Ad"> | string
   title?: Prisma.StringWithAggregatesFilter<"Ad"> | string
   description?: Prisma.StringWithAggregatesFilter<"Ad"> | string
-  price?: Prisma.IntNullableWithAggregatesFilter<"Ad"> | number | null
-  unit?: Prisma.StringWithAggregatesFilter<"Ad"> | string
+  price?: Prisma.BigIntNullableWithAggregatesFilter<"Ad"> | bigint | number | null
+  unit?: Prisma.EnumPriceUnitWithAggregatesFilter<"Ad"> | $Enums.PriceUnit
   images?: Prisma.StringNullableListFilter<"Ad">
   address?: Prisma.StringWithAggregatesFilter<"Ad"> | string
+  phone?: Prisma.StringWithAggregatesFilter<"Ad"> | string
   features?: Prisma.JsonWithAggregatesFilter<"Ad">
   lat?: Prisma.FloatWithAggregatesFilter<"Ad"> | number
   lng?: Prisma.FloatWithAggregatesFilter<"Ad"> | number
@@ -463,10 +475,11 @@ export type AdCreateInput = {
   slug?: string
   title: string
   description: string
-  price?: number | null
-  unit?: string
+  price?: bigint | number | null
+  unit?: $Enums.PriceUnit
   images?: Prisma.AdCreateimagesInput | string[]
   address: string
+  phone: string
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lat: number
   lng: number
@@ -488,10 +501,11 @@ export type AdUncheckedCreateInput = {
   slug?: string
   title: string
   description: string
-  price?: number | null
-  unit?: string
+  price?: bigint | number | null
+  unit?: $Enums.PriceUnit
   images?: Prisma.AdCreateimagesInput | string[]
   address: string
+  phone: string
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lat: number
   lng: number
@@ -513,10 +527,11 @@ export type AdUpdateInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  unit?: Prisma.StringFieldUpdateOperationsInput | string
+  price?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  unit?: Prisma.EnumPriceUnitFieldUpdateOperationsInput | $Enums.PriceUnit
   images?: Prisma.AdUpdateimagesInput | string[]
   address?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lat?: Prisma.FloatFieldUpdateOperationsInput | number
   lng?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -538,10 +553,11 @@ export type AdUncheckedUpdateInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  unit?: Prisma.StringFieldUpdateOperationsInput | string
+  price?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  unit?: Prisma.EnumPriceUnitFieldUpdateOperationsInput | $Enums.PriceUnit
   images?: Prisma.AdUpdateimagesInput | string[]
   address?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lat?: Prisma.FloatFieldUpdateOperationsInput | number
   lng?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -563,10 +579,11 @@ export type AdCreateManyInput = {
   slug?: string
   title: string
   description: string
-  price?: number | null
-  unit?: string
+  price?: bigint | number | null
+  unit?: $Enums.PriceUnit
   images?: Prisma.AdCreateimagesInput | string[]
   address: string
+  phone: string
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lat: number
   lng: number
@@ -587,10 +604,11 @@ export type AdUpdateManyMutationInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  unit?: Prisma.StringFieldUpdateOperationsInput | string
+  price?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  unit?: Prisma.EnumPriceUnitFieldUpdateOperationsInput | $Enums.PriceUnit
   images?: Prisma.AdUpdateimagesInput | string[]
   address?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lat?: Prisma.FloatFieldUpdateOperationsInput | number
   lng?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -609,10 +627,11 @@ export type AdUncheckedUpdateManyInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  unit?: Prisma.StringFieldUpdateOperationsInput | string
+  price?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  unit?: Prisma.EnumPriceUnitFieldUpdateOperationsInput | $Enums.PriceUnit
   images?: Prisma.AdUpdateimagesInput | string[]
   address?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lat?: Prisma.FloatFieldUpdateOperationsInput | number
   lng?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -647,6 +666,7 @@ export type AdCountOrderByAggregateInput = {
   unit?: Prisma.SortOrder
   images?: Prisma.SortOrder
   address?: Prisma.SortOrder
+  phone?: Prisma.SortOrder
   features?: Prisma.SortOrder
   lat?: Prisma.SortOrder
   lng?: Prisma.SortOrder
@@ -676,6 +696,7 @@ export type AdMaxOrderByAggregateInput = {
   price?: Prisma.SortOrder
   unit?: Prisma.SortOrder
   address?: Prisma.SortOrder
+  phone?: Prisma.SortOrder
   lat?: Prisma.SortOrder
   lng?: Prisma.SortOrder
   seoPath?: Prisma.SortOrder
@@ -697,6 +718,7 @@ export type AdMinOrderByAggregateInput = {
   price?: Prisma.SortOrder
   unit?: Prisma.SortOrder
   address?: Prisma.SortOrder
+  phone?: Prisma.SortOrder
   lat?: Prisma.SortOrder
   lng?: Prisma.SortOrder
   seoPath?: Prisma.SortOrder
@@ -813,12 +835,16 @@ export type AdCreatecategoryPathInput = {
   set: string[]
 }
 
-export type NullableIntFieldUpdateOperationsInput = {
-  set?: number | null
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
+export type NullableBigIntFieldUpdateOperationsInput = {
+  set?: bigint | number | null
+  increment?: bigint | number
+  decrement?: bigint | number
+  multiply?: bigint | number
+  divide?: bigint | number
+}
+
+export type EnumPriceUnitFieldUpdateOperationsInput = {
+  set?: $Enums.PriceUnit
 }
 
 export type AdUpdateimagesInput = {
@@ -866,10 +892,11 @@ export type AdCreateWithoutUserInput = {
   slug?: string
   title: string
   description: string
-  price?: number | null
-  unit?: string
+  price?: bigint | number | null
+  unit?: $Enums.PriceUnit
   images?: Prisma.AdCreateimagesInput | string[]
   address: string
+  phone: string
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lat: number
   lng: number
@@ -890,10 +917,11 @@ export type AdUncheckedCreateWithoutUserInput = {
   slug?: string
   title: string
   description: string
-  price?: number | null
-  unit?: string
+  price?: bigint | number | null
+  unit?: $Enums.PriceUnit
   images?: Prisma.AdCreateimagesInput | string[]
   address: string
+  phone: string
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lat: number
   lng: number
@@ -943,10 +971,11 @@ export type AdScalarWhereInput = {
   slug?: Prisma.StringFilter<"Ad"> | string
   title?: Prisma.StringFilter<"Ad"> | string
   description?: Prisma.StringFilter<"Ad"> | string
-  price?: Prisma.IntNullableFilter<"Ad"> | number | null
-  unit?: Prisma.StringFilter<"Ad"> | string
+  price?: Prisma.BigIntNullableFilter<"Ad"> | bigint | number | null
+  unit?: Prisma.EnumPriceUnitFilter<"Ad"> | $Enums.PriceUnit
   images?: Prisma.StringNullableListFilter<"Ad">
   address?: Prisma.StringFilter<"Ad"> | string
+  phone?: Prisma.StringFilter<"Ad"> | string
   features?: Prisma.JsonFilter<"Ad">
   lat?: Prisma.FloatFilter<"Ad"> | number
   lng?: Prisma.FloatFilter<"Ad"> | number
@@ -967,10 +996,11 @@ export type AdCreateWithoutCategoryInput = {
   slug?: string
   title: string
   description: string
-  price?: number | null
-  unit?: string
+  price?: bigint | number | null
+  unit?: $Enums.PriceUnit
   images?: Prisma.AdCreateimagesInput | string[]
   address: string
+  phone: string
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lat: number
   lng: number
@@ -991,10 +1021,11 @@ export type AdUncheckedCreateWithoutCategoryInput = {
   slug?: string
   title: string
   description: string
-  price?: number | null
-  unit?: string
+  price?: bigint | number | null
+  unit?: $Enums.PriceUnit
   images?: Prisma.AdCreateimagesInput | string[]
   address: string
+  phone: string
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lat: number
   lng: number
@@ -1041,10 +1072,11 @@ export type AdCreateWithoutFavoritesInput = {
   slug?: string
   title: string
   description: string
-  price?: number | null
-  unit?: string
+  price?: bigint | number | null
+  unit?: $Enums.PriceUnit
   images?: Prisma.AdCreateimagesInput | string[]
   address: string
+  phone: string
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lat: number
   lng: number
@@ -1065,10 +1097,11 @@ export type AdUncheckedCreateWithoutFavoritesInput = {
   slug?: string
   title: string
   description: string
-  price?: number | null
-  unit?: string
+  price?: bigint | number | null
+  unit?: $Enums.PriceUnit
   images?: Prisma.AdCreateimagesInput | string[]
   address: string
+  phone: string
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lat: number
   lng: number
@@ -1105,10 +1138,11 @@ export type AdUpdateWithoutFavoritesInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  unit?: Prisma.StringFieldUpdateOperationsInput | string
+  price?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  unit?: Prisma.EnumPriceUnitFieldUpdateOperationsInput | $Enums.PriceUnit
   images?: Prisma.AdUpdateimagesInput | string[]
   address?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lat?: Prisma.FloatFieldUpdateOperationsInput | number
   lng?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1129,10 +1163,11 @@ export type AdUncheckedUpdateWithoutFavoritesInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  unit?: Prisma.StringFieldUpdateOperationsInput | string
+  price?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  unit?: Prisma.EnumPriceUnitFieldUpdateOperationsInput | $Enums.PriceUnit
   images?: Prisma.AdUpdateimagesInput | string[]
   address?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lat?: Prisma.FloatFieldUpdateOperationsInput | number
   lng?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1153,10 +1188,11 @@ export type AdCreateManyUserInput = {
   slug?: string
   title: string
   description: string
-  price?: number | null
-  unit?: string
+  price?: bigint | number | null
+  unit?: $Enums.PriceUnit
   images?: Prisma.AdCreateimagesInput | string[]
   address: string
+  phone: string
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lat: number
   lng: number
@@ -1176,10 +1212,11 @@ export type AdUpdateWithoutUserInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  unit?: Prisma.StringFieldUpdateOperationsInput | string
+  price?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  unit?: Prisma.EnumPriceUnitFieldUpdateOperationsInput | $Enums.PriceUnit
   images?: Prisma.AdUpdateimagesInput | string[]
   address?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lat?: Prisma.FloatFieldUpdateOperationsInput | number
   lng?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1200,10 +1237,11 @@ export type AdUncheckedUpdateWithoutUserInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  unit?: Prisma.StringFieldUpdateOperationsInput | string
+  price?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  unit?: Prisma.EnumPriceUnitFieldUpdateOperationsInput | $Enums.PriceUnit
   images?: Prisma.AdUpdateimagesInput | string[]
   address?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lat?: Prisma.FloatFieldUpdateOperationsInput | number
   lng?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1224,10 +1262,11 @@ export type AdUncheckedUpdateManyWithoutUserInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  unit?: Prisma.StringFieldUpdateOperationsInput | string
+  price?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  unit?: Prisma.EnumPriceUnitFieldUpdateOperationsInput | $Enums.PriceUnit
   images?: Prisma.AdUpdateimagesInput | string[]
   address?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lat?: Prisma.FloatFieldUpdateOperationsInput | number
   lng?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1247,10 +1286,11 @@ export type AdCreateManyCategoryInput = {
   slug?: string
   title: string
   description: string
-  price?: number | null
-  unit?: string
+  price?: bigint | number | null
+  unit?: $Enums.PriceUnit
   images?: Prisma.AdCreateimagesInput | string[]
   address: string
+  phone: string
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lat: number
   lng: number
@@ -1270,10 +1310,11 @@ export type AdUpdateWithoutCategoryInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  unit?: Prisma.StringFieldUpdateOperationsInput | string
+  price?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  unit?: Prisma.EnumPriceUnitFieldUpdateOperationsInput | $Enums.PriceUnit
   images?: Prisma.AdUpdateimagesInput | string[]
   address?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lat?: Prisma.FloatFieldUpdateOperationsInput | number
   lng?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1294,10 +1335,11 @@ export type AdUncheckedUpdateWithoutCategoryInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  unit?: Prisma.StringFieldUpdateOperationsInput | string
+  price?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  unit?: Prisma.EnumPriceUnitFieldUpdateOperationsInput | $Enums.PriceUnit
   images?: Prisma.AdUpdateimagesInput | string[]
   address?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lat?: Prisma.FloatFieldUpdateOperationsInput | number
   lng?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1318,10 +1360,11 @@ export type AdUncheckedUpdateManyWithoutCategoryInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
-  price?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  unit?: Prisma.StringFieldUpdateOperationsInput | string
+  price?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  unit?: Prisma.EnumPriceUnitFieldUpdateOperationsInput | $Enums.PriceUnit
   images?: Prisma.AdUpdateimagesInput | string[]
   address?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lat?: Prisma.FloatFieldUpdateOperationsInput | number
   lng?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1376,6 +1419,7 @@ export type AdSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = run
   unit?: boolean
   images?: boolean
   address?: boolean
+  phone?: boolean
   features?: boolean
   lat?: boolean
   lng?: boolean
@@ -1404,6 +1448,7 @@ export type AdSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions
   unit?: boolean
   images?: boolean
   address?: boolean
+  phone?: boolean
   features?: boolean
   lat?: boolean
   lng?: boolean
@@ -1430,6 +1475,7 @@ export type AdSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions
   unit?: boolean
   images?: boolean
   address?: boolean
+  phone?: boolean
   features?: boolean
   lat?: boolean
   lng?: boolean
@@ -1456,6 +1502,7 @@ export type AdSelectScalar = {
   unit?: boolean
   images?: boolean
   address?: boolean
+  phone?: boolean
   features?: boolean
   lat?: boolean
   lng?: boolean
@@ -1471,7 +1518,7 @@ export type AdSelectScalar = {
   updatedAt?: boolean
 }
 
-export type AdOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "title" | "description" | "price" | "unit" | "images" | "address" | "features" | "lat" | "lng" | "categoryPath" | "seoPath" | "userId" | "categoryId" | "status" | "rejectionReason" | "expiresAt" | "publishedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["ad"]>
+export type AdOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "title" | "description" | "price" | "unit" | "images" | "address" | "phone" | "features" | "lat" | "lng" | "categoryPath" | "seoPath" | "userId" | "categoryId" | "status" | "rejectionReason" | "expiresAt" | "publishedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["ad"]>
 export type AdInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.Ad$userArgs<ExtArgs>
   category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>
@@ -1499,10 +1546,11 @@ export type $AdPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
     slug: string
     title: string
     description: string
-    price: number | null
-    unit: string
+    price: bigint | null
+    unit: $Enums.PriceUnit
     images: string[]
     address: string
+    phone: string
     features: runtime.JsonValue
     lat: number
     lng: number
@@ -1946,10 +1994,11 @@ export interface AdFieldRefs {
   readonly slug: Prisma.FieldRef<"Ad", 'String'>
   readonly title: Prisma.FieldRef<"Ad", 'String'>
   readonly description: Prisma.FieldRef<"Ad", 'String'>
-  readonly price: Prisma.FieldRef<"Ad", 'Int'>
-  readonly unit: Prisma.FieldRef<"Ad", 'String'>
+  readonly price: Prisma.FieldRef<"Ad", 'BigInt'>
+  readonly unit: Prisma.FieldRef<"Ad", 'PriceUnit'>
   readonly images: Prisma.FieldRef<"Ad", 'String[]'>
   readonly address: Prisma.FieldRef<"Ad", 'String'>
+  readonly phone: Prisma.FieldRef<"Ad", 'String'>
   readonly features: Prisma.FieldRef<"Ad", 'Json'>
   readonly lat: Prisma.FieldRef<"Ad", 'Float'>
   readonly lng: Prisma.FieldRef<"Ad", 'Float'>
