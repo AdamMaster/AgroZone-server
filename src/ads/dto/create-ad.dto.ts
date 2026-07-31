@@ -1,6 +1,7 @@
 import { IsNotEmpty, IsNumber, IsObject, IsOptional, IsString, IsArray, IsEnum, Matches, Length } from 'class-validator'
 import { Transform } from 'class-transformer'
 import { PriceUnit, Prisma } from 'prisma/generated/client'
+import { parseJsonField } from '@/libs/common/utils/parse-json-field.util'
 
 export class CreateAdDto {
   @IsString()
@@ -55,7 +56,7 @@ export class CreateAdDto {
   @IsNotEmpty()
   categoryId!: string
 
-  @Transform(({ value }) => (typeof value === 'string' ? JSON.parse(value) : value))
+  @Transform(({ value }) => parseJsonField(value))
   @IsObject()
   @IsOptional()
   features?: Record<string, unknown>

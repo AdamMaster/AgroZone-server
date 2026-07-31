@@ -1,6 +1,7 @@
 import { Transform } from 'class-transformer'
 import { IsArray, IsNotEmpty, IsNumber, IsObject, IsOptional, IsString, Matches } from 'class-validator'
 import { Prisma } from 'prisma/generated/client'
+import { parseJsonField } from '@/libs/common/utils/parse-json-field.util'
 
 export class UpdateAdDto {
   @IsOptional()
@@ -50,7 +51,7 @@ export class UpdateAdDto {
   phone?: string
 
   @IsOptional()
-  @Transform(({ value }) => (typeof value === 'string' ? JSON.parse(value) : value))
+  @Transform(({ value }) => parseJsonField(value))
   @IsObject()
   features?: Record<string, unknown>
 
