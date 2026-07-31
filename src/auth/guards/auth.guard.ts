@@ -12,7 +12,10 @@ export class AuthGuard implements CanActivate {
     const userId = request.session?.userId
 
     if (!userId) {
-      throw new UnauthorizedException('Чтобы добавлять в избранное, необходимо авторизоваться.')
+      // Нейтральный текст: этот guard навешан на десятки разных роутов
+      // (объявления, профиль, смена телефона/почты и т.д.), а не только
+      // на избранное — сообщение не должно ссылаться на конкретное действие.
+      throw new UnauthorizedException('Необходимо авторизоваться, чтобы выполнить это действие.')
     }
 
     const user = await this.userService.findById(userId)
