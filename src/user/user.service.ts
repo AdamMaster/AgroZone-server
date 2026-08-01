@@ -8,6 +8,7 @@ import { ConfigService } from '@nestjs/config'
 import { FileService } from '../file/file.service'
 import { AD_LIMITS } from '@/ads/constants/ads.constants'
 import { normalizePhone } from '@/libs/common/utils/phone.util'
+import { generateSmsCode } from '@/libs/common/utils/generate-code.util'
 
 @Injectable()
 export class UserService {
@@ -215,7 +216,7 @@ export class UserService {
       throw new BadRequestException('Этот номер уже используется другим аккаунтом')
     }
 
-    const smsCode = Math.floor(1000 + Math.random() * 9000).toString()
+    const smsCode = generateSmsCode()
 
     await this.prismaService.token.deleteMany({ where: { userId, type: 'PHONE_CHANGE' } })
     await this.prismaService.token.create({
@@ -329,7 +330,7 @@ export class UserService {
     }
   }
 
-  async confirmAddPhone(userId: string, smsCode: string) {
+  async confirmAddPhone(userId: string, smsCode: string, makePrimary = false) {
     const tokenRecord = await this.prismaService.token.findFirst({
       where: {
         token: smsCode,
@@ -363,11 +364,18 @@ export class UserService {
     }
 
     await this.prismaService.$transaction(async tx => {
+      if (makePrimary) {
+        await tx.userPhone.updateMany({
+          where: { userId, isPrimary: true },
+          data: { isPrimary: false }
+        })
+      }
+
       await tx.userPhone.create({
         data: {
           phone,
           userId,
-          isPrimary: false,
+          isPrimary: makePrimary,
           isVerified: true
         }
       })
@@ -383,5 +391,41 @@ export class UserService {
       success: true,
       phone
     }
+  }
+
+  // Переключить основной номер аккаунта на уже добавленный и подтверждённый
+  // номер — без повторного SMS-подтверждения, так как номер уже верифицирован.
+  async setPrimaryPhone(userId: string, phone: string) {
+    const normalizedPhone = normalizePhone(phone)
+
+    const userPhone = await this.prismaService.userPhone.findFirst({
+      where: { userId, phone: normalizedPhone }
+    })
+
+    if (!userPhone) {
+      throw new NotFoundException('Этот номер телефона не найден в вашем аккаунте')
+    }
+
+    if (!userPhone.isVerified) {
+      throw new BadRequestException('Номер телефона должен быть подтверждён')
+    }
+
+    if (userPhone.isPrimary) {
+      return { success: true, message: 'Этот номер уже является основным' }
+    }
+
+    await this.prismaService.$transaction(async tx => {
+      await tx.userPhone.updateMany({
+        where: { userId, isPrimary: true },
+        data: { isPrimary: false }
+      })
+
+      await tx.userPhone.update({
+        where: { id: userPhone.id },
+        data: { isPrimary: true }
+      })
+    })
+
+    return { success: true, message: 'Основной номер изменён' }
   }
 }

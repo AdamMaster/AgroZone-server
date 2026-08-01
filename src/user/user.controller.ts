@@ -24,6 +24,7 @@ import { FileInterceptor } from '@nestjs/platform-express'
 import { PasswordChangeDto } from './dto/password-change.dto'
 import { PhoneChangeDto } from './dto/phone-change.dto'
 import { ConfirmPhoneChangeDto } from './dto/confirm-phone-change.dto'
+import { SetPrimaryPhoneDto } from './dto/set-primary-phone.dto'
 import { ThrottlerGuard } from '@nestjs/throttler'
 
 @Controller('users')
@@ -116,6 +117,13 @@ export class UserController {
   @HttpCode(HttpStatus.OK)
   @Patch('profile/phones/confirm')
   async confirmAddPhone(@Authorized('id') userId: string, @Body() dto: ConfirmPhoneChangeDto) {
-    return this.userService.confirmAddPhone(userId, dto.code)
+    return this.userService.confirmAddPhone(userId, dto.code, dto.makePrimary)
+  }
+
+  @Authorization()
+  @HttpCode(HttpStatus.OK)
+  @Patch('profile/phones/primary')
+  async setPrimaryPhone(@Authorized('id') userId: string, @Body() dto: SetPrimaryPhoneDto) {
+    return this.userService.setPrimaryPhone(userId, dto.phone)
   }
 }

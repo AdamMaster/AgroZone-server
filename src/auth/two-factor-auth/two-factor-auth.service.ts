@@ -62,7 +62,7 @@ export class TwoFactorAuthService {
   }
 
   private async generateTwoFactorToken(email: string) {
-    const token = generateNumericCode(6)
+    const token = generateNumericCode()
     const expiresIn = new Date(new Date().getTime() + 300000)
 
     const existingToken = await this.prismaService.token.findFirst({

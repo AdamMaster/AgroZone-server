@@ -116,10 +116,6 @@ export class AuthService {
   }
 
   async sendSmsCode(phone: string, type: TokenType = TokenType.SMS_VERIFICATION) {
-    // Раньше здесь был Math.floor(1000 + Math.random() * 9000) — 4-значный
-    // код на небезопасном Math.random(). Используем тот же генератор, что
-    // и остальные SMS-потоки в проекте (регистрация телефона, смена
-    // основного номера): 6 цифр, crypto.randomInt.
     const code = generateSmsCode()
 
     // Удаляем старые коды для этого номера
@@ -148,6 +144,73 @@ export class AuthService {
     console.log(`---------------------\n`)
 
     return { message: 'Код подтверждения отправлен на ваш телефон' }
+  }
+
+  async sendPhoneChangeCode(phone: string, userId: string) {
+    phone = normalizePhone(phone)
+
+    const exists = await this.userService.findByPhone(phone)
+
+    if (exists && exists.id !== userId) {
+      throw new ConflictException('Этот номер уже используется.')
+    }
+
+    return this.sendSmsCode(phone, TokenType.PHONE_CHANGE)
+  }
+
+  async confirmPhoneChange(userId: string, phone: string, code: string) {
+    phone = normalizePhone(phone)
+
+    const token = await this.prismaService.token.findFirst({
+      where: {
+        phone,
+        token: code,
+        type: TokenType.PHONE_CHANGE
+      }
+    })
+
+    if (!token) {
+      throw new BadRequestException('Неверный код подтверждения')
+    }
+
+    if (new Date() > token.expiresIn) {
+      await this.prismaService.token.delete({
+        where: { id: token.id }
+      })
+
+      throw new BadRequestException('Срок действия кода истек')
+    }
+
+    const exists = await this.userService.findByPhone(phone)
+
+    if (exists && exists.id !== userId) {
+      throw new ConflictException('Этот номер уже используется.')
+    }
+
+    await this.prismaService.userPhone.deleteMany({
+      where: {
+        userId
+      }
+    })
+
+    await this.prismaService.userPhone.create({
+      data: {
+        phone,
+        userId,
+        isPrimary: true,
+        isVerified: true
+      }
+    })
+
+    await this.prismaService.token.delete({
+      where: {
+        id: token.id
+      }
+    })
+
+    return {
+      success: true
+    }
   }
 
   async verifySms(req: Request, dto: VerifySmsDto) {
