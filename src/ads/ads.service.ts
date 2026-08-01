@@ -15,7 +15,6 @@ import { randomBytes } from 'crypto'
 import slugify from 'slugify'
 import { UserService } from '@/user/user.service'
 import { normalizePhone } from '@/libs/common/utils/phone.util'
-import { assertPhoneBelongsToUser } from '@/libs/common/utils/assert-phone-belongs-to-user.util'
 
 @Injectable()
 export class AdsService {
@@ -27,16 +26,6 @@ export class AdsService {
     private readonly categoriesService: CategoriesService,
     private readonly userService: UserService
   ) {}
-
-  private resolvePrimaryPhoneOrThrow(user: { phones: { phone: string; isPrimary: boolean }[] }): string {
-    const phone = user.phones.find(p => p.isPrimary)?.phone ?? user.phones[0]?.phone
-
-    if (!phone) {
-      throw new BadRequestException('Укажите номер телефона для связи')
-    }
-
-    return phone
-  }
 
   async create(
     createAdDto: CreateAdDto,
@@ -52,13 +41,18 @@ export class AdsService {
       throw new NotFoundException('Пользователь не найден')
     }
 
-    let phone: string
+    let phone = createAdDto.phone ? normalizePhone(createAdDto.phone) : null
 
-    if (createAdDto.phone) {
-      phone = normalizePhone(createAdDto.phone)
-      assertPhoneBelongsToUser(user, phone)
-    } else {
-      phone = this.resolvePrimaryPhoneOrThrow(user)
+    if (!phone) {
+      phone = user.phones.find(p => p.isPrimary)?.phone ?? null
+    }
+
+    if (!phone) {
+      throw new BadRequestException('Укажите номер телефона для связи')
+    }
+
+    if (!/^\d{10,15}$/.test(phone)) {
+      throw new BadRequestException('Некорректный номер телефона')
     }
 
     const images = await this.prepareImages(null, createAdDto.existingImages ?? [], files)
@@ -196,7 +190,25 @@ export class AdsService {
             id: true,
             displayName: true,
             picture: true,
-            createdAt: true
+            createdAt: true,
+            type: true,
+            // Считаем ДРУГИЕ активные объявления продавца прямо в этом же
+            // запросе (filtered relation count), без отдельного round-trip
+            // к базе. Фильтр совпадает с условием "объявление видно
+            // публично": опубликовано и не просрочено, плюс исключаем само
+            // текущее объявление — фронту нужно число "ещё объявлений", а
+            // не "всего объявлений включая это".
+            _count: {
+              select: {
+                ads: {
+                  where: {
+                    status: AdStatus.PUBLISHED,
+                    expiresAt: { gt: now },
+                    id: { not: id }
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -212,7 +224,16 @@ export class AdsService {
       throw new NotFoundException('Объявление не найдено')
     }
 
-    return ad
+    const { user, ...rest } = ad
+
+    let userWithAdsCount: (Omit<NonNullable<typeof user>, '_count'> & { adsCount: number }) | null = null
+
+    if (user) {
+      const { _count, ...userRest } = user
+      userWithAdsCount = { ...userRest, adsCount: _count.ads }
+    }
+
+    return { ...rest, user: userWithAdsCount }
   }
 
   async findOneForOwner(id: string, userId: string) {
@@ -319,14 +340,14 @@ export class AdsService {
 
     const { existingImages, features, phone, ...rest } = updateAdDto
 
-    let normalizedPhone: string | undefined
+    let normalizedPhone = phone
 
     if (phone !== undefined) {
       normalizedPhone = normalizePhone(phone)
 
-      const user = await this.userService.findById(userId)
-
-      assertPhoneBelongsToUser(user, normalizedPhone)
+      if (!normalizedPhone) {
+        throw new BadRequestException('Некорректный номер телефона')
+      }
     }
 
     const nextStatus = ad.status === AdStatus.PUBLISHED ? AdStatus.PENDING : ad.status
@@ -395,14 +416,10 @@ export class AdsService {
 
     if (!ad) throw new NotFoundException('Объявление не найдено')
 
-    let normalizedPhone: string | undefined
+    const normalizedPhone = updateDto?.phone !== undefined ? normalizePhone(updateDto.phone) : undefined
 
-    if (updateDto?.phone !== undefined) {
-      normalizedPhone = normalizePhone(updateDto.phone)
-
-      const user = await this.userService.findById(userId)
-
-      assertPhoneBelongsToUser(user, normalizedPhone)
+    if (normalizedPhone !== undefined && !normalizedPhone) {
+      throw new BadRequestException('Некорректный номер телефона')
     }
 
     const hasChanges =
@@ -556,13 +573,19 @@ export class AdsService {
 
     const { existingImages, features, lat, lng, price, phone, ...rest } = createAdDto
 
-    let normalizedPhone: string
+    let normalizedPhone = phone ? normalizePhone(phone) : null
 
-    if (phone) {
-      normalizedPhone = normalizePhone(phone)
-      assertPhoneBelongsToUser(user, normalizedPhone)
-    } else {
-      normalizedPhone = this.resolvePrimaryPhoneOrThrow(user)
+    if (phone && !normalizedPhone) {
+      throw new BadRequestException('Некорректный номер телефона')
+    }
+
+
+    if (!normalizedPhone) {
+      normalizedPhone = user.phones.find(phone => phone.isPrimary)?.phone ?? user.phones[0]?.phone ?? null
+
+      if (!normalizedPhone) {
+        throw new BadRequestException('Укажите номер телефона для связи')
+      }
     }
 
     const parsedLat = lat !== undefined ? Number(lat) : 0

@@ -241,6 +241,7 @@ enum UserRole {
 
 enum UserType {
   INDIVIDUAL
+  INDIVIDUAL_ENTREPRENEUR
   BUSINESS
 }
 

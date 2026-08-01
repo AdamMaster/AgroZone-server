@@ -31,6 +31,7 @@ export type UserRole = (typeof UserRole)[keyof typeof UserRole]
 
 export const UserType = {
   INDIVIDUAL: 'INDIVIDUAL',
+  INDIVIDUAL_ENTREPRENEUR: 'INDIVIDUAL_ENTREPRENEUR',
   BUSINESS: 'BUSINESS'
 } as const
 

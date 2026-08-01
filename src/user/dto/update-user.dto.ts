@@ -1,4 +1,5 @@
-import { IsBoolean, IsEmail, IsOptional, IsString, Matches } from 'class-validator'
+import { IsBoolean, IsEmail, IsEnum, IsOptional, IsString, Matches } from 'class-validator'
+import { UserType } from 'prisma/generated/enums'
 
 export class UpdateUserDto {
   @IsOptional()
@@ -13,4 +14,10 @@ export class UpdateUserDto {
   @IsOptional()
   @IsBoolean({ message: 'isTwoFactorEnabled должно быть булевым значением.' })
   isTwoFactorEnabled?: boolean
+
+  // Частное лицо / ИП / компания — чисто информационная метка на карточке
+  // продавца, без привязанных к ней привилегий на площадке.
+  @IsOptional()
+  @IsEnum(UserType, { message: 'Некорректный тип продавца.' })
+  type?: UserType
 }

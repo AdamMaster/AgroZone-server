@@ -8,8 +8,6 @@ import { ConfigService } from '@nestjs/config'
 import { FileService } from '../file/file.service'
 import { AD_LIMITS } from '@/ads/constants/ads.constants'
 import { normalizePhone } from '@/libs/common/utils/phone.util'
-import { generateSmsCode } from '@/libs/common/utils/generate-code.util'
-import { assertPhoneBelongsToUser } from '@/libs/common/utils/assert-phone-belongs-to-user.util'
 
 @Injectable()
 export class UserService {
@@ -200,10 +198,6 @@ export class UserService {
     })
   }
 
-  // Отправка смс на новый номер. Раньше использовалась и "сменой номера"
-  // (/change-phone/*, теперь удалён) и "добавлением номера" (/phones/*) —
-  // остался только второй вызывающий, но сам метод не переименовываю,
-  // чтобы не плодить лишний диф.
   async requestPhoneChange(userId: string, newPhone: string) {
     newPhone = normalizePhone(newPhone)
 
@@ -221,7 +215,7 @@ export class UserService {
       throw new BadRequestException('Этот номер уже используется другим аккаунтом')
     }
 
-    const smsCode = generateSmsCode()
+    const smsCode = Math.floor(1000 + Math.random() * 9000).toString()
 
     await this.prismaService.token.deleteMany({ where: { userId, type: 'PHONE_CHANGE' } })
     await this.prismaService.token.create({
@@ -238,7 +232,104 @@ export class UserService {
     return { success: true }
   }
 
-  async confirmAddPhone(userId: string, smsCode: string, makePrimary = false) {
+  async confirmPhoneChange(userId: string, smsCode: string) {
+    const tokenRecord = await this.prismaService.token.findFirst({
+      where: {
+        token: smsCode,
+        userId,
+        type: TokenType.PHONE_CHANGE
+      }
+    })
+
+    if (!tokenRecord || new Date() > tokenRecord.expiresIn) {
+      throw new BadRequestException('Неверный код или срок его действия истек')
+    }
+
+    if (!tokenRecord.phone) {
+      throw new BadRequestException('Номер телефона отсутствует')
+    }
+
+    const phone = tokenRecord.phone
+
+    const phoneExists = await this.prismaService.userPhone.findUnique({
+      where: {
+        phone
+      }
+    })
+
+    if (phoneExists) {
+      if (phoneExists.userId !== userId) {
+        throw new BadRequestException('Этот номер телефона уже используется другим аккаунтом')
+      }
+
+      await this.prismaService.$transaction(async tx => {
+        await tx.userPhone.updateMany({
+          where: {
+            userId,
+            isPrimary: true
+          },
+          data: {
+            isPrimary: false
+          }
+        })
+
+        await tx.userPhone.update({
+          where: {
+            id: phoneExists.id
+          },
+          data: {
+            isPrimary: true,
+            isVerified: true
+          }
+        })
+
+        await tx.token.delete({
+          where: {
+            id: tokenRecord.id
+          }
+        })
+      })
+
+      return {
+        success: true,
+        message: 'Основной номер изменен'
+      }
+    }
+
+    await this.prismaService.$transaction(async tx => {
+      await tx.userPhone.updateMany({
+        where: {
+          userId,
+          isPrimary: true
+        },
+        data: {
+          isPrimary: false
+        }
+      })
+
+      await tx.userPhone.create({
+        data: {
+          phone,
+          userId,
+          isPrimary: true,
+          isVerified: true
+        }
+      })
+
+      await tx.token.delete({
+        where: {
+          id: tokenRecord.id
+        }
+      })
+    })
+
+    return {
+      success: true,
+      message: 'Номер телефона успешно изменен'
+    }
+  }
+
+  async confirmAddPhone(userId: string, smsCode: string) {
     const tokenRecord = await this.prismaService.token.findFirst({
       where: {
         token: smsCode,
@@ -272,63 +363,25 @@ export class UserService {
     }
 
     await this.prismaService.$transaction(async tx => {
-      // Самый первый номер пользователя становится основным автоматически —
-      // выбирать в профиле/при создании объявления всё равно не из чего.
-      // Явный makePrimary приходит, когда номер добавляют со страницы
-      // профиля (это и есть смена основного номера); из формы объявления
-      // makePrimary не передаётся — там номер остаётся дополнительным
-      // контактным, а не основным.
-      const existingPhonesCount = await tx.userPhone.count({ where: { userId } })
-      const isPrimary = makePrimary || existingPhonesCount === 0
-
-      if (isPrimary) {
-        await tx.userPhone.updateMany({
-          where: { userId, isPrimary: true },
-          data: { isPrimary: false }
-        })
-      }
-
       await tx.userPhone.create({
-        data: { phone, userId, isPrimary, isVerified: true }
+        data: {
+          phone,
+          userId,
+          isPrimary: false,
+          isVerified: true
+        }
       })
 
-      await tx.token.delete({ where: { id: tokenRecord.id } })
+      await tx.token.delete({
+        where: {
+          id: tokenRecord.id
+        }
+      })
     })
 
-    return { success: true, phone }
-  }
-
-  // Переключить основной номер на один из уже подтверждённых номеров
-  // аккаунта. СМС не нужна: владение номером уже доказано в момент его
-  // первого добавления. Раньше эта же логика была спрятана внутри
-  // confirmPhoneChange и была недостижима из-за более ранней проверки
-  // "номер уже добавлен" в requestPhoneChange — теперь это отдельное
-  // явное действие со своим эндпоинтом, без смс.
-  async setPrimaryPhone(userId: string, phone: string) {
-    const normalizedPhone = normalizePhone(phone)
-
-    const user = await this.findById(userId)
-
-    assertPhoneBelongsToUser(user, normalizedPhone)
-
-    const target = user.phones.find(p => p.phone === normalizedPhone)
-
-    if (target?.isPrimary) {
-      return { success: true, phone: normalizedPhone }
+    return {
+      success: true,
+      phone
     }
-
-    await this.prismaService.$transaction(async tx => {
-      await tx.userPhone.updateMany({
-        where: { userId, isPrimary: true },
-        data: { isPrimary: false }
-      })
-
-      await tx.userPhone.update({
-        where: { id: target!.id },
-        data: { isPrimary: true }
-      })
-    })
-
-    return { success: true, phone: normalizedPhone }
   }
 }

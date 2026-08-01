@@ -24,7 +24,6 @@ import { FileInterceptor } from '@nestjs/platform-express'
 import { PasswordChangeDto } from './dto/password-change.dto'
 import { PhoneChangeDto } from './dto/phone-change.dto'
 import { ConfirmPhoneChangeDto } from './dto/confirm-phone-change.dto'
-import { SetPrimaryPhoneDto } from './dto/set-primary-phone.dto'
 import { ThrottlerGuard } from '@nestjs/throttler'
 
 @Controller('users')
@@ -93,6 +92,21 @@ export class UserController {
   @Authorization()
   @HttpCode(HttpStatus.OK)
   @UseGuards(ThrottlerGuard)
+  @Post('profile/change-phone/request')
+  async requestPhoneChange(@Authorized('id') userId: string, @Body() dto: PhoneChangeDto) {
+    return this.userService.requestPhoneChange(userId, dto.newPhone)
+  }
+
+  @Authorization()
+  @HttpCode(HttpStatus.OK)
+  @Patch('profile/change-phone/confirm')
+  async confirmPhoneChange(@Authorized('id') userId: string, @Body() dto: ConfirmPhoneChangeDto) {
+    return this.userService.confirmPhoneChange(userId, dto.code)
+  }
+
+  @Authorization()
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(ThrottlerGuard)
   @Post('profile/phones/request')
   async requestAddPhone(@Authorized('id') userId: string, @Body() dto: PhoneChangeDto) {
     return this.userService.requestPhoneChange(userId, dto.newPhone)
@@ -102,15 +116,6 @@ export class UserController {
   @HttpCode(HttpStatus.OK)
   @Patch('profile/phones/confirm')
   async confirmAddPhone(@Authorized('id') userId: string, @Body() dto: ConfirmPhoneChangeDto) {
-    return this.userService.confirmAddPhone(userId, dto.code, dto.makePrimary)
-  }
-
-  // Переключение основного номера на уже подтверждённый номер аккаунта.
-  // Без смс — владение доказано ещё при добавлении этого номера.
-  @Authorization()
-  @HttpCode(HttpStatus.OK)
-  @Patch('profile/phones/primary')
-  async setPrimaryPhone(@Authorized('id') userId: string, @Body() dto: SetPrimaryPhoneDto) {
-    return this.userService.setPrimaryPhone(userId, dto.phone)
+    return this.userService.confirmAddPhone(userId, dto.code)
   }
 }
