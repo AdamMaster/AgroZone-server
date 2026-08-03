@@ -285,9 +285,16 @@ const AGRO_CHEM_STANDARD = [
   { name: 'active_ingredient', label: 'Действующее вещество', type: 'TEXT', required: true },
   { name: 'concentration', label: 'Концентрация', type: 'TEXT' },
   { name: 'application_purpose', label: 'Назначение', type: 'TEXT', filterable: false },
-  { name: 'crop', label: 'Культура применения', type: 'TEXT', filterable: false },
+  // Переименовано из 'crop': отдельный ключ от AGRO_SEED_FEATURES.crop —
+  // там 'crop' означает культуру, КОТОРАЯ продаётся (семена), а здесь —
+  // культуру, к которой ПРИМЕНЯЕТСЯ химикат. Разный смысл, общее имя поля
+  // раньше приводило к тому, что одно и то же имя 'crop' было то
+  // filterable, то нет в зависимости от категории.
+  { name: 'target_crop', label: 'Культура применения', type: 'TEXT', filterable: false },
   { name: 'manufacturer', label: 'Производитель', type: 'TEXT' },
-  { name: 'registration_number', label: 'Регистрационный номер', type: 'TEXT' },
+  // Уникальный номер госрегистрации конкретного препарата — не факт
+  // фильтрации, справочное поле.
+  { name: 'registration_number', label: 'Регистрационный номер', type: 'TEXT', filterable: false },
   {
     name: 'hazard_class',
     label: 'Класс опасности',
@@ -304,7 +311,25 @@ const AGRO_CHEM_STANDARD = [
 ] satisfies CategoryFeatureSeed[]
 
 const AGRO_SOIL_FEATURES = [
-  { name: 'soil_type', label: 'Тип грунта/субстрата', type: 'TEXT' },
+  // Список вариантов ориентировочный — стоит свериться и поправить под
+  // реальный ассортимент, прежде чем полагаться на него как на
+  // окончательный.
+  {
+    name: 'soil_type',
+    label: 'Тип грунта/субстрата',
+    type: 'SELECT',
+    options: [
+      'Универсальный грунт',
+      'Чернозём',
+      'Торфяной грунт',
+      'Грунт для рассады/цветов',
+      'Кокосовый субстрат',
+      'Песок',
+      'Перлит/Вермикулит',
+      'Компост',
+      'Другое'
+    ]
+  },
   { name: 'composition', label: 'Состав', type: 'TEXT', filterable: false },
   { name: 'acidity', label: 'Кислотность (pH)', type: 'NUMBER', unit: 'pH', min: 0, max: 14 },
   {
@@ -468,8 +493,8 @@ export const EQUIP_BASE = [
 
 const EQUIP_PARTS = [
   { name: 'compatible_brand', label: 'Совместимая марка', type: 'TEXT', required: true },
-  { name: 'compatible_model', label: 'Совместимая модель', type: 'TEXT' },
-  { name: 'part_number', label: 'Каталожный номер/артикул', type: 'TEXT' },
+  { name: 'compatible_model', label: 'Совместимая модель', type: 'TEXT', filterable: false },
+  { name: 'part_number', label: 'Каталожный номер/артикул', type: 'TEXT', filterable: false },
   {
     name: 'part_origin',
     label: 'Тип запчасти',
@@ -497,7 +522,7 @@ const FOOD_GROCERY = [
   },
   { name: 'package_weight', label: 'Масса упаковки', type: 'NUMBER', units: ['г', 'кг', 'т'] },
   { name: 'shelf_life', label: 'Срок годности', type: 'NUMBER', units: ['дн.', 'мес.'] },
-  { name: 'gost', label: 'ГОСТ/ТУ/СТО', type: 'TEXT' }
+  { name: 'gost', label: 'ГОСТ/ТУ/СТО', type: 'TEXT', filterable: false }
 ] satisfies CategoryFeatureSeed[]
 
 const FOOD_DAIRY = [
@@ -519,7 +544,7 @@ const FOOD_DAIRY = [
   },
   { name: 'package_size', label: 'Масса/объём упаковки', type: 'NUMBER', units: ['мл', 'л', 'г', 'кг'] },
   { name: 'shelf_life', label: 'Срок годности', type: 'NUMBER', units: ['дн.', 'мес.'] },
-  { name: 'gost', label: 'ГОСТ/ТУ/СТО', type: 'TEXT', placeholder: 'Например, ГОСТ 31450-2013' }
+  { name: 'gost', label: 'ГОСТ/ТУ/СТО', type: 'TEXT', placeholder: 'Например, ГОСТ 31450-2013', filterable: false }
 ] satisfies CategoryFeatureSeed[]
 
 export const FOOD_BASE = [
@@ -533,7 +558,7 @@ export const FOOD_BASE = [
   },
   { name: 'package_weight', label: 'Масса упаковки/партии', type: 'NUMBER', units: ['г', 'кг', 'т'] },
   { name: 'shelf_life', label: 'Срок годности', type: 'NUMBER', units: ['дн.', 'мес.'] },
-  { name: 'gost', label: 'ГОСТ/ТУ/СТО', type: 'TEXT', placeholder: 'Например, ГОСТ 32125-2013' }
+  { name: 'gost', label: 'ГОСТ/ТУ/СТО', type: 'TEXT', placeholder: 'Например, ГОСТ 32125-2013', filterable: false }
 ] satisfies CategoryFeatureSeed[]
 
 export const FOOD_MEAT = [
@@ -561,7 +586,7 @@ export const FOOD_MEAT = [
   },
   { name: 'batch_weight', label: 'Масса партии', type: 'NUMBER', units: ['кг', 'т'] },
   { name: 'shelf_life', label: 'Срок годности', type: 'NUMBER', units: ['дн.', 'мес.'] },
-  { name: 'gost', label: 'ГОСТ/ТУ/СТО', type: 'TEXT' }
+  { name: 'gost', label: 'ГОСТ/ТУ/СТО', type: 'TEXT', filterable: false }
 ] satisfies CategoryFeatureSeed[]
 
 export const FOOD_FISH = [
@@ -581,7 +606,7 @@ export const FOOD_FISH = [
   },
   { name: 'batch_weight', label: 'Масса партии', type: 'NUMBER', units: ['кг', 'т'] },
   { name: 'shelf_life', label: 'Срок годности', type: 'NUMBER', units: ['дн.', 'мес.'] },
-  { name: 'gost', label: 'ГОСТ/ТУ/СТО', type: 'TEXT' }
+  { name: 'gost', label: 'ГОСТ/ТУ/СТО', type: 'TEXT', filterable: false }
 ] satisfies CategoryFeatureSeed[]
 
 export const FOOD_CANNED = [
@@ -601,7 +626,7 @@ export const FOOD_CANNED = [
   },
   { name: 'package_weight', label: 'Масса/объём упаковки', type: 'NUMBER', units: ['мл', 'л', 'г', 'кг'] },
   { name: 'shelf_life', label: 'Срок годности', type: 'NUMBER', units: ['дн.', 'мес.'] },
-  { name: 'gost', label: 'ГОСТ/ТУ/СТО', type: 'TEXT' }
+  { name: 'gost', label: 'ГОСТ/ТУ/СТО', type: 'TEXT', filterable: false }
 ] satisfies CategoryFeatureSeed[]
 
 const FOOD_READY = [
@@ -622,7 +647,7 @@ const FOOD_READY = [
   },
   { name: 'package_weight', label: 'Масса/объём упаковки', type: 'NUMBER', units: ['мл', 'л', 'г', 'кг'] },
   { name: 'shelf_life', label: 'Срок годности', type: 'NUMBER', units: ['дн.', 'мес.'] },
-  { name: 'gost', label: 'ГОСТ/ТУ/СТО', type: 'TEXT' }
+  { name: 'gost', label: 'ГОСТ/ТУ/СТО', type: 'TEXT', filterable: false }
 ] satisfies CategoryFeatureSeed[]
 
 export const AGRO_RAW_FEATURES = [
@@ -637,7 +662,7 @@ export const AGRO_RAW_FEATURES = [
     options: ['Навалом/Насыпью', 'Биг-бэг', 'Мешки', 'Флекситанк/Цистерна']
   },
   { name: 'batch_weight', label: 'Объём партии', type: 'NUMBER', units: ['кг', 'т'] },
-  { name: 'gost', label: 'ГОСТ/ТУ', type: 'TEXT' }
+  { name: 'gost', label: 'ГОСТ/ТУ', type: 'TEXT', filterable: false }
 ] satisfies CategoryFeatureSeed[]
 
 const AGRO_FRESH_FEATURES = [
@@ -701,7 +726,7 @@ const AGRO_HONEY_FEATURES = [
 const BEE_PRODUCT_FEATURES = [
   { name: 'collection_year', label: 'Год сбора/производства', type: 'NUMBER', unit: 'год' },
   { name: 'product_state', label: 'Форма/состояние продукта', type: 'TEXT' },
-  { name: 'packaging_description', label: 'Упаковка', type: 'TEXT' },
+  { name: 'packaging_description', label: 'Упаковка', type: 'TEXT', filterable: false },
   { name: 'package_weight', label: 'Масса упаковки', type: 'NUMBER', units: ['г', 'кг'] },
   { name: 'laboratory_report', label: 'Есть лабораторный протокол', type: 'BOOLEAN' }
 ] satisfies CategoryFeatureSeed[]
@@ -714,7 +739,7 @@ const BEE_WAX_FEATURES = [
     options: ['Воск-сырец', 'Слиток', 'Гранулы', 'Вощина', 'Другое']
   },
   { name: 'grade', label: 'Сорт/качество', type: 'TEXT' },
-  { name: 'packaging_description', label: 'Упаковка', type: 'TEXT' },
+  { name: 'packaging_description', label: 'Упаковка', type: 'TEXT', filterable: false },
   { name: 'batch_weight', label: 'Масса партии', type: 'NUMBER', units: ['кг', 'т'] }
 ] satisfies CategoryFeatureSeed[]
 
@@ -849,8 +874,8 @@ const TECH_ATTACHED = [
 
 const TECH_PARTS = [
   { name: 'compatible_brand', label: 'Совместимая марка техники', type: 'TEXT', required: true },
-  { name: 'compatible_model', label: 'Совместимая модель', type: 'TEXT' },
-  { name: 'part_number', label: 'Каталожный номер/артикул', type: 'TEXT' },
+  { name: 'compatible_model', label: 'Совместимая модель', type: 'TEXT', filterable: false },
+  { name: 'part_number', label: 'Каталожный номер/артикул', type: 'TEXT', filterable: false },
   {
     name: 'part_origin',
     label: 'Тип запчасти',
@@ -874,16 +899,16 @@ const PACKAGING_MATERIAL_FEATURES = [
     type: 'SELECT',
     options: ['Пластик', 'Полиэтилен/Плёнка', 'Бумага/Картон', 'Дерево', 'Стекло', 'Металл', 'Ткань/Джут']
   },
-  { name: 'dimensions', label: 'Размеры (Д×Ш×В)', type: 'TEXT', placeholder: 'Например, 1200×800×1000 мм' },
+  {
+    name: 'dimensions',
+    label: 'Размеры (Д×Ш×В)',
+    type: 'TEXT',
+    placeholder: 'Например, 1200×800×1000 мм',
+    filterable: false
+  },
   { name: 'capacity', label: 'Вместимость', type: 'NUMBER', units: ['мл', 'л', 'м³'] },
   { name: 'load_capacity', label: 'Допустимая масса', type: 'NUMBER', units: ['кг', 'т'] },
   { name: 'new_or_used', label: 'Состояние', type: 'SELECT', options: ['Новое', 'Б/у'] }
-] satisfies CategoryFeatureSeed[]
-
-const MATERIAL_FEATURES = [
-  { name: 'material_type', label: 'Материал', type: 'TEXT' },
-  { name: 'dimensions', label: 'Размеры (мм)', type: 'TEXT' },
-  { name: 'volume', label: 'Объем/Вес (кг)', type: 'NUMBER' }
 ] satisfies CategoryFeatureSeed[]
 
 const OTHER_FUEL_FEATURES = [
@@ -897,9 +922,12 @@ const OTHER_FUEL_FEATURES = [
 ] satisfies CategoryFeatureSeed[]
 
 const OTHER_GOODS_FEATURES = [
-  { name: 'material_description', label: 'Материал', type: 'TEXT' },
-  { name: 'dimensions', label: 'Размеры / Толщина', type: 'TEXT' },
-  { name: 'origin', label: 'Производитель', type: 'TEXT' }
+  { name: 'material_description', label: 'Материал', type: 'TEXT', filterable: false },
+  { name: 'dimensions', label: 'Размеры / Толщина', type: 'TEXT', filterable: false },
+  // Переименовано из 'origin': это то же самое поле "Производитель", что и
+  // в остальных наборах — просто раньше называлось по-другому и было
+  // независимым от общего ключа 'manufacturer'.
+  { name: 'manufacturer', label: 'Производитель', type: 'TEXT' }
 ] satisfies CategoryFeatureSeed[]
 
 const OTHER_WASTE_FEATURES = [
@@ -960,7 +988,20 @@ const AGRO_INDUSTRIAL_RAW_FEATURES = [
 const AGRO_SEED_FEATURES = [
   { name: 'crop', label: 'Культура', type: 'TEXT', required: true },
   { name: 'variety', label: 'Сорт/гибрид', type: 'TEXT' },
-  { name: 'reproduction', label: 'Репродукция/поколение', type: 'TEXT' },
+  // Список вариантов ориентировочный (стандартная сортовая градация семян
+  // в РФ) — стоит свериться и поправить под реальный ассортимент.
+  {
+    name: 'reproduction',
+    label: 'Репродукция/поколение',
+    type: 'SELECT',
+    options: [
+      'Оригинальные семена (ОС)',
+      'Элитные семена (ЭС)',
+      '1-я репродукция (РС1)',
+      '2-я репродукция (РС2)',
+      'Массовая репродукция (РСт)'
+    ]
+  },
   { name: 'harvest_year', label: 'Год урожая/производства', type: 'NUMBER', unit: 'год' },
   { name: 'germination', label: 'Всхожесть', type: 'NUMBER', unit: '%', min: 0, max: 100 },
   { name: 'purity', label: 'Чистота', type: 'NUMBER', unit: '%', min: 0, max: 100 },
@@ -978,7 +1019,9 @@ const AGRO_SEED_FEATURES = [
 
 const OTHER_DEFAULT_FEATURES = [
   { name: 'usage', label: 'Назначение', type: 'TEXT' },
-  { name: 'origin', label: 'Производитель/Бренд', type: 'TEXT' }
+  // Переименовано из 'origin' — тот же общий ключ 'manufacturer', что и
+  // везде остальные (см. OTHER_GOODS_FEATURES).
+  { name: 'manufacturer', label: 'Производитель/Бренд', type: 'TEXT' }
 ] satisfies CategoryFeatureSeed[]
 
 const CATEGORY_TREE = [
@@ -990,7 +1033,7 @@ const CATEGORY_TREE = [
       { name: 'Грунты', children: [], categoryFeatures: AGRO_SOIL_FEATURES },
       { name: 'Микроудобрения', children: [], categoryFeatures: AGRO_CHEM_STANDARD },
       { name: 'Минеральные удобрения', children: [], categoryFeatures: AGRO_CHEM_STANDARD },
-      { name: 'Моющие и дезсредства', children: [], categoryFeatures: AGRO_CLEAN_FEATURES },
+      { name: 'Моющие и дезинфицирующие средства', children: [], categoryFeatures: AGRO_CLEAN_FEATURES },
       { name: 'Органические удобрения', children: [], categoryFeatures: AGRO_CHEM_STANDARD },
       { name: 'Органоминеральные удобрения', children: [], categoryFeatures: AGRO_CHEM_STANDARD },
       { name: 'Регуляторы роста', children: [], categoryFeatures: AGRO_CHEM_STANDARD },
@@ -1003,7 +1046,7 @@ const CATEGORY_TREE = [
     aliases: ['Сельскохозяйственные животные, птица и аквакультура', 'Сельхозживотные'],
     iconId: 'Bird',
     children: [
-      { name: 'Крупный рогатый скот', children: [], categoryFeatures: ANIMAL_FEATURES },
+      { name: 'Крупный рогатый скот (КРС)', children: [], categoryFeatures: ANIMAL_FEATURES },
       { name: 'Свиньи', children: [], categoryFeatures: ANIMAL_FEATURES },
       { name: 'Овцы и бараны', children: [], categoryFeatures: ANIMAL_FEATURES },
       { name: 'Козы', children: [], categoryFeatures: ANIMAL_FEATURES },
@@ -1011,14 +1054,14 @@ const CATEGORY_TREE = [
       { name: 'Сельхозптица', children: [], categoryFeatures: POULTRY_FEATURES },
       { name: 'Кролики', children: [], categoryFeatures: ANIMAL_FEATURES },
       {
-        name: 'Пчёлы',
+        name: 'Пчёлы, пчелосемьи и пчеломатки',
         aliases: ['Пчеловодство', 'Пчелопакеты', 'Пчеломатки'],
         children: [],
         categoryFeatures: BEES_FEATURES
       },
       { name: 'Рыбопосадочный материал и малёк', children: [], categoryFeatures: FISH_FEATURES },
       {
-        name: 'Другие с/х животные',
+        name: 'Другие сельскохозяйственные животные',
         aliases: ['Другие с/х животные'],
         children: [],
         categoryFeatures: ANIMAL_FEATURES
@@ -1080,7 +1123,7 @@ const CATEGORY_TREE = [
         ]
       },
       {
-        name: 'Консервация кормов',
+        name: 'Силосование и консервация кормов',
         children: [
           {
             name: 'Средства для силосования',
@@ -1783,7 +1826,7 @@ const CATEGORY_TREE = [
     name: 'Тара и упаковка',
     iconId: 'Box',
     children: [
-      { name: 'Пластиковые емкости', children: [], categoryFeatures: PACKAGING_MATERIAL_FEATURES },
+      { name: 'Пластиковые емкости крупногабаритные', children: [], categoryFeatures: PACKAGING_MATERIAL_FEATURES },
       { name: 'Тара, упаковка', children: [], categoryFeatures: PACKAGING_MATERIAL_FEATURES },
       { name: 'Упаковочные материалы и сырьё', children: [], categoryFeatures: PACKAGING_MATERIAL_FEATURES }
     ]
@@ -1815,7 +1858,7 @@ const CATEGORY_TREE = [
       {
         name: 'Программное обеспечение АПК',
         children: [],
-        categoryFeatures: [{ name: 'version', label: 'Версия', type: 'TEXT' }]
+        categoryFeatures: [{ name: 'version', label: 'Версия', type: 'TEXT', filterable: false }]
       },
       { name: 'Прочие с/х товары', children: [], categoryFeatures: OTHER_DEFAULT_FEATURES },
       { name: 'Различные товары для пищевой промышленности', children: [], categoryFeatures: OTHER_DEFAULT_FEATURES },
@@ -1848,7 +1891,7 @@ const CATEGORY_TREE = [
       {
         name: 'Книги, документация, аграрные издания',
         children: [],
-        categoryFeatures: [{ name: 'author', label: 'Автор/Издательство', type: 'TEXT' }]
+        categoryFeatures: [{ name: 'author', label: 'Автор/Издательство', type: 'TEXT', filterable: false }]
       }
     ]
   }
