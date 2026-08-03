@@ -990,20 +990,20 @@ const CATEGORY_TREE = [
       { name: 'Грунты', children: [], categoryFeatures: AGRO_SOIL_FEATURES },
       { name: 'Микроудобрения', children: [], categoryFeatures: AGRO_CHEM_STANDARD },
       { name: 'Минеральные удобрения', children: [], categoryFeatures: AGRO_CHEM_STANDARD },
-      { name: 'Моющие и дезинфицирующие средства', children: [], categoryFeatures: AGRO_CLEAN_FEATURES },
+      { name: 'Моющие и дезсредства', children: [], categoryFeatures: AGRO_CLEAN_FEATURES },
       { name: 'Органические удобрения', children: [], categoryFeatures: AGRO_CHEM_STANDARD },
       { name: 'Органоминеральные удобрения', children: [], categoryFeatures: AGRO_CHEM_STANDARD },
       { name: 'Регуляторы роста', children: [], categoryFeatures: AGRO_CHEM_STANDARD },
-      { name: 'Средства для дезинсекции и дератизации', children: [], categoryFeatures: AGRO_CHEM_STANDARD },
+      { name: 'Дезинсекция и дератизация', children: [], categoryFeatures: AGRO_CHEM_STANDARD },
       { name: 'Средства защиты растений', children: [], categoryFeatures: AGRO_CHEM_STANDARD }
     ]
   },
   {
-    name: 'Сельскохозяйственные животные, птица и аквакультура',
-    aliases: ['С/х животные и птица', 'Сельхозживотные'],
+    name: 'С/х животные и птица',
+    aliases: ['Сельскохозяйственные животные, птица и аквакультура', 'Сельхозживотные'],
     iconId: 'Bird',
     children: [
-      { name: 'Крупный рогатый скот (КРС)', children: [], categoryFeatures: ANIMAL_FEATURES },
+      { name: 'Крупный рогатый скот', children: [], categoryFeatures: ANIMAL_FEATURES },
       { name: 'Свиньи', children: [], categoryFeatures: ANIMAL_FEATURES },
       { name: 'Овцы и бараны', children: [], categoryFeatures: ANIMAL_FEATURES },
       { name: 'Козы', children: [], categoryFeatures: ANIMAL_FEATURES },
@@ -1011,14 +1011,14 @@ const CATEGORY_TREE = [
       { name: 'Сельхозптица', children: [], categoryFeatures: POULTRY_FEATURES },
       { name: 'Кролики', children: [], categoryFeatures: ANIMAL_FEATURES },
       {
-        name: 'Пчёлы, пчелосемьи и пчеломатки',
+        name: 'Пчёлы',
         aliases: ['Пчеловодство', 'Пчелопакеты', 'Пчеломатки'],
         children: [],
         categoryFeatures: BEES_FEATURES
       },
       { name: 'Рыбопосадочный материал и малёк', children: [], categoryFeatures: FISH_FEATURES },
       {
-        name: 'Другие сельскохозяйственные животные',
+        name: 'Другие с/х животные',
         aliases: ['Другие с/х животные'],
         children: [],
         categoryFeatures: ANIMAL_FEATURES
@@ -1026,8 +1026,8 @@ const CATEGORY_TREE = [
     ]
   },
   {
-    name: 'Корма и кормовые компоненты',
-    aliases: ['Корма для животных'],
+    name: 'Корма и компоненты',
+    aliases: ['Корма и кормовые компоненты', 'Корма для животных'],
     iconId: 'Wheat',
     children: [
       {
@@ -1080,7 +1080,7 @@ const CATEGORY_TREE = [
         ]
       },
       {
-        name: 'Силосование и консервация кормов',
+        name: 'Консервация кормов',
         children: [
           {
             name: 'Средства для силосования',
@@ -1107,7 +1107,7 @@ const CATEGORY_TREE = [
           { name: 'Мукомольно-крупяное оборудование', children: [], categoryFeatures: EQUIP_BASE },
           { name: 'Оборудование для анализа качества зерна', children: [], categoryFeatures: EQUIP_BASE },
           { name: 'Оборудование для хранения зерна', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Прочее зерноперерабатывающее оборудование', children: [], categoryFeatures: EQUIP_BASE }
+          { name: 'Прочее оборудование', children: [], categoryFeatures: EQUIP_BASE }
         ]
       },
       { name: 'Компрессорное и насосное оборудование', children: [], categoryFeatures: EQUIP_BASE },
@@ -1187,7 +1187,7 @@ const CATEGORY_TREE = [
           { name: 'Для разделки, нарезки, шинковки', children: [], categoryFeatures: EQUIP_BASE },
           { name: 'Для сушки', children: [], categoryFeatures: EQUIP_BASE },
           { name: 'Протирочные машины', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Прочее для переработки овощей, фруктов, ягод', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Прочее оборудование', children: [], categoryFeatures: EQUIP_BASE },
           { name: 'Сортировщики и калибровщики', children: [], categoryFeatures: EQUIP_BASE },
           { name: 'Столы переборочные', children: [], categoryFeatures: EQUIP_BASE }
         ]
@@ -1238,7 +1238,7 @@ const CATEGORY_TREE = [
           { name: 'Для производства макаронных изделий', children: [], categoryFeatures: EQUIP_BASE },
           { name: 'Отсадочные машины', children: [], categoryFeatures: EQUIP_BASE },
           { name: 'Печи хлебопекарные', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Прочее хлебопекарное и кондитерское', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Прочее оборудование', children: [], categoryFeatures: EQUIP_BASE },
           { name: 'Тестоделительные машины', children: [], categoryFeatures: EQUIP_BASE },
           { name: 'Тестозакаточные, формующие машины', children: [], categoryFeatures: EQUIP_BASE },
           { name: 'Тестомесильные машины', children: [], categoryFeatures: EQUIP_BASE },
@@ -1256,7 +1256,7 @@ const CATEGORY_TREE = [
         children: [
           { name: 'Ульи и комплектующие', children: [], categoryFeatures: OTHER_GOODS_FEATURES },
           { name: 'Медогонки и оборудование для переработки мёда', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Прочее оборудование для пчеловодства', children: [], categoryFeatures: EQUIP_BASE }
+          { name: 'Прочее оборудование', children: [], categoryFeatures: EQUIP_BASE }
         ]
       },
       { name: 'Для рыбоводства', children: [], categoryFeatures: EQUIP_BASE },
@@ -1302,7 +1302,7 @@ const CATEGORY_TREE = [
           { name: 'Крупа рисовая', children: [], categoryFeatures: FOOD_GROCERY },
           { name: 'Крупа ячневая', children: [], categoryFeatures: FOOD_GROCERY },
           { name: 'Хлопья овсяные и зерновые', children: [], categoryFeatures: FOOD_GROCERY },
-          { name: 'Прочие крупы и бобовые (чечевица, фасоль, нут, маш)', children: [], categoryFeatures: FOOD_GROCERY }
+          { name: 'Прочие бобовые (чечевица, фасоль, нут, маш)', children: [], categoryFeatures: FOOD_GROCERY }
         ]
       },
       { name: 'Масложировая продукция', children: [], categoryFeatures: FOOD_READY },
@@ -1564,8 +1564,8 @@ const CATEGORY_TREE = [
     ]
   },
   {
-    name: 'Сельхозпродукция и растительное сырьё',
-    aliases: ['Сельхозсырьё и агрокультуры', 'Агрокультуры'],
+    name: 'Агрокультуры',
+    aliases: ['Сельхозпродукция и растительное сырьё', 'Сельхозсырьё и агрокультуры'],
     iconId: 'Sprout',
     children: [
       {
@@ -1644,7 +1644,7 @@ const CATEGORY_TREE = [
             categoryFeatures: AGRO_RAW_FEATURES
           },
           {
-            name: 'Сушёные цветы для кондитерского производства и производства чая',
+            name: 'Сушёные цветы для кондитерских изделий и чая',
             children: [],
             categoryFeatures: DEFAULT_FEATURES
           }
@@ -1655,17 +1655,17 @@ const CATEGORY_TREE = [
         children: [
           { name: 'Мицелий, грибные блоки', children: [], categoryFeatures: AGRO_SEED_FEATURES },
           {
-            name: 'Посевной материал зерновых и зернобобовых культур',
+            name: 'Семена зерновых и зернобобовых культур',
             children: [],
             categoryFeatures: AGRO_SEED_FEATURES
           },
           {
-            name: 'Посевной материал кормовых, силосных и пастбищных трав',
+            name: 'Семена кормовых, силосных и пастбищных трав',
             children: [],
             categoryFeatures: AGRO_SEED_FEATURES
           },
-          { name: 'Посевной материал лекарственных растений', children: [], categoryFeatures: AGRO_SEED_FEATURES },
-          { name: 'Посевной материал масличных культур', children: [], categoryFeatures: AGRO_SEED_FEATURES },
+          { name: 'Семена лекарственных растений', children: [], categoryFeatures: AGRO_SEED_FEATURES },
+          { name: 'Семена масличных культур', children: [], categoryFeatures: AGRO_SEED_FEATURES },
           { name: 'Рассада овощных культур', children: [], categoryFeatures: AGRO_SEED_FEATURES },
           { name: 'Саженцы деревьев и кустарников', children: [], categoryFeatures: AGRO_SEED_FEATURES },
           { name: 'Семена бахчевых культур', children: [], categoryFeatures: AGRO_SEED_FEATURES },
@@ -1688,7 +1688,8 @@ const CATEGORY_TREE = [
     ]
   },
   {
-    name: 'Сельскохозяйственная техника',
+    name: 'С/х техника',
+    aliases: ['Сельскохозяйственная техника'],
     iconId: 'Truck',
     children: [
       {
@@ -1782,15 +1783,15 @@ const CATEGORY_TREE = [
     name: 'Тара и упаковка',
     iconId: 'Box',
     children: [
-      { name: 'Пластиковые емкости крупногабаритные', children: [], categoryFeatures: PACKAGING_MATERIAL_FEATURES },
+      { name: 'Пластиковые емкости', children: [], categoryFeatures: PACKAGING_MATERIAL_FEATURES },
       { name: 'Тара, упаковка', children: [], categoryFeatures: PACKAGING_MATERIAL_FEATURES },
       { name: 'Упаковочные материалы и сырьё', children: [], categoryFeatures: PACKAGING_MATERIAL_FEATURES }
     ]
   },
   {
-    name: 'Сырьё животного происхождения',
+    name: 'Животное сырьё',
     iconId: 'Shell',
-    aliases: ['Техническое сырьё'],
+    aliases: ['Сырьё животного происхождения', 'Техническое сырьё'],
     children: [
       { name: 'Натуральные оболочки', children: [], categoryFeatures: AGRO_INDUSTRIAL_RAW_FEATURES },
       { name: 'Овечьи шкуры', children: [], categoryFeatures: AGRO_INDUSTRIAL_RAW_FEATURES },
