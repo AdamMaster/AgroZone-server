@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Controller,
   Get,
   Post,
@@ -13,10 +12,7 @@ import {
   UnauthorizedException,
   ParseUUIDPipe,
   ParseIntPipe,
-  DefaultValuePipe,
-  FileTypeValidator,
-  MaxFileSizeValidator,
-  ParseFilePipe
+  DefaultValuePipe
 } from '@nestjs/common'
 import { AdsService } from './ads.service'
 import { CreateAdDto } from './dto/create-ad.dto'
@@ -35,25 +31,6 @@ import { CurrentUser } from '@/auth/decorators/decorators/user.decorator'
 import { FindAdsQueryDto } from './dto/find-ads-query.dto'
 import { FindMyAdsQueryDto } from './dto/find-my-ads-query.dto'
 import { User } from 'prisma/generated/client'
-
-// Валидатор фото объявления: проверяем не только размер (это уже делает multer
-// через limits.fileSize в интерсепторе), но и MIME-тип, чтобы под видом "фото"
-// нельзя было загрузить произвольный файл (svg со скриптом, html и т.п.).
-// fileIsRequired: false — файлы в этих формах не всегда обязательны
-// (например, при обновлении можно ничего не прикладывать, оставив старые images).
-const adImagesValidationPipe = () =>
-  new ParseFilePipe({
-    validators: [
-      new MaxFileSizeValidator({ maxSize: AD_MAX_FILE_SIZE }),
-      new FileTypeValidator({ fileType: '.(png|jpeg|jpg|webp)' })
-    ],
-    fileIsRequired: false,
-    // Свой текст ошибки вместо технического "Validation failed (current file
-    // type is ..., expected type is ...)" — этот текст уходит клиенту как
-    // error.message и попадает прямиком в toast, поэтому должен быть понятным.
-    exceptionFactory: () =>
-      new BadRequestException('Файл должен быть изображением в формате PNG, JPEG или WEBP и весить не более 10 МБ.')
-  })
 
 @Controller('ads')
 export class AdsController {
@@ -91,7 +68,7 @@ export class AdsController {
   async create(
     @Body() createAdDto: CreateAdDto,
     @CurrentUser('id') userId: string,
-    @UploadedFiles(adImagesValidationPipe()) files: Express.Multer.File[]
+    @UploadedFiles() files: Express.Multer.File[]
   ) {
     return this.adsService.create(createAdDto, userId, files) // <-- И передаваться первым аргументом в сервис
   }
@@ -142,6 +119,12 @@ export class AdsController {
     return await this.adsService.getAddressFromCoords(lat, lon)
   }
 
+  // Регистрируем до @Get(':id') — иначе Nest примет 'locations' за id.
+  @Get('locations')
+  getAvailableLocations() {
+    return this.adsService.getAvailableLocations()
+  }
+
   @Get('my/:id')
   @UseGuards(AuthGuard)
   findOneForOwner(@Param('id') id: string, @CurrentUser('id') userId: string) {
@@ -166,7 +149,7 @@ export class AdsController {
     @Param('id') id: string,
     @Body() updateAdDto: UpdateAdDto,
     @CurrentUser('id') userId: string,
-    @UploadedFiles(adImagesValidationPipe()) files: Express.Multer.File[]
+    @UploadedFiles() files: Express.Multer.File[]
   ) {
     return this.adsService.update(id, updateAdDto, userId, files)
   }
@@ -200,7 +183,7 @@ export class AdsController {
   async saveDraft(
     @Body() createAdDto: CreateAdDto & { existingImages?: string[] | string },
     @CurrentUser('id') userId: string,
-    @UploadedFiles(adImagesValidationPipe()) files: Express.Multer.File[],
+    @UploadedFiles() files: Express.Multer.File[],
     @Query('id') id?: string
   ) {
     const existingImages =

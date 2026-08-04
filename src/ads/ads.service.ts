@@ -139,6 +139,17 @@ export class AdsService {
       conditions.push(Prisma.sql`(ads.title ILIKE ${pattern} OR ads.description ILIKE ${pattern})`)
     }
 
+    // Точное совпадение по ISO-коду региона — regionIsoCode обычная
+    // скалярная колонка (не JSON), так что это простое условие, а не
+    // что-то в духе resolveFeatureFilters.
+    if (query.regionIsoCode) {
+      conditions.push(Prisma.sql`ads.region_iso_code = ${query.regionIsoCode}`)
+    }
+
+    if (query.localityFiasId) {
+      conditions.push(Prisma.sql`ads.locality_fias_id = ${query.localityFiasId}`)
+    }
+
     if (query.unit && (query.minPrice !== undefined || query.maxPrice !== undefined)) {
       const priceBounds: Prisma.Sql[] = [Prisma.sql`ads.unit = ${query.unit}::"PriceUnit"`]
 
@@ -226,6 +237,63 @@ export class AdsService {
     }))
 
     return { items, total, page, limit }
+  }
+
+  // Список локаций для фильтра каталога — сознательно НЕ статический
+  // хардкод географии РФ (это было бы и политически спорно на некоторых
+  // границах, и бесполезно показывало бы места без единого объявления), а
+  // реальные локации, где прямо сейчас есть хотя бы одно опубликованное
+  // объявление. Источник истины — тот же DaData-справочник, которым уже
+  // размечены сами объявления, никакой отдельной геобазы вести не нужно.
+  //
+  // Отдаём ДВА уровня вперемешку одним списком — так фронт может искать
+  // единым полем и по региону целиком ("Кабардино-Балкарская Респ." →
+  // все объявления по всему региону), и по конкретному городу/селу
+  // ("Нальчик" → только по нему, через ФИАС-id, а не сравнение строк).
+  async getAvailableLocations() {
+    const now = new Date()
+
+    const baseWhere = {
+      status: AdStatus.PUBLISHED,
+      expiresAt: { gt: now }
+    }
+
+    const [regionRows, localityRows] = await Promise.all([
+      this.prisma.ad.findMany({
+        where: { ...baseWhere, regionIsoCode: { not: null } },
+        select: { region: true, regionIsoCode: true },
+        distinct: ['regionIsoCode'],
+        orderBy: { region: 'asc' }
+      }),
+      this.prisma.ad.findMany({
+        where: { ...baseWhere, localityFiasId: { not: null } },
+        select: { region: true, regionIsoCode: true, locality: true, localityFiasId: true },
+        distinct: ['localityFiasId'],
+        orderBy: { locality: 'asc' }
+      })
+    ])
+
+    const regions = regionRows
+      .filter((row): row is { region: string; regionIsoCode: string } => Boolean(row.region && row.regionIsoCode))
+      .map(row => ({
+        type: 'region' as const,
+        label: row.region,
+        regionIsoCode: row.regionIsoCode
+      }))
+
+    const localities = localityRows
+      .filter(
+        (row): row is { region: string; regionIsoCode: string; locality: string; localityFiasId: string } =>
+          Boolean(row.region && row.regionIsoCode && row.locality && row.localityFiasId)
+      )
+      .map(row => ({
+        type: 'locality' as const,
+        label: `${row.locality}, ${row.region}`,
+        regionIsoCode: row.regionIsoCode,
+        localityFiasId: row.localityFiasId
+      }))
+
+    return [...regions, ...localities]
   }
 
   private mapSortToPrismaOrderBy(sortBy?: AdsSortBy) {

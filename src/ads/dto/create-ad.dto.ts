@@ -1,7 +1,6 @@
 import { IsNotEmpty, IsNumber, IsObject, IsOptional, IsString, IsArray, IsEnum, Matches, Length } from 'class-validator'
 import { Transform } from 'class-transformer'
 import { PriceUnit, Prisma } from 'prisma/generated/client'
-import { parseJsonField } from '@/libs/common/utils/parse-json-field.util'
 
 export class CreateAdDto {
   @IsString()
@@ -47,22 +46,35 @@ export class CreateAdDto {
   @IsNumber()
   lng!: number
 
-  // Клиент всегда присылает номер в отформатированном виде
-  // ("+7 (999) 999-99-99") — как из инпута с маской, так и из выбора
-  // существующего номера в модалке. Раньше здесь ожидались "голые" цифры
-  // (^\d{10,15}$), что не соответствовало ни формату из формы, ни формату,
-  // который принимает UpdateAdDto для того же поля — из-за этого валидный
-  // номер отклонялся ещё на уровне ValidationPipe, до вызова сервиса.
+  // Регион — приходит из того же DaData-ответа, что и address/lat/lng (см.
+  // AddressInput на клиенте). Опционально: не должно ронять создание
+  // объявления, если по какой-то причине DaData не смог его определить.
+  @IsOptional()
+  @IsString()
+  region?: string
+
+  @IsOptional()
+  @IsString()
+  regionIsoCode?: string
+
+  @IsOptional()
+  @IsString()
+  locality?: string
+
+  @IsOptional()
+  @IsString()
+  localityFiasId?: string
+
   @IsOptional()
   @IsString({ message: 'Номер телефона должен быть строкой.' })
-  @Matches(/^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/, { message: 'Некорректный формат телефона' })
+  @Matches(/^\d{10,15}$/, { message: 'Некорректный номер телефона.' })
   phone?: string
 
   @IsString()
   @IsNotEmpty()
   categoryId!: string
 
-  @Transform(({ value }) => parseJsonField(value))
+  @Transform(({ value }) => (typeof value === 'string' ? JSON.parse(value) : value))
   @IsObject()
   @IsOptional()
   features?: Record<string, unknown>

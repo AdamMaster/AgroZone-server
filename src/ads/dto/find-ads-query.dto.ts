@@ -55,6 +55,21 @@ export class FindAdsQueryDto {
   @IsEnum(AdsSortBy)
   sortBy?: AdsSortBy
 
+  // ISO 3166-2:RU код региона (например "RU-KB") — точное совпадение по
+  // Ad.regionIsoCode. Не зависит от выбранной категории/уровня каталога,
+  // в отличие от features.
+  @IsOptional()
+  @IsString()
+  regionIsoCode?: string
+
+  // Более узкий уровень, чем regionIsoCode — точечный фильтр по
+  // конкретному городу/селу (Ad.localityFiasId). Взаимоисключим с
+  // regionIsoCode на фронте (см. LocationFilter), но бэкенд не завязан на
+  // это и просто ANDит оба условия, если вдруг придут одновременно.
+  @IsOptional()
+  @IsString()
+  localityFiasId?: string
+
   // JSON-строка вида:
   //   {"soil_type":["Чернозём"],"humidity":{"min":10,"max":80},"is_organic":true}
   // Ключи должны совпадать с CategoryFeature.name выбранной категории;

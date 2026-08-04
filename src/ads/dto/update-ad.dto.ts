@@ -1,7 +1,6 @@
 import { Transform } from 'class-transformer'
-import { IsArray, IsNotEmpty, IsNumber, IsObject, IsOptional, IsString, Matches } from 'class-validator'
-import { Prisma } from 'prisma/generated/client'
-import { parseJsonField } from '@/libs/common/utils/parse-json-field.util'
+import { IsArray, IsEnum, IsNotEmpty, IsNumber, IsObject, IsOptional, IsString, Matches } from 'class-validator'
+import { PriceUnit, Prisma } from 'prisma/generated/client'
 
 export class UpdateAdDto {
   @IsOptional()
@@ -18,6 +17,16 @@ export class UpdateAdDto {
   @Transform(({ value }) => Number(value))
   @IsNumber()
   price?: number
+
+  // Раньше отсутствовало в UpdateAdDto — форма (buildAdFormData) всегда
+  // отправляет unit при сохранении (в схеме формы у него default('ITEM')),
+  // а бэкенд с включённым forbidNonWhitelisted эту поле не знал и ронял
+  // весь запрос на редактирование ("property unit should not exist"),
+  // никак не связано с фильтром по локации — баг был и раньше, просто не
+  // всплывал, пока не попробовали отредактировать объявление в этой сессии.
+  @IsOptional()
+  @IsEnum(PriceUnit)
+  unit?: PriceUnit
 
   @IsOptional()
   @Transform(({ value }) => {
@@ -44,6 +53,22 @@ export class UpdateAdDto {
   lng?: number
 
   @IsOptional()
+  @IsString()
+  region?: string
+
+  @IsOptional()
+  @IsString()
+  regionIsoCode?: string
+
+  @IsOptional()
+  @IsString()
+  locality?: string
+
+  @IsOptional()
+  @IsString()
+  localityFiasId?: string
+
+  @IsOptional()
   @IsString({ message: 'Номер телефона должен быть строкой.' })
   @Matches(/^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/, {
     message: 'Некорректный формат телефона'
@@ -51,7 +76,7 @@ export class UpdateAdDto {
   phone?: string
 
   @IsOptional()
-  @Transform(({ value }) => parseJsonField(value))
+  @Transform(({ value }) => (typeof value === 'string' ? JSON.parse(value) : value))
   @IsObject()
   features?: Record<string, unknown>
 

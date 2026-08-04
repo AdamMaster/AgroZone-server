@@ -189,6 +189,23 @@ model Ad {
   lat         Float
   lng         Float
 
+  // Регион объявления — берётся из того же ответа DaData, которым уже
+  // геокодируется address/lat/lng (см. AddressInput), без отдельного
+  // запроса. region — для отображения ("Кабардино-Балкарская Респ."),
+  // regionIsoCode — стабильный ISO 3166-2:RU код (например "RU-KB"),
+  // именно по нему фильтруем в каталоге (AdsService.findAll) — он не
+  // зависит от вариаций написания названия региона.
+  region        String?
+  regionIsoCode String? @map("region_iso_code")
+
+  // Более узкий уровень, чем регион — конкретный город ИЛИ (если это не
+  // город, а посёлок/село) населённый пункт; из того же DaData-ответа.
+  // locality — для отображения ("г. Нальчик" / "с. Верх-Ирмень"),
+  // localityFiasId — стабильный ФИАС-идентификатор для точного фильтра
+  // (у городов/сёл нет ISO-кода, в отличие от региона).
+  locality       String?
+  localityFiasId String? @map("locality_fias_id")
+
   categoryPath String[] @default([]) @map("category_path")
   seoPath      String   @map("seo_path")
 
@@ -215,6 +232,8 @@ model Ad {
   // Под фильтр каталога: выбрана категория + сортировка/диапазон по цене.
   @@index([categoryId, price])
   @@index([phone])
+  @@index([regionIsoCode])
+  @@index([localityFiasId])
   @@map("ads")
 }
 

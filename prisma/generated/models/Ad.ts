@@ -49,6 +49,10 @@ export type AdMinAggregateOutputType = {
   phone: string | null
   lat: number | null
   lng: number | null
+  region: string | null
+  regionIsoCode: string | null
+  locality: string | null
+  localityFiasId: string | null
   seoPath: string | null
   userId: string | null
   categoryId: string | null
@@ -71,6 +75,10 @@ export type AdMaxAggregateOutputType = {
   phone: string | null
   lat: number | null
   lng: number | null
+  region: string | null
+  regionIsoCode: string | null
+  locality: string | null
+  localityFiasId: string | null
   seoPath: string | null
   userId: string | null
   categoryId: string | null
@@ -95,6 +103,10 @@ export type AdCountAggregateOutputType = {
   features: number
   lat: number
   lng: number
+  region: number
+  regionIsoCode: number
+  locality: number
+  localityFiasId: number
   categoryPath: number
   seoPath: number
   userId: number
@@ -132,6 +144,10 @@ export type AdMinAggregateInputType = {
   phone?: true
   lat?: true
   lng?: true
+  region?: true
+  regionIsoCode?: true
+  locality?: true
+  localityFiasId?: true
   seoPath?: true
   userId?: true
   categoryId?: true
@@ -154,6 +170,10 @@ export type AdMaxAggregateInputType = {
   phone?: true
   lat?: true
   lng?: true
+  region?: true
+  regionIsoCode?: true
+  locality?: true
+  localityFiasId?: true
   seoPath?: true
   userId?: true
   categoryId?: true
@@ -178,6 +198,10 @@ export type AdCountAggregateInputType = {
   features?: true
   lat?: true
   lng?: true
+  region?: true
+  regionIsoCode?: true
+  locality?: true
+  localityFiasId?: true
   categoryPath?: true
   seoPath?: true
   userId?: true
@@ -290,6 +314,10 @@ export type AdGroupByOutputType = {
   features: runtime.JsonValue
   lat: number
   lng: number
+  region: string | null
+  regionIsoCode: string | null
+  locality: string | null
+  localityFiasId: string | null
   categoryPath: string[]
   seoPath: string
   userId: string
@@ -338,6 +366,10 @@ export type AdWhereInput = {
   features?: Prisma.JsonFilter<"Ad">
   lat?: Prisma.FloatFilter<"Ad"> | number
   lng?: Prisma.FloatFilter<"Ad"> | number
+  region?: Prisma.StringNullableFilter<"Ad"> | string | null
+  regionIsoCode?: Prisma.StringNullableFilter<"Ad"> | string | null
+  locality?: Prisma.StringNullableFilter<"Ad"> | string | null
+  localityFiasId?: Prisma.StringNullableFilter<"Ad"> | string | null
   categoryPath?: Prisma.StringNullableListFilter<"Ad">
   seoPath?: Prisma.StringFilter<"Ad"> | string
   userId?: Prisma.StringFilter<"Ad"> | string
@@ -366,6 +398,10 @@ export type AdOrderByWithRelationInput = {
   features?: Prisma.SortOrder
   lat?: Prisma.SortOrder
   lng?: Prisma.SortOrder
+  region?: Prisma.SortOrderInput | Prisma.SortOrder
+  regionIsoCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  locality?: Prisma.SortOrderInput | Prisma.SortOrder
+  localityFiasId?: Prisma.SortOrderInput | Prisma.SortOrder
   categoryPath?: Prisma.SortOrder
   seoPath?: Prisma.SortOrder
   userId?: Prisma.SortOrder
@@ -397,6 +433,10 @@ export type AdWhereUniqueInput = Prisma.AtLeast<{
   features?: Prisma.JsonFilter<"Ad">
   lat?: Prisma.FloatFilter<"Ad"> | number
   lng?: Prisma.FloatFilter<"Ad"> | number
+  region?: Prisma.StringNullableFilter<"Ad"> | string | null
+  regionIsoCode?: Prisma.StringNullableFilter<"Ad"> | string | null
+  locality?: Prisma.StringNullableFilter<"Ad"> | string | null
+  localityFiasId?: Prisma.StringNullableFilter<"Ad"> | string | null
   categoryPath?: Prisma.StringNullableListFilter<"Ad">
   seoPath?: Prisma.StringFilter<"Ad"> | string
   userId?: Prisma.StringFilter<"Ad"> | string
@@ -425,6 +465,10 @@ export type AdOrderByWithAggregationInput = {
   features?: Prisma.SortOrder
   lat?: Prisma.SortOrder
   lng?: Prisma.SortOrder
+  region?: Prisma.SortOrderInput | Prisma.SortOrder
+  regionIsoCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  locality?: Prisma.SortOrderInput | Prisma.SortOrder
+  localityFiasId?: Prisma.SortOrderInput | Prisma.SortOrder
   categoryPath?: Prisma.SortOrder
   seoPath?: Prisma.SortOrder
   userId?: Prisma.SortOrder
@@ -458,6 +502,10 @@ export type AdScalarWhereWithAggregatesInput = {
   features?: Prisma.JsonWithAggregatesFilter<"Ad">
   lat?: Prisma.FloatWithAggregatesFilter<"Ad"> | number
   lng?: Prisma.FloatWithAggregatesFilter<"Ad"> | number
+  region?: Prisma.StringNullableWithAggregatesFilter<"Ad"> | string | null
+  regionIsoCode?: Prisma.StringNullableWithAggregatesFilter<"Ad"> | string | null
+  locality?: Prisma.StringNullableWithAggregatesFilter<"Ad"> | string | null
+  localityFiasId?: Prisma.StringNullableWithAggregatesFilter<"Ad"> | string | null
   categoryPath?: Prisma.StringNullableListFilter<"Ad">
   seoPath?: Prisma.StringWithAggregatesFilter<"Ad"> | string
   userId?: Prisma.StringWithAggregatesFilter<"Ad"> | string
@@ -483,6 +531,10 @@ export type AdCreateInput = {
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lat: number
   lng: number
+  region?: string | null
+  regionIsoCode?: string | null
+  locality?: string | null
+  localityFiasId?: string | null
   categoryPath?: Prisma.AdCreatecategoryPathInput | string[]
   seoPath: string
   status?: $Enums.AdStatus
@@ -509,6 +561,10 @@ export type AdUncheckedCreateInput = {
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lat: number
   lng: number
+  region?: string | null
+  regionIsoCode?: string | null
+  locality?: string | null
+  localityFiasId?: string | null
   categoryPath?: Prisma.AdCreatecategoryPathInput | string[]
   seoPath: string
   userId: string
@@ -535,6 +591,10 @@ export type AdUpdateInput = {
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lat?: Prisma.FloatFieldUpdateOperationsInput | number
   lng?: Prisma.FloatFieldUpdateOperationsInput | number
+  region?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionIsoCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localityFiasId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryPath?: Prisma.AdUpdatecategoryPathInput | string[]
   seoPath?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumAdStatusFieldUpdateOperationsInput | $Enums.AdStatus
@@ -561,6 +621,10 @@ export type AdUncheckedUpdateInput = {
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lat?: Prisma.FloatFieldUpdateOperationsInput | number
   lng?: Prisma.FloatFieldUpdateOperationsInput | number
+  region?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionIsoCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localityFiasId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryPath?: Prisma.AdUpdatecategoryPathInput | string[]
   seoPath?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -587,6 +651,10 @@ export type AdCreateManyInput = {
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lat: number
   lng: number
+  region?: string | null
+  regionIsoCode?: string | null
+  locality?: string | null
+  localityFiasId?: string | null
   categoryPath?: Prisma.AdCreatecategoryPathInput | string[]
   seoPath: string
   userId: string
@@ -612,6 +680,10 @@ export type AdUpdateManyMutationInput = {
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lat?: Prisma.FloatFieldUpdateOperationsInput | number
   lng?: Prisma.FloatFieldUpdateOperationsInput | number
+  region?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionIsoCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localityFiasId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryPath?: Prisma.AdUpdatecategoryPathInput | string[]
   seoPath?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumAdStatusFieldUpdateOperationsInput | $Enums.AdStatus
@@ -635,6 +707,10 @@ export type AdUncheckedUpdateManyInput = {
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lat?: Prisma.FloatFieldUpdateOperationsInput | number
   lng?: Prisma.FloatFieldUpdateOperationsInput | number
+  region?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionIsoCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localityFiasId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryPath?: Prisma.AdUpdatecategoryPathInput | string[]
   seoPath?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -670,6 +746,10 @@ export type AdCountOrderByAggregateInput = {
   features?: Prisma.SortOrder
   lat?: Prisma.SortOrder
   lng?: Prisma.SortOrder
+  region?: Prisma.SortOrder
+  regionIsoCode?: Prisma.SortOrder
+  locality?: Prisma.SortOrder
+  localityFiasId?: Prisma.SortOrder
   categoryPath?: Prisma.SortOrder
   seoPath?: Prisma.SortOrder
   userId?: Prisma.SortOrder
@@ -699,6 +779,10 @@ export type AdMaxOrderByAggregateInput = {
   phone?: Prisma.SortOrder
   lat?: Prisma.SortOrder
   lng?: Prisma.SortOrder
+  region?: Prisma.SortOrder
+  regionIsoCode?: Prisma.SortOrder
+  locality?: Prisma.SortOrder
+  localityFiasId?: Prisma.SortOrder
   seoPath?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
@@ -721,6 +805,10 @@ export type AdMinOrderByAggregateInput = {
   phone?: Prisma.SortOrder
   lat?: Prisma.SortOrder
   lng?: Prisma.SortOrder
+  region?: Prisma.SortOrder
+  regionIsoCode?: Prisma.SortOrder
+  locality?: Prisma.SortOrder
+  localityFiasId?: Prisma.SortOrder
   seoPath?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
@@ -900,6 +988,10 @@ export type AdCreateWithoutUserInput = {
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lat: number
   lng: number
+  region?: string | null
+  regionIsoCode?: string | null
+  locality?: string | null
+  localityFiasId?: string | null
   categoryPath?: Prisma.AdCreatecategoryPathInput | string[]
   seoPath: string
   status?: $Enums.AdStatus
@@ -925,6 +1017,10 @@ export type AdUncheckedCreateWithoutUserInput = {
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lat: number
   lng: number
+  region?: string | null
+  regionIsoCode?: string | null
+  locality?: string | null
+  localityFiasId?: string | null
   categoryPath?: Prisma.AdCreatecategoryPathInput | string[]
   seoPath: string
   categoryId: string
@@ -979,6 +1075,10 @@ export type AdScalarWhereInput = {
   features?: Prisma.JsonFilter<"Ad">
   lat?: Prisma.FloatFilter<"Ad"> | number
   lng?: Prisma.FloatFilter<"Ad"> | number
+  region?: Prisma.StringNullableFilter<"Ad"> | string | null
+  regionIsoCode?: Prisma.StringNullableFilter<"Ad"> | string | null
+  locality?: Prisma.StringNullableFilter<"Ad"> | string | null
+  localityFiasId?: Prisma.StringNullableFilter<"Ad"> | string | null
   categoryPath?: Prisma.StringNullableListFilter<"Ad">
   seoPath?: Prisma.StringFilter<"Ad"> | string
   userId?: Prisma.StringFilter<"Ad"> | string
@@ -1004,6 +1104,10 @@ export type AdCreateWithoutCategoryInput = {
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lat: number
   lng: number
+  region?: string | null
+  regionIsoCode?: string | null
+  locality?: string | null
+  localityFiasId?: string | null
   categoryPath?: Prisma.AdCreatecategoryPathInput | string[]
   seoPath: string
   status?: $Enums.AdStatus
@@ -1029,6 +1133,10 @@ export type AdUncheckedCreateWithoutCategoryInput = {
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lat: number
   lng: number
+  region?: string | null
+  regionIsoCode?: string | null
+  locality?: string | null
+  localityFiasId?: string | null
   categoryPath?: Prisma.AdCreatecategoryPathInput | string[]
   seoPath: string
   userId: string
@@ -1080,6 +1188,10 @@ export type AdCreateWithoutFavoritesInput = {
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lat: number
   lng: number
+  region?: string | null
+  regionIsoCode?: string | null
+  locality?: string | null
+  localityFiasId?: string | null
   categoryPath?: Prisma.AdCreatecategoryPathInput | string[]
   seoPath: string
   status?: $Enums.AdStatus
@@ -1105,6 +1217,10 @@ export type AdUncheckedCreateWithoutFavoritesInput = {
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lat: number
   lng: number
+  region?: string | null
+  regionIsoCode?: string | null
+  locality?: string | null
+  localityFiasId?: string | null
   categoryPath?: Prisma.AdCreatecategoryPathInput | string[]
   seoPath: string
   userId: string
@@ -1146,6 +1262,10 @@ export type AdUpdateWithoutFavoritesInput = {
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lat?: Prisma.FloatFieldUpdateOperationsInput | number
   lng?: Prisma.FloatFieldUpdateOperationsInput | number
+  region?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionIsoCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localityFiasId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryPath?: Prisma.AdUpdatecategoryPathInput | string[]
   seoPath?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumAdStatusFieldUpdateOperationsInput | $Enums.AdStatus
@@ -1171,6 +1291,10 @@ export type AdUncheckedUpdateWithoutFavoritesInput = {
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lat?: Prisma.FloatFieldUpdateOperationsInput | number
   lng?: Prisma.FloatFieldUpdateOperationsInput | number
+  region?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionIsoCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localityFiasId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryPath?: Prisma.AdUpdatecategoryPathInput | string[]
   seoPath?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1196,6 +1320,10 @@ export type AdCreateManyUserInput = {
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lat: number
   lng: number
+  region?: string | null
+  regionIsoCode?: string | null
+  locality?: string | null
+  localityFiasId?: string | null
   categoryPath?: Prisma.AdCreatecategoryPathInput | string[]
   seoPath: string
   categoryId: string
@@ -1220,6 +1348,10 @@ export type AdUpdateWithoutUserInput = {
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lat?: Prisma.FloatFieldUpdateOperationsInput | number
   lng?: Prisma.FloatFieldUpdateOperationsInput | number
+  region?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionIsoCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localityFiasId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryPath?: Prisma.AdUpdatecategoryPathInput | string[]
   seoPath?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumAdStatusFieldUpdateOperationsInput | $Enums.AdStatus
@@ -1245,6 +1377,10 @@ export type AdUncheckedUpdateWithoutUserInput = {
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lat?: Prisma.FloatFieldUpdateOperationsInput | number
   lng?: Prisma.FloatFieldUpdateOperationsInput | number
+  region?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionIsoCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localityFiasId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryPath?: Prisma.AdUpdatecategoryPathInput | string[]
   seoPath?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1270,6 +1406,10 @@ export type AdUncheckedUpdateManyWithoutUserInput = {
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lat?: Prisma.FloatFieldUpdateOperationsInput | number
   lng?: Prisma.FloatFieldUpdateOperationsInput | number
+  region?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionIsoCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localityFiasId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryPath?: Prisma.AdUpdatecategoryPathInput | string[]
   seoPath?: Prisma.StringFieldUpdateOperationsInput | string
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1294,6 +1434,10 @@ export type AdCreateManyCategoryInput = {
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lat: number
   lng: number
+  region?: string | null
+  regionIsoCode?: string | null
+  locality?: string | null
+  localityFiasId?: string | null
   categoryPath?: Prisma.AdCreatecategoryPathInput | string[]
   seoPath: string
   userId: string
@@ -1318,6 +1462,10 @@ export type AdUpdateWithoutCategoryInput = {
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lat?: Prisma.FloatFieldUpdateOperationsInput | number
   lng?: Prisma.FloatFieldUpdateOperationsInput | number
+  region?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionIsoCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localityFiasId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryPath?: Prisma.AdUpdatecategoryPathInput | string[]
   seoPath?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumAdStatusFieldUpdateOperationsInput | $Enums.AdStatus
@@ -1343,6 +1491,10 @@ export type AdUncheckedUpdateWithoutCategoryInput = {
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lat?: Prisma.FloatFieldUpdateOperationsInput | number
   lng?: Prisma.FloatFieldUpdateOperationsInput | number
+  region?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionIsoCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localityFiasId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryPath?: Prisma.AdUpdatecategoryPathInput | string[]
   seoPath?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1368,6 +1520,10 @@ export type AdUncheckedUpdateManyWithoutCategoryInput = {
   features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   lat?: Prisma.FloatFieldUpdateOperationsInput | number
   lng?: Prisma.FloatFieldUpdateOperationsInput | number
+  region?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionIsoCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localityFiasId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryPath?: Prisma.AdUpdatecategoryPathInput | string[]
   seoPath?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1423,6 +1579,10 @@ export type AdSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = run
   features?: boolean
   lat?: boolean
   lng?: boolean
+  region?: boolean
+  regionIsoCode?: boolean
+  locality?: boolean
+  localityFiasId?: boolean
   categoryPath?: boolean
   seoPath?: boolean
   userId?: boolean
@@ -1452,6 +1612,10 @@ export type AdSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions
   features?: boolean
   lat?: boolean
   lng?: boolean
+  region?: boolean
+  regionIsoCode?: boolean
+  locality?: boolean
+  localityFiasId?: boolean
   categoryPath?: boolean
   seoPath?: boolean
   userId?: boolean
@@ -1479,6 +1643,10 @@ export type AdSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions
   features?: boolean
   lat?: boolean
   lng?: boolean
+  region?: boolean
+  regionIsoCode?: boolean
+  locality?: boolean
+  localityFiasId?: boolean
   categoryPath?: boolean
   seoPath?: boolean
   userId?: boolean
@@ -1506,6 +1674,10 @@ export type AdSelectScalar = {
   features?: boolean
   lat?: boolean
   lng?: boolean
+  region?: boolean
+  regionIsoCode?: boolean
+  locality?: boolean
+  localityFiasId?: boolean
   categoryPath?: boolean
   seoPath?: boolean
   userId?: boolean
@@ -1518,7 +1690,7 @@ export type AdSelectScalar = {
   updatedAt?: boolean
 }
 
-export type AdOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "title" | "description" | "price" | "unit" | "images" | "address" | "phone" | "features" | "lat" | "lng" | "categoryPath" | "seoPath" | "userId" | "categoryId" | "status" | "rejectionReason" | "expiresAt" | "publishedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["ad"]>
+export type AdOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "title" | "description" | "price" | "unit" | "images" | "address" | "phone" | "features" | "lat" | "lng" | "region" | "regionIsoCode" | "locality" | "localityFiasId" | "categoryPath" | "seoPath" | "userId" | "categoryId" | "status" | "rejectionReason" | "expiresAt" | "publishedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["ad"]>
 export type AdInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.Ad$userArgs<ExtArgs>
   category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>
@@ -1554,6 +1726,10 @@ export type $AdPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
     features: runtime.JsonValue
     lat: number
     lng: number
+    region: string | null
+    regionIsoCode: string | null
+    locality: string | null
+    localityFiasId: string | null
     categoryPath: string[]
     seoPath: string
     userId: string
@@ -2002,6 +2178,10 @@ export interface AdFieldRefs {
   readonly features: Prisma.FieldRef<"Ad", 'Json'>
   readonly lat: Prisma.FieldRef<"Ad", 'Float'>
   readonly lng: Prisma.FieldRef<"Ad", 'Float'>
+  readonly region: Prisma.FieldRef<"Ad", 'String'>
+  readonly regionIsoCode: Prisma.FieldRef<"Ad", 'String'>
+  readonly locality: Prisma.FieldRef<"Ad", 'String'>
+  readonly localityFiasId: Prisma.FieldRef<"Ad", 'String'>
   readonly categoryPath: Prisma.FieldRef<"Ad", 'String[]'>
   readonly seoPath: Prisma.FieldRef<"Ad", 'String'>
   readonly userId: Prisma.FieldRef<"Ad", 'String'>
