@@ -12,6 +12,9 @@ export interface CategoryWithChildren {
   level: number
   sortOrder: number
   categoryFeatures: CategoryFeature[]
+  path: string[]
+  fullPath: string
+  priceUnits: string[]
   children: CategoryWithChildren[]
 }
 
@@ -56,6 +59,7 @@ export class CategoriesService {
         categoryFeatures: cat.categoryFeatures,
         path: cat.path,
         fullPath: cat.fullPath,
+        priceUnits: cat.priceUnits,
         children: build(cat.id)
       }))
     }

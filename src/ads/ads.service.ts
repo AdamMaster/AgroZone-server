@@ -59,6 +59,23 @@ export class AdsService {
 
     const categoryPath = await this.categoriesService.getCategoryPath(createAdDto.categoryId)
 
+    // Единица цены должна быть одной из разрешённых для выбранной
+    // категории (Category.priceUnits) — иначе, например, объявление о
+    // продаже зерна можно было бы случайно/специально опубликовать с ценой
+    // "за час". Категории без явно заданных единиц (priceUnits пуст)
+    // трактуем как разрешающие любое значение enum, чтобы не блокировать
+    // публикацию из-за неполных сид-данных.
+    const category = await this.prisma.category.findUnique({
+      where: { id: createAdDto.categoryId },
+      select: { priceUnits: true }
+    })
+
+    const unit = createAdDto.unit ?? PriceUnit.ITEM
+
+    if (category?.priceUnits?.length && !category.priceUnits.includes(unit)) {
+      throw new BadRequestException('Выбранная единица измерения цены недоступна для этой категории')
+    }
+
     const baseSlug =
       slugify(createAdDto.title, {
         lower: true,
@@ -77,7 +94,7 @@ export class AdsService {
         ...restDto,
         phone,
         price: price !== undefined && price !== null ? BigInt(Math.round(price)) : null,
-        unit: createAdDto.unit ?? PriceUnit.ITEM,
+        unit,
         images,
         userId,
         status,

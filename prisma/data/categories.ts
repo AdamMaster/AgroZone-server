@@ -34,11 +34,29 @@ export type CategoryInput = {
   redirectToCategoryId?: string
   children?: CategoryInput[]
   categoryFeatures?: CategoryFeatureInput[]
+  /**
+   * Единицы измерения цены (значения enum Prisma PriceUnit — 'ITEM', 'TON',
+   * 'KG', 'LITER', 'M3', 'BAG', 'HEAD', 'DOSE', 'RUNNING_METER', 'HA',
+   * 'HOUR'), доступные при создании объявления в этой категории. Если не
+   * задано явно в CATEGORY_TREE — подставляется автоматически в
+   * materializeCategories() на основе набора categoryFeatures (см.
+   * DEFAULT_PRICE_UNITS_BY_FEATURES ниже), с запасным вариантом ['ITEM'].
+   */
+  priceUnits: string[]
 }
 
 type CategorySeed = Omit<
   CategoryInput,
-  'id' | 'parentId' | 'slug' | 'sortOrder' | 'status' | 'isSelectable' | 'version' | 'children' | 'categoryFeatures'
+  | 'id'
+  | 'parentId'
+  | 'slug'
+  | 'sortOrder'
+  | 'status'
+  | 'isSelectable'
+  | 'version'
+  | 'children'
+  | 'categoryFeatures'
+  | 'priceUnits'
 > & {
   id?: string
   slug?: string
@@ -48,6 +66,8 @@ type CategorySeed = Omit<
   version?: number
   children?: CategorySeed[]
   categoryFeatures?: CategoryFeatureSeed[]
+  /** Необязательный ручной оверрайд — если не задан, будет выведен автоматически. */
+  priceUnits?: string[]
 }
 
 const CYRILLIC_TO_LATIN: Record<string, string> = {
@@ -137,7 +157,8 @@ function materializeCategories(
       isSelectable: category.isSelectable ?? children.length === 0,
       version: category.version ?? 1,
       children,
-      categoryFeatures: category.categoryFeatures?.map(materializeFeature)
+      categoryFeatures: category.categoryFeatures?.map(materializeFeature),
+      priceUnits: category.priceUnits ?? inferPriceUnits(category.categoryFeatures)
     }
   })
 }
@@ -911,6 +932,10 @@ const PACKAGING_MATERIAL_FEATURES = [
   { name: 'new_or_used', label: 'Состояние', type: 'SELECT', options: ['Новое', 'Б/у'] }
 ] satisfies CategoryFeatureSeed[]
 
+// MATERIAL_FEATURES был удалён: набор нигде не применялся ни к одной
+// категории (мёртвый код), а его material_type: TEXT дублировал/конфликтовал
+// по смыслу с material_type: SELECT из PACKAGING_MATERIAL_FEATURES.
+
 const OTHER_FUEL_FEATURES = [
   { name: 'fuel_type', label: 'Тип/Марка', type: 'TEXT' },
   {
@@ -1023,6 +1048,69 @@ const OTHER_DEFAULT_FEATURES = [
   // везде остальные (см. OTHER_GOODS_FEATURES).
   { name: 'manufacturer', label: 'Производитель/Бренд', type: 'TEXT' }
 ] satisfies CategoryFeatureSeed[]
+
+// Значения — из enum Prisma PriceUnit ('ITEM' | 'TON' | 'KG' | 'LITER' |
+// 'M3' | 'BAG' | 'HEAD' | 'DOSE' | 'RUNNING_METER' | 'HA' | 'HOUR'),
+// см. server/prisma/schema.prisma. Ключи — ссылки на сами наборы фич
+// (не строки), поэтому карта должна идти ПОСЛЕ объявления всех наборов
+// фич выше и ДО того, как materializeCategories() реально выполнится
+// (то есть до вызова CATEGORIES_DATA = materializeCategories(...) внизу
+// файла) — сама функция materializeCategories объявлена раньше, но
+// вызывается только в самом конце файла, так что порядок ок.
+//
+// Порядок значений в каждом списке — это и порядок вариантов в выпадающем
+// списке при создании объявления, первое значение подставляется по
+// умолчанию. Список ориентировочный — по каждой категории его можно
+// переопределить вручную полем priceUnits прямо в CATEGORY_TREE.
+const DEFAULT_PRICE_UNITS_BY_FEATURES = new Map<CategoryFeatureSeed[], string[]>([
+  [AGRO_CHEM_STANDARD, ['KG', 'LITER', 'ITEM']],
+  [AGRO_SOIL_FEATURES, ['KG', 'M3', 'ITEM']],
+  [AGRO_CLEAN_FEATURES, ['LITER', 'KG', 'ITEM']],
+  [FEED_HIGH_PROTEIN, ['KG', 'TON', 'BAG']],
+  [FEED_BULK_FEATURES, ['TON', 'KG', 'BAG']],
+  [FEED_ADDITIVES, ['KG', 'ITEM']],
+  [ENSILAGE_FEATURES, ['LITER', 'KG', 'ITEM']],
+  [ANIMAL_FEED_EXTENDED, ['ITEM', 'KG']],
+  [FEED_LIQUID_FEATURES, ['LITER', 'TON']],
+  [EQUIP_BASE, ['ITEM']],
+  [EQUIP_PARTS, ['ITEM']],
+  [FOOD_GROCERY, ['KG', 'TON', 'BAG', 'ITEM']],
+  [FOOD_DAIRY, ['LITER', 'KG', 'ITEM']],
+  [FOOD_BASE, ['KG', 'TON', 'ITEM']],
+  [FOOD_MEAT, ['KG', 'TON']],
+  [FOOD_FISH, ['KG', 'TON']],
+  [FOOD_CANNED, ['ITEM']],
+  [FOOD_READY, ['ITEM', 'KG']],
+  [AGRO_RAW_FEATURES, ['TON', 'KG', 'BAG']],
+  [AGRO_FRESH_FEATURES, ['KG', 'TON', 'ITEM']],
+  [AGRO_HONEY_FEATURES, ['KG', 'ITEM']],
+  [BEE_PRODUCT_FEATURES, ['KG', 'ITEM']],
+  [BEE_WAX_FEATURES, ['KG']],
+  [AGRO_GREEN_FEATURES, ['KG', 'ITEM']],
+  [AGRO_MUSHROOM_FEATURES, ['KG', 'ITEM']],
+  [ANIMAL_FEATURES, ['HEAD', 'ITEM']],
+  [POULTRY_FEATURES, ['HEAD', 'ITEM']],
+  [BEES_FEATURES, ['ITEM']],
+  [FISH_FEATURES, ['ITEM', 'KG']],
+  [DEFAULT_FEATURES, ['ITEM']],
+  [TECH_ATTACHED, ['ITEM']],
+  [TECH_PARTS, ['ITEM']],
+  [PACKAGING_MATERIAL_FEATURES, ['ITEM']],
+  [OTHER_FUEL_FEATURES, ['TON', 'KG', 'M3', 'ITEM']],
+  [OTHER_GOODS_FEATURES, ['ITEM']],
+  [OTHER_WASTE_FEATURES, ['TON', 'KG', 'M3']],
+  [AGRO_TECHNICAL_FEATURES, ['TON', 'KG', 'BAG']],
+  [AGRO_INDUSTRIAL_RAW_FEATURES, ['KG', 'ITEM']],
+  [AGRO_SEED_FEATURES, ['KG', 'TON', 'DOSE', 'BAG']],
+  [OTHER_DEFAULT_FEATURES, ['ITEM']]
+])
+
+function inferPriceUnits(categoryFeatures?: CategoryFeatureSeed[]): string[] {
+  if (categoryFeatures && DEFAULT_PRICE_UNITS_BY_FEATURES.has(categoryFeatures)) {
+    return DEFAULT_PRICE_UNITS_BY_FEATURES.get(categoryFeatures)!
+  }
+  return ['ITEM']
+}
 
 const CATEGORY_TREE = [
   {
@@ -1884,7 +1972,12 @@ const CATEGORY_TREE = [
           { name: 'Спецодежда', children: [], categoryFeatures: OTHER_GOODS_FEATURES },
           { name: 'Средства защиты от насекомых и грызунов', children: [], categoryFeatures: OTHER_DEFAULT_FEATURES },
           { name: 'Укрывной материал, пленка, агроткань', children: [], categoryFeatures: OTHER_GOODS_FEATURES },
-          { name: 'Шпагат и сетка', children: [], categoryFeatures: OTHER_GOODS_FEATURES }
+          {
+            name: 'Шпагат и сетка',
+            children: [],
+            categoryFeatures: OTHER_GOODS_FEATURES,
+            priceUnits: ['RUNNING_METER', 'ITEM']
+          }
         ]
       },
       { name: 'С/х отходы и побочные продукты производства', children: [], categoryFeatures: OTHER_WASTE_FEATURES },
