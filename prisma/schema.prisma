@@ -212,6 +212,8 @@ model Ad {
   @@index([status, expiresAt])
   @@index([userId])
   @@index([categoryId])
+  // Под фильтр каталога: выбрана категория + сортировка/диапазон по цене.
+  @@index([categoryId, price])
   @@index([phone])
   @@map("ads")
 }

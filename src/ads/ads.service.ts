@@ -5,10 +5,10 @@ import { ConfigService } from '@nestjs/config'
 import 'multer'
 import { AD_LIMITS } from './constants/ads.constants'
 import { CreateAdDto } from './dto/create-ad.dto'
-import { AdStatus, PriceUnit, Prisma } from 'prisma/generated/client'
+import { AdStatus, FeatureType, PriceUnit, Prisma } from 'prisma/generated/client'
 import { UpdateAdDto } from './dto/update-ad.dto'
 import { AdStateMachineService } from './ad-state-machine.service'
-import { FindAdsQueryDto } from './dto/find-ads-query.dto'
+import { AdsSortBy, FindAdsQueryDto } from './dto/find-ads-query.dto'
 import { FindMyAdsQueryDto } from './dto/find-my-ads-query.dto'
 import { CategoriesService } from '@/categories/categories.service'
 import { randomBytes } from 'crypto'
@@ -111,39 +111,96 @@ export class AdsService {
     const limit = Math.min(query.limit ?? 20, 50)
     const skip = (page - 1) * limit
 
-    const now = new Date()
-
-    let categoryIds: string[] | undefined = undefined
-
-    if (query.categoryId) {
-      const result = await this.prisma.$queryRaw<{ id: string }[]>`
-      WITH RECURSIVE category_tree AS (
-        SELECT id FROM categories WHERE id = ${query.categoryId}
-        UNION ALL
-        SELECT c.id FROM categories c
-        INNER JOIN category_tree ct ON c.parent_id = ct.id
-      )
-      SELECT id FROM category_tree;
-    `
-
-      categoryIds = result.map(row => row.id)
+    // Цена "за кг" и "за тонну" — разные величины, поэтому диапазон
+    // minPrice/maxPrice всегда действует в рамках одной явно выбранной
+    // единицы (см. обсуждение с пользователем): без unit фильтр по цене
+    // запрещаем, а не пытаемся молча угадать/сконвертировать.
+    if ((query.minPrice !== undefined || query.maxPrice !== undefined) && !query.unit) {
+      throw new BadRequestException('Для фильтра по цене нужно указать единицу измерения')
     }
 
-    const ads = await this.prisma.ad.findMany({
-      where: {
-        status: AdStatus.PUBLISHED,
-        expiresAt: { gt: now },
-        ...(categoryIds ? { categoryId: { in: categoryIds } } : {}),
+    if (query.minPrice !== undefined && query.maxPrice !== undefined && query.minPrice > query.maxPrice) {
+      throw new BadRequestException('Минимальная цена не может быть больше максимальной')
+    }
 
-        ...(query.search
-          ? {
-              OR: [
-                { title: { contains: query.search, mode: 'insensitive' } },
-                { description: { contains: query.search, mode: 'insensitive' } }
-              ]
-            }
-          : {})
-      },
+    const featureConditions = query.features ? await this.resolveFeatureFilters(query.categoryId, query.features) : []
+
+    const conditions: Prisma.Sql[] = [
+      Prisma.sql`ads.status = ${AdStatus.PUBLISHED}::"AdStatus"`,
+      Prisma.sql`ads.expires_at > now()`
+    ]
+
+    if (query.categoryId) {
+      conditions.push(Prisma.sql`ads.category_id IN (SELECT id FROM category_tree)`)
+    }
+
+    if (query.search) {
+      const pattern = `%${query.search}%`
+      conditions.push(Prisma.sql`(ads.title ILIKE ${pattern} OR ads.description ILIKE ${pattern})`)
+    }
+
+    if (query.unit && (query.minPrice !== undefined || query.maxPrice !== undefined)) {
+      const priceBounds: Prisma.Sql[] = [Prisma.sql`ads.unit = ${query.unit}::"PriceUnit"`]
+
+      if (query.minPrice !== undefined) {
+        priceBounds.push(Prisma.sql`ads.price >= ${BigInt(Math.round(query.minPrice))}`)
+      }
+
+      if (query.maxPrice !== undefined) {
+        priceBounds.push(Prisma.sql`ads.price <= ${BigInt(Math.round(query.maxPrice))}`)
+      }
+
+      conditions.push(Prisma.join(priceBounds, ' AND '))
+    }
+
+    conditions.push(...featureConditions)
+
+    const sortMap: Record<AdsSortBy, Prisma.Sql> = {
+      [AdsSortBy.DATE_DESC]: Prisma.sql`ads.created_at DESC`,
+      [AdsSortBy.DATE_ASC]: Prisma.sql`ads.created_at ASC`,
+      [AdsSortBy.PRICE_ASC]: Prisma.sql`ads.price ASC NULLS LAST`,
+      [AdsSortBy.PRICE_DESC]: Prisma.sql`ads.price DESC NULLS LAST`
+    }
+    const orderBy = sortMap[query.sortBy ?? AdsSortBy.DATE_DESC]
+
+    // Рекурсивное CTE нужно только когда фильтруем по категории (вместе с
+    // её подкатегориями) — иначе просто опускаем его.
+    const categoryTreeCte = query.categoryId
+      ? Prisma.sql`WITH RECURSIVE category_tree AS (
+          SELECT id FROM categories WHERE id = ${query.categoryId}
+          UNION ALL
+          SELECT c.id FROM categories c INNER JOIN category_tree ct ON c.parent_id = ct.id
+        )`
+      : Prisma.sql``
+
+    const whereClause = Prisma.join(conditions, ' AND ')
+
+    // Считаем total отдельным запросом, а не через COUNT(*) OVER() в одном
+    // запросе с LIMIT/OFFSET: если запрошена страница за пределами
+    // доступных данных, оконная функция просто не вернёт ни одной строки,
+    // и total пришлось бы считать нулём даже когда объявления есть.
+    const countRows = await this.prisma.$queryRaw<{ count: bigint }[]>(Prisma.sql`
+      ${categoryTreeCte}
+      SELECT COUNT(*) AS count FROM ads WHERE ${whereClause}
+    `)
+
+    const total = Number(countRows[0]?.count ?? 0)
+
+    if (!total || skip >= total) {
+      return { items: [], total, page, limit }
+    }
+
+    const idRows = await this.prisma.$queryRaw<{ id: string }[]>(Prisma.sql`
+      ${categoryTreeCte}
+      SELECT ads.id FROM ads WHERE ${whereClause}
+      ORDER BY ${orderBy}
+      LIMIT ${limit} OFFSET ${skip}
+    `)
+
+    const ids = idRows.map(row => row.id)
+
+    const ads = await this.prisma.ad.findMany({
+      where: { id: { in: ids } },
       include: {
         user: {
           select: {
@@ -159,16 +216,133 @@ export class AdsService {
             }
           : false
       },
-      orderBy: { createdAt: 'desc' },
-      skip,
-      take: limit
+      orderBy: this.mapSortToPrismaOrderBy(query.sortBy)
     })
 
-    return ads.map(ad => ({
+    const items = ads.map(ad => ({
       ...ad,
       isFavorite: userId ? ad.favorites?.length > 0 : false,
       isExpired: false
     }))
+
+    return { items, total, page, limit }
+  }
+
+  private mapSortToPrismaOrderBy(sortBy?: AdsSortBy) {
+    switch (sortBy) {
+      case AdsSortBy.DATE_ASC:
+        return [{ createdAt: 'asc' as const }]
+      case AdsSortBy.PRICE_ASC:
+        return [{ price: { sort: 'asc' as const, nulls: 'last' as const } }]
+      case AdsSortBy.PRICE_DESC:
+        return [{ price: { sort: 'desc' as const, nulls: 'last' as const } }]
+      case AdsSortBy.DATE_DESC:
+      default:
+        return [{ createdAt: 'desc' as const }]
+    }
+  }
+
+  // Строит SQL-условия для фильтра по динамическим характеристикам
+  // категории (Ad.features, JSONB). Ключи в rawFeatures сверяются с
+  // реальными CategoryFeature этой категории — неизвестные, нефильтруемые
+  // или устаревшие (например, категория поменялась, а в адресной строке
+  // остался старый параметр) тихо игнорируются, а не роняют весь запрос.
+  private async resolveFeatureFilters(categoryId: string | undefined, rawFeatures: string): Promise<Prisma.Sql[]> {
+    if (!categoryId) {
+      throw new BadRequestException('Фильтрация по характеристикам доступна только внутри конкретной категории')
+    }
+
+    let parsed: unknown
+
+    try {
+      parsed = JSON.parse(rawFeatures)
+    } catch {
+      throw new BadRequestException('Некорректный формат параметра features')
+    }
+
+    if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
+      throw new BadRequestException('Некорректный формат параметра features')
+    }
+
+    const requested = parsed as Record<string, unknown>
+
+    const definitions = await this.prisma.categoryFeature.findMany({
+      where: { categoryId, filterable: true }
+    })
+
+    const byName = new Map(definitions.map(definition => [definition.name, definition]))
+
+    const conditions: Prisma.Sql[] = []
+
+    for (const [key, value] of Object.entries(requested)) {
+      const definition = byName.get(key)
+
+      if (!definition) continue
+
+      switch (definition.type) {
+        case FeatureType.NUMBER: {
+          if (typeof value !== 'object' || value === null || Array.isArray(value)) break
+
+          const { min, max } = value as { min?: unknown; max?: unknown }
+
+          // Значения хранятся как JSON-число, но ->>'ключ' достаёт их
+          // текстом — на случай "грязных" исторических данных сверяем
+          // регуляркой перед ::numeric, чтобы битое значение у одного
+          // объявления не роняло весь запрос ошибкой каста.
+          const numericGuard = Prisma.sql`ads.features->>${key} ~ '^-?[0-9]+(\\.[0-9]+)?$'`
+
+          if (typeof min === 'number' && Number.isFinite(min)) {
+            conditions.push(Prisma.sql`(${numericGuard} AND (ads.features->>${key})::numeric >= ${min})`)
+          }
+
+          if (typeof max === 'number' && Number.isFinite(max)) {
+            conditions.push(Prisma.sql`(${numericGuard} AND (ads.features->>${key})::numeric <= ${max})`)
+          }
+
+          break
+        }
+
+        case FeatureType.BOOLEAN: {
+          if (typeof value !== 'boolean') break
+          conditions.push(Prisma.sql`ads.features->>${key} = ${String(value)}`)
+          break
+        }
+
+        case FeatureType.SELECT: {
+          if (!Array.isArray(value) || !value.length) break
+
+          const allowedOptions = Array.isArray(definition.options) ? (definition.options as string[]) : []
+          const values = value.filter((v): v is string => typeof v === 'string' && allowedOptions.includes(v))
+
+          if (!values.length) break
+
+          conditions.push(Prisma.sql`ads.features->>${key} IN (${Prisma.join(values)})`)
+          break
+        }
+
+        case FeatureType.MULTI_SELECT: {
+          if (!Array.isArray(value) || !value.length) break
+
+          const allowedOptions = Array.isArray(definition.options) ? (definition.options as string[]) : []
+          const values = value.filter((v): v is string => typeof v === 'string' && allowedOptions.includes(v))
+
+          if (!values.length) break
+
+          conditions.push(Prisma.sql`ads.features->${key} ?| ARRAY[${Prisma.join(values)}]::text[]`)
+          break
+        }
+
+        case FeatureType.TEXT:
+        default:
+          // Свободный текст сознательно не фильтруем в v1 — после аудита
+          // categories.ts большинство текстовых полей уже filterable:
+          // false, а для оставшихся точное совпадение малополезно
+          // (нужен был бы полнотекстовый поиск, это отдельная задача).
+          break
+      }
+    }
+
+    return conditions
   }
 
   async findMyAds(userId: string, query: FindMyAdsQueryDto) {
