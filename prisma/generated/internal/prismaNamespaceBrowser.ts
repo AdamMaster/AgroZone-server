@@ -60,6 +60,7 @@ export const ModelName = {
   Ad: 'Ad',
   Favorite: 'Favorite',
   Conversation: 'Conversation',
+  BlockedUser: 'BlockedUser',
   Message: 'Message',
   RuCity: 'RuCity'
 } as const
@@ -233,11 +234,23 @@ export const ConversationScalarFieldEnum = {
   buyerLastReadAt: 'buyerLastReadAt',
   sellerLastReadAt: 'sellerLastReadAt',
   dealConfirmed: 'dealConfirmed',
+  hiddenByBuyer: 'hiddenByBuyer',
+  hiddenBySeller: 'hiddenBySeller',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type ConversationScalarFieldEnum = (typeof ConversationScalarFieldEnum)[keyof typeof ConversationScalarFieldEnum]
+
+
+export const BlockedUserScalarFieldEnum = {
+  id: 'id',
+  blockerId: 'blockerId',
+  blockedId: 'blockedId',
+  createdAt: 'createdAt'
+} as const
+
+export type BlockedUserScalarFieldEnum = (typeof BlockedUserScalarFieldEnum)[keyof typeof BlockedUserScalarFieldEnum]
 
 
 export const MessageScalarFieldEnum = {

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseUUIDPipe, Patch, Post, Query, UseGuards } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Patch, Post, Query, UseGuards } from '@nestjs/common'
 
 import { CurrentUser } from '@/auth/decorators/decorators/user.decorator'
 import { AuthGuard } from '@/auth/guards/auth.guard'
@@ -43,5 +43,12 @@ export class ConversationsController {
   @Patch(':id/read')
   markRead(@Param('id', ParseUUIDPipe) id: string, @CurrentUser('id') userId: string) {
     return this.conversationsService.markRead(id, userId)
+  }
+
+  // Скрывает диалог только у вызывающего — не физическое удаление (см.
+  // комментарий к ConversationsService.deleteConversation).
+  @Delete(':id')
+  delete(@Param('id', ParseUUIDPipe) id: string, @CurrentUser('id') userId: string) {
+    return this.conversationsService.deleteConversation(id, userId)
   }
 }

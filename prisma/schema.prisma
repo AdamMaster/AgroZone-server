@@ -41,6 +41,11 @@ model User {
   conversationsAsSeller Conversation[] @relation("ConversationsAsSeller")
   sentMessages          Message[]
 
+  // Кого этот юзер заблокировал / кто заблокировал этого юзера (см.
+  // BlockedUser) — раздельные связи по той же причине, что и с диалогами.
+  blockedUsers   BlockedUser[] @relation("BlockerOf")
+  blockedByUsers BlockedUser[] @relation("BlockedBy")
+
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
@@ -304,6 +309,17 @@ model Conversation {
 
   dealConfirmed Boolean @default(false) @map("deal_confirmed")
 
+  // "Удаление" диалога — per-user, не физическое: переписка принадлежит
+  // ОБОИМ участникам, и стереть её из базы по воле одного из них означало
+  // бы стереть историю и у второго. Поэтому "удалить" — это скрыть у себя;
+  // диалог продолжает существовать и просто пропадает из списка того, кто
+  // его скрыл (см. ConversationsService.deleteConversation). Если после
+  // этого приходит новое сообщение — оба флага сбрасываются обратно в
+  // false (см. createMessage): диалог не должен быть потерян навсегда для
+  // человека, которому продолжают писать.
+  hiddenByBuyer  Boolean @default(false) @map("hidden_by_buyer")
+  hiddenBySeller Boolean @default(false) @map("hidden_by_seller")
+
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
@@ -314,6 +330,31 @@ model Conversation {
   @@index([sellerId, lastMessageAt])
   @@index([adId])
   @@map("conversations")
+}
+
+// Блокировка одного юзера другим — глобальная, не привязанная к конкретному
+// диалогу или объявлению: если заблокировал, значит не хочет получать
+// сообщения от этого человека вообще, а не только в рамках одной переписки
+// (в отличие от "удаления" диалога, см. Conversation.hiddenByBuyer/hiddenBySeller,
+// которое скрывает только конкретную переписку и снимается новым сообщением).
+// Однонаправленная запись (blocker -> blocked), но проверка при отправке
+// сообщения смотрит блокировку в обе стороны — если хотя бы один из двух
+// заблокировал другого, переписка невозможна (см. BlockedUsersService.isBlocked).
+model BlockedUser {
+  id String @id @default(uuid())
+
+  blockerId String @map("blocker_id")
+  blocker   User   @relation("BlockerOf", fields: [blockerId], references: [id], onDelete: Cascade)
+
+  blockedId String @map("blocked_id")
+  blocked   User   @relation("BlockedBy", fields: [blockedId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@unique([blockerId, blockedId])
+  @@index([blockerId])
+  @@index([blockedId])
+  @@map("blocked_users")
 }
 
 model Message {

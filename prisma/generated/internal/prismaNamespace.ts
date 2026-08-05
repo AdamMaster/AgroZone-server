@@ -393,6 +393,7 @@ export const ModelName = {
   Ad: 'Ad',
   Favorite: 'Favorite',
   Conversation: 'Conversation',
+  BlockedUser: 'BlockedUser',
   Message: 'Message',
   RuCity: 'RuCity'
 } as const
@@ -410,7 +411,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "userPhone" | "account" | "token" | "category" | "categoryFeature" | "ad" | "favorite" | "conversation" | "message" | "ruCity"
+    modelProps: "user" | "userPhone" | "account" | "token" | "category" | "categoryFeature" | "ad" | "favorite" | "conversation" | "blockedUser" | "message" | "ruCity"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1080,6 +1081,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    BlockedUser: {
+      payload: Prisma.$BlockedUserPayload<ExtArgs>
+      fields: Prisma.BlockedUserFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BlockedUserFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlockedUserPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BlockedUserFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlockedUserPayload>
+        }
+        findFirst: {
+          args: Prisma.BlockedUserFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlockedUserPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BlockedUserFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlockedUserPayload>
+        }
+        findMany: {
+          args: Prisma.BlockedUserFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlockedUserPayload>[]
+        }
+        create: {
+          args: Prisma.BlockedUserCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlockedUserPayload>
+        }
+        createMany: {
+          args: Prisma.BlockedUserCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.BlockedUserCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlockedUserPayload>[]
+        }
+        delete: {
+          args: Prisma.BlockedUserDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlockedUserPayload>
+        }
+        update: {
+          args: Prisma.BlockedUserUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlockedUserPayload>
+        }
+        deleteMany: {
+          args: Prisma.BlockedUserDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BlockedUserUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.BlockedUserUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlockedUserPayload>[]
+        }
+        upsert: {
+          args: Prisma.BlockedUserUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlockedUserPayload>
+        }
+        aggregate: {
+          args: Prisma.BlockedUserAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBlockedUser>
+        }
+        groupBy: {
+          args: Prisma.BlockedUserGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BlockedUserGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BlockedUserCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BlockedUserCountAggregateOutputType> | number
+        }
+      }
+    }
     Message: {
       payload: Prisma.$MessagePayload<ExtArgs>
       fields: Prisma.MessageFieldRefs
@@ -1420,11 +1495,23 @@ export const ConversationScalarFieldEnum = {
   buyerLastReadAt: 'buyerLastReadAt',
   sellerLastReadAt: 'sellerLastReadAt',
   dealConfirmed: 'dealConfirmed',
+  hiddenByBuyer: 'hiddenByBuyer',
+  hiddenBySeller: 'hiddenBySeller',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type ConversationScalarFieldEnum = (typeof ConversationScalarFieldEnum)[keyof typeof ConversationScalarFieldEnum]
+
+
+export const BlockedUserScalarFieldEnum = {
+  id: 'id',
+  blockerId: 'blockerId',
+  blockedId: 'blockedId',
+  createdAt: 'createdAt'
+} as const
+
+export type BlockedUserScalarFieldEnum = (typeof BlockedUserScalarFieldEnum)[keyof typeof BlockedUserScalarFieldEnum]
 
 
 export const MessageScalarFieldEnum = {
@@ -1799,6 +1886,7 @@ export type GlobalOmitConfig = {
   ad?: Prisma.AdOmit
   favorite?: Prisma.FavoriteOmit
   conversation?: Prisma.ConversationOmit
+  blockedUser?: Prisma.BlockedUserOmit
   message?: Prisma.MessageOmit
   ruCity?: Prisma.RuCityOmit
 }

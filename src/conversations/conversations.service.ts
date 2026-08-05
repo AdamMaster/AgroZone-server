@@ -1,5 +1,6 @@
 import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common'
 
+import { BlockedUsersService } from '@/blocked-users/blocked-users.service'
 import { PrismaService } from '@/prisma/prisma.service'
 
 import { FindMessagesQueryDto } from './dto/find-messages-query.dto'
@@ -8,7 +9,10 @@ import { StartConversationDto } from './dto/start-conversation.dto'
 
 @Injectable()
 export class ConversationsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly blockedUsersService: BlockedUsersService
+  ) {}
 
   // Начать диалог с продавцом объявления. Всегда вызывается покупателем —
   // sellerId берём из самого объявления, а не из тела запроса, чтобы нельзя
@@ -29,6 +33,13 @@ export class ConversationsService {
       throw new BadRequestException('Нельзя написать самому себе')
     }
 
+    // Сообщение об ошибке намеренно нейтральное, без слова "заблокировал" —
+    // не сообщаем прямо, что именно произошла блокировка (см. обсуждение UX
+    // блокировки), чтобы не провоцировать конфликт в интерфейсе.
+    if (await this.blockedUsersService.isBlocked(userId, ad.userId)) {
+      throw new ForbiddenException('Не удалось отправить сообщение')
+    }
+
     const conversation = await this.prisma.conversation.upsert({
       where: { adId_buyerId: { adId: dto.adId, buyerId: userId } },
       update: {},
@@ -41,7 +52,12 @@ export class ConversationsService {
   }
 
   async sendMessage(conversationId: string, userId: string, dto: SendMessageDto) {
-    await this.getConversationForParticipant(conversationId, userId)
+    const conversation = await this.getConversationForParticipant(conversationId, userId)
+    const counterpartId = conversation.buyerId === userId ? conversation.sellerId : conversation.buyerId
+
+    if (await this.blockedUsersService.isBlocked(userId, counterpartId)) {
+      throw new ForbiddenException('Не удалось отправить сообщение')
+    }
 
     return this.createMessage(conversationId, userId, dto.text, dto.attachments)
   }
@@ -54,7 +70,16 @@ export class ConversationsService {
   // таблицы статусов (см. комментарий к модели Conversation в schema.prisma).
   async getConversations(userId: string) {
     const conversations = await this.prisma.conversation.findMany({
-      where: { OR: [{ buyerId: userId }, { sellerId: userId }] },
+      // hiddenBy* — диалог, который этот юзер у себя "удалил" (см. комментарий
+      // в schema.prisma), просто не попадает в список; для второго участника
+      // условие на его собственный флаг не срабатывает, и у него диалог
+      // остаётся видимым как ни в чём не бывало.
+      where: {
+        OR: [
+          { buyerId: userId, hiddenByBuyer: false },
+          { sellerId: userId, hiddenBySeller: false }
+        ]
+      },
       orderBy: [{ lastMessageAt: 'desc' }, { createdAt: 'desc' }],
       include: {
         ad: { select: { id: true, title: true, images: true, slug: true } },
@@ -112,10 +137,31 @@ export class ConversationsService {
     })
   }
 
+  // "Удаление" диалога из списка — скрывает его только у того, кто нажал
+  // удалить (см. комментарий к hiddenByBuyer/hiddenBySeller в schema.prisma).
+  // У второго участника переписка остаётся как есть.
+  async deleteConversation(conversationId: string, userId: string) {
+    const conversation = await this.getConversationForParticipant(conversationId, userId)
+    const isBuyer = conversation.buyerId === userId
+
+    await this.prisma.conversation.update({
+      where: { id: conversationId },
+      data: isBuyer ? { hiddenByBuyer: true } : { hiddenBySeller: true }
+    })
+  }
+
   private async createMessage(conversationId: string, senderId: string, text: string, attachments: string[] = []) {
     const [message] = await this.prisma.$transaction([
       this.prisma.message.create({ data: { conversationId, senderId, text, attachments } }),
-      this.prisma.conversation.update({ where: { id: conversationId }, data: { lastMessageAt: new Date() } })
+      // Сбрасываем скрытие с обеих сторон при любом новом сообщении — не
+      // только у получателя (которому логично снова увидеть диалог, раз ему
+      // пишут), но и у самого отправителя: если он писал через "Написать" на
+      // странице объявления в диалог, который сам же раньше скрыл, он должен
+      // увидеть в списке своё же новое сообщение, а не потерять его.
+      this.prisma.conversation.update({
+        where: { id: conversationId },
+        data: { lastMessageAt: new Date(), hiddenByBuyer: false, hiddenBySeller: false }
+      })
     ])
 
     return message

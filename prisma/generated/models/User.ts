@@ -262,6 +262,8 @@ export type UserWhereInput = {
   conversationsAsBuyer?: Prisma.ConversationListRelationFilter
   conversationsAsSeller?: Prisma.ConversationListRelationFilter
   sentMessages?: Prisma.MessageListRelationFilter
+  blockedUsers?: Prisma.BlockedUserListRelationFilter
+  blockedByUsers?: Prisma.BlockedUserListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -287,6 +289,8 @@ export type UserOrderByWithRelationInput = {
   conversationsAsBuyer?: Prisma.ConversationOrderByRelationAggregateInput
   conversationsAsSeller?: Prisma.ConversationOrderByRelationAggregateInput
   sentMessages?: Prisma.MessageOrderByRelationAggregateInput
+  blockedUsers?: Prisma.BlockedUserOrderByRelationAggregateInput
+  blockedByUsers?: Prisma.BlockedUserOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -315,6 +319,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   conversationsAsBuyer?: Prisma.ConversationListRelationFilter
   conversationsAsSeller?: Prisma.ConversationListRelationFilter
   sentMessages?: Prisma.MessageListRelationFilter
+  blockedUsers?: Prisma.BlockedUserListRelationFilter
+  blockedByUsers?: Prisma.BlockedUserListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -380,6 +386,8 @@ export type UserCreateInput = {
   conversationsAsBuyer?: Prisma.ConversationCreateNestedManyWithoutBuyerInput
   conversationsAsSeller?: Prisma.ConversationCreateNestedManyWithoutSellerInput
   sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
+  blockedUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -405,6 +413,8 @@ export type UserUncheckedCreateInput = {
   conversationsAsBuyer?: Prisma.ConversationUncheckedCreateNestedManyWithoutBuyerInput
   conversationsAsSeller?: Prisma.ConversationUncheckedCreateNestedManyWithoutSellerInput
   sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
+  blockedUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
 }
 
 export type UserUpdateInput = {
@@ -430,6 +440,8 @@ export type UserUpdateInput = {
   conversationsAsBuyer?: Prisma.ConversationUpdateManyWithoutBuyerNestedInput
   conversationsAsSeller?: Prisma.ConversationUpdateManyWithoutSellerNestedInput
   sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
+  blockedUsers?: Prisma.BlockedUserUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -455,6 +467,8 @@ export type UserUncheckedUpdateInput = {
   conversationsAsBuyer?: Prisma.ConversationUncheckedUpdateManyWithoutBuyerNestedInput
   conversationsAsSeller?: Prisma.ConversationUncheckedUpdateManyWithoutSellerNestedInput
   sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
+  blockedUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -701,6 +715,34 @@ export type UserUpdateOneRequiredWithoutConversationsAsSellerNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutConversationsAsSellerInput, Prisma.UserUpdateWithoutConversationsAsSellerInput>, Prisma.UserUncheckedUpdateWithoutConversationsAsSellerInput>
 }
 
+export type UserCreateNestedOneWithoutBlockedUsersInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBlockedUsersInput, Prisma.UserUncheckedCreateWithoutBlockedUsersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBlockedUsersInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutBlockedByUsersInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBlockedByUsersInput, Prisma.UserUncheckedCreateWithoutBlockedByUsersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBlockedByUsersInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutBlockedUsersNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBlockedUsersInput, Prisma.UserUncheckedCreateWithoutBlockedUsersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBlockedUsersInput
+  upsert?: Prisma.UserUpsertWithoutBlockedUsersInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutBlockedUsersInput, Prisma.UserUpdateWithoutBlockedUsersInput>, Prisma.UserUncheckedUpdateWithoutBlockedUsersInput>
+}
+
+export type UserUpdateOneRequiredWithoutBlockedByUsersNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBlockedByUsersInput, Prisma.UserUncheckedCreateWithoutBlockedByUsersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBlockedByUsersInput
+  upsert?: Prisma.UserUpsertWithoutBlockedByUsersInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutBlockedByUsersInput, Prisma.UserUpdateWithoutBlockedByUsersInput>, Prisma.UserUncheckedUpdateWithoutBlockedByUsersInput>
+}
+
 export type UserCreateNestedOneWithoutSentMessagesInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutSentMessagesInput, Prisma.UserUncheckedCreateWithoutSentMessagesInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutSentMessagesInput
@@ -737,6 +779,8 @@ export type UserCreateWithoutPhonesInput = {
   conversationsAsBuyer?: Prisma.ConversationCreateNestedManyWithoutBuyerInput
   conversationsAsSeller?: Prisma.ConversationCreateNestedManyWithoutSellerInput
   sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
+  blockedUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
 }
 
 export type UserUncheckedCreateWithoutPhonesInput = {
@@ -761,6 +805,8 @@ export type UserUncheckedCreateWithoutPhonesInput = {
   conversationsAsBuyer?: Prisma.ConversationUncheckedCreateNestedManyWithoutBuyerInput
   conversationsAsSeller?: Prisma.ConversationUncheckedCreateNestedManyWithoutSellerInput
   sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
+  blockedUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
 }
 
 export type UserCreateOrConnectWithoutPhonesInput = {
@@ -801,6 +847,8 @@ export type UserUpdateWithoutPhonesInput = {
   conversationsAsBuyer?: Prisma.ConversationUpdateManyWithoutBuyerNestedInput
   conversationsAsSeller?: Prisma.ConversationUpdateManyWithoutSellerNestedInput
   sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
+  blockedUsers?: Prisma.BlockedUserUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPhonesInput = {
@@ -825,6 +873,8 @@ export type UserUncheckedUpdateWithoutPhonesInput = {
   conversationsAsBuyer?: Prisma.ConversationUncheckedUpdateManyWithoutBuyerNestedInput
   conversationsAsSeller?: Prisma.ConversationUncheckedUpdateManyWithoutSellerNestedInput
   sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
+  blockedUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
 }
 
 export type UserCreateWithoutAccountsInput = {
@@ -849,6 +899,8 @@ export type UserCreateWithoutAccountsInput = {
   conversationsAsBuyer?: Prisma.ConversationCreateNestedManyWithoutBuyerInput
   conversationsAsSeller?: Prisma.ConversationCreateNestedManyWithoutSellerInput
   sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
+  blockedUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -873,6 +925,8 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   conversationsAsBuyer?: Prisma.ConversationUncheckedCreateNestedManyWithoutBuyerInput
   conversationsAsSeller?: Prisma.ConversationUncheckedCreateNestedManyWithoutSellerInput
   sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
+  blockedUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -913,6 +967,8 @@ export type UserUpdateWithoutAccountsInput = {
   conversationsAsBuyer?: Prisma.ConversationUpdateManyWithoutBuyerNestedInput
   conversationsAsSeller?: Prisma.ConversationUpdateManyWithoutSellerNestedInput
   sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
+  blockedUsers?: Prisma.BlockedUserUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -937,6 +993,8 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   conversationsAsBuyer?: Prisma.ConversationUncheckedUpdateManyWithoutBuyerNestedInput
   conversationsAsSeller?: Prisma.ConversationUncheckedUpdateManyWithoutSellerNestedInput
   sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
+  blockedUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
 }
 
 export type UserCreateWithoutTokensInput = {
@@ -961,6 +1019,8 @@ export type UserCreateWithoutTokensInput = {
   conversationsAsBuyer?: Prisma.ConversationCreateNestedManyWithoutBuyerInput
   conversationsAsSeller?: Prisma.ConversationCreateNestedManyWithoutSellerInput
   sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
+  blockedUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
 }
 
 export type UserUncheckedCreateWithoutTokensInput = {
@@ -985,6 +1045,8 @@ export type UserUncheckedCreateWithoutTokensInput = {
   conversationsAsBuyer?: Prisma.ConversationUncheckedCreateNestedManyWithoutBuyerInput
   conversationsAsSeller?: Prisma.ConversationUncheckedCreateNestedManyWithoutSellerInput
   sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
+  blockedUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
 }
 
 export type UserCreateOrConnectWithoutTokensInput = {
@@ -1025,6 +1087,8 @@ export type UserUpdateWithoutTokensInput = {
   conversationsAsBuyer?: Prisma.ConversationUpdateManyWithoutBuyerNestedInput
   conversationsAsSeller?: Prisma.ConversationUpdateManyWithoutSellerNestedInput
   sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
+  blockedUsers?: Prisma.BlockedUserUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTokensInput = {
@@ -1049,6 +1113,8 @@ export type UserUncheckedUpdateWithoutTokensInput = {
   conversationsAsBuyer?: Prisma.ConversationUncheckedUpdateManyWithoutBuyerNestedInput
   conversationsAsSeller?: Prisma.ConversationUncheckedUpdateManyWithoutSellerNestedInput
   sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
+  blockedUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
 }
 
 export type UserCreateWithoutAdsInput = {
@@ -1073,6 +1139,8 @@ export type UserCreateWithoutAdsInput = {
   conversationsAsBuyer?: Prisma.ConversationCreateNestedManyWithoutBuyerInput
   conversationsAsSeller?: Prisma.ConversationCreateNestedManyWithoutSellerInput
   sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
+  blockedUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
 }
 
 export type UserUncheckedCreateWithoutAdsInput = {
@@ -1097,6 +1165,8 @@ export type UserUncheckedCreateWithoutAdsInput = {
   conversationsAsBuyer?: Prisma.ConversationUncheckedCreateNestedManyWithoutBuyerInput
   conversationsAsSeller?: Prisma.ConversationUncheckedCreateNestedManyWithoutSellerInput
   sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
+  blockedUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
 }
 
 export type UserCreateOrConnectWithoutAdsInput = {
@@ -1137,6 +1207,8 @@ export type UserUpdateWithoutAdsInput = {
   conversationsAsBuyer?: Prisma.ConversationUpdateManyWithoutBuyerNestedInput
   conversationsAsSeller?: Prisma.ConversationUpdateManyWithoutSellerNestedInput
   sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
+  blockedUsers?: Prisma.BlockedUserUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAdsInput = {
@@ -1161,6 +1233,8 @@ export type UserUncheckedUpdateWithoutAdsInput = {
   conversationsAsBuyer?: Prisma.ConversationUncheckedUpdateManyWithoutBuyerNestedInput
   conversationsAsSeller?: Prisma.ConversationUncheckedUpdateManyWithoutSellerNestedInput
   sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
+  blockedUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
 }
 
 export type UserCreateWithoutFavoritesInput = {
@@ -1185,6 +1259,8 @@ export type UserCreateWithoutFavoritesInput = {
   conversationsAsBuyer?: Prisma.ConversationCreateNestedManyWithoutBuyerInput
   conversationsAsSeller?: Prisma.ConversationCreateNestedManyWithoutSellerInput
   sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
+  blockedUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
 }
 
 export type UserUncheckedCreateWithoutFavoritesInput = {
@@ -1209,6 +1285,8 @@ export type UserUncheckedCreateWithoutFavoritesInput = {
   conversationsAsBuyer?: Prisma.ConversationUncheckedCreateNestedManyWithoutBuyerInput
   conversationsAsSeller?: Prisma.ConversationUncheckedCreateNestedManyWithoutSellerInput
   sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
+  blockedUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
 }
 
 export type UserCreateOrConnectWithoutFavoritesInput = {
@@ -1249,6 +1327,8 @@ export type UserUpdateWithoutFavoritesInput = {
   conversationsAsBuyer?: Prisma.ConversationUpdateManyWithoutBuyerNestedInput
   conversationsAsSeller?: Prisma.ConversationUpdateManyWithoutSellerNestedInput
   sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
+  blockedUsers?: Prisma.BlockedUserUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
 }
 
 export type UserUncheckedUpdateWithoutFavoritesInput = {
@@ -1273,6 +1353,8 @@ export type UserUncheckedUpdateWithoutFavoritesInput = {
   conversationsAsBuyer?: Prisma.ConversationUncheckedUpdateManyWithoutBuyerNestedInput
   conversationsAsSeller?: Prisma.ConversationUncheckedUpdateManyWithoutSellerNestedInput
   sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
+  blockedUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
 }
 
 export type UserCreateWithoutConversationsAsBuyerInput = {
@@ -1297,6 +1379,8 @@ export type UserCreateWithoutConversationsAsBuyerInput = {
   favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput
   conversationsAsSeller?: Prisma.ConversationCreateNestedManyWithoutSellerInput
   sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
+  blockedUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
 }
 
 export type UserUncheckedCreateWithoutConversationsAsBuyerInput = {
@@ -1321,6 +1405,8 @@ export type UserUncheckedCreateWithoutConversationsAsBuyerInput = {
   favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput
   conversationsAsSeller?: Prisma.ConversationUncheckedCreateNestedManyWithoutSellerInput
   sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
+  blockedUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
 }
 
 export type UserCreateOrConnectWithoutConversationsAsBuyerInput = {
@@ -1350,6 +1436,8 @@ export type UserCreateWithoutConversationsAsSellerInput = {
   favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput
   conversationsAsBuyer?: Prisma.ConversationCreateNestedManyWithoutBuyerInput
   sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
+  blockedUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
 }
 
 export type UserUncheckedCreateWithoutConversationsAsSellerInput = {
@@ -1374,6 +1462,8 @@ export type UserUncheckedCreateWithoutConversationsAsSellerInput = {
   favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput
   conversationsAsBuyer?: Prisma.ConversationUncheckedCreateNestedManyWithoutBuyerInput
   sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
+  blockedUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
 }
 
 export type UserCreateOrConnectWithoutConversationsAsSellerInput = {
@@ -1414,6 +1504,8 @@ export type UserUpdateWithoutConversationsAsBuyerInput = {
   favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput
   conversationsAsSeller?: Prisma.ConversationUpdateManyWithoutSellerNestedInput
   sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
+  blockedUsers?: Prisma.BlockedUserUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
 }
 
 export type UserUncheckedUpdateWithoutConversationsAsBuyerInput = {
@@ -1438,6 +1530,8 @@ export type UserUncheckedUpdateWithoutConversationsAsBuyerInput = {
   favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput
   conversationsAsSeller?: Prisma.ConversationUncheckedUpdateManyWithoutSellerNestedInput
   sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
+  blockedUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
 }
 
 export type UserUpsertWithoutConversationsAsSellerInput = {
@@ -1473,6 +1567,8 @@ export type UserUpdateWithoutConversationsAsSellerInput = {
   favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput
   conversationsAsBuyer?: Prisma.ConversationUpdateManyWithoutBuyerNestedInput
   sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
+  blockedUsers?: Prisma.BlockedUserUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
 }
 
 export type UserUncheckedUpdateWithoutConversationsAsSellerInput = {
@@ -1497,6 +1593,248 @@ export type UserUncheckedUpdateWithoutConversationsAsSellerInput = {
   favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput
   conversationsAsBuyer?: Prisma.ConversationUncheckedUpdateManyWithoutBuyerNestedInput
   sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
+  blockedUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
+}
+
+export type UserCreateWithoutBlockedUsersInput = {
+  id?: string
+  password?: string | null
+  email?: string | null
+  displayName?: string | null
+  picture?: string | null
+  type?: $Enums.UserType
+  bio?: string | null
+  location?: string | null
+  role?: $Enums.UserRole
+  isVerified?: boolean
+  isTwoFactorEnabled?: boolean
+  method: $Enums.AuthMethod
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  phones?: Prisma.UserPhoneCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  tokens?: Prisma.TokenCreateNestedManyWithoutUserInput
+  ads?: Prisma.AdCreateNestedManyWithoutUserInput
+  favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput
+  conversationsAsBuyer?: Prisma.ConversationCreateNestedManyWithoutBuyerInput
+  conversationsAsSeller?: Prisma.ConversationCreateNestedManyWithoutSellerInput
+  sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
+  blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
+}
+
+export type UserUncheckedCreateWithoutBlockedUsersInput = {
+  id?: string
+  password?: string | null
+  email?: string | null
+  displayName?: string | null
+  picture?: string | null
+  type?: $Enums.UserType
+  bio?: string | null
+  location?: string | null
+  role?: $Enums.UserRole
+  isVerified?: boolean
+  isTwoFactorEnabled?: boolean
+  method: $Enums.AuthMethod
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  phones?: Prisma.UserPhoneUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  tokens?: Prisma.TokenUncheckedCreateNestedManyWithoutUserInput
+  ads?: Prisma.AdUncheckedCreateNestedManyWithoutUserInput
+  favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput
+  conversationsAsBuyer?: Prisma.ConversationUncheckedCreateNestedManyWithoutBuyerInput
+  conversationsAsSeller?: Prisma.ConversationUncheckedCreateNestedManyWithoutSellerInput
+  sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
+}
+
+export type UserCreateOrConnectWithoutBlockedUsersInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutBlockedUsersInput, Prisma.UserUncheckedCreateWithoutBlockedUsersInput>
+}
+
+export type UserCreateWithoutBlockedByUsersInput = {
+  id?: string
+  password?: string | null
+  email?: string | null
+  displayName?: string | null
+  picture?: string | null
+  type?: $Enums.UserType
+  bio?: string | null
+  location?: string | null
+  role?: $Enums.UserRole
+  isVerified?: boolean
+  isTwoFactorEnabled?: boolean
+  method: $Enums.AuthMethod
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  phones?: Prisma.UserPhoneCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  tokens?: Prisma.TokenCreateNestedManyWithoutUserInput
+  ads?: Prisma.AdCreateNestedManyWithoutUserInput
+  favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput
+  conversationsAsBuyer?: Prisma.ConversationCreateNestedManyWithoutBuyerInput
+  conversationsAsSeller?: Prisma.ConversationCreateNestedManyWithoutSellerInput
+  sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
+  blockedUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockerInput
+}
+
+export type UserUncheckedCreateWithoutBlockedByUsersInput = {
+  id?: string
+  password?: string | null
+  email?: string | null
+  displayName?: string | null
+  picture?: string | null
+  type?: $Enums.UserType
+  bio?: string | null
+  location?: string | null
+  role?: $Enums.UserRole
+  isVerified?: boolean
+  isTwoFactorEnabled?: boolean
+  method: $Enums.AuthMethod
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  phones?: Prisma.UserPhoneUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  tokens?: Prisma.TokenUncheckedCreateNestedManyWithoutUserInput
+  ads?: Prisma.AdUncheckedCreateNestedManyWithoutUserInput
+  favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput
+  conversationsAsBuyer?: Prisma.ConversationUncheckedCreateNestedManyWithoutBuyerInput
+  conversationsAsSeller?: Prisma.ConversationUncheckedCreateNestedManyWithoutSellerInput
+  sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
+  blockedUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockerInput
+}
+
+export type UserCreateOrConnectWithoutBlockedByUsersInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutBlockedByUsersInput, Prisma.UserUncheckedCreateWithoutBlockedByUsersInput>
+}
+
+export type UserUpsertWithoutBlockedUsersInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutBlockedUsersInput, Prisma.UserUncheckedUpdateWithoutBlockedUsersInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutBlockedUsersInput, Prisma.UserUncheckedCreateWithoutBlockedUsersInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutBlockedUsersInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutBlockedUsersInput, Prisma.UserUncheckedUpdateWithoutBlockedUsersInput>
+}
+
+export type UserUpdateWithoutBlockedUsersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  picture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  phones?: Prisma.UserPhoneUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  tokens?: Prisma.TokenUpdateManyWithoutUserNestedInput
+  ads?: Prisma.AdUpdateManyWithoutUserNestedInput
+  favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput
+  conversationsAsBuyer?: Prisma.ConversationUpdateManyWithoutBuyerNestedInput
+  conversationsAsSeller?: Prisma.ConversationUpdateManyWithoutSellerNestedInput
+  sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
+  blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
+}
+
+export type UserUncheckedUpdateWithoutBlockedUsersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  picture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  phones?: Prisma.UserPhoneUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  tokens?: Prisma.TokenUncheckedUpdateManyWithoutUserNestedInput
+  ads?: Prisma.AdUncheckedUpdateManyWithoutUserNestedInput
+  favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput
+  conversationsAsBuyer?: Prisma.ConversationUncheckedUpdateManyWithoutBuyerNestedInput
+  conversationsAsSeller?: Prisma.ConversationUncheckedUpdateManyWithoutSellerNestedInput
+  sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
+}
+
+export type UserUpsertWithoutBlockedByUsersInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutBlockedByUsersInput, Prisma.UserUncheckedUpdateWithoutBlockedByUsersInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutBlockedByUsersInput, Prisma.UserUncheckedCreateWithoutBlockedByUsersInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutBlockedByUsersInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutBlockedByUsersInput, Prisma.UserUncheckedUpdateWithoutBlockedByUsersInput>
+}
+
+export type UserUpdateWithoutBlockedByUsersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  picture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  phones?: Prisma.UserPhoneUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  tokens?: Prisma.TokenUpdateManyWithoutUserNestedInput
+  ads?: Prisma.AdUpdateManyWithoutUserNestedInput
+  favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput
+  conversationsAsBuyer?: Prisma.ConversationUpdateManyWithoutBuyerNestedInput
+  conversationsAsSeller?: Prisma.ConversationUpdateManyWithoutSellerNestedInput
+  sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
+  blockedUsers?: Prisma.BlockedUserUpdateManyWithoutBlockerNestedInput
+}
+
+export type UserUncheckedUpdateWithoutBlockedByUsersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  picture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  phones?: Prisma.UserPhoneUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  tokens?: Prisma.TokenUncheckedUpdateManyWithoutUserNestedInput
+  ads?: Prisma.AdUncheckedUpdateManyWithoutUserNestedInput
+  favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput
+  conversationsAsBuyer?: Prisma.ConversationUncheckedUpdateManyWithoutBuyerNestedInput
+  conversationsAsSeller?: Prisma.ConversationUncheckedUpdateManyWithoutSellerNestedInput
+  sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
+  blockedUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockerNestedInput
 }
 
 export type UserCreateWithoutSentMessagesInput = {
@@ -1521,6 +1859,8 @@ export type UserCreateWithoutSentMessagesInput = {
   favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput
   conversationsAsBuyer?: Prisma.ConversationCreateNestedManyWithoutBuyerInput
   conversationsAsSeller?: Prisma.ConversationCreateNestedManyWithoutSellerInput
+  blockedUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
 }
 
 export type UserUncheckedCreateWithoutSentMessagesInput = {
@@ -1545,6 +1885,8 @@ export type UserUncheckedCreateWithoutSentMessagesInput = {
   favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput
   conversationsAsBuyer?: Prisma.ConversationUncheckedCreateNestedManyWithoutBuyerInput
   conversationsAsSeller?: Prisma.ConversationUncheckedCreateNestedManyWithoutSellerInput
+  blockedUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
 }
 
 export type UserCreateOrConnectWithoutSentMessagesInput = {
@@ -1585,6 +1927,8 @@ export type UserUpdateWithoutSentMessagesInput = {
   favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput
   conversationsAsBuyer?: Prisma.ConversationUpdateManyWithoutBuyerNestedInput
   conversationsAsSeller?: Prisma.ConversationUpdateManyWithoutSellerNestedInput
+  blockedUsers?: Prisma.BlockedUserUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSentMessagesInput = {
@@ -1609,6 +1953,8 @@ export type UserUncheckedUpdateWithoutSentMessagesInput = {
   favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput
   conversationsAsBuyer?: Prisma.ConversationUncheckedUpdateManyWithoutBuyerNestedInput
   conversationsAsSeller?: Prisma.ConversationUncheckedUpdateManyWithoutSellerNestedInput
+  blockedUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
 }
 
 
@@ -1625,6 +1971,8 @@ export type UserCountOutputType = {
   conversationsAsBuyer: number
   conversationsAsSeller: number
   sentMessages: number
+  blockedUsers: number
+  blockedByUsers: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1636,6 +1984,8 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   conversationsAsBuyer?: boolean | UserCountOutputTypeCountConversationsAsBuyerArgs
   conversationsAsSeller?: boolean | UserCountOutputTypeCountConversationsAsSellerArgs
   sentMessages?: boolean | UserCountOutputTypeCountSentMessagesArgs
+  blockedUsers?: boolean | UserCountOutputTypeCountBlockedUsersArgs
+  blockedByUsers?: boolean | UserCountOutputTypeCountBlockedByUsersArgs
 }
 
 /**
@@ -1704,6 +2054,20 @@ export type UserCountOutputTypeCountSentMessagesArgs<ExtArgs extends runtime.Typ
   where?: Prisma.MessageWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountBlockedUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BlockedUserWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountBlockedByUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BlockedUserWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1728,6 +2092,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   conversationsAsBuyer?: boolean | Prisma.User$conversationsAsBuyerArgs<ExtArgs>
   conversationsAsSeller?: boolean | Prisma.User$conversationsAsSellerArgs<ExtArgs>
   sentMessages?: boolean | Prisma.User$sentMessagesArgs<ExtArgs>
+  blockedUsers?: boolean | Prisma.User$blockedUsersArgs<ExtArgs>
+  blockedByUsers?: boolean | Prisma.User$blockedByUsersArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1792,6 +2158,8 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   conversationsAsBuyer?: boolean | Prisma.User$conversationsAsBuyerArgs<ExtArgs>
   conversationsAsSeller?: boolean | Prisma.User$conversationsAsSellerArgs<ExtArgs>
   sentMessages?: boolean | Prisma.User$sentMessagesArgs<ExtArgs>
+  blockedUsers?: boolean | Prisma.User$blockedUsersArgs<ExtArgs>
+  blockedByUsers?: boolean | Prisma.User$blockedByUsersArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1808,6 +2176,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     conversationsAsBuyer: Prisma.$ConversationPayload<ExtArgs>[]
     conversationsAsSeller: Prisma.$ConversationPayload<ExtArgs>[]
     sentMessages: Prisma.$MessagePayload<ExtArgs>[]
+    blockedUsers: Prisma.$BlockedUserPayload<ExtArgs>[]
+    blockedByUsers: Prisma.$BlockedUserPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2226,6 +2596,8 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   conversationsAsBuyer<T extends Prisma.User$conversationsAsBuyerArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$conversationsAsBuyerArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConversationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   conversationsAsSeller<T extends Prisma.User$conversationsAsSellerArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$conversationsAsSellerArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConversationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sentMessages<T extends Prisma.User$sentMessagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sentMessagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  blockedUsers<T extends Prisma.User$blockedUsersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$blockedUsersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BlockedUserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  blockedByUsers<T extends Prisma.User$blockedByUsersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$blockedByUsersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BlockedUserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2846,6 +3218,54 @@ export type User$sentMessagesArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   distinct?: Prisma.MessageScalarFieldEnum | Prisma.MessageScalarFieldEnum[]
+}
+
+/**
+ * User.blockedUsers
+ */
+export type User$blockedUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BlockedUser
+   */
+  select?: Prisma.BlockedUserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BlockedUser
+   */
+  omit?: Prisma.BlockedUserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BlockedUserInclude<ExtArgs> | null
+  where?: Prisma.BlockedUserWhereInput
+  orderBy?: Prisma.BlockedUserOrderByWithRelationInput | Prisma.BlockedUserOrderByWithRelationInput[]
+  cursor?: Prisma.BlockedUserWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BlockedUserScalarFieldEnum | Prisma.BlockedUserScalarFieldEnum[]
+}
+
+/**
+ * User.blockedByUsers
+ */
+export type User$blockedByUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BlockedUser
+   */
+  select?: Prisma.BlockedUserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BlockedUser
+   */
+  omit?: Prisma.BlockedUserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BlockedUserInclude<ExtArgs> | null
+  where?: Prisma.BlockedUserWhereInput
+  orderBy?: Prisma.BlockedUserOrderByWithRelationInput | Prisma.BlockedUserOrderByWithRelationInput[]
+  cursor?: Prisma.BlockedUserWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BlockedUserScalarFieldEnum | Prisma.BlockedUserScalarFieldEnum[]
 }
 
 /**

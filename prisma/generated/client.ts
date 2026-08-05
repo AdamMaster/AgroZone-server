@@ -83,6 +83,11 @@ export type Favorite = Prisma.FavoriteModel
  */
 export type Conversation = Prisma.ConversationModel
 /**
+ * Model BlockedUser
+ * 
+ */
+export type BlockedUser = Prisma.BlockedUserModel
+/**
  * Model Message
  * 
  */
