@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common'
 import { RegisterDto } from './dto/register.dto'
 import { UserService } from '@/user/user.service'
-import { AuthMethod, TokenType } from 'prisma/generated/enums'
+import { AuthMethod, TokenType, UserRole } from 'prisma/generated/enums'
 import { User } from 'prisma/generated/client'
 import { Request, Response } from 'express'
 import { LoginDto } from './dto/login.dto'
@@ -417,10 +417,18 @@ export class AuthService {
     })
   }
 
+  // saveSession — единственная точка, через которую проходит вход/регистрация
+  // независимо от способа (пароль, SMS, Google, Yandex — см. все вызовы
+  // this.saveSession выше), поэтому это самое надёжное место для
+  // автоповышения роли: сработает при любом способе входа, без дублирования
+  // проверки в каждом методе отдельно.
   async saveSession(req: Request, user: User) {
+    const role = await this.ensureAdminRole(user)
+    const sessionUser = role === user.role ? user : { ...user, role }
+
     return new Promise((resolve, reject) => {
       req.session.userId = user.id
-      req.session.userRole = user.role
+      req.session.userRole = role
 
       req.session.save(err => {
         if (err) {
@@ -432,8 +440,38 @@ export class AuthService {
           )
         }
 
-        resolve({ user })
+        resolve({ user: sessionUser })
       })
     })
+  }
+
+  // Автоповышение до ADMIN по списку почт из переменной окружения
+  // ADMIN_EMAILS (через запятую) — решает проблему курицы и яйца: самого
+  // первого админа неоткуда назначить через интерфейс, потому что сам
+  // интерфейс администрирования будет защищён ролью ADMIN, которой ни у кого
+  // ещё нет. Достаточно один раз прописать свою почту в ADMIN_EMAILS на
+  // сервере — при следующем входе роль проставится сама, без ручных правок в
+  // БД. Дальше, когда в админке появится управление пользователями, НОВЫХ
+  // админов уже можно будет назначать через интерфейс, а не через .env.
+  private async ensureAdminRole(user: User): Promise<UserRole> {
+    if (user.role === UserRole.ADMIN || !user.email) {
+      return user.role
+    }
+
+    const adminEmails = (this.configService.get<string>('ADMIN_EMAILS') ?? '')
+      .split(',')
+      .map(email => email.trim().toLowerCase())
+      .filter(Boolean)
+
+    if (!adminEmails.includes(user.email.toLowerCase())) {
+      return user.role
+    }
+
+    const updated = await this.prismaService.user.update({
+      where: { id: user.id },
+      data: { role: UserRole.ADMIN }
+    })
+
+    return updated.role
   }
 }
