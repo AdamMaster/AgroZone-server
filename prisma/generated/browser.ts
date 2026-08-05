@@ -58,6 +58,11 @@ export type Ad = Prisma.AdModel
  */
 export type Favorite = Prisma.FavoriteModel
 /**
+ * Model AdReport
+ * 
+ */
+export type AdReport = Prisma.AdReportModel
+/**
  * Model Conversation
  * 
  */

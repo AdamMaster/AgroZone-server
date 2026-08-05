@@ -392,6 +392,7 @@ export const ModelName = {
   CategoryFeature: 'CategoryFeature',
   Ad: 'Ad',
   Favorite: 'Favorite',
+  AdReport: 'AdReport',
   Conversation: 'Conversation',
   BlockedUser: 'BlockedUser',
   Message: 'Message',
@@ -411,7 +412,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "userPhone" | "account" | "token" | "category" | "categoryFeature" | "ad" | "favorite" | "conversation" | "blockedUser" | "message" | "ruCity"
+    modelProps: "user" | "userPhone" | "account" | "token" | "category" | "categoryFeature" | "ad" | "favorite" | "adReport" | "conversation" | "blockedUser" | "message" | "ruCity"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1007,6 +1008,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    AdReport: {
+      payload: Prisma.$AdReportPayload<ExtArgs>
+      fields: Prisma.AdReportFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AdReportFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdReportPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AdReportFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdReportPayload>
+        }
+        findFirst: {
+          args: Prisma.AdReportFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdReportPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AdReportFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdReportPayload>
+        }
+        findMany: {
+          args: Prisma.AdReportFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdReportPayload>[]
+        }
+        create: {
+          args: Prisma.AdReportCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdReportPayload>
+        }
+        createMany: {
+          args: Prisma.AdReportCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AdReportCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdReportPayload>[]
+        }
+        delete: {
+          args: Prisma.AdReportDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdReportPayload>
+        }
+        update: {
+          args: Prisma.AdReportUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdReportPayload>
+        }
+        deleteMany: {
+          args: Prisma.AdReportDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AdReportUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AdReportUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdReportPayload>[]
+        }
+        upsert: {
+          args: Prisma.AdReportUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdReportPayload>
+        }
+        aggregate: {
+          args: Prisma.AdReportAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAdReport>
+        }
+        groupBy: {
+          args: Prisma.AdReportGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AdReportGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AdReportCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AdReportCountAggregateOutputType> | number
+        }
+      }
+    }
     Conversation: {
       payload: Prisma.$ConversationPayload<ExtArgs>
       fields: Prisma.ConversationFieldRefs
@@ -1486,6 +1561,18 @@ export const FavoriteScalarFieldEnum = {
 export type FavoriteScalarFieldEnum = (typeof FavoriteScalarFieldEnum)[keyof typeof FavoriteScalarFieldEnum]
 
 
+export const AdReportScalarFieldEnum = {
+  id: 'id',
+  adId: 'adId',
+  userId: 'userId',
+  reason: 'reason',
+  comment: 'comment',
+  createdAt: 'createdAt'
+} as const
+
+export type AdReportScalarFieldEnum = (typeof AdReportScalarFieldEnum)[keyof typeof AdReportScalarFieldEnum]
+
+
 export const ConversationScalarFieldEnum = {
   id: 'id',
   adId: 'adId',
@@ -1782,6 +1869,20 @@ export type EnumAdStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
 export type ListEnumAdStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AdStatus[]'>
     
 
+
+/**
+ * Reference to a field of type 'AdReportReason'
+ */
+export type EnumAdReportReasonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AdReportReason'>
+    
+
+
+/**
+ * Reference to a field of type 'AdReportReason[]'
+ */
+export type ListEnumAdReportReasonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AdReportReason[]'>
+    
+
 /**
  * Batch Payload for updateMany & deleteMany & createMany
  */
@@ -1885,6 +1986,7 @@ export type GlobalOmitConfig = {
   categoryFeature?: Prisma.CategoryFeatureOmit
   ad?: Prisma.AdOmit
   favorite?: Prisma.FavoriteOmit
+  adReport?: Prisma.AdReportOmit
   conversation?: Prisma.ConversationOmit
   blockedUser?: Prisma.BlockedUserOmit
   message?: Prisma.MessageOmit

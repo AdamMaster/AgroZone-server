@@ -59,6 +59,7 @@ export const ModelName = {
   CategoryFeature: 'CategoryFeature',
   Ad: 'Ad',
   Favorite: 'Favorite',
+  AdReport: 'AdReport',
   Conversation: 'Conversation',
   BlockedUser: 'BlockedUser',
   Message: 'Message',
@@ -223,6 +224,18 @@ export const FavoriteScalarFieldEnum = {
 } as const
 
 export type FavoriteScalarFieldEnum = (typeof FavoriteScalarFieldEnum)[keyof typeof FavoriteScalarFieldEnum]
+
+
+export const AdReportScalarFieldEnum = {
+  id: 'id',
+  adId: 'adId',
+  userId: 'userId',
+  reason: 'reason',
+  comment: 'comment',
+  createdAt: 'createdAt'
+} as const
+
+export type AdReportScalarFieldEnum = (typeof AdReportScalarFieldEnum)[keyof typeof AdReportScalarFieldEnum]
 
 
 export const ConversationScalarFieldEnum = {

@@ -264,6 +264,7 @@ export type UserWhereInput = {
   sentMessages?: Prisma.MessageListRelationFilter
   blockedUsers?: Prisma.BlockedUserListRelationFilter
   blockedByUsers?: Prisma.BlockedUserListRelationFilter
+  adReports?: Prisma.AdReportListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -291,6 +292,7 @@ export type UserOrderByWithRelationInput = {
   sentMessages?: Prisma.MessageOrderByRelationAggregateInput
   blockedUsers?: Prisma.BlockedUserOrderByRelationAggregateInput
   blockedByUsers?: Prisma.BlockedUserOrderByRelationAggregateInput
+  adReports?: Prisma.AdReportOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -321,6 +323,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   sentMessages?: Prisma.MessageListRelationFilter
   blockedUsers?: Prisma.BlockedUserListRelationFilter
   blockedByUsers?: Prisma.BlockedUserListRelationFilter
+  adReports?: Prisma.AdReportListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -388,6 +391,7 @@ export type UserCreateInput = {
   sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
   blockedUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockerInput
   blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
+  adReports?: Prisma.AdReportCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -415,6 +419,7 @@ export type UserUncheckedCreateInput = {
   sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
   blockedUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockerInput
   blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
+  adReports?: Prisma.AdReportUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -442,6 +447,7 @@ export type UserUpdateInput = {
   sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
   blockedUsers?: Prisma.BlockedUserUpdateManyWithoutBlockerNestedInput
   blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
+  adReports?: Prisma.AdReportUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -469,6 +475,7 @@ export type UserUncheckedUpdateInput = {
   sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
   blockedUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockerNestedInput
   blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
+  adReports?: Prisma.AdReportUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -687,6 +694,20 @@ export type UserUpdateOneRequiredWithoutFavoritesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutFavoritesInput, Prisma.UserUpdateWithoutFavoritesInput>, Prisma.UserUncheckedUpdateWithoutFavoritesInput>
 }
 
+export type UserCreateNestedOneWithoutAdReportsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAdReportsInput, Prisma.UserUncheckedCreateWithoutAdReportsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAdReportsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutAdReportsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAdReportsInput, Prisma.UserUncheckedCreateWithoutAdReportsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAdReportsInput
+  upsert?: Prisma.UserUpsertWithoutAdReportsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAdReportsInput, Prisma.UserUpdateWithoutAdReportsInput>, Prisma.UserUncheckedUpdateWithoutAdReportsInput>
+}
+
 export type UserCreateNestedOneWithoutConversationsAsBuyerInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutConversationsAsBuyerInput, Prisma.UserUncheckedCreateWithoutConversationsAsBuyerInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutConversationsAsBuyerInput
@@ -781,6 +802,7 @@ export type UserCreateWithoutPhonesInput = {
   sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
   blockedUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockerInput
   blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
+  adReports?: Prisma.AdReportCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPhonesInput = {
@@ -807,6 +829,7 @@ export type UserUncheckedCreateWithoutPhonesInput = {
   sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
   blockedUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockerInput
   blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
+  adReports?: Prisma.AdReportUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPhonesInput = {
@@ -849,6 +872,7 @@ export type UserUpdateWithoutPhonesInput = {
   sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
   blockedUsers?: Prisma.BlockedUserUpdateManyWithoutBlockerNestedInput
   blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
+  adReports?: Prisma.AdReportUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPhonesInput = {
@@ -875,6 +899,7 @@ export type UserUncheckedUpdateWithoutPhonesInput = {
   sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
   blockedUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockerNestedInput
   blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
+  adReports?: Prisma.AdReportUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAccountsInput = {
@@ -901,6 +926,7 @@ export type UserCreateWithoutAccountsInput = {
   sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
   blockedUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockerInput
   blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
+  adReports?: Prisma.AdReportCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -927,6 +953,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
   blockedUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockerInput
   blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
+  adReports?: Prisma.AdReportUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -969,6 +996,7 @@ export type UserUpdateWithoutAccountsInput = {
   sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
   blockedUsers?: Prisma.BlockedUserUpdateManyWithoutBlockerNestedInput
   blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
+  adReports?: Prisma.AdReportUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -995,6 +1023,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
   blockedUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockerNestedInput
   blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
+  adReports?: Prisma.AdReportUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutTokensInput = {
@@ -1021,6 +1050,7 @@ export type UserCreateWithoutTokensInput = {
   sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
   blockedUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockerInput
   blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
+  adReports?: Prisma.AdReportCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutTokensInput = {
@@ -1047,6 +1077,7 @@ export type UserUncheckedCreateWithoutTokensInput = {
   sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
   blockedUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockerInput
   blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
+  adReports?: Prisma.AdReportUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutTokensInput = {
@@ -1089,6 +1120,7 @@ export type UserUpdateWithoutTokensInput = {
   sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
   blockedUsers?: Prisma.BlockedUserUpdateManyWithoutBlockerNestedInput
   blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
+  adReports?: Prisma.AdReportUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTokensInput = {
@@ -1115,6 +1147,7 @@ export type UserUncheckedUpdateWithoutTokensInput = {
   sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
   blockedUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockerNestedInput
   blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
+  adReports?: Prisma.AdReportUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAdsInput = {
@@ -1141,6 +1174,7 @@ export type UserCreateWithoutAdsInput = {
   sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
   blockedUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockerInput
   blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
+  adReports?: Prisma.AdReportCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAdsInput = {
@@ -1167,6 +1201,7 @@ export type UserUncheckedCreateWithoutAdsInput = {
   sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
   blockedUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockerInput
   blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
+  adReports?: Prisma.AdReportUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAdsInput = {
@@ -1209,6 +1244,7 @@ export type UserUpdateWithoutAdsInput = {
   sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
   blockedUsers?: Prisma.BlockedUserUpdateManyWithoutBlockerNestedInput
   blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
+  adReports?: Prisma.AdReportUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAdsInput = {
@@ -1235,6 +1271,7 @@ export type UserUncheckedUpdateWithoutAdsInput = {
   sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
   blockedUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockerNestedInput
   blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
+  adReports?: Prisma.AdReportUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutFavoritesInput = {
@@ -1261,6 +1298,7 @@ export type UserCreateWithoutFavoritesInput = {
   sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
   blockedUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockerInput
   blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
+  adReports?: Prisma.AdReportCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutFavoritesInput = {
@@ -1287,6 +1325,7 @@ export type UserUncheckedCreateWithoutFavoritesInput = {
   sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
   blockedUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockerInput
   blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
+  adReports?: Prisma.AdReportUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutFavoritesInput = {
@@ -1329,6 +1368,7 @@ export type UserUpdateWithoutFavoritesInput = {
   sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
   blockedUsers?: Prisma.BlockedUserUpdateManyWithoutBlockerNestedInput
   blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
+  adReports?: Prisma.AdReportUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutFavoritesInput = {
@@ -1350,6 +1390,131 @@ export type UserUncheckedUpdateWithoutFavoritesInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   tokens?: Prisma.TokenUncheckedUpdateManyWithoutUserNestedInput
   ads?: Prisma.AdUncheckedUpdateManyWithoutUserNestedInput
+  conversationsAsBuyer?: Prisma.ConversationUncheckedUpdateManyWithoutBuyerNestedInput
+  conversationsAsSeller?: Prisma.ConversationUncheckedUpdateManyWithoutSellerNestedInput
+  sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
+  blockedUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
+  adReports?: Prisma.AdReportUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutAdReportsInput = {
+  id?: string
+  password?: string | null
+  email?: string | null
+  displayName?: string | null
+  picture?: string | null
+  type?: $Enums.UserType
+  bio?: string | null
+  location?: string | null
+  role?: $Enums.UserRole
+  isVerified?: boolean
+  isTwoFactorEnabled?: boolean
+  method: $Enums.AuthMethod
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  phones?: Prisma.UserPhoneCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  tokens?: Prisma.TokenCreateNestedManyWithoutUserInput
+  ads?: Prisma.AdCreateNestedManyWithoutUserInput
+  favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput
+  conversationsAsBuyer?: Prisma.ConversationCreateNestedManyWithoutBuyerInput
+  conversationsAsSeller?: Prisma.ConversationCreateNestedManyWithoutSellerInput
+  sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
+  blockedUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
+}
+
+export type UserUncheckedCreateWithoutAdReportsInput = {
+  id?: string
+  password?: string | null
+  email?: string | null
+  displayName?: string | null
+  picture?: string | null
+  type?: $Enums.UserType
+  bio?: string | null
+  location?: string | null
+  role?: $Enums.UserRole
+  isVerified?: boolean
+  isTwoFactorEnabled?: boolean
+  method: $Enums.AuthMethod
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  phones?: Prisma.UserPhoneUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  tokens?: Prisma.TokenUncheckedCreateNestedManyWithoutUserInput
+  ads?: Prisma.AdUncheckedCreateNestedManyWithoutUserInput
+  favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput
+  conversationsAsBuyer?: Prisma.ConversationUncheckedCreateNestedManyWithoutBuyerInput
+  conversationsAsSeller?: Prisma.ConversationUncheckedCreateNestedManyWithoutSellerInput
+  sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
+  blockedUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
+}
+
+export type UserCreateOrConnectWithoutAdReportsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutAdReportsInput, Prisma.UserUncheckedCreateWithoutAdReportsInput>
+}
+
+export type UserUpsertWithoutAdReportsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAdReportsInput, Prisma.UserUncheckedUpdateWithoutAdReportsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAdReportsInput, Prisma.UserUncheckedCreateWithoutAdReportsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutAdReportsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAdReportsInput, Prisma.UserUncheckedUpdateWithoutAdReportsInput>
+}
+
+export type UserUpdateWithoutAdReportsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  picture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  phones?: Prisma.UserPhoneUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  tokens?: Prisma.TokenUpdateManyWithoutUserNestedInput
+  ads?: Prisma.AdUpdateManyWithoutUserNestedInput
+  favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput
+  conversationsAsBuyer?: Prisma.ConversationUpdateManyWithoutBuyerNestedInput
+  conversationsAsSeller?: Prisma.ConversationUpdateManyWithoutSellerNestedInput
+  sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
+  blockedUsers?: Prisma.BlockedUserUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
+}
+
+export type UserUncheckedUpdateWithoutAdReportsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  picture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  phones?: Prisma.UserPhoneUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  tokens?: Prisma.TokenUncheckedUpdateManyWithoutUserNestedInput
+  ads?: Prisma.AdUncheckedUpdateManyWithoutUserNestedInput
+  favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput
   conversationsAsBuyer?: Prisma.ConversationUncheckedUpdateManyWithoutBuyerNestedInput
   conversationsAsSeller?: Prisma.ConversationUncheckedUpdateManyWithoutSellerNestedInput
   sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
@@ -1381,6 +1546,7 @@ export type UserCreateWithoutConversationsAsBuyerInput = {
   sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
   blockedUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockerInput
   blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
+  adReports?: Prisma.AdReportCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutConversationsAsBuyerInput = {
@@ -1407,6 +1573,7 @@ export type UserUncheckedCreateWithoutConversationsAsBuyerInput = {
   sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
   blockedUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockerInput
   blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
+  adReports?: Prisma.AdReportUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutConversationsAsBuyerInput = {
@@ -1438,6 +1605,7 @@ export type UserCreateWithoutConversationsAsSellerInput = {
   sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
   blockedUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockerInput
   blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
+  adReports?: Prisma.AdReportCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutConversationsAsSellerInput = {
@@ -1464,6 +1632,7 @@ export type UserUncheckedCreateWithoutConversationsAsSellerInput = {
   sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
   blockedUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockerInput
   blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
+  adReports?: Prisma.AdReportUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutConversationsAsSellerInput = {
@@ -1506,6 +1675,7 @@ export type UserUpdateWithoutConversationsAsBuyerInput = {
   sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
   blockedUsers?: Prisma.BlockedUserUpdateManyWithoutBlockerNestedInput
   blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
+  adReports?: Prisma.AdReportUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutConversationsAsBuyerInput = {
@@ -1532,6 +1702,7 @@ export type UserUncheckedUpdateWithoutConversationsAsBuyerInput = {
   sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
   blockedUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockerNestedInput
   blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
+  adReports?: Prisma.AdReportUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUpsertWithoutConversationsAsSellerInput = {
@@ -1569,6 +1740,7 @@ export type UserUpdateWithoutConversationsAsSellerInput = {
   sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
   blockedUsers?: Prisma.BlockedUserUpdateManyWithoutBlockerNestedInput
   blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
+  adReports?: Prisma.AdReportUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutConversationsAsSellerInput = {
@@ -1595,6 +1767,7 @@ export type UserUncheckedUpdateWithoutConversationsAsSellerInput = {
   sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
   blockedUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockerNestedInput
   blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
+  adReports?: Prisma.AdReportUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutBlockedUsersInput = {
@@ -1621,6 +1794,7 @@ export type UserCreateWithoutBlockedUsersInput = {
   conversationsAsSeller?: Prisma.ConversationCreateNestedManyWithoutSellerInput
   sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
   blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
+  adReports?: Prisma.AdReportCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutBlockedUsersInput = {
@@ -1647,6 +1821,7 @@ export type UserUncheckedCreateWithoutBlockedUsersInput = {
   conversationsAsSeller?: Prisma.ConversationUncheckedCreateNestedManyWithoutSellerInput
   sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
   blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
+  adReports?: Prisma.AdReportUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutBlockedUsersInput = {
@@ -1678,6 +1853,7 @@ export type UserCreateWithoutBlockedByUsersInput = {
   conversationsAsSeller?: Prisma.ConversationCreateNestedManyWithoutSellerInput
   sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
   blockedUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockerInput
+  adReports?: Prisma.AdReportCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutBlockedByUsersInput = {
@@ -1704,6 +1880,7 @@ export type UserUncheckedCreateWithoutBlockedByUsersInput = {
   conversationsAsSeller?: Prisma.ConversationUncheckedCreateNestedManyWithoutSellerInput
   sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
   blockedUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockerInput
+  adReports?: Prisma.AdReportUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutBlockedByUsersInput = {
@@ -1746,6 +1923,7 @@ export type UserUpdateWithoutBlockedUsersInput = {
   conversationsAsSeller?: Prisma.ConversationUpdateManyWithoutSellerNestedInput
   sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
   blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
+  adReports?: Prisma.AdReportUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBlockedUsersInput = {
@@ -1772,6 +1950,7 @@ export type UserUncheckedUpdateWithoutBlockedUsersInput = {
   conversationsAsSeller?: Prisma.ConversationUncheckedUpdateManyWithoutSellerNestedInput
   sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
   blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
+  adReports?: Prisma.AdReportUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUpsertWithoutBlockedByUsersInput = {
@@ -1809,6 +1988,7 @@ export type UserUpdateWithoutBlockedByUsersInput = {
   conversationsAsSeller?: Prisma.ConversationUpdateManyWithoutSellerNestedInput
   sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
   blockedUsers?: Prisma.BlockedUserUpdateManyWithoutBlockerNestedInput
+  adReports?: Prisma.AdReportUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBlockedByUsersInput = {
@@ -1835,6 +2015,7 @@ export type UserUncheckedUpdateWithoutBlockedByUsersInput = {
   conversationsAsSeller?: Prisma.ConversationUncheckedUpdateManyWithoutSellerNestedInput
   sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
   blockedUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockerNestedInput
+  adReports?: Prisma.AdReportUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSentMessagesInput = {
@@ -1861,6 +2042,7 @@ export type UserCreateWithoutSentMessagesInput = {
   conversationsAsSeller?: Prisma.ConversationCreateNestedManyWithoutSellerInput
   blockedUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockerInput
   blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
+  adReports?: Prisma.AdReportCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSentMessagesInput = {
@@ -1887,6 +2069,7 @@ export type UserUncheckedCreateWithoutSentMessagesInput = {
   conversationsAsSeller?: Prisma.ConversationUncheckedCreateNestedManyWithoutSellerInput
   blockedUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockerInput
   blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
+  adReports?: Prisma.AdReportUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSentMessagesInput = {
@@ -1929,6 +2112,7 @@ export type UserUpdateWithoutSentMessagesInput = {
   conversationsAsSeller?: Prisma.ConversationUpdateManyWithoutSellerNestedInput
   blockedUsers?: Prisma.BlockedUserUpdateManyWithoutBlockerNestedInput
   blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
+  adReports?: Prisma.AdReportUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSentMessagesInput = {
@@ -1955,6 +2139,7 @@ export type UserUncheckedUpdateWithoutSentMessagesInput = {
   conversationsAsSeller?: Prisma.ConversationUncheckedUpdateManyWithoutSellerNestedInput
   blockedUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockerNestedInput
   blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
+  adReports?: Prisma.AdReportUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -1973,6 +2158,7 @@ export type UserCountOutputType = {
   sentMessages: number
   blockedUsers: number
   blockedByUsers: number
+  adReports: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1986,6 +2172,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   sentMessages?: boolean | UserCountOutputTypeCountSentMessagesArgs
   blockedUsers?: boolean | UserCountOutputTypeCountBlockedUsersArgs
   blockedByUsers?: boolean | UserCountOutputTypeCountBlockedByUsersArgs
+  adReports?: boolean | UserCountOutputTypeCountAdReportsArgs
 }
 
 /**
@@ -2068,6 +2255,13 @@ export type UserCountOutputTypeCountBlockedByUsersArgs<ExtArgs extends runtime.T
   where?: Prisma.BlockedUserWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountAdReportsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AdReportWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2094,6 +2288,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   sentMessages?: boolean | Prisma.User$sentMessagesArgs<ExtArgs>
   blockedUsers?: boolean | Prisma.User$blockedUsersArgs<ExtArgs>
   blockedByUsers?: boolean | Prisma.User$blockedByUsersArgs<ExtArgs>
+  adReports?: boolean | Prisma.User$adReportsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -2160,6 +2355,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   sentMessages?: boolean | Prisma.User$sentMessagesArgs<ExtArgs>
   blockedUsers?: boolean | Prisma.User$blockedUsersArgs<ExtArgs>
   blockedByUsers?: boolean | Prisma.User$blockedByUsersArgs<ExtArgs>
+  adReports?: boolean | Prisma.User$adReportsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -2178,6 +2374,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     sentMessages: Prisma.$MessagePayload<ExtArgs>[]
     blockedUsers: Prisma.$BlockedUserPayload<ExtArgs>[]
     blockedByUsers: Prisma.$BlockedUserPayload<ExtArgs>[]
+    adReports: Prisma.$AdReportPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2598,6 +2795,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   sentMessages<T extends Prisma.User$sentMessagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sentMessagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   blockedUsers<T extends Prisma.User$blockedUsersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$blockedUsersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BlockedUserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   blockedByUsers<T extends Prisma.User$blockedByUsersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$blockedByUsersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BlockedUserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  adReports<T extends Prisma.User$adReportsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$adReportsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AdReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3266,6 +3464,30 @@ export type User$blockedByUsersArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.BlockedUserScalarFieldEnum | Prisma.BlockedUserScalarFieldEnum[]
+}
+
+/**
+ * User.adReports
+ */
+export type User$adReportsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AdReport
+   */
+  select?: Prisma.AdReportSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AdReport
+   */
+  omit?: Prisma.AdReportOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AdReportInclude<ExtArgs> | null
+  where?: Prisma.AdReportWhereInput
+  orderBy?: Prisma.AdReportOrderByWithRelationInput | Prisma.AdReportOrderByWithRelationInput[]
+  cursor?: Prisma.AdReportWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AdReportScalarFieldEnum | Prisma.AdReportScalarFieldEnum[]
 }
 
 /**

@@ -20,6 +20,18 @@ export const FeatureType = {
 export type FeatureType = (typeof FeatureType)[keyof typeof FeatureType]
 
 
+export const AdReportReason = {
+  SCAM: 'SCAM',
+  WRONG_CATEGORY: 'WRONG_CATEGORY',
+  PROHIBITED_ITEM: 'PROHIBITED_ITEM',
+  DUPLICATE: 'DUPLICATE',
+  SPAM: 'SPAM',
+  OTHER: 'OTHER'
+} as const
+
+export type AdReportReason = (typeof AdReportReason)[keyof typeof AdReportReason]
+
+
 export const UserRole = {
   REGULAR: 'REGULAR',
   ADMIN: 'ADMIN',
