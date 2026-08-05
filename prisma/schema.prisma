@@ -33,6 +33,14 @@ model User {
   ads       Ad[]
   favorites Favorite[]
 
+  // Диалоги, где этот юзер выступает покупателем/продавцом — раздельные
+  // связи, а не одна общая, чтобы можно было отдельно и дёшево (без доп.
+  // условий в WHERE) получить "мои диалоги как покупателя" и "как
+  // продавца" (см. Conversation).
+  conversationsAsBuyer  Conversation[] @relation("ConversationsAsBuyer")
+  conversationsAsSeller Conversation[] @relation("ConversationsAsSeller")
+  sentMessages          Message[]
+
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
@@ -216,6 +224,8 @@ model Ad {
   category   Category   @relation(fields: [categoryId], references: [id])
   favorites  Favorite[]
 
+  conversations Conversation[]
+
   status AdStatus @default(PENDING)
 
   rejectionReason String?   @map("rejection_reason")
@@ -252,6 +262,78 @@ model Favorite {
   @@index([userId])
   @@index([adId])
   @@map("favorites")
+}
+
+// Диалог между покупателем и продавцом ПО КОНКРЕТНОМУ объявлению — не
+// просто "переписка между двумя юзерами", а именно пара (объявление,
+// покупатель): если один и тот же человек напишет продавцу и про трактор, и
+// через месяц про комбайн — это два разных диалога, а не одна общая каша
+// сообщений. sellerId продублирован из ad.userId (а не вычисляется каждый
+// раз через join) — чтобы дёшево фильтровать "мои диалоги как продавец" по
+// индексу, без обращения к Ad.
+//
+// Курсоры прочтения (buyerLastReadAt/sellerLastReadAt) — вместо флага
+// "прочитано" на каждом отдельном Message: непрочитанные считаются
+// сравнением lastMessageAt с *LastReadAt соответствующей стороны, что не
+// требует ни отдельной таблицы статусов чтения, ни массового UPDATE по всем
+// сообщениям диалога при открытии чата — обновляется одна строка.
+//
+// dealConfirmed — отметка "сделка состоялась", которую смогут ставить
+// участники диалога; задел на будущее: когда дойдём до отзывов о продавце,
+// оставить отзыв можно будет только там, где dealConfirmed = true — так
+// отзыв нельзя написать, просто зайдя на страницу объявления, не пообщавшись
+// с продавцом по-настоящему.
+model Conversation {
+  id String @id @default(uuid())
+
+  adId String @map("ad_id")
+  ad   Ad     @relation(fields: [adId], references: [id], onDelete: Cascade)
+
+  buyerId String @map("buyer_id")
+  buyer   User   @relation("ConversationsAsBuyer", fields: [buyerId], references: [id], onDelete: Cascade)
+
+  sellerId String @map("seller_id")
+  seller   User   @relation("ConversationsAsSeller", fields: [sellerId], references: [id], onDelete: Cascade)
+
+  messages Message[]
+
+  lastMessageAt DateTime? @map("last_message_at")
+
+  buyerLastReadAt  DateTime? @map("buyer_last_read_at")
+  sellerLastReadAt DateTime? @map("seller_last_read_at")
+
+  dealConfirmed Boolean @default(false) @map("deal_confirmed")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Повторное обращение того же покупателя по тому же объявлению должно
+  // попадать в существующий диалог, а не плодить дубликаты.
+  @@unique([adId, buyerId])
+  @@index([buyerId, lastMessageAt])
+  @@index([sellerId, lastMessageAt])
+  @@index([adId])
+  @@map("conversations")
+}
+
+model Message {
+  id String @id @default(uuid())
+
+  conversationId String       @map("conversation_id")
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  senderId String @map("sender_id")
+  sender   User   @relation(fields: [senderId], references: [id], onDelete: Cascade)
+
+  text        String   @db.Text
+  attachments String[] @default([])
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // Под пагинированную историю диалога, отсортированную по времени.
+  @@index([conversationId, createdAt])
+  @@index([senderId])
+  @@map("messages")
 }
 
 enum UserRole {

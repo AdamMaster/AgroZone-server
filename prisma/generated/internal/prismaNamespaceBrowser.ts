@@ -59,6 +59,8 @@ export const ModelName = {
   CategoryFeature: 'CategoryFeature',
   Ad: 'Ad',
   Favorite: 'Favorite',
+  Conversation: 'Conversation',
+  Message: 'Message',
   RuCity: 'RuCity'
 } as const
 
@@ -220,6 +222,34 @@ export const FavoriteScalarFieldEnum = {
 } as const
 
 export type FavoriteScalarFieldEnum = (typeof FavoriteScalarFieldEnum)[keyof typeof FavoriteScalarFieldEnum]
+
+
+export const ConversationScalarFieldEnum = {
+  id: 'id',
+  adId: 'adId',
+  buyerId: 'buyerId',
+  sellerId: 'sellerId',
+  lastMessageAt: 'lastMessageAt',
+  buyerLastReadAt: 'buyerLastReadAt',
+  sellerLastReadAt: 'sellerLastReadAt',
+  dealConfirmed: 'dealConfirmed',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ConversationScalarFieldEnum = (typeof ConversationScalarFieldEnum)[keyof typeof ConversationScalarFieldEnum]
+
+
+export const MessageScalarFieldEnum = {
+  id: 'id',
+  conversationId: 'conversationId',
+  senderId: 'senderId',
+  text: 'text',
+  attachments: 'attachments',
+  createdAt: 'createdAt'
+} as const
+
+export type MessageScalarFieldEnum = (typeof MessageScalarFieldEnum)[keyof typeof MessageScalarFieldEnum]
 
 
 export const RuCityScalarFieldEnum = {
