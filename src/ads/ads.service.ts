@@ -560,7 +560,12 @@ export class AdsService {
     }))
   }
 
-  async findOne(id: string) {
+  // userId опционален — эндпоинт публичный (доступен без авторизации), но
+  // если сессия есть, нужно посчитать isFavorite именно для этого юзера.
+  // Раньше userId сюда вообще не передавался, и это поле не отдавалось в
+  // ответе — карточка объявления никогда не показывала, что оно уже в
+  // избранном, даже у залогиненного и реально добавившего его пользователя.
+  async findOne(id: string, userId?: string) {
     const now = new Date()
 
     const ad = await this.prisma.ad.findUnique({
@@ -592,7 +597,15 @@ export class AdsService {
               }
             }
           }
-        }
+        },
+        // Тот же приём, что и в findAll: тянем связь с избранным только
+        // если известен userId, иначе просто не запрашиваем её.
+        favorites: userId
+          ? {
+              where: { userId },
+              select: { id: true }
+            }
+          : false
       }
     })
 
@@ -606,7 +619,7 @@ export class AdsService {
       throw new NotFoundException('Объявление не найдено')
     }
 
-    const { user, ...rest } = ad
+    const { user, favorites, ...rest } = ad
 
     let userWithAdsCount: (Omit<NonNullable<typeof user>, '_count'> & { adsCount: number }) | null = null
 
@@ -615,7 +628,7 @@ export class AdsService {
       userWithAdsCount = { ...userRest, adsCount: _count.ads }
     }
 
-    return { ...rest, user: userWithAdsCount }
+    return { ...rest, user: userWithAdsCount, isFavorite: userId ? (favorites?.length ?? 0) > 0 : false }
   }
 
   async findOneForOwner(id: string, userId: string) {

@@ -132,8 +132,13 @@ export class AdsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.adsService.findOne(id)
+  findOne(@Param('id') id: string, @Req() request: Request) {
+    // Эндпоинт публичный (без @UseGuards) — доступен и без авторизации, но
+    // если сессия есть, передаём userId в сервис, чтобы корректно посчитать
+    // isFavorite именно для текущего пользователя (см. AdsService.findOne).
+    const userId = request.session?.userId
+
+    return this.adsService.findOne(id, userId)
   }
 
   @Patch(':id')
