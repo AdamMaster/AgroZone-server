@@ -46,6 +46,9 @@ model User {
   blockedUsers   BlockedUser[] @relation("BlockerOf")
   blockedByUsers BlockedUser[] @relation("BlockedBy")
 
+  // Жалобы, которые этот юзер отправил на чужие объявления (см. AdReport).
+  adReports AdReport[]
+
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
@@ -230,6 +233,7 @@ model Ad {
   favorites  Favorite[]
 
   conversations Conversation[]
+  reports       AdReport[]
 
   status AdStatus @default(PENDING)
 
@@ -267,6 +271,41 @@ model Favorite {
   @@index([userId])
   @@index([adId])
   @@map("favorites")
+}
+
+enum AdReportReason {
+  SCAM
+  WRONG_CATEGORY
+  PROHIBITED_ITEM
+  DUPLICATE
+  SPAM
+  OTHER
+}
+
+// Жалоба на объявление — модерация контента (не то же самое, что
+// блокировка юзера в чате, см. BlockedUser: там про отношения между двумя
+// людьми, здесь про сам контент объявления, и жалоба должна быть видна
+// модератору вне зависимости от того, переписывался ли жалующийся с
+// продавцом). Одна жалоба от одного юзера на одно объявление — чтобы нельзя
+// было накрутить счётчик жалоб самому себе спамом кликов.
+model AdReport {
+  id String @id @default(uuid())
+
+  adId String @map("ad_id")
+  ad   Ad     @relation(fields: [adId], references: [id], onDelete: Cascade)
+
+  userId String @map("user_id")
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  reason  AdReportReason
+  comment String?        @db.Text
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@unique([adId, userId])
+  @@index([adId])
+  @@index([userId])
+  @@map("ad_reports")
 }
 
 // Диалог между покупателем и продавцом ПО КОНКРЕТНОМУ объявлению — не

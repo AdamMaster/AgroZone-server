@@ -20,6 +20,7 @@ import { SearchModule } from './search/search.module'
 import { RedisModule } from './redis/redis.module'
 import { ConversationsModule } from './conversations/conversations.module'
 import { BlockedUsersModule } from './blocked-users/blocked-users.module'
+import { AdReportsModule } from './ad-reports/ad-reports.module'
 
 @Module({
   imports: [
@@ -59,7 +60,8 @@ import { BlockedUsersModule } from './blocked-users/blocked-users.module'
     SearchModule,
     RedisModule,
     ConversationsModule,
-    BlockedUsersModule
+    BlockedUsersModule,
+    AdReportsModule
   ]
 })
 export class AppModule {}
