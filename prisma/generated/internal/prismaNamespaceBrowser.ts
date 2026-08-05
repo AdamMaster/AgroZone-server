@@ -58,7 +58,8 @@ export const ModelName = {
   Category: 'Category',
   CategoryFeature: 'CategoryFeature',
   Ad: 'Ad',
-  Favorite: 'Favorite'
+  Favorite: 'Favorite',
+  RuCity: 'RuCity'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -219,6 +220,20 @@ export const FavoriteScalarFieldEnum = {
 } as const
 
 export type FavoriteScalarFieldEnum = (typeof FavoriteScalarFieldEnum)[keyof typeof FavoriteScalarFieldEnum]
+
+
+export const RuCityScalarFieldEnum = {
+  fiasId: 'fiasId',
+  city: 'city',
+  cityType: 'cityType',
+  region: 'region',
+  regionType: 'regionType',
+  isFederalCity: 'isFederalCity',
+  lat: 'lat',
+  lng: 'lng'
+} as const
+
+export type RuCityScalarFieldEnum = (typeof RuCityScalarFieldEnum)[keyof typeof RuCityScalarFieldEnum]
 
 
 export const SortOrder = {

@@ -391,7 +391,8 @@ export const ModelName = {
   Category: 'Category',
   CategoryFeature: 'CategoryFeature',
   Ad: 'Ad',
-  Favorite: 'Favorite'
+  Favorite: 'Favorite',
+  RuCity: 'RuCity'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -407,7 +408,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "userPhone" | "account" | "token" | "category" | "categoryFeature" | "ad" | "favorite"
+    modelProps: "user" | "userPhone" | "account" | "token" | "category" | "categoryFeature" | "ad" | "favorite" | "ruCity"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1003,6 +1004,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    RuCity: {
+      payload: Prisma.$RuCityPayload<ExtArgs>
+      fields: Prisma.RuCityFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.RuCityFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RuCityPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.RuCityFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RuCityPayload>
+        }
+        findFirst: {
+          args: Prisma.RuCityFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RuCityPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.RuCityFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RuCityPayload>
+        }
+        findMany: {
+          args: Prisma.RuCityFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RuCityPayload>[]
+        }
+        create: {
+          args: Prisma.RuCityCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RuCityPayload>
+        }
+        createMany: {
+          args: Prisma.RuCityCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.RuCityCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RuCityPayload>[]
+        }
+        delete: {
+          args: Prisma.RuCityDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RuCityPayload>
+        }
+        update: {
+          args: Prisma.RuCityUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RuCityPayload>
+        }
+        deleteMany: {
+          args: Prisma.RuCityDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.RuCityUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.RuCityUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RuCityPayload>[]
+        }
+        upsert: {
+          args: Prisma.RuCityUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RuCityPayload>
+        }
+        aggregate: {
+          args: Prisma.RuCityAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateRuCity>
+        }
+        groupBy: {
+          args: Prisma.RuCityGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RuCityGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.RuCityCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RuCityCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1184,6 +1259,20 @@ export const FavoriteScalarFieldEnum = {
 } as const
 
 export type FavoriteScalarFieldEnum = (typeof FavoriteScalarFieldEnum)[keyof typeof FavoriteScalarFieldEnum]
+
+
+export const RuCityScalarFieldEnum = {
+  fiasId: 'fiasId',
+  city: 'city',
+  cityType: 'cityType',
+  region: 'region',
+  regionType: 'regionType',
+  isFederalCity: 'isFederalCity',
+  lat: 'lat',
+  lng: 'lng'
+} as const
+
+export type RuCityScalarFieldEnum = (typeof RuCityScalarFieldEnum)[keyof typeof RuCityScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1531,6 +1620,7 @@ export type GlobalOmitConfig = {
   categoryFeature?: Prisma.CategoryFeatureOmit
   ad?: Prisma.AdOmit
   favorite?: Prisma.FavoriteOmit
+  ruCity?: Prisma.RuCityOmit
 }
 
 /* Types for Logging */

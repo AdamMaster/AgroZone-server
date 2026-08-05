@@ -39,7 +39,14 @@ export class UserService {
   async getProfileForClient(userId: string) {
     const user = await this.findById(userId)
 
-    const primaryPhone = user.phones.find(phone => phone.isPrimary)?.phone ?? null
+    // Есть номер, но ни один не помечен isPrimary — раньше могло возникать
+    // из-за confirmAddPhone(makePrimary=false) при добавлении номера прямо
+    // из формы объявления (см. AdsService/ad-form.tsx), это уже
+    // исправлено там, но у пользователей, добавивших номер ДО фикса,
+    // состояние в БД так и осталось. Подстраховываемся и здесь — тот же
+    // приём, что уже используется в AdsService.saveDraft: если основного
+    // нет, но номера есть, считаем основным первый, а не оставляем null.
+    const primaryPhone = user.phones.find(phone => phone.isPrimary)?.phone ?? user.phones[0]?.phone ?? null
 
     return {
       ...user,
@@ -364,7 +371,20 @@ export class UserService {
     }
 
     await this.prismaService.$transaction(async tx => {
-      if (makePrimary) {
+      const existingPhonesCount = await tx.userPhone.count({ where: { userId } })
+
+      // Самый первый номер аккаунта всегда становится основным, даже если
+      // вызывающий код явно не просил makePrimary (например, добавление
+      // номера прямо из формы объявления — см. FormAddPhone/ad-form.tsx,
+      // там makePrimary не передаётся). Без этого пользователь, добавивший
+      // номер таким способом, оставался без primaryPhone — из-за этого при
+      // создании СЛЕДУЮЩЕГО объявления номер не подставлялся автоматически,
+      // будто его и не добавляли, и приходилось каждый раз вводить заново.
+      // Если у пользователя уже есть номер(а), ведём себя как раньше — не
+      // переключаем основной без явного makePrimary.
+      const shouldBePrimary = makePrimary || existingPhonesCount === 0
+
+      if (shouldBePrimary) {
         await tx.userPhone.updateMany({
           where: { userId, isPrimary: true },
           data: { isPrimary: false }
@@ -375,7 +395,7 @@ export class UserService {
         data: {
           phone,
           userId,
-          isPrimary: makePrimary,
+          isPrimary: shouldBePrimary,
           isVerified: true
         }
       })

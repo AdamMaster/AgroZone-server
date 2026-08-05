@@ -2,6 +2,7 @@ import { PrismaClient, FeatureType, PriceUnit, Prisma } from './generated/client
 import { PrismaPg } from '@prisma/adapter-pg'
 import { Pool } from 'pg'
 import { CATEGORIES_DATA, CategoryFeatureInput } from './data/categories'
+import { RU_CITIES_DATA } from './data/ru-cities'
 import slugify from 'slugify'
 
 const pool = new Pool({
@@ -171,6 +172,19 @@ async function upsertCategory(
   return category
 }
 
+// Справочник городов (RuCity) — статичный, полностью заменяем при каждом
+// сиде (deleteMany + createMany), в отличие от категорий тут не нужен
+// upsert по одной записи — нет ни дочерних сущностей, ни ручных
+// правок поверх сид-данных, которые было бы жалко потерять.
+async function seedCities() {
+  console.log(`🌍 Импорт справочника городов (${RU_CITIES_DATA.length})...`)
+
+  await prisma.ruCity.deleteMany()
+  await prisma.ruCity.createMany({ data: RU_CITIES_DATA })
+
+  console.log('✔ Справочник городов импортирован')
+}
+
 async function main() {
   console.log('🚀 Начало импорта категорий...')
 
@@ -179,6 +193,8 @@ async function main() {
     await upsertCategory(category, null, null, [], 0, i)
     console.log(`✔ Категория обработана: ${category.name}`)
   }
+
+  await seedCities()
 
   console.log('🎉 Импорт успешно завершён!')
 }

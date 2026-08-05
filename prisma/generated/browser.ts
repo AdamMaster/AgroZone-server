@@ -57,3 +57,8 @@ export type Ad = Prisma.AdModel
  * 
  */
 export type Favorite = Prisma.FavoriteModel
+/**
+ * Model RuCity
+ * 
+ */
+export type RuCity = Prisma.RuCityModel

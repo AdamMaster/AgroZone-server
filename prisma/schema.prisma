@@ -290,6 +290,35 @@ enum AdStatus {
   EXPIRED
 }
 
+// Статический справочник городов России (датасет hflabs/city, тот же
+// источник, что и DaData) — импортируется один раз сид-скриптом
+// (prisma/seed.ts, prisma/data/ru-cities.ts) и НЕ зависит от того, есть ли
+// по этому городу хотя бы одно объявление. Нужен, чтобы фильтр локации в
+// каталоге подсказывал города сразу при вводе (см. AdsService.getAvailableLocations).
+// Сёл/деревень тут нет (в исходном датасете их нет) — они по-прежнему
+// фильтруются только по реальным объявлениям, как и раньше.
+model RuCity {
+  fiasId String @id @map("fias_id")
+
+  city     String
+  cityType String? @map("city_type")
+
+  region     String
+  regionType String? @map("region_type")
+
+  // Москва/Санкт-Петербург/Севастополь — у них city совпадает с region;
+  // используется в AdsService для матчинга объявлений по названию региона
+  // (ISO-код региона мы намеренно не хардкодим — см. комментарий в
+  // ru-cities.ts).
+  isFederalCity Boolean @default(false) @map("is_federal_city")
+
+  lat Float
+  lng Float
+
+  @@index([city])
+  @@map("ru_cities")
+}
+
 enum PriceUnit {
   ITEM
   TON

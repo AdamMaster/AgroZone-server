@@ -16,6 +16,82 @@ import slugify from 'slugify'
 import { UserService } from '@/user/user.service'
 import { normalizePhone } from '@/libs/common/utils/phone.util'
 
+// Города федерального значения — у них DaData отдаёт city == region, из-за
+// чего city_fias_id/city_with_type в ответе DaData пустые (см.
+// AddressInput.handleAddressChange), и Ad.localityFiasId для таких
+// объявлений вообще НЕ заполняется — есть только Ad.region/regionIsoCode.
+// Поэтому при выборе такого города из справочника RuCity (у него свой,
+// отдельный fiasId — см. ru-cities.ts) фильтровать по locality_fias_id
+// бессмысленно: сравниваем по названию региона (ILIKE) вместо этого. ISO
+// 3166-2:RU коды регионов мы намеренно не хардкодим (не удалось надёжно
+// подтвердить точный формат, см. обсуждение), поэтому не region_iso_code.
+const FEDERAL_CITY_REGION_NAMES: Record<string, string> = {
+  '0c5b2444-70a0-4932-980c-b4dc0d3f02b5': 'Москва',
+  'c2deb16a-0330-4f05-821f-1d09c93331e6': 'Санкт-Петербург',
+  '6fdecb78-893a-4e3f-a5ba-aa062459463b': 'Севастополь'
+}
+
+// Форматирование подписи региона из полей справочника RuCity (region +
+// regionType, взятых из hflabs/city как есть — там region в именительном
+// падеже без типа, "Адыгея"/"Респ", а не готовая строка вроде DaData
+// region_with_type). Обрабатывает только реально встречающиеся в датасете
+// значения regionType (см. ru-cities.ts).
+function formatRegionLabel(regionType: string | null, region: string): string {
+  switch (regionType) {
+    case 'Респ':
+      return `Респ. ${region}`
+    case 'край':
+      return `${region} край`
+    case 'обл':
+      return `${region} обл.`
+    case 'Аобл':
+      return `${region} автономная обл.`
+    case 'АО':
+      return /округ/i.test(region) ? region : `${region} АО`
+    case 'Чувашия':
+      return `${region} - Чувашия`
+    default:
+      return region
+  }
+}
+
+function formatCityLabel(city: {
+  city: string
+  cityType: string | null
+  region: string
+  regionType: string | null
+  isFederalCity: boolean
+}): string {
+  // Федеральный город — регион и есть город, дублировать в подписи нечего.
+  if (city.isFederalCity) return city.city
+
+  const cityLabel = city.cityType ? `${city.cityType}. ${city.city}` : city.city
+
+  return `${cityLabel}, ${formatRegionLabel(city.regionType, city.region)}`
+}
+
+// Регион, выбранный в фильтре (query.regionIsoCode — см. FindAdsQueryDto),
+// сравнивается не по ISO-коду (мы намеренно не храним и не хардкодим
+// ISO 3166-2:RU — не удалось надёжно подтвердить точный формат, см.
+// обсуждение), а по вхождению БАЗОВОГО названия региона (как оно записано
+// в справочнике RuCity, например "Алтай" или "Кабардино-Балкарская") в
+// Ad.region (человекочитаемая строка вида "Кабардино-Балкарская Респ.",
+// см. AddressInput) — этот базовый кусок названия у DaData и hflabs
+// совпадает буквально, а тип региона ("Респ"/"край"/"обл", у DaData может
+// стоять и до, и после названия) — нет, поэтому в сравнении не участвует.
+//
+// Матчим ЦЕЛЫМ словом (\y...\y), а не подстрокой — иначе "Алтай" совпал бы
+// и внутри "Алтайский край" (проверено на реальном Postgres). Ведущие и
+// хвостовые не-буквенные символы обрезаем — у одного региона в датасете
+// название вида "Саха /Якутия/", и висящий "/" на конце иначе ломает
+// границу слова.
+function buildRegionMatchPattern(name: string): string {
+  const trimmed = name.replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu, '')
+  const escaped = trimmed.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+
+  return `\\y${escaped}\\y`
+}
+
 @Injectable()
 export class AdsService {
   constructor(
@@ -44,7 +120,11 @@ export class AdsService {
     let phone = createAdDto.phone ? normalizePhone(createAdDto.phone) : null
 
     if (!phone) {
-      phone = user.phones.find(p => p.isPrimary)?.phone ?? null
+      // Как и в saveDraft() — если основного номера нет, но хотя бы один
+      // номер привязан, используем его, а не считаем, что номера нет
+      // вовсе (см. обсуждение — UserService.confirmAddPhone раньше мог
+      // добавить номер без isPrimary).
+      phone = user.phones.find(p => p.isPrimary)?.phone ?? user.phones[0]?.phone ?? null
     }
 
     if (!phone) {
@@ -139,15 +219,27 @@ export class AdsService {
       conditions.push(Prisma.sql`(ads.title ILIKE ${pattern} OR ads.description ILIKE ${pattern})`)
     }
 
-    // Точное совпадение по ISO-коду региона — regionIsoCode обычная
-    // скалярная колонка (не JSON), так что это простое условие, а не
-    // что-то в духе resolveFeatureFilters.
+    // regionIsoCode (несмотря на название параметра — оставили для
+    // совместимости с фронтом/URL) на самом деле несёт базовое название
+    // региона из справочника RuCity, а не настоящий ISO-код (мы его не
+    // храним — см. buildRegionMatchPattern). Сравниваем целым словом по
+    // Ad.region, а не точным совпадением колонки.
     if (query.regionIsoCode) {
-      conditions.push(Prisma.sql`ads.region_iso_code = ${query.regionIsoCode}`)
+      conditions.push(Prisma.sql`ads.region ~* ${buildRegionMatchPattern(query.regionIsoCode)}`)
     }
 
     if (query.localityFiasId) {
-      conditions.push(Prisma.sql`ads.locality_fias_id = ${query.localityFiasId}`)
+      const federalCityRegionName = FEDERAL_CITY_REGION_NAMES[query.localityFiasId]
+
+      // Москва/СПб/Севастополь выбраны из справочника RuCity — у таких
+      // объявлений locality_fias_id не заполняется (см. AddressInput —
+      // DaData не отдаёт city_fias_id, когда city == region), поэтому
+      // сравниваем по названию региона вместо ФИАС-id.
+      conditions.push(
+        federalCityRegionName
+          ? Prisma.sql`ads.region ~* ${buildRegionMatchPattern(federalCityRegionName)}`
+          : Prisma.sql`ads.locality_fias_id = ${query.localityFiasId}`
+      )
     }
 
     if (query.unit && (query.minPrice !== undefined || query.maxPrice !== undefined)) {
@@ -239,14 +331,20 @@ export class AdsService {
     return { items, total, page, limit }
   }
 
-  // Список локаций для фильтра каталога — сознательно НЕ статический
-  // хардкод географии РФ (это было бы и политически спорно на некоторых
-  // границах, и бесполезно показывало бы места без единого объявления), а
-  // реальные локации, где прямо сейчас есть хотя бы одно опубликованное
-  // объявление. Источник истины — тот же DaData-справочник, которым уже
-  // размечены сами объявления, никакой отдельной геобазы вести не нужно.
+  // Список локаций для фильтра каталога — гибрид двух источников:
+  //  - регионы (респ./край/обл./АО и т.д.) И города — из статичного
+  //    справочника RuCity (датасет hflabs/city, тот же источник, что и
+  //    DaData), доступны для поиска ВСЕГДА, даже если по ним ещё нет ни
+  //    одного объявления (иначе ввод "Красн..."/"Крас..." ничего бы не
+  //    подсказывал, пока кто-то не разместит объявление именно там —
+  //    ровно это и было нужно: "и города, и республики, и края, и всё
+  //    всё всё", а не только то, что уже опубликовано);
+  //  - сёла/деревни — по-прежнему из реальных объявлений, отдельной
+  //    статичной геобазы для них нет (в датасете их нет, а хардкодить
+  //    самим — и политически спорно на некоторых границах, и бесполезно
+  //    показывало бы места без единого объявления).
   //
-  // Отдаём ДВА уровня вперемешку одним списком — так фронт может искать
+  // Отдаём уровни вперемешку одним списком — так фронт может искать
   // единым полем и по региону целиком ("Кабардино-Балкарская Респ." →
   // все объявления по всему региону), и по конкретному городу/селу
   // ("Нальчик" → только по нему, через ФИАС-id, а не сравнение строк).
@@ -258,11 +356,18 @@ export class AdsService {
       expiresAt: { gt: now }
     }
 
-    const [regionRows, localityRows] = await Promise.all([
-      this.prisma.ad.findMany({
-        where: { ...baseWhere, regionIsoCode: { not: null } },
-        select: { region: true, regionIsoCode: true },
-        distinct: ['regionIsoCode'],
+    const [cities, regionRows, localityRows] = await Promise.all([
+      // Справочник городов (RuCity, датасет hflabs/city) — не зависит от
+      // того, есть ли по городу хоть одно объявление, доступен для
+      // поиска всегда (см. ru-cities.ts).
+      this.prisma.ruCity.findMany({ orderBy: { city: 'asc' } }),
+      // Уникальные регионы того же справочника — те же самые ~85
+      // субъектов РФ, что и у городов выше, поэтому регион точно так же
+      // доступен для поиска всегда, а не только там, где уже есть
+      // объявление.
+      this.prisma.ruCity.findMany({
+        distinct: ['region'],
+        select: { region: true, regionType: true, isFederalCity: true },
         orderBy: { region: 'asc' }
       }),
       this.prisma.ad.findMany({
@@ -273,19 +378,37 @@ export class AdsService {
       })
     ])
 
+    const citiesFromReference = cities.map(city => ({
+      type: 'locality' as const,
+      label: formatCityLabel(city),
+      regionIsoCode: undefined,
+      localityFiasId: city.fiasId
+    }))
+
+    // Москва/СПб/Севастополь в RuCity одновременно "город" и "регион"
+    // (region === city, см. ru-cities.ts) — как отдельный пункт "регион"
+    // их не показываем, они уже есть выше в citiesFromReference, и это и
+    // есть выбор "весь регион" для них (весь федеральный город).
     const regions = regionRows
-      .filter((row): row is { region: string; regionIsoCode: string } => Boolean(row.region && row.regionIsoCode))
-      .map(row => ({
+      .filter(region => !region.isFederalCity)
+      .map(region => ({
         type: 'region' as const,
-        label: row.region,
-        regionIsoCode: row.regionIsoCode
+        label: formatRegionLabel(region.regionType, region.region),
+        regionIsoCode: region.region
       }))
 
+    const cityFiasIds = new Set(cities.map(city => city.fiasId))
+
+    // Сёла/деревни и прочие населённые пункты — их нет в справочнике
+    // городов (RuCity содержит только города), поэтому как и раньше берём
+    // их из реальных объявлений. Города, которые объявление указало точно
+    // так же, как уже есть в справочнике, пропускаем — не дублировать.
     const localities = localityRows
       .filter(
         (row): row is { region: string; regionIsoCode: string; locality: string; localityFiasId: string } =>
           Boolean(row.region && row.regionIsoCode && row.locality && row.localityFiasId)
       )
+      .filter(row => !cityFiasIds.has(row.localityFiasId))
       .map(row => ({
         type: 'locality' as const,
         label: `${row.locality}, ${row.region}`,
@@ -293,7 +416,7 @@ export class AdsService {
         localityFiasId: row.localityFiasId
       }))
 
-    return [...regions, ...localities]
+    return [...regions, ...citiesFromReference, ...localities]
   }
 
   private mapSortToPrismaOrderBy(sortBy?: AdsSortBy) {
