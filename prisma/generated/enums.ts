@@ -41,6 +41,15 @@ export const AdReportStatus = {
 export type AdReportStatus = (typeof AdReportStatus)[keyof typeof AdReportStatus]
 
 
+export const AdBumpStatus = {
+  PENDING: 'PENDING',
+  SUCCEEDED: 'SUCCEEDED',
+  CANCELED: 'CANCELED'
+} as const
+
+export type AdBumpStatus = (typeof AdBumpStatus)[keyof typeof AdBumpStatus]
+
+
 export const UserRole = {
   REGULAR: 'REGULAR',
   ADMIN: 'ADMIN',

@@ -484,6 +484,23 @@ export type EnumAdReportStatusWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumAdReportStatusFilter<$PrismaModel>
 }
 
+export type EnumAdBumpStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.AdBumpStatus | Prisma.EnumAdBumpStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.AdBumpStatus[] | Prisma.ListEnumAdBumpStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AdBumpStatus[] | Prisma.ListEnumAdBumpStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAdBumpStatusFilter<$PrismaModel> | $Enums.AdBumpStatus
+}
+
+export type EnumAdBumpStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.AdBumpStatus | Prisma.EnumAdBumpStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.AdBumpStatus[] | Prisma.ListEnumAdBumpStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AdBumpStatus[] | Prisma.ListEnumAdBumpStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAdBumpStatusWithAggregatesFilter<$PrismaModel> | $Enums.AdBumpStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumAdBumpStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumAdBumpStatusFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -911,6 +928,23 @@ export type NestedEnumAdReportStatusWithAggregatesFilter<$PrismaModel = never> =
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumAdReportStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumAdReportStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumAdBumpStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.AdBumpStatus | Prisma.EnumAdBumpStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.AdBumpStatus[] | Prisma.ListEnumAdBumpStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AdBumpStatus[] | Prisma.ListEnumAdBumpStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAdBumpStatusFilter<$PrismaModel> | $Enums.AdBumpStatus
+}
+
+export type NestedEnumAdBumpStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.AdBumpStatus | Prisma.EnumAdBumpStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.AdBumpStatus[] | Prisma.ListEnumAdBumpStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AdBumpStatus[] | Prisma.ListEnumAdBumpStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAdBumpStatusWithAggregatesFilter<$PrismaModel> | $Enums.AdBumpStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumAdBumpStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumAdBumpStatusFilter<$PrismaModel>
 }
 
 

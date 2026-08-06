@@ -50,7 +50,15 @@ export class AdBumpsService {
       data: { adId, userId, amount: AD_BUMP_PRICE_KOPECKS }
     })
 
-    const returnUrl = `${this.configService.getOrThrow<string>('APPLICATION_URL')}/ads/${adId}`
+    // ?bump=<id> — чтобы страница объявления при возврате с оплаты знала,
+    // какой именно платёж перепроверить (см. checkStatus/ad-bumps.controller.ts
+    // и фронтовый use-bump-status.ts).
+    //
+    // ВАЖНО: именно ALLOWED_ORIGIN (адрес фронтенда, клиента), а не
+    // APPLICATION_URL — это адрес самого бэкенда (см. providers.config.ts,
+    // куда уходят OAuth-редиректы). Тут нужна страница объявления, которую
+    // отдаёт Next.js, а не Nest.
+    const returnUrl = `${this.configService.getOrThrow<string>('ALLOWED_ORIGIN')}/ads/${adId}?bump=${bump.id}`
 
     let payment: YookassaPayment
 

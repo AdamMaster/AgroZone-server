@@ -393,6 +393,7 @@ export const ModelName = {
   Ad: 'Ad',
   Favorite: 'Favorite',
   AdReport: 'AdReport',
+  AdBump: 'AdBump',
   Conversation: 'Conversation',
   BlockedUser: 'BlockedUser',
   Message: 'Message',
@@ -412,7 +413,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "userPhone" | "account" | "token" | "category" | "categoryFeature" | "ad" | "favorite" | "adReport" | "conversation" | "blockedUser" | "message" | "ruCity"
+    modelProps: "user" | "userPhone" | "account" | "token" | "category" | "categoryFeature" | "ad" | "favorite" | "adReport" | "adBump" | "conversation" | "blockedUser" | "message" | "ruCity"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1082,6 +1083,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    AdBump: {
+      payload: Prisma.$AdBumpPayload<ExtArgs>
+      fields: Prisma.AdBumpFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AdBumpFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdBumpPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AdBumpFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdBumpPayload>
+        }
+        findFirst: {
+          args: Prisma.AdBumpFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdBumpPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AdBumpFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdBumpPayload>
+        }
+        findMany: {
+          args: Prisma.AdBumpFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdBumpPayload>[]
+        }
+        create: {
+          args: Prisma.AdBumpCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdBumpPayload>
+        }
+        createMany: {
+          args: Prisma.AdBumpCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AdBumpCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdBumpPayload>[]
+        }
+        delete: {
+          args: Prisma.AdBumpDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdBumpPayload>
+        }
+        update: {
+          args: Prisma.AdBumpUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdBumpPayload>
+        }
+        deleteMany: {
+          args: Prisma.AdBumpDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AdBumpUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AdBumpUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdBumpPayload>[]
+        }
+        upsert: {
+          args: Prisma.AdBumpUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdBumpPayload>
+        }
+        aggregate: {
+          args: Prisma.AdBumpAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAdBump>
+        }
+        groupBy: {
+          args: Prisma.AdBumpGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AdBumpGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AdBumpCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AdBumpCountAggregateOutputType> | number
+        }
+      }
+    }
     Conversation: {
       payload: Prisma.$ConversationPayload<ExtArgs>
       fields: Prisma.ConversationFieldRefs
@@ -1544,6 +1619,7 @@ export const AdScalarFieldEnum = {
   rejectionReason: 'rejectionReason',
   expiresAt: 'expiresAt',
   publishedAt: 'publishedAt',
+  bumpedAt: 'bumpedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1572,6 +1648,20 @@ export const AdReportScalarFieldEnum = {
 } as const
 
 export type AdReportScalarFieldEnum = (typeof AdReportScalarFieldEnum)[keyof typeof AdReportScalarFieldEnum]
+
+
+export const AdBumpScalarFieldEnum = {
+  id: 'id',
+  adId: 'adId',
+  userId: 'userId',
+  amount: 'amount',
+  status: 'status',
+  yookassaPaymentId: 'yookassaPaymentId',
+  createdAt: 'createdAt',
+  paidAt: 'paidAt'
+} as const
+
+export type AdBumpScalarFieldEnum = (typeof AdBumpScalarFieldEnum)[keyof typeof AdBumpScalarFieldEnum]
 
 
 export const ConversationScalarFieldEnum = {
@@ -1898,6 +1988,20 @@ export type EnumAdReportStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$P
 export type ListEnumAdReportStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AdReportStatus[]'>
     
 
+
+/**
+ * Reference to a field of type 'AdBumpStatus'
+ */
+export type EnumAdBumpStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AdBumpStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'AdBumpStatus[]'
+ */
+export type ListEnumAdBumpStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AdBumpStatus[]'>
+    
+
 /**
  * Batch Payload for updateMany & deleteMany & createMany
  */
@@ -2002,6 +2106,7 @@ export type GlobalOmitConfig = {
   ad?: Prisma.AdOmit
   favorite?: Prisma.FavoriteOmit
   adReport?: Prisma.AdReportOmit
+  adBump?: Prisma.AdBumpOmit
   conversation?: Prisma.ConversationOmit
   blockedUser?: Prisma.BlockedUserOmit
   message?: Prisma.MessageOmit

@@ -60,6 +60,7 @@ export const ModelName = {
   Ad: 'Ad',
   Favorite: 'Favorite',
   AdReport: 'AdReport',
+  AdBump: 'AdBump',
   Conversation: 'Conversation',
   BlockedUser: 'BlockedUser',
   Message: 'Message',
@@ -209,6 +210,7 @@ export const AdScalarFieldEnum = {
   rejectionReason: 'rejectionReason',
   expiresAt: 'expiresAt',
   publishedAt: 'publishedAt',
+  bumpedAt: 'bumpedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -237,6 +239,20 @@ export const AdReportScalarFieldEnum = {
 } as const
 
 export type AdReportScalarFieldEnum = (typeof AdReportScalarFieldEnum)[keyof typeof AdReportScalarFieldEnum]
+
+
+export const AdBumpScalarFieldEnum = {
+  id: 'id',
+  adId: 'adId',
+  userId: 'userId',
+  amount: 'amount',
+  status: 'status',
+  yookassaPaymentId: 'yookassaPaymentId',
+  createdAt: 'createdAt',
+  paidAt: 'paidAt'
+} as const
+
+export type AdBumpScalarFieldEnum = (typeof AdBumpScalarFieldEnum)[keyof typeof AdBumpScalarFieldEnum]
 
 
 export const ConversationScalarFieldEnum = {
