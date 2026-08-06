@@ -457,6 +457,13 @@ export type EnumAdReportReasonFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumAdReportReasonFilter<$PrismaModel> | $Enums.AdReportReason
 }
 
+export type EnumAdReportStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.AdReportStatus | Prisma.EnumAdReportStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.AdReportStatus[] | Prisma.ListEnumAdReportStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AdReportStatus[] | Prisma.ListEnumAdReportStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAdReportStatusFilter<$PrismaModel> | $Enums.AdReportStatus
+}
+
 export type EnumAdReportReasonWithAggregatesFilter<$PrismaModel = never> = {
   equals?: $Enums.AdReportReason | Prisma.EnumAdReportReasonFieldRefInput<$PrismaModel>
   in?: $Enums.AdReportReason[] | Prisma.ListEnumAdReportReasonFieldRefInput<$PrismaModel>
@@ -465,6 +472,16 @@ export type EnumAdReportReasonWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumAdReportReasonFilter<$PrismaModel>
   _max?: Prisma.NestedEnumAdReportReasonFilter<$PrismaModel>
+}
+
+export type EnumAdReportStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.AdReportStatus | Prisma.EnumAdReportStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.AdReportStatus[] | Prisma.ListEnumAdReportStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AdReportStatus[] | Prisma.ListEnumAdReportStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAdReportStatusWithAggregatesFilter<$PrismaModel> | $Enums.AdReportStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumAdReportStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumAdReportStatusFilter<$PrismaModel>
 }
 
 export type NestedStringFilter<$PrismaModel = never> = {
@@ -869,6 +886,13 @@ export type NestedEnumAdReportReasonFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumAdReportReasonFilter<$PrismaModel> | $Enums.AdReportReason
 }
 
+export type NestedEnumAdReportStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.AdReportStatus | Prisma.EnumAdReportStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.AdReportStatus[] | Prisma.ListEnumAdReportStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AdReportStatus[] | Prisma.ListEnumAdReportStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAdReportStatusFilter<$PrismaModel> | $Enums.AdReportStatus
+}
+
 export type NestedEnumAdReportReasonWithAggregatesFilter<$PrismaModel = never> = {
   equals?: $Enums.AdReportReason | Prisma.EnumAdReportReasonFieldRefInput<$PrismaModel>
   in?: $Enums.AdReportReason[] | Prisma.ListEnumAdReportReasonFieldRefInput<$PrismaModel>
@@ -877,6 +901,16 @@ export type NestedEnumAdReportReasonWithAggregatesFilter<$PrismaModel = never> =
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumAdReportReasonFilter<$PrismaModel>
   _max?: Prisma.NestedEnumAdReportReasonFilter<$PrismaModel>
+}
+
+export type NestedEnumAdReportStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.AdReportStatus | Prisma.EnumAdReportStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.AdReportStatus[] | Prisma.ListEnumAdReportStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AdReportStatus[] | Prisma.ListEnumAdReportStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAdReportStatusWithAggregatesFilter<$PrismaModel> | $Enums.AdReportStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumAdReportStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumAdReportStatusFilter<$PrismaModel>
 }
 
 

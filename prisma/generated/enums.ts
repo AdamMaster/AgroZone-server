@@ -32,6 +32,15 @@ export const AdReportReason = {
 export type AdReportReason = (typeof AdReportReason)[keyof typeof AdReportReason]
 
 
+export const AdReportStatus = {
+  PENDING: 'PENDING',
+  REVIEWED: 'REVIEWED',
+  DISMISSED: 'DISMISSED'
+} as const
+
+export type AdReportStatus = (typeof AdReportStatus)[keyof typeof AdReportStatus]
+
+
 export const UserRole = {
   REGULAR: 'REGULAR',
   ADMIN: 'ADMIN',

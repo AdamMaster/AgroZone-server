@@ -1567,6 +1567,7 @@ export const AdReportScalarFieldEnum = {
   userId: 'userId',
   reason: 'reason',
   comment: 'comment',
+  status: 'status',
   createdAt: 'createdAt'
 } as const
 
@@ -1881,6 +1882,20 @@ export type EnumAdReportReasonFieldRefInput<$PrismaModel> = FieldRefInputType<$P
  * Reference to a field of type 'AdReportReason[]'
  */
 export type ListEnumAdReportReasonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AdReportReason[]'>
+    
+
+
+/**
+ * Reference to a field of type 'AdReportStatus'
+ */
+export type EnumAdReportStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AdReportStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'AdReportStatus[]'
+ */
+export type ListEnumAdReportStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AdReportStatus[]'>
     
 
 /**

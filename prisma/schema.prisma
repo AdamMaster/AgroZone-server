@@ -282,6 +282,16 @@ enum AdReportReason {
   OTHER
 }
 
+// PENDING — ещё не разобрана модератором; REVIEWED — разобрана, меры приняты
+// (например, объявление отклонено отдельным действием в очереди модерации);
+// DISMISSED — разобрана и признана необоснованной. Порядок значений важен:
+// используется для сортировки "новые жалобы сверху" (см. AdReportsService.findAll).
+enum AdReportStatus {
+  PENDING
+  REVIEWED
+  DISMISSED
+}
+
 // Жалоба на объявление — модерация контента (не то же самое, что
 // блокировка юзера в чате, см. BlockedUser: там про отношения между двумя
 // людьми, здесь про сам контент объявления, и жалоба должна быть видна
@@ -299,12 +309,14 @@ model AdReport {
 
   reason  AdReportReason
   comment String?        @db.Text
+  status  AdReportStatus @default(PENDING)
 
   createdAt DateTime @default(now()) @map("created_at")
 
   @@unique([adId, userId])
   @@index([adId])
   @@index([userId])
+  @@index([status])
   @@map("ad_reports")
 }
 

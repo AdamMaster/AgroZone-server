@@ -30,6 +30,7 @@ export type AdReportMinAggregateOutputType = {
   userId: string | null
   reason: $Enums.AdReportReason | null
   comment: string | null
+  status: $Enums.AdReportStatus | null
   createdAt: Date | null
 }
 
@@ -39,6 +40,7 @@ export type AdReportMaxAggregateOutputType = {
   userId: string | null
   reason: $Enums.AdReportReason | null
   comment: string | null
+  status: $Enums.AdReportStatus | null
   createdAt: Date | null
 }
 
@@ -48,6 +50,7 @@ export type AdReportCountAggregateOutputType = {
   userId: number
   reason: number
   comment: number
+  status: number
   createdAt: number
   _all: number
 }
@@ -59,6 +62,7 @@ export type AdReportMinAggregateInputType = {
   userId?: true
   reason?: true
   comment?: true
+  status?: true
   createdAt?: true
 }
 
@@ -68,6 +72,7 @@ export type AdReportMaxAggregateInputType = {
   userId?: true
   reason?: true
   comment?: true
+  status?: true
   createdAt?: true
 }
 
@@ -77,6 +82,7 @@ export type AdReportCountAggregateInputType = {
   userId?: true
   reason?: true
   comment?: true
+  status?: true
   createdAt?: true
   _all?: true
 }
@@ -159,6 +165,7 @@ export type AdReportGroupByOutputType = {
   userId: string
   reason: $Enums.AdReportReason
   comment: string | null
+  status: $Enums.AdReportStatus
   createdAt: Date
   _count: AdReportCountAggregateOutputType | null
   _min: AdReportMinAggregateOutputType | null
@@ -189,6 +196,7 @@ export type AdReportWhereInput = {
   userId?: Prisma.StringFilter<"AdReport"> | string
   reason?: Prisma.EnumAdReportReasonFilter<"AdReport"> | $Enums.AdReportReason
   comment?: Prisma.StringNullableFilter<"AdReport"> | string | null
+  status?: Prisma.EnumAdReportStatusFilter<"AdReport"> | $Enums.AdReportStatus
   createdAt?: Prisma.DateTimeFilter<"AdReport"> | Date | string
   ad?: Prisma.XOR<Prisma.AdScalarRelationFilter, Prisma.AdWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -200,6 +208,7 @@ export type AdReportOrderByWithRelationInput = {
   userId?: Prisma.SortOrder
   reason?: Prisma.SortOrder
   comment?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   ad?: Prisma.AdOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
@@ -215,6 +224,7 @@ export type AdReportWhereUniqueInput = Prisma.AtLeast<{
   userId?: Prisma.StringFilter<"AdReport"> | string
   reason?: Prisma.EnumAdReportReasonFilter<"AdReport"> | $Enums.AdReportReason
   comment?: Prisma.StringNullableFilter<"AdReport"> | string | null
+  status?: Prisma.EnumAdReportStatusFilter<"AdReport"> | $Enums.AdReportStatus
   createdAt?: Prisma.DateTimeFilter<"AdReport"> | Date | string
   ad?: Prisma.XOR<Prisma.AdScalarRelationFilter, Prisma.AdWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -226,6 +236,7 @@ export type AdReportOrderByWithAggregationInput = {
   userId?: Prisma.SortOrder
   reason?: Prisma.SortOrder
   comment?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.AdReportCountOrderByAggregateInput
   _max?: Prisma.AdReportMaxOrderByAggregateInput
@@ -241,6 +252,7 @@ export type AdReportScalarWhereWithAggregatesInput = {
   userId?: Prisma.StringWithAggregatesFilter<"AdReport"> | string
   reason?: Prisma.EnumAdReportReasonWithAggregatesFilter<"AdReport"> | $Enums.AdReportReason
   comment?: Prisma.StringNullableWithAggregatesFilter<"AdReport"> | string | null
+  status?: Prisma.EnumAdReportStatusWithAggregatesFilter<"AdReport"> | $Enums.AdReportStatus
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"AdReport"> | Date | string
 }
 
@@ -248,6 +260,7 @@ export type AdReportCreateInput = {
   id?: string
   reason: $Enums.AdReportReason
   comment?: string | null
+  status?: $Enums.AdReportStatus
   createdAt?: Date | string
   ad: Prisma.AdCreateNestedOneWithoutReportsInput
   user: Prisma.UserCreateNestedOneWithoutAdReportsInput
@@ -259,6 +272,7 @@ export type AdReportUncheckedCreateInput = {
   userId: string
   reason: $Enums.AdReportReason
   comment?: string | null
+  status?: $Enums.AdReportStatus
   createdAt?: Date | string
 }
 
@@ -266,6 +280,7 @@ export type AdReportUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   reason?: Prisma.EnumAdReportReasonFieldUpdateOperationsInput | $Enums.AdReportReason
   comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumAdReportStatusFieldUpdateOperationsInput | $Enums.AdReportStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ad?: Prisma.AdUpdateOneRequiredWithoutReportsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutAdReportsNestedInput
@@ -277,6 +292,7 @@ export type AdReportUncheckedUpdateInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   reason?: Prisma.EnumAdReportReasonFieldUpdateOperationsInput | $Enums.AdReportReason
   comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumAdReportStatusFieldUpdateOperationsInput | $Enums.AdReportStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -286,6 +302,7 @@ export type AdReportCreateManyInput = {
   userId: string
   reason: $Enums.AdReportReason
   comment?: string | null
+  status?: $Enums.AdReportStatus
   createdAt?: Date | string
 }
 
@@ -293,6 +310,7 @@ export type AdReportUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   reason?: Prisma.EnumAdReportReasonFieldUpdateOperationsInput | $Enums.AdReportReason
   comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumAdReportStatusFieldUpdateOperationsInput | $Enums.AdReportStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -302,6 +320,7 @@ export type AdReportUncheckedUpdateManyInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   reason?: Prisma.EnumAdReportReasonFieldUpdateOperationsInput | $Enums.AdReportReason
   comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumAdReportStatusFieldUpdateOperationsInput | $Enums.AdReportStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -326,6 +345,7 @@ export type AdReportCountOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   reason?: Prisma.SortOrder
   comment?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -335,6 +355,7 @@ export type AdReportMaxOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   reason?: Prisma.SortOrder
   comment?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -344,6 +365,7 @@ export type AdReportMinOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   reason?: Prisma.SortOrder
   comment?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -435,10 +457,15 @@ export type EnumAdReportReasonFieldUpdateOperationsInput = {
   set?: $Enums.AdReportReason
 }
 
+export type EnumAdReportStatusFieldUpdateOperationsInput = {
+  set?: $Enums.AdReportStatus
+}
+
 export type AdReportCreateWithoutUserInput = {
   id?: string
   reason: $Enums.AdReportReason
   comment?: string | null
+  status?: $Enums.AdReportStatus
   createdAt?: Date | string
   ad: Prisma.AdCreateNestedOneWithoutReportsInput
 }
@@ -448,6 +475,7 @@ export type AdReportUncheckedCreateWithoutUserInput = {
   adId: string
   reason: $Enums.AdReportReason
   comment?: string | null
+  status?: $Enums.AdReportStatus
   createdAt?: Date | string
 }
 
@@ -486,6 +514,7 @@ export type AdReportScalarWhereInput = {
   userId?: Prisma.StringFilter<"AdReport"> | string
   reason?: Prisma.EnumAdReportReasonFilter<"AdReport"> | $Enums.AdReportReason
   comment?: Prisma.StringNullableFilter<"AdReport"> | string | null
+  status?: Prisma.EnumAdReportStatusFilter<"AdReport"> | $Enums.AdReportStatus
   createdAt?: Prisma.DateTimeFilter<"AdReport"> | Date | string
 }
 
@@ -493,6 +522,7 @@ export type AdReportCreateWithoutAdInput = {
   id?: string
   reason: $Enums.AdReportReason
   comment?: string | null
+  status?: $Enums.AdReportStatus
   createdAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutAdReportsInput
 }
@@ -502,6 +532,7 @@ export type AdReportUncheckedCreateWithoutAdInput = {
   userId: string
   reason: $Enums.AdReportReason
   comment?: string | null
+  status?: $Enums.AdReportStatus
   createdAt?: Date | string
 }
 
@@ -536,6 +567,7 @@ export type AdReportCreateManyUserInput = {
   adId: string
   reason: $Enums.AdReportReason
   comment?: string | null
+  status?: $Enums.AdReportStatus
   createdAt?: Date | string
 }
 
@@ -543,6 +575,7 @@ export type AdReportUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   reason?: Prisma.EnumAdReportReasonFieldUpdateOperationsInput | $Enums.AdReportReason
   comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumAdReportStatusFieldUpdateOperationsInput | $Enums.AdReportStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ad?: Prisma.AdUpdateOneRequiredWithoutReportsNestedInput
 }
@@ -552,6 +585,7 @@ export type AdReportUncheckedUpdateWithoutUserInput = {
   adId?: Prisma.StringFieldUpdateOperationsInput | string
   reason?: Prisma.EnumAdReportReasonFieldUpdateOperationsInput | $Enums.AdReportReason
   comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumAdReportStatusFieldUpdateOperationsInput | $Enums.AdReportStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -560,6 +594,7 @@ export type AdReportUncheckedUpdateManyWithoutUserInput = {
   adId?: Prisma.StringFieldUpdateOperationsInput | string
   reason?: Prisma.EnumAdReportReasonFieldUpdateOperationsInput | $Enums.AdReportReason
   comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumAdReportStatusFieldUpdateOperationsInput | $Enums.AdReportStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -568,6 +603,7 @@ export type AdReportCreateManyAdInput = {
   userId: string
   reason: $Enums.AdReportReason
   comment?: string | null
+  status?: $Enums.AdReportStatus
   createdAt?: Date | string
 }
 
@@ -575,6 +611,7 @@ export type AdReportUpdateWithoutAdInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   reason?: Prisma.EnumAdReportReasonFieldUpdateOperationsInput | $Enums.AdReportReason
   comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumAdReportStatusFieldUpdateOperationsInput | $Enums.AdReportStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutAdReportsNestedInput
 }
@@ -584,6 +621,7 @@ export type AdReportUncheckedUpdateWithoutAdInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   reason?: Prisma.EnumAdReportReasonFieldUpdateOperationsInput | $Enums.AdReportReason
   comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumAdReportStatusFieldUpdateOperationsInput | $Enums.AdReportStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -592,6 +630,7 @@ export type AdReportUncheckedUpdateManyWithoutAdInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   reason?: Prisma.EnumAdReportReasonFieldUpdateOperationsInput | $Enums.AdReportReason
   comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumAdReportStatusFieldUpdateOperationsInput | $Enums.AdReportStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -603,6 +642,7 @@ export type AdReportSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   userId?: boolean
   reason?: boolean
   comment?: boolean
+  status?: boolean
   createdAt?: boolean
   ad?: boolean | Prisma.AdDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -614,6 +654,7 @@ export type AdReportSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   userId?: boolean
   reason?: boolean
   comment?: boolean
+  status?: boolean
   createdAt?: boolean
   ad?: boolean | Prisma.AdDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -625,6 +666,7 @@ export type AdReportSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   userId?: boolean
   reason?: boolean
   comment?: boolean
+  status?: boolean
   createdAt?: boolean
   ad?: boolean | Prisma.AdDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -636,10 +678,11 @@ export type AdReportSelectScalar = {
   userId?: boolean
   reason?: boolean
   comment?: boolean
+  status?: boolean
   createdAt?: boolean
 }
 
-export type AdReportOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "adId" | "userId" | "reason" | "comment" | "createdAt", ExtArgs["result"]["adReport"]>
+export type AdReportOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "adId" | "userId" | "reason" | "comment" | "status" | "createdAt", ExtArgs["result"]["adReport"]>
 export type AdReportInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   ad?: boolean | Prisma.AdDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -665,6 +708,7 @@ export type $AdReportPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     userId: string
     reason: $Enums.AdReportReason
     comment: string | null
+    status: $Enums.AdReportStatus
     createdAt: Date
   }, ExtArgs["result"]["adReport"]>
   composites: {}
@@ -1096,6 +1140,7 @@ export interface AdReportFieldRefs {
   readonly userId: Prisma.FieldRef<"AdReport", 'String'>
   readonly reason: Prisma.FieldRef<"AdReport", 'AdReportReason'>
   readonly comment: Prisma.FieldRef<"AdReport", 'String'>
+  readonly status: Prisma.FieldRef<"AdReport", 'AdReportStatus'>
   readonly createdAt: Prisma.FieldRef<"AdReport", 'DateTime'>
 }
     

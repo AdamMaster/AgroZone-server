@@ -1,9 +1,18 @@
 import { ConflictException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common'
 import { Prisma } from 'prisma/generated/client'
+import { AdReportStatus } from 'prisma/generated/enums'
 
 import { PrismaService } from '@/prisma/prisma.service'
 
 import { CreateAdReportDto } from './dto/create-ad-report.dto'
+
+// Общий include для отдачи жалобы админу — нужны и объявление (посмотреть,
+// на что жалуются), и сам жалующийся (на всякий случай, если понадобится
+// связаться/разобраться в контексте).
+const ADMIN_REPORT_INCLUDE = {
+  ad: { select: { id: true, title: true, images: true } },
+  user: { select: { id: true, displayName: true } }
+} satisfies Prisma.AdReportInclude
 
 @Injectable()
 export class AdReportsService {
@@ -42,5 +51,29 @@ export class AdReportsService {
 
       throw error
     }
+  }
+
+  // Все жалобы сразу, по всем объявлениям — только для модератора (см.
+  // AdReportsAdminController). PENDING первыми (см. порядок значений в
+  // enum AdReportStatus), внутри статуса — новые сверху.
+  async findAll() {
+    return this.prisma.adReport.findMany({
+      orderBy: [{ status: 'asc' }, { createdAt: 'desc' }],
+      include: ADMIN_REPORT_INCLUDE
+    })
+  }
+
+  async updateStatus(id: string, status: AdReportStatus) {
+    const report = await this.prisma.adReport.findUnique({ where: { id } })
+
+    if (!report) {
+      throw new NotFoundException('Жалоба не найдена')
+    }
+
+    return this.prisma.adReport.update({
+      where: { id },
+      data: { status },
+      include: ADMIN_REPORT_INCLUDE
+    })
   }
 }

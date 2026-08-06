@@ -232,6 +232,7 @@ export const AdReportScalarFieldEnum = {
   userId: 'userId',
   reason: 'reason',
   comment: 'comment',
+  status: 'status',
   createdAt: 'createdAt'
 } as const
 
