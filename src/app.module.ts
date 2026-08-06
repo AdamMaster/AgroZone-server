@@ -21,6 +21,7 @@ import { RedisModule } from './redis/redis.module'
 import { ConversationsModule } from './conversations/conversations.module'
 import { BlockedUsersModule } from './blocked-users/blocked-users.module'
 import { AdReportsModule } from './ad-reports/ad-reports.module'
+import { AdBumpsModule } from './ad-bumps/ad-bumps.module'
 
 @Module({
   imports: [
@@ -61,7 +62,8 @@ import { AdReportsModule } from './ad-reports/ad-reports.module'
     RedisModule,
     ConversationsModule,
     BlockedUsersModule,
-    AdReportsModule
+    AdReportsModule,
+    AdBumpsModule
   ]
 })
 export class AppModule {}

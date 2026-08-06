@@ -258,8 +258,15 @@ export class AdsService {
 
     conditions.push(...featureConditions)
 
+    // DATE_DESC (сортировка по умолчанию) — COALESCE(bumped_at, created_at):
+    // платно поднятое объявление (см. AdBumpsService) всплывает в топ ленты
+    // ровно как только что созданное и естественно "тонет" по мере
+    // появления более новых/свежеподнятых объявлений. Явная сортировка по
+    // цене/дате намеренно не учитывает bumped_at — поднятие влияет только
+    // на дефолтную ленту, а не переупорядочивает то, что юзер явно
+    // отсортировал сам.
     const sortMap: Record<AdsSortBy, Prisma.Sql> = {
-      [AdsSortBy.DATE_DESC]: Prisma.sql`ads.created_at DESC`,
+      [AdsSortBy.DATE_DESC]: Prisma.sql`COALESCE(ads.bumped_at, ads.created_at) DESC`,
       [AdsSortBy.DATE_ASC]: Prisma.sql`ads.created_at ASC`,
       [AdsSortBy.PRICE_ASC]: Prisma.sql`ads.price ASC NULLS LAST`,
       [AdsSortBy.PRICE_DESC]: Prisma.sql`ads.price DESC NULLS LAST`
@@ -318,11 +325,18 @@ export class AdsService {
               select: { id: true }
             }
           : false
-      },
-      orderBy: this.mapSortToPrismaOrderBy(query.sortBy)
+      }
+      // Без orderBy — порядок строк из findMany({ where: { id: { in } } })
+      // не гарантирован и не обязан совпадать с ORDER BY выше (особенно
+      // для COALESCE(bumped_at, created_at), для которого нет прямого
+      // аналога в декларативном orderBy Prisma). Правильный порядок уже
+      // есть в ids — просто раскладываем найденные записи по нему ниже.
     })
 
-    const items = ads.map(ad => ({
+    const adsById = new Map(ads.map(ad => [ad.id, ad]))
+    const orderedAds = ids.map(id => adsById.get(id)).filter((ad): ad is (typeof ads)[number] => ad !== undefined)
+
+    const items = orderedAds.map(ad => ({
       ...ad,
       isFavorite: userId ? ad.favorites?.length > 0 : false,
       isExpired: false
@@ -419,19 +433,6 @@ export class AdsService {
     return [...regions, ...citiesFromReference, ...localities]
   }
 
-  private mapSortToPrismaOrderBy(sortBy?: AdsSortBy) {
-    switch (sortBy) {
-      case AdsSortBy.DATE_ASC:
-        return [{ createdAt: 'asc' as const }]
-      case AdsSortBy.PRICE_ASC:
-        return [{ price: { sort: 'asc' as const, nulls: 'last' as const } }]
-      case AdsSortBy.PRICE_DESC:
-        return [{ price: { sort: 'desc' as const, nulls: 'last' as const } }]
-      case AdsSortBy.DATE_DESC:
-      default:
-        return [{ createdAt: 'desc' as const }]
-    }
-  }
 
   // Строит SQL-условия для фильтра по динамическим характеристикам
   // категории (Ad.features, JSONB). Ключи в rawFeatures сверяются с

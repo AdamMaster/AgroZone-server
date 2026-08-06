@@ -49,6 +49,9 @@ model User {
   // Жалобы, которые этот юзер отправил на чужие объявления (см. AdReport).
   adReports AdReport[]
 
+  // Платные "поднятия" объявлений этого юзера (см. AdBump).
+  adBumps AdBump[]
+
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
@@ -234,12 +237,22 @@ model Ad {
 
   conversations Conversation[]
   reports       AdReport[]
+  bumps         AdBump[]
 
   status AdStatus @default(PENDING)
 
   rejectionReason String?   @map("rejection_reason")
   expiresAt       DateTime? @map("expires_at")
   publishedAt     DateTime? @map("published_at")
+
+  // Время последнего платного "поднятия" объявления (см. AdBumpsService) —
+  // null, если ни разу не поднимали. Используется вместо createdAt в
+  // сортировке каталога по умолчанию (COALESCE(bumped_at, created_at) —
+  // см. AdsService.findAll), чтобы поднятое объявление всплывало в топ
+  // ленты ровно как только что созданное, и естественно "тонуло" по мере
+  // появления более новых/свежеподнятых объявлений — без отдельного поля
+  // "закреплено" и без фоновых задач на снятие закрепления.
+  bumpedAt DateTime? @map("bumped_at")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -318,6 +331,52 @@ model AdReport {
   @@index([userId])
   @@index([status])
   @@map("ad_reports")
+}
+
+// PENDING — платёж создан в ЮKassa, ждём подтверждения по вебхуку;
+// SUCCEEDED — оплата прошла, объявление поднято (Ad.bumpedAt проставлен
+// в той же транзакции — см. AdBumpsService.handleWebhook); CANCELED —
+// платёж отменён/просрочен на стороне ЮKassa. Статус выставляется только
+// на основании повторного запроса к API ЮKassa по platformId, а не на
+// основании тела вебхука (его в теории можно подделать).
+enum AdBumpStatus {
+  PENDING
+  SUCCEEDED
+  CANCELED
+}
+
+// Один платный "разовый подъём" объявления в топ ленты. Каждая попытка —
+// отдельная запись (в отличие от AdReport с @@unique — тут юзер может
+// поднимать одно и то же объявление сколько угодно раз, было бы за что
+// платить).
+model AdBump {
+  id String @id @default(uuid())
+
+  adId String @map("ad_id")
+  ad   Ad     @relation(fields: [adId], references: [id], onDelete: Cascade)
+
+  userId String @map("user_id")
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // В копейках — как и Ad.price устроен через BigInt, чтобы не иметь дела
+  // с плавающей точкой в деньгах. Для ЮKassa конвертируется в строку с
+  // двумя знаками после запятой (см. AdBumpsService).
+  amount Int
+
+  status AdBumpStatus @default(PENDING)
+
+  // id платежа в ЮKassa — приходит в ответ на создание платежа, по нему же
+  // сверяем вебхук. Уникален — на один AdBump не может быть двух платежей
+  // ЮKassa одновременно.
+  yookassaPaymentId String? @unique @map("yookassa_payment_id")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  paidAt    DateTime? @map("paid_at")
+
+  @@index([adId])
+  @@index([userId])
+  @@index([status])
+  @@map("ad_bumps")
 }
 
 // Диалог между покупателем и продавцом ПО КОНКРЕТНОМУ объявлению — не
