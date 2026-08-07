@@ -264,6 +264,16 @@ model Ad {
   // "закреплено" и без фоновых задач на снятие закрепления.
   bumpedAt DateTime? @map("bumped_at")
 
+  // До какого момента активна платная услуга "Поднять объявление"
+  // (см. AdBumpsService/AdAutoBumpWorker) — null или дата в прошлом, если
+  // услуга не куплена/закончилась. Пока это поле в будущем, фоновый воркер
+  // раз в сутки сам обновляет bumpedAt — источник истины именно тут, а не
+  // в отдельных записях AdBump (та же схема, что и User.premiumUntil vs
+  // PremiumPurchase: AdBump — история платежей, bumpServiceUntil — текущее
+  // состояние). Повторная покупка ПРОДЛЕВАЕТ это поле (складывает 7 дней
+  // поверх текущего значения, если оно ещё не истекло), а не перезаписывает.
+  bumpServiceUntil DateTime? @map("bump_service_until")
+
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 

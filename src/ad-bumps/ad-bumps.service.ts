@@ -5,7 +5,7 @@ import { AdBumpStatus } from 'prisma/generated/enums'
 
 import { PrismaService } from '@/prisma/prisma.service'
 
-import { AD_BUMP_PRICE_KOPECKS } from './constants/ad-bumps.constants'
+import { AD_BUMP_PRICE_KOPECKS, BUMP_SERVICE_DURATION_DAYS } from './constants/ad-bumps.constants'
 
 const YOOKASSA_API_URL = 'https://api.yookassa.ru/v3'
 
@@ -178,18 +178,34 @@ export class AdBumpsService {
     const payment: YookassaPayment = await response.json()
 
     if (payment.status === 'succeeded') {
-      const [updatedBump] = await this.prisma.$transaction([
-        this.prisma.adBump.update({
-          where: { id: bump.id },
-          data: { status: AdBumpStatus.SUCCEEDED, paidAt: new Date() }
-        }),
-        this.prisma.ad.update({
+      return this.prisma.$transaction(async tx => {
+        const ad = await tx.ad.findUniqueOrThrow({
           where: { id: bump.adId },
-          data: { bumpedAt: new Date() }
+          select: { bumpServiceUntil: true }
         })
-      ])
 
-      return updatedBump
+        const now = new Date()
+        // Продление "сверху" — та же логика, что и в
+        // PremiumService.reconcilePayment: если услуга ещё активна,
+        // считаем от текущего bumpServiceUntil, а не от now, иначе уже
+        // оплаченные дни просто сгорали бы при повторной покупке.
+        const base = ad.bumpServiceUntil && ad.bumpServiceUntil > now ? ad.bumpServiceUntil : now
+        const bumpServiceUntil = new Date(base.getTime() + BUMP_SERVICE_DURATION_DAYS * 24 * 60 * 60 * 1000)
+
+        // bumpedAt = now сразу же — чтобы эффект был виден мгновенно, а не
+        // только на следующий проход AdAutoBumpWorker (который дальше сам
+        // будет поддерживать bumpedAt свежим всё время, пока
+        // bumpServiceUntil в будущем).
+        await tx.ad.update({
+          where: { id: bump.adId },
+          data: { bumpServiceUntil, bumpedAt: now }
+        })
+
+        return tx.adBump.update({
+          where: { id: bump.id },
+          data: { status: AdBumpStatus.SUCCEEDED, paidAt: now }
+        })
+      })
     }
 
     if (payment.status === 'canceled') {

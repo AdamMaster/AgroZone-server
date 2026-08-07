@@ -1,5 +1,6 @@
 import { Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
+import { AdStatus } from 'prisma/generated/client'
 import { PremiumPurchaseStatus } from 'prisma/generated/enums'
 
 import { PrismaService } from '@/prisma/prisma.service'
@@ -172,6 +173,15 @@ export class PremiumService {
         const premiumUntil = new Date(base.getTime() + PREMIUM_DURATION_DAYS * 24 * 60 * 60 * 1000)
 
         await tx.user.update({ where: { id: purchase.userId }, data: { premiumUntil } })
+
+        // Мгновенный эффект в момент покупки — поднимаем ВСЕ опубликованные
+        // объявления пользователя сразу, не дожидаясь ближайшего прохода
+        // AdAutoBumpWorker (который дальше уже сам будет держать их
+        // свежими всё время, пока премиум активен, см. сам воркер).
+        await tx.ad.updateMany({
+          where: { userId: purchase.userId, status: AdStatus.PUBLISHED },
+          data: { bumpedAt: now }
+        })
 
         return tx.premiumPurchase.update({
           where: { id: purchase.id },

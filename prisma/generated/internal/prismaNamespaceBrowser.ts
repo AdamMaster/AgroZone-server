@@ -213,6 +213,7 @@ export const AdScalarFieldEnum = {
   expiresAt: 'expiresAt',
   publishedAt: 'publishedAt',
   bumpedAt: 'bumpedAt',
+  bumpServiceUntil: 'bumpServiceUntil',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
