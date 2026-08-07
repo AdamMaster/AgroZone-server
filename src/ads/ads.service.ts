@@ -915,6 +915,41 @@ export class AdsService {
     })
   }
 
+  // Полная карточка объявления для предпросмотра модератором — в отличие
+  // от публичного findOne, НЕ ограничена статусом PUBLISHED (модератору
+  // как раз нужно смотреть PENDING, а в будущем возможно и любые другие),
+  // доступ ограничивается ролью на уровне контроллера (@Roles(ADMIN) +
+  // RolesGuard), а не статусом объявления. Контактные данные продавца — те
+  // же самые, что и в findPending (email + основной телефон напрямую, без
+  // "показать телефон" как на публичной странице): модератору нужно уметь
+  // связаться с продавцом, а не защищать его от спама.
+  async findOneForModeration(id: string) {
+    const ad = await this.prisma.ad.findUnique({
+      where: { id },
+      include: {
+        category: true,
+        user: {
+          select: {
+            id: true,
+            displayName: true,
+            email: true,
+            phones: {
+              where: { isPrimary: true },
+              take: 1,
+              select: { phone: true }
+            }
+          }
+        }
+      }
+    })
+
+    if (!ad) {
+      throw new NotFoundException('Объявление не найдено')
+    }
+
+    return ad
+  }
+
   async archive(id: string, userId: string) {
     const ad = await this.getUserAdOrThrow(id, userId)
 

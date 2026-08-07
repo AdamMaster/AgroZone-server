@@ -114,6 +114,19 @@ export class AdsController {
     return this.adsService.reject(id, reason)
   }
 
+  // Предпросмотр для модератора — та же самая карточка объявления, что и
+  // на публичной странице, но без ограничения по статусу (см.
+  // AdsService.findOneForModeration). Именно ':id/moderation', а не сам
+  // ':id' — публичный @Get(':id') ниже намеренно жёстко привязан к
+  // PUBLISHED и не должен превратиться в дырку для просмотра чужих
+  // черновиков/объявлений на модерации по прямой ссылке.
+  @Get(':id/moderation')
+  @Roles(UserRole.ADMIN)
+  @UseGuards(AuthGuard, RolesGuard)
+  findOneForModeration(@Param('id', ParseUUIDPipe) id: string) {
+    return this.adsService.findOneForModeration(id)
+  }
+
   @Get('geocode')
   async getAddress(@Query('lat') lat: number, @Query('lon') lon: number) {
     return await this.adsService.getAddressFromCoords(lat, lon)
