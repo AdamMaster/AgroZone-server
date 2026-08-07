@@ -88,6 +88,11 @@ export type AdReport = Prisma.AdReportModel
  */
 export type AdBump = Prisma.AdBumpModel
 /**
+ * Model PremiumPurchase
+ * 
+ */
+export type PremiumPurchase = Prisma.PremiumPurchaseModel
+/**
  * Model Conversation
  * 
  */

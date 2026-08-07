@@ -1,6 +1,8 @@
 import { Body, Controller, HttpCode, Post } from '@nestjs/common'
 import { SkipThrottle } from '@nestjs/throttler'
 
+import { PremiumService } from '@/premium/premium.service'
+
 import { AdBumpsService } from './ad-bumps.service'
 
 // Публичный урл — сюда стучится сама ЮKassa, без сессии/куки пользователя.
@@ -8,10 +10,20 @@ import { AdBumpsService } from './ad-bumps.service'
 // (Настройки → HTTP-уведомления): https://<домен>/payments/yookassa/webhook.
 // @SkipThrottle — глобальный лимитер (3 запроса/мин, см. AppModule) не
 // должен резать легитимные повторные уведомления от ЮKassa.
+//
+// Один урл на ВСЕ виды платежей магазина — сейчас это AdBump и
+// PremiumPurchase, дальше могут добавиться другие. Каждый сервис сверяет
+// paymentId со своей таблицей и молча ничего не делает, если совпадения
+// нет (см. reconcilePayment в обоих сервисах), поэтому вызывать оба
+// безопасно — "чужой" для конкретного сервиса вебхук просто не найдёт
+// запись.
 @Controller('payments/yookassa')
 @SkipThrottle()
 export class YookassaWebhookController {
-  constructor(private readonly adBumpsService: AdBumpsService) {}
+  constructor(
+    private readonly adBumpsService: AdBumpsService,
+    private readonly premiumService: PremiumService
+  ) {}
 
   // 200 — на успешный разбор, включая "не наш платёж"/уже обработанный
   // (см. handleWebhook, это не ошибки). Если же перепроверка статуса в
@@ -22,5 +34,6 @@ export class YookassaWebhookController {
   @HttpCode(200)
   async handleWebhook(@Body() body: unknown) {
     await this.adBumpsService.handleWebhook(body)
+    await this.premiumService.handleWebhook(body)
   }
 }

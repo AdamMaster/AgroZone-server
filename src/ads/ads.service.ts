@@ -4,6 +4,7 @@ import { FileService } from '../file/file.service'
 import { ConfigService } from '@nestjs/config'
 import 'multer'
 import { AD_LIMITS } from './constants/ads.constants'
+import { isPremiumActive } from '@/premium/utils/is-premium-active.util'
 import { CreateAdDto } from './dto/create-ad.dto'
 import { AdStatus, FeatureType, PriceUnit, Prisma } from 'prisma/generated/client'
 import { UpdateAdDto } from './dto/update-ad.dto'
@@ -665,10 +666,13 @@ export class AdsService {
   private async validateFileLimits(userId: string, files: Express.Multer.File[]) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
-      select: { role: true }
+      select: { premiumUntil: true }
     })
 
-    const maxFiles = user?.role === 'PREMIUM' ? AD_LIMITS.PREMIUM : AD_LIMITS.REGULAR
+    // Раньше сверялись с role === 'PREMIUM' — устарело: премиум теперь
+    // покупается через PremiumService и хранится в premiumUntil, role в
+    // этом не участвует (см. schema.prisma).
+    const maxFiles = isPremiumActive(user?.premiumUntil) ? AD_LIMITS.PREMIUM : AD_LIMITS.REGULAR
 
     if ((files?.length ?? 0) > maxFiles) {
       throw new BadRequestException(`Вы можете загрузить не более ${maxFiles} фото`)

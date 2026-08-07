@@ -50,6 +50,15 @@ export const AdBumpStatus = {
 export type AdBumpStatus = (typeof AdBumpStatus)[keyof typeof AdBumpStatus]
 
 
+export const PremiumPurchaseStatus = {
+  PENDING: 'PENDING',
+  SUCCEEDED: 'SUCCEEDED',
+  CANCELED: 'CANCELED'
+} as const
+
+export type PremiumPurchaseStatus = (typeof PremiumPurchaseStatus)[keyof typeof PremiumPurchaseStatus]
+
+
 export const UserRole = {
   REGULAR: 'REGULAR',
   ADMIN: 'ADMIN',

@@ -7,6 +7,7 @@ import { PasswordChangeDto } from './dto/password-change.dto'
 import { ConfigService } from '@nestjs/config'
 import { FileService } from '../file/file.service'
 import { AD_LIMITS } from '@/ads/constants/ads.constants'
+import { isPremiumActive } from '@/premium/utils/is-premium-active.util'
 import { normalizePhone } from '@/libs/common/utils/phone.util'
 import { generateSmsCode } from '@/libs/common/utils/generate-code.util'
 
@@ -51,7 +52,9 @@ export class UserService {
     return {
       ...user,
       primaryPhone,
-      maxUploadLimit: user.role === 'PREMIUM' ? AD_LIMITS.PREMIUM : AD_LIMITS.REGULAR
+      // Раньше сверялись с role === 'PREMIUM' — устарело, см. тот же
+      // комментарий в AdsService.validateFileLimits.
+      maxUploadLimit: isPremiumActive(user.premiumUntil) ? AD_LIMITS.PREMIUM : AD_LIMITS.REGULAR
     }
   }
 

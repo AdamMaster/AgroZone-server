@@ -23,6 +23,13 @@ model User {
 
   role UserRole @default(REGULAR)
 
+  // Премиум-статус НЕ хранится в role (UserRole.PREMIUM оставлен только
+  // для обратной совместимости, новым кодом не используется) — role это
+  // права доступа (REGULAR/ADMIN), а премиум это оплаченный статус с
+  // сроком действия, ролью такое не выразить. Активен, если это поле в
+  // будущем (см. PremiumService).
+  premiumUntil DateTime? @map("premium_until")
+
   isVerified         Boolean @default(false) @map("is_verified")
   isTwoFactorEnabled Boolean @default(false) @map("is_two_factor_enabled")
 
@@ -51,6 +58,9 @@ model User {
 
   // Платные "поднятия" объявлений этого юзера (см. AdBump).
   adBumps AdBump[]
+
+  // Покупки премиум-статуса этого юзера (см. PremiumPurchase).
+  premiumPurchases PremiumPurchase[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -377,6 +387,48 @@ model AdBump {
   @@index([userId])
   @@index([status])
   @@map("ad_bumps")
+}
+
+enum PremiumPurchaseStatus {
+  PENDING
+  SUCCEEDED
+  CANCELED
+}
+
+// Разовая покупка премиум-статуса на 30 дней (см. User.premiumUntil) — по
+// структуре и логике оплаты почти copy-paste AdBump: тот же одноразовый
+// чекаут в ЮKassa, та же перепроверка статуса вместо доверия вебхуку.
+// Отличие от AdBump — это не привязано к конкретному объявлению (платит
+// сам юзер за себя), и продление СКЛАДЫВАЕТ дни поверх текущего
+// premiumUntil, а не перезаписывает его (см. PremiumService.reconcilePayment).
+//
+// isRecurring/yookassaPaymentMethodId — задел под будущее автосписание:
+// ЮKassa подтвердила, что рекуррентные платежи для магазина доступны на
+// проде, но не в тестовом режиме, поэтому сам код автосписания пока не
+// пишем (не на чем проверить) — просто резервируем под него поля, чтобы
+// не переделывать схему, когда дойдём до этого на проде.
+model PremiumPurchase {
+  id String @id @default(uuid())
+
+  userId String @map("user_id")
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // В копейках, как и AdBump.amount.
+  amount Int
+
+  status PremiumPurchaseStatus @default(PENDING)
+
+  yookassaPaymentId String? @unique @map("yookassa_payment_id")
+
+  isRecurring             Boolean @default(false) @map("is_recurring")
+  yookassaPaymentMethodId String? @map("yookassa_payment_method_id")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  paidAt    DateTime? @map("paid_at")
+
+  @@index([userId])
+  @@index([status])
+  @@map("premium_purchases")
 }
 
 // Диалог между покупателем и продавцом ПО КОНКРЕТНОМУ объявлению — не

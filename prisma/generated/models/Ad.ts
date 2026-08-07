@@ -1000,10 +1000,6 @@ export type EnumAdStatusFieldUpdateOperationsInput = {
   set?: $Enums.AdStatus
 }
 
-export type NullableDateTimeFieldUpdateOperationsInput = {
-  set?: Date | string | null
-}
-
 export type AdCreateNestedOneWithoutFavoritesInput = {
   create?: Prisma.XOR<Prisma.AdCreateWithoutFavoritesInput, Prisma.AdUncheckedCreateWithoutFavoritesInput>
   connectOrCreate?: Prisma.AdCreateOrConnectWithoutFavoritesInput

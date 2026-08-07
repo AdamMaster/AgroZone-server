@@ -61,6 +61,7 @@ export const ModelName = {
   Favorite: 'Favorite',
   AdReport: 'AdReport',
   AdBump: 'AdBump',
+  PremiumPurchase: 'PremiumPurchase',
   Conversation: 'Conversation',
   BlockedUser: 'BlockedUser',
   Message: 'Message',
@@ -93,6 +94,7 @@ export const UserScalarFieldEnum = {
   bio: 'bio',
   location: 'location',
   role: 'role',
+  premiumUntil: 'premiumUntil',
   isVerified: 'isVerified',
   isTwoFactorEnabled: 'isTwoFactorEnabled',
   method: 'method',
@@ -253,6 +255,21 @@ export const AdBumpScalarFieldEnum = {
 } as const
 
 export type AdBumpScalarFieldEnum = (typeof AdBumpScalarFieldEnum)[keyof typeof AdBumpScalarFieldEnum]
+
+
+export const PremiumPurchaseScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  amount: 'amount',
+  status: 'status',
+  yookassaPaymentId: 'yookassaPaymentId',
+  isRecurring: 'isRecurring',
+  yookassaPaymentMethodId: 'yookassaPaymentMethodId',
+  createdAt: 'createdAt',
+  paidAt: 'paidAt'
+} as const
+
+export type PremiumPurchaseScalarFieldEnum = (typeof PremiumPurchaseScalarFieldEnum)[keyof typeof PremiumPurchaseScalarFieldEnum]
 
 
 export const ConversationScalarFieldEnum = {

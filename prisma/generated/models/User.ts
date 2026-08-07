@@ -34,6 +34,7 @@ export type UserMinAggregateOutputType = {
   bio: string | null
   location: string | null
   role: $Enums.UserRole | null
+  premiumUntil: Date | null
   isVerified: boolean | null
   isTwoFactorEnabled: boolean | null
   method: $Enums.AuthMethod | null
@@ -51,6 +52,7 @@ export type UserMaxAggregateOutputType = {
   bio: string | null
   location: string | null
   role: $Enums.UserRole | null
+  premiumUntil: Date | null
   isVerified: boolean | null
   isTwoFactorEnabled: boolean | null
   method: $Enums.AuthMethod | null
@@ -68,6 +70,7 @@ export type UserCountAggregateOutputType = {
   bio: number
   location: number
   role: number
+  premiumUntil: number
   isVerified: number
   isTwoFactorEnabled: number
   method: number
@@ -87,6 +90,7 @@ export type UserMinAggregateInputType = {
   bio?: true
   location?: true
   role?: true
+  premiumUntil?: true
   isVerified?: true
   isTwoFactorEnabled?: true
   method?: true
@@ -104,6 +108,7 @@ export type UserMaxAggregateInputType = {
   bio?: true
   location?: true
   role?: true
+  premiumUntil?: true
   isVerified?: true
   isTwoFactorEnabled?: true
   method?: true
@@ -121,6 +126,7 @@ export type UserCountAggregateInputType = {
   bio?: true
   location?: true
   role?: true
+  premiumUntil?: true
   isVerified?: true
   isTwoFactorEnabled?: true
   method?: true
@@ -211,6 +217,7 @@ export type UserGroupByOutputType = {
   bio: string | null
   location: string | null
   role: $Enums.UserRole
+  premiumUntil: Date | null
   isVerified: boolean
   isTwoFactorEnabled: boolean
   method: $Enums.AuthMethod
@@ -249,6 +256,7 @@ export type UserWhereInput = {
   bio?: Prisma.StringNullableFilter<"User"> | string | null
   location?: Prisma.StringNullableFilter<"User"> | string | null
   role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
+  premiumUntil?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   isVerified?: Prisma.BoolFilter<"User"> | boolean
   isTwoFactorEnabled?: Prisma.BoolFilter<"User"> | boolean
   method?: Prisma.EnumAuthMethodFilter<"User"> | $Enums.AuthMethod
@@ -266,6 +274,7 @@ export type UserWhereInput = {
   blockedByUsers?: Prisma.BlockedUserListRelationFilter
   adReports?: Prisma.AdReportListRelationFilter
   adBumps?: Prisma.AdBumpListRelationFilter
+  premiumPurchases?: Prisma.PremiumPurchaseListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -278,6 +287,7 @@ export type UserOrderByWithRelationInput = {
   bio?: Prisma.SortOrderInput | Prisma.SortOrder
   location?: Prisma.SortOrderInput | Prisma.SortOrder
   role?: Prisma.SortOrder
+  premiumUntil?: Prisma.SortOrderInput | Prisma.SortOrder
   isVerified?: Prisma.SortOrder
   isTwoFactorEnabled?: Prisma.SortOrder
   method?: Prisma.SortOrder
@@ -295,6 +305,7 @@ export type UserOrderByWithRelationInput = {
   blockedByUsers?: Prisma.BlockedUserOrderByRelationAggregateInput
   adReports?: Prisma.AdReportOrderByRelationAggregateInput
   adBumps?: Prisma.AdBumpOrderByRelationAggregateInput
+  premiumPurchases?: Prisma.PremiumPurchaseOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -310,6 +321,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   bio?: Prisma.StringNullableFilter<"User"> | string | null
   location?: Prisma.StringNullableFilter<"User"> | string | null
   role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
+  premiumUntil?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   isVerified?: Prisma.BoolFilter<"User"> | boolean
   isTwoFactorEnabled?: Prisma.BoolFilter<"User"> | boolean
   method?: Prisma.EnumAuthMethodFilter<"User"> | $Enums.AuthMethod
@@ -327,6 +339,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   blockedByUsers?: Prisma.BlockedUserListRelationFilter
   adReports?: Prisma.AdReportListRelationFilter
   adBumps?: Prisma.AdBumpListRelationFilter
+  premiumPurchases?: Prisma.PremiumPurchaseListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -339,6 +352,7 @@ export type UserOrderByWithAggregationInput = {
   bio?: Prisma.SortOrderInput | Prisma.SortOrder
   location?: Prisma.SortOrderInput | Prisma.SortOrder
   role?: Prisma.SortOrder
+  premiumUntil?: Prisma.SortOrderInput | Prisma.SortOrder
   isVerified?: Prisma.SortOrder
   isTwoFactorEnabled?: Prisma.SortOrder
   method?: Prisma.SortOrder
@@ -362,6 +376,7 @@ export type UserScalarWhereWithAggregatesInput = {
   bio?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   location?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   role?: Prisma.EnumUserRoleWithAggregatesFilter<"User"> | $Enums.UserRole
+  premiumUntil?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   isVerified?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   isTwoFactorEnabled?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   method?: Prisma.EnumAuthMethodWithAggregatesFilter<"User"> | $Enums.AuthMethod
@@ -379,6 +394,7 @@ export type UserCreateInput = {
   bio?: string | null
   location?: string | null
   role?: $Enums.UserRole
+  premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
   method: $Enums.AuthMethod
@@ -396,6 +412,7 @@ export type UserCreateInput = {
   blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
   adReports?: Prisma.AdReportCreateNestedManyWithoutUserInput
   adBumps?: Prisma.AdBumpCreateNestedManyWithoutUserInput
+  premiumPurchases?: Prisma.PremiumPurchaseCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -408,6 +425,7 @@ export type UserUncheckedCreateInput = {
   bio?: string | null
   location?: string | null
   role?: $Enums.UserRole
+  premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
   method: $Enums.AuthMethod
@@ -425,6 +443,7 @@ export type UserUncheckedCreateInput = {
   blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
   adReports?: Prisma.AdReportUncheckedCreateNestedManyWithoutUserInput
   adBumps?: Prisma.AdBumpUncheckedCreateNestedManyWithoutUserInput
+  premiumPurchases?: Prisma.PremiumPurchaseUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -437,6 +456,7 @@ export type UserUpdateInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
@@ -454,6 +474,7 @@ export type UserUpdateInput = {
   blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
   adReports?: Prisma.AdReportUpdateManyWithoutUserNestedInput
   adBumps?: Prisma.AdBumpUpdateManyWithoutUserNestedInput
+  premiumPurchases?: Prisma.PremiumPurchaseUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -466,6 +487,7 @@ export type UserUncheckedUpdateInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
@@ -483,6 +505,7 @@ export type UserUncheckedUpdateInput = {
   blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
   adReports?: Prisma.AdReportUncheckedUpdateManyWithoutUserNestedInput
   adBumps?: Prisma.AdBumpUncheckedUpdateManyWithoutUserNestedInput
+  premiumPurchases?: Prisma.PremiumPurchaseUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -495,6 +518,7 @@ export type UserCreateManyInput = {
   bio?: string | null
   location?: string | null
   role?: $Enums.UserRole
+  premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
   method: $Enums.AuthMethod
@@ -512,6 +536,7 @@ export type UserUpdateManyMutationInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
@@ -529,6 +554,7 @@ export type UserUncheckedUpdateManyInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
@@ -546,6 +572,7 @@ export type UserCountOrderByAggregateInput = {
   bio?: Prisma.SortOrder
   location?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  premiumUntil?: Prisma.SortOrder
   isVerified?: Prisma.SortOrder
   isTwoFactorEnabled?: Prisma.SortOrder
   method?: Prisma.SortOrder
@@ -563,6 +590,7 @@ export type UserMaxOrderByAggregateInput = {
   bio?: Prisma.SortOrder
   location?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  premiumUntil?: Prisma.SortOrder
   isVerified?: Prisma.SortOrder
   isTwoFactorEnabled?: Prisma.SortOrder
   method?: Prisma.SortOrder
@@ -580,6 +608,7 @@ export type UserMinOrderByAggregateInput = {
   bio?: Prisma.SortOrder
   location?: Prisma.SortOrder
   role?: Prisma.SortOrder
+  premiumUntil?: Prisma.SortOrder
   isVerified?: Prisma.SortOrder
   isTwoFactorEnabled?: Prisma.SortOrder
   method?: Prisma.SortOrder
@@ -611,6 +640,10 @@ export type EnumUserTypeFieldUpdateOperationsInput = {
 
 export type EnumUserRoleFieldUpdateOperationsInput = {
   set?: $Enums.UserRole
+}
+
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
 }
 
 export type BoolFieldUpdateOperationsInput = {
@@ -729,6 +762,20 @@ export type UserUpdateOneRequiredWithoutAdBumpsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAdBumpsInput, Prisma.UserUpdateWithoutAdBumpsInput>, Prisma.UserUncheckedUpdateWithoutAdBumpsInput>
 }
 
+export type UserCreateNestedOneWithoutPremiumPurchasesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPremiumPurchasesInput, Prisma.UserUncheckedCreateWithoutPremiumPurchasesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPremiumPurchasesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutPremiumPurchasesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPremiumPurchasesInput, Prisma.UserUncheckedCreateWithoutPremiumPurchasesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPremiumPurchasesInput
+  upsert?: Prisma.UserUpsertWithoutPremiumPurchasesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPremiumPurchasesInput, Prisma.UserUpdateWithoutPremiumPurchasesInput>, Prisma.UserUncheckedUpdateWithoutPremiumPurchasesInput>
+}
+
 export type UserCreateNestedOneWithoutConversationsAsBuyerInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutConversationsAsBuyerInput, Prisma.UserUncheckedCreateWithoutConversationsAsBuyerInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutConversationsAsBuyerInput
@@ -809,6 +856,7 @@ export type UserCreateWithoutPhonesInput = {
   bio?: string | null
   location?: string | null
   role?: $Enums.UserRole
+  premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
   method: $Enums.AuthMethod
@@ -825,6 +873,7 @@ export type UserCreateWithoutPhonesInput = {
   blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
   adReports?: Prisma.AdReportCreateNestedManyWithoutUserInput
   adBumps?: Prisma.AdBumpCreateNestedManyWithoutUserInput
+  premiumPurchases?: Prisma.PremiumPurchaseCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPhonesInput = {
@@ -837,6 +886,7 @@ export type UserUncheckedCreateWithoutPhonesInput = {
   bio?: string | null
   location?: string | null
   role?: $Enums.UserRole
+  premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
   method: $Enums.AuthMethod
@@ -853,6 +903,7 @@ export type UserUncheckedCreateWithoutPhonesInput = {
   blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
   adReports?: Prisma.AdReportUncheckedCreateNestedManyWithoutUserInput
   adBumps?: Prisma.AdBumpUncheckedCreateNestedManyWithoutUserInput
+  premiumPurchases?: Prisma.PremiumPurchaseUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPhonesInput = {
@@ -881,6 +932,7 @@ export type UserUpdateWithoutPhonesInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
@@ -897,6 +949,7 @@ export type UserUpdateWithoutPhonesInput = {
   blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
   adReports?: Prisma.AdReportUpdateManyWithoutUserNestedInput
   adBumps?: Prisma.AdBumpUpdateManyWithoutUserNestedInput
+  premiumPurchases?: Prisma.PremiumPurchaseUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPhonesInput = {
@@ -909,6 +962,7 @@ export type UserUncheckedUpdateWithoutPhonesInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
@@ -925,6 +979,7 @@ export type UserUncheckedUpdateWithoutPhonesInput = {
   blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
   adReports?: Prisma.AdReportUncheckedUpdateManyWithoutUserNestedInput
   adBumps?: Prisma.AdBumpUncheckedUpdateManyWithoutUserNestedInput
+  premiumPurchases?: Prisma.PremiumPurchaseUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAccountsInput = {
@@ -937,6 +992,7 @@ export type UserCreateWithoutAccountsInput = {
   bio?: string | null
   location?: string | null
   role?: $Enums.UserRole
+  premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
   method: $Enums.AuthMethod
@@ -953,6 +1009,7 @@ export type UserCreateWithoutAccountsInput = {
   blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
   adReports?: Prisma.AdReportCreateNestedManyWithoutUserInput
   adBumps?: Prisma.AdBumpCreateNestedManyWithoutUserInput
+  premiumPurchases?: Prisma.PremiumPurchaseCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -965,6 +1022,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   bio?: string | null
   location?: string | null
   role?: $Enums.UserRole
+  premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
   method: $Enums.AuthMethod
@@ -981,6 +1039,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
   adReports?: Prisma.AdReportUncheckedCreateNestedManyWithoutUserInput
   adBumps?: Prisma.AdBumpUncheckedCreateNestedManyWithoutUserInput
+  premiumPurchases?: Prisma.PremiumPurchaseUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -1009,6 +1068,7 @@ export type UserUpdateWithoutAccountsInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
@@ -1025,6 +1085,7 @@ export type UserUpdateWithoutAccountsInput = {
   blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
   adReports?: Prisma.AdReportUpdateManyWithoutUserNestedInput
   adBumps?: Prisma.AdBumpUpdateManyWithoutUserNestedInput
+  premiumPurchases?: Prisma.PremiumPurchaseUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -1037,6 +1098,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
@@ -1053,6 +1115,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
   adReports?: Prisma.AdReportUncheckedUpdateManyWithoutUserNestedInput
   adBumps?: Prisma.AdBumpUncheckedUpdateManyWithoutUserNestedInput
+  premiumPurchases?: Prisma.PremiumPurchaseUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutTokensInput = {
@@ -1065,6 +1128,7 @@ export type UserCreateWithoutTokensInput = {
   bio?: string | null
   location?: string | null
   role?: $Enums.UserRole
+  premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
   method: $Enums.AuthMethod
@@ -1081,6 +1145,7 @@ export type UserCreateWithoutTokensInput = {
   blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
   adReports?: Prisma.AdReportCreateNestedManyWithoutUserInput
   adBumps?: Prisma.AdBumpCreateNestedManyWithoutUserInput
+  premiumPurchases?: Prisma.PremiumPurchaseCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutTokensInput = {
@@ -1093,6 +1158,7 @@ export type UserUncheckedCreateWithoutTokensInput = {
   bio?: string | null
   location?: string | null
   role?: $Enums.UserRole
+  premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
   method: $Enums.AuthMethod
@@ -1109,6 +1175,7 @@ export type UserUncheckedCreateWithoutTokensInput = {
   blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
   adReports?: Prisma.AdReportUncheckedCreateNestedManyWithoutUserInput
   adBumps?: Prisma.AdBumpUncheckedCreateNestedManyWithoutUserInput
+  premiumPurchases?: Prisma.PremiumPurchaseUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutTokensInput = {
@@ -1137,6 +1204,7 @@ export type UserUpdateWithoutTokensInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
@@ -1153,6 +1221,7 @@ export type UserUpdateWithoutTokensInput = {
   blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
   adReports?: Prisma.AdReportUpdateManyWithoutUserNestedInput
   adBumps?: Prisma.AdBumpUpdateManyWithoutUserNestedInput
+  premiumPurchases?: Prisma.PremiumPurchaseUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTokensInput = {
@@ -1165,6 +1234,7 @@ export type UserUncheckedUpdateWithoutTokensInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
@@ -1181,6 +1251,7 @@ export type UserUncheckedUpdateWithoutTokensInput = {
   blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
   adReports?: Prisma.AdReportUncheckedUpdateManyWithoutUserNestedInput
   adBumps?: Prisma.AdBumpUncheckedUpdateManyWithoutUserNestedInput
+  premiumPurchases?: Prisma.PremiumPurchaseUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAdsInput = {
@@ -1193,6 +1264,7 @@ export type UserCreateWithoutAdsInput = {
   bio?: string | null
   location?: string | null
   role?: $Enums.UserRole
+  premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
   method: $Enums.AuthMethod
@@ -1209,6 +1281,7 @@ export type UserCreateWithoutAdsInput = {
   blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
   adReports?: Prisma.AdReportCreateNestedManyWithoutUserInput
   adBumps?: Prisma.AdBumpCreateNestedManyWithoutUserInput
+  premiumPurchases?: Prisma.PremiumPurchaseCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAdsInput = {
@@ -1221,6 +1294,7 @@ export type UserUncheckedCreateWithoutAdsInput = {
   bio?: string | null
   location?: string | null
   role?: $Enums.UserRole
+  premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
   method: $Enums.AuthMethod
@@ -1237,6 +1311,7 @@ export type UserUncheckedCreateWithoutAdsInput = {
   blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
   adReports?: Prisma.AdReportUncheckedCreateNestedManyWithoutUserInput
   adBumps?: Prisma.AdBumpUncheckedCreateNestedManyWithoutUserInput
+  premiumPurchases?: Prisma.PremiumPurchaseUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAdsInput = {
@@ -1265,6 +1340,7 @@ export type UserUpdateWithoutAdsInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
@@ -1281,6 +1357,7 @@ export type UserUpdateWithoutAdsInput = {
   blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
   adReports?: Prisma.AdReportUpdateManyWithoutUserNestedInput
   adBumps?: Prisma.AdBumpUpdateManyWithoutUserNestedInput
+  premiumPurchases?: Prisma.PremiumPurchaseUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAdsInput = {
@@ -1293,6 +1370,7 @@ export type UserUncheckedUpdateWithoutAdsInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
@@ -1309,6 +1387,7 @@ export type UserUncheckedUpdateWithoutAdsInput = {
   blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
   adReports?: Prisma.AdReportUncheckedUpdateManyWithoutUserNestedInput
   adBumps?: Prisma.AdBumpUncheckedUpdateManyWithoutUserNestedInput
+  premiumPurchases?: Prisma.PremiumPurchaseUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutFavoritesInput = {
@@ -1321,6 +1400,7 @@ export type UserCreateWithoutFavoritesInput = {
   bio?: string | null
   location?: string | null
   role?: $Enums.UserRole
+  premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
   method: $Enums.AuthMethod
@@ -1337,6 +1417,7 @@ export type UserCreateWithoutFavoritesInput = {
   blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
   adReports?: Prisma.AdReportCreateNestedManyWithoutUserInput
   adBumps?: Prisma.AdBumpCreateNestedManyWithoutUserInput
+  premiumPurchases?: Prisma.PremiumPurchaseCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutFavoritesInput = {
@@ -1349,6 +1430,7 @@ export type UserUncheckedCreateWithoutFavoritesInput = {
   bio?: string | null
   location?: string | null
   role?: $Enums.UserRole
+  premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
   method: $Enums.AuthMethod
@@ -1365,6 +1447,7 @@ export type UserUncheckedCreateWithoutFavoritesInput = {
   blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
   adReports?: Prisma.AdReportUncheckedCreateNestedManyWithoutUserInput
   adBumps?: Prisma.AdBumpUncheckedCreateNestedManyWithoutUserInput
+  premiumPurchases?: Prisma.PremiumPurchaseUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutFavoritesInput = {
@@ -1393,6 +1476,7 @@ export type UserUpdateWithoutFavoritesInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
@@ -1409,6 +1493,7 @@ export type UserUpdateWithoutFavoritesInput = {
   blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
   adReports?: Prisma.AdReportUpdateManyWithoutUserNestedInput
   adBumps?: Prisma.AdBumpUpdateManyWithoutUserNestedInput
+  premiumPurchases?: Prisma.PremiumPurchaseUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutFavoritesInput = {
@@ -1421,6 +1506,7 @@ export type UserUncheckedUpdateWithoutFavoritesInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
@@ -1437,6 +1523,7 @@ export type UserUncheckedUpdateWithoutFavoritesInput = {
   blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
   adReports?: Prisma.AdReportUncheckedUpdateManyWithoutUserNestedInput
   adBumps?: Prisma.AdBumpUncheckedUpdateManyWithoutUserNestedInput
+  premiumPurchases?: Prisma.PremiumPurchaseUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAdReportsInput = {
@@ -1449,6 +1536,7 @@ export type UserCreateWithoutAdReportsInput = {
   bio?: string | null
   location?: string | null
   role?: $Enums.UserRole
+  premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
   method: $Enums.AuthMethod
@@ -1465,6 +1553,7 @@ export type UserCreateWithoutAdReportsInput = {
   blockedUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockerInput
   blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
   adBumps?: Prisma.AdBumpCreateNestedManyWithoutUserInput
+  premiumPurchases?: Prisma.PremiumPurchaseCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAdReportsInput = {
@@ -1477,6 +1566,7 @@ export type UserUncheckedCreateWithoutAdReportsInput = {
   bio?: string | null
   location?: string | null
   role?: $Enums.UserRole
+  premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
   method: $Enums.AuthMethod
@@ -1493,6 +1583,7 @@ export type UserUncheckedCreateWithoutAdReportsInput = {
   blockedUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockerInput
   blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
   adBumps?: Prisma.AdBumpUncheckedCreateNestedManyWithoutUserInput
+  premiumPurchases?: Prisma.PremiumPurchaseUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAdReportsInput = {
@@ -1521,6 +1612,7 @@ export type UserUpdateWithoutAdReportsInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
@@ -1537,6 +1629,7 @@ export type UserUpdateWithoutAdReportsInput = {
   blockedUsers?: Prisma.BlockedUserUpdateManyWithoutBlockerNestedInput
   blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
   adBumps?: Prisma.AdBumpUpdateManyWithoutUserNestedInput
+  premiumPurchases?: Prisma.PremiumPurchaseUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAdReportsInput = {
@@ -1549,6 +1642,7 @@ export type UserUncheckedUpdateWithoutAdReportsInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
@@ -1565,6 +1659,7 @@ export type UserUncheckedUpdateWithoutAdReportsInput = {
   blockedUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockerNestedInput
   blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
   adBumps?: Prisma.AdBumpUncheckedUpdateManyWithoutUserNestedInput
+  premiumPurchases?: Prisma.PremiumPurchaseUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAdBumpsInput = {
@@ -1577,6 +1672,7 @@ export type UserCreateWithoutAdBumpsInput = {
   bio?: string | null
   location?: string | null
   role?: $Enums.UserRole
+  premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
   method: $Enums.AuthMethod
@@ -1593,6 +1689,7 @@ export type UserCreateWithoutAdBumpsInput = {
   blockedUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockerInput
   blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
   adReports?: Prisma.AdReportCreateNestedManyWithoutUserInput
+  premiumPurchases?: Prisma.PremiumPurchaseCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAdBumpsInput = {
@@ -1605,6 +1702,7 @@ export type UserUncheckedCreateWithoutAdBumpsInput = {
   bio?: string | null
   location?: string | null
   role?: $Enums.UserRole
+  premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
   method: $Enums.AuthMethod
@@ -1621,6 +1719,7 @@ export type UserUncheckedCreateWithoutAdBumpsInput = {
   blockedUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockerInput
   blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
   adReports?: Prisma.AdReportUncheckedCreateNestedManyWithoutUserInput
+  premiumPurchases?: Prisma.PremiumPurchaseUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAdBumpsInput = {
@@ -1649,6 +1748,7 @@ export type UserUpdateWithoutAdBumpsInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
@@ -1665,6 +1765,7 @@ export type UserUpdateWithoutAdBumpsInput = {
   blockedUsers?: Prisma.BlockedUserUpdateManyWithoutBlockerNestedInput
   blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
   adReports?: Prisma.AdReportUpdateManyWithoutUserNestedInput
+  premiumPurchases?: Prisma.PremiumPurchaseUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAdBumpsInput = {
@@ -1677,6 +1778,7 @@ export type UserUncheckedUpdateWithoutAdBumpsInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
@@ -1693,6 +1795,143 @@ export type UserUncheckedUpdateWithoutAdBumpsInput = {
   blockedUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockerNestedInput
   blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
   adReports?: Prisma.AdReportUncheckedUpdateManyWithoutUserNestedInput
+  premiumPurchases?: Prisma.PremiumPurchaseUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutPremiumPurchasesInput = {
+  id?: string
+  password?: string | null
+  email?: string | null
+  displayName?: string | null
+  picture?: string | null
+  type?: $Enums.UserType
+  bio?: string | null
+  location?: string | null
+  role?: $Enums.UserRole
+  premiumUntil?: Date | string | null
+  isVerified?: boolean
+  isTwoFactorEnabled?: boolean
+  method: $Enums.AuthMethod
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  phones?: Prisma.UserPhoneCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  tokens?: Prisma.TokenCreateNestedManyWithoutUserInput
+  ads?: Prisma.AdCreateNestedManyWithoutUserInput
+  favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput
+  conversationsAsBuyer?: Prisma.ConversationCreateNestedManyWithoutBuyerInput
+  conversationsAsSeller?: Prisma.ConversationCreateNestedManyWithoutSellerInput
+  sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
+  blockedUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
+  adReports?: Prisma.AdReportCreateNestedManyWithoutUserInput
+  adBumps?: Prisma.AdBumpCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutPremiumPurchasesInput = {
+  id?: string
+  password?: string | null
+  email?: string | null
+  displayName?: string | null
+  picture?: string | null
+  type?: $Enums.UserType
+  bio?: string | null
+  location?: string | null
+  role?: $Enums.UserRole
+  premiumUntil?: Date | string | null
+  isVerified?: boolean
+  isTwoFactorEnabled?: boolean
+  method: $Enums.AuthMethod
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  phones?: Prisma.UserPhoneUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  tokens?: Prisma.TokenUncheckedCreateNestedManyWithoutUserInput
+  ads?: Prisma.AdUncheckedCreateNestedManyWithoutUserInput
+  favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput
+  conversationsAsBuyer?: Prisma.ConversationUncheckedCreateNestedManyWithoutBuyerInput
+  conversationsAsSeller?: Prisma.ConversationUncheckedCreateNestedManyWithoutSellerInput
+  sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
+  blockedUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
+  adReports?: Prisma.AdReportUncheckedCreateNestedManyWithoutUserInput
+  adBumps?: Prisma.AdBumpUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutPremiumPurchasesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutPremiumPurchasesInput, Prisma.UserUncheckedCreateWithoutPremiumPurchasesInput>
+}
+
+export type UserUpsertWithoutPremiumPurchasesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutPremiumPurchasesInput, Prisma.UserUncheckedUpdateWithoutPremiumPurchasesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutPremiumPurchasesInput, Prisma.UserUncheckedCreateWithoutPremiumPurchasesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutPremiumPurchasesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutPremiumPurchasesInput, Prisma.UserUncheckedUpdateWithoutPremiumPurchasesInput>
+}
+
+export type UserUpdateWithoutPremiumPurchasesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  picture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  phones?: Prisma.UserPhoneUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  tokens?: Prisma.TokenUpdateManyWithoutUserNestedInput
+  ads?: Prisma.AdUpdateManyWithoutUserNestedInput
+  favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput
+  conversationsAsBuyer?: Prisma.ConversationUpdateManyWithoutBuyerNestedInput
+  conversationsAsSeller?: Prisma.ConversationUpdateManyWithoutSellerNestedInput
+  sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
+  blockedUsers?: Prisma.BlockedUserUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
+  adReports?: Prisma.AdReportUpdateManyWithoutUserNestedInput
+  adBumps?: Prisma.AdBumpUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutPremiumPurchasesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  picture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  phones?: Prisma.UserPhoneUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  tokens?: Prisma.TokenUncheckedUpdateManyWithoutUserNestedInput
+  ads?: Prisma.AdUncheckedUpdateManyWithoutUserNestedInput
+  favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput
+  conversationsAsBuyer?: Prisma.ConversationUncheckedUpdateManyWithoutBuyerNestedInput
+  conversationsAsSeller?: Prisma.ConversationUncheckedUpdateManyWithoutSellerNestedInput
+  sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
+  blockedUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
+  adReports?: Prisma.AdReportUncheckedUpdateManyWithoutUserNestedInput
+  adBumps?: Prisma.AdBumpUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutConversationsAsBuyerInput = {
@@ -1705,6 +1944,7 @@ export type UserCreateWithoutConversationsAsBuyerInput = {
   bio?: string | null
   location?: string | null
   role?: $Enums.UserRole
+  premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
   method: $Enums.AuthMethod
@@ -1721,6 +1961,7 @@ export type UserCreateWithoutConversationsAsBuyerInput = {
   blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
   adReports?: Prisma.AdReportCreateNestedManyWithoutUserInput
   adBumps?: Prisma.AdBumpCreateNestedManyWithoutUserInput
+  premiumPurchases?: Prisma.PremiumPurchaseCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutConversationsAsBuyerInput = {
@@ -1733,6 +1974,7 @@ export type UserUncheckedCreateWithoutConversationsAsBuyerInput = {
   bio?: string | null
   location?: string | null
   role?: $Enums.UserRole
+  premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
   method: $Enums.AuthMethod
@@ -1749,6 +1991,7 @@ export type UserUncheckedCreateWithoutConversationsAsBuyerInput = {
   blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
   adReports?: Prisma.AdReportUncheckedCreateNestedManyWithoutUserInput
   adBumps?: Prisma.AdBumpUncheckedCreateNestedManyWithoutUserInput
+  premiumPurchases?: Prisma.PremiumPurchaseUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutConversationsAsBuyerInput = {
@@ -1766,6 +2009,7 @@ export type UserCreateWithoutConversationsAsSellerInput = {
   bio?: string | null
   location?: string | null
   role?: $Enums.UserRole
+  premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
   method: $Enums.AuthMethod
@@ -1782,6 +2026,7 @@ export type UserCreateWithoutConversationsAsSellerInput = {
   blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
   adReports?: Prisma.AdReportCreateNestedManyWithoutUserInput
   adBumps?: Prisma.AdBumpCreateNestedManyWithoutUserInput
+  premiumPurchases?: Prisma.PremiumPurchaseCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutConversationsAsSellerInput = {
@@ -1794,6 +2039,7 @@ export type UserUncheckedCreateWithoutConversationsAsSellerInput = {
   bio?: string | null
   location?: string | null
   role?: $Enums.UserRole
+  premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
   method: $Enums.AuthMethod
@@ -1810,6 +2056,7 @@ export type UserUncheckedCreateWithoutConversationsAsSellerInput = {
   blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
   adReports?: Prisma.AdReportUncheckedCreateNestedManyWithoutUserInput
   adBumps?: Prisma.AdBumpUncheckedCreateNestedManyWithoutUserInput
+  premiumPurchases?: Prisma.PremiumPurchaseUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutConversationsAsSellerInput = {
@@ -1838,6 +2085,7 @@ export type UserUpdateWithoutConversationsAsBuyerInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
@@ -1854,6 +2102,7 @@ export type UserUpdateWithoutConversationsAsBuyerInput = {
   blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
   adReports?: Prisma.AdReportUpdateManyWithoutUserNestedInput
   adBumps?: Prisma.AdBumpUpdateManyWithoutUserNestedInput
+  premiumPurchases?: Prisma.PremiumPurchaseUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutConversationsAsBuyerInput = {
@@ -1866,6 +2115,7 @@ export type UserUncheckedUpdateWithoutConversationsAsBuyerInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
@@ -1882,6 +2132,7 @@ export type UserUncheckedUpdateWithoutConversationsAsBuyerInput = {
   blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
   adReports?: Prisma.AdReportUncheckedUpdateManyWithoutUserNestedInput
   adBumps?: Prisma.AdBumpUncheckedUpdateManyWithoutUserNestedInput
+  premiumPurchases?: Prisma.PremiumPurchaseUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUpsertWithoutConversationsAsSellerInput = {
@@ -1905,6 +2156,7 @@ export type UserUpdateWithoutConversationsAsSellerInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
@@ -1921,6 +2173,7 @@ export type UserUpdateWithoutConversationsAsSellerInput = {
   blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
   adReports?: Prisma.AdReportUpdateManyWithoutUserNestedInput
   adBumps?: Prisma.AdBumpUpdateManyWithoutUserNestedInput
+  premiumPurchases?: Prisma.PremiumPurchaseUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutConversationsAsSellerInput = {
@@ -1933,6 +2186,7 @@ export type UserUncheckedUpdateWithoutConversationsAsSellerInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
@@ -1949,6 +2203,7 @@ export type UserUncheckedUpdateWithoutConversationsAsSellerInput = {
   blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
   adReports?: Prisma.AdReportUncheckedUpdateManyWithoutUserNestedInput
   adBumps?: Prisma.AdBumpUncheckedUpdateManyWithoutUserNestedInput
+  premiumPurchases?: Prisma.PremiumPurchaseUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutBlockedUsersInput = {
@@ -1961,6 +2216,7 @@ export type UserCreateWithoutBlockedUsersInput = {
   bio?: string | null
   location?: string | null
   role?: $Enums.UserRole
+  premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
   method: $Enums.AuthMethod
@@ -1977,6 +2233,7 @@ export type UserCreateWithoutBlockedUsersInput = {
   blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
   adReports?: Prisma.AdReportCreateNestedManyWithoutUserInput
   adBumps?: Prisma.AdBumpCreateNestedManyWithoutUserInput
+  premiumPurchases?: Prisma.PremiumPurchaseCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutBlockedUsersInput = {
@@ -1989,6 +2246,7 @@ export type UserUncheckedCreateWithoutBlockedUsersInput = {
   bio?: string | null
   location?: string | null
   role?: $Enums.UserRole
+  premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
   method: $Enums.AuthMethod
@@ -2005,6 +2263,7 @@ export type UserUncheckedCreateWithoutBlockedUsersInput = {
   blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
   adReports?: Prisma.AdReportUncheckedCreateNestedManyWithoutUserInput
   adBumps?: Prisma.AdBumpUncheckedCreateNestedManyWithoutUserInput
+  premiumPurchases?: Prisma.PremiumPurchaseUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutBlockedUsersInput = {
@@ -2022,6 +2281,7 @@ export type UserCreateWithoutBlockedByUsersInput = {
   bio?: string | null
   location?: string | null
   role?: $Enums.UserRole
+  premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
   method: $Enums.AuthMethod
@@ -2038,6 +2298,7 @@ export type UserCreateWithoutBlockedByUsersInput = {
   blockedUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockerInput
   adReports?: Prisma.AdReportCreateNestedManyWithoutUserInput
   adBumps?: Prisma.AdBumpCreateNestedManyWithoutUserInput
+  premiumPurchases?: Prisma.PremiumPurchaseCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutBlockedByUsersInput = {
@@ -2050,6 +2311,7 @@ export type UserUncheckedCreateWithoutBlockedByUsersInput = {
   bio?: string | null
   location?: string | null
   role?: $Enums.UserRole
+  premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
   method: $Enums.AuthMethod
@@ -2066,6 +2328,7 @@ export type UserUncheckedCreateWithoutBlockedByUsersInput = {
   blockedUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockerInput
   adReports?: Prisma.AdReportUncheckedCreateNestedManyWithoutUserInput
   adBumps?: Prisma.AdBumpUncheckedCreateNestedManyWithoutUserInput
+  premiumPurchases?: Prisma.PremiumPurchaseUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutBlockedByUsersInput = {
@@ -2094,6 +2357,7 @@ export type UserUpdateWithoutBlockedUsersInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
@@ -2110,6 +2374,7 @@ export type UserUpdateWithoutBlockedUsersInput = {
   blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
   adReports?: Prisma.AdReportUpdateManyWithoutUserNestedInput
   adBumps?: Prisma.AdBumpUpdateManyWithoutUserNestedInput
+  premiumPurchases?: Prisma.PremiumPurchaseUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBlockedUsersInput = {
@@ -2122,6 +2387,7 @@ export type UserUncheckedUpdateWithoutBlockedUsersInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
@@ -2138,6 +2404,7 @@ export type UserUncheckedUpdateWithoutBlockedUsersInput = {
   blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
   adReports?: Prisma.AdReportUncheckedUpdateManyWithoutUserNestedInput
   adBumps?: Prisma.AdBumpUncheckedUpdateManyWithoutUserNestedInput
+  premiumPurchases?: Prisma.PremiumPurchaseUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUpsertWithoutBlockedByUsersInput = {
@@ -2161,6 +2428,7 @@ export type UserUpdateWithoutBlockedByUsersInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
@@ -2177,6 +2445,7 @@ export type UserUpdateWithoutBlockedByUsersInput = {
   blockedUsers?: Prisma.BlockedUserUpdateManyWithoutBlockerNestedInput
   adReports?: Prisma.AdReportUpdateManyWithoutUserNestedInput
   adBumps?: Prisma.AdBumpUpdateManyWithoutUserNestedInput
+  premiumPurchases?: Prisma.PremiumPurchaseUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBlockedByUsersInput = {
@@ -2189,6 +2458,7 @@ export type UserUncheckedUpdateWithoutBlockedByUsersInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
@@ -2205,6 +2475,7 @@ export type UserUncheckedUpdateWithoutBlockedByUsersInput = {
   blockedUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockerNestedInput
   adReports?: Prisma.AdReportUncheckedUpdateManyWithoutUserNestedInput
   adBumps?: Prisma.AdBumpUncheckedUpdateManyWithoutUserNestedInput
+  premiumPurchases?: Prisma.PremiumPurchaseUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSentMessagesInput = {
@@ -2217,6 +2488,7 @@ export type UserCreateWithoutSentMessagesInput = {
   bio?: string | null
   location?: string | null
   role?: $Enums.UserRole
+  premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
   method: $Enums.AuthMethod
@@ -2233,6 +2505,7 @@ export type UserCreateWithoutSentMessagesInput = {
   blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
   adReports?: Prisma.AdReportCreateNestedManyWithoutUserInput
   adBumps?: Prisma.AdBumpCreateNestedManyWithoutUserInput
+  premiumPurchases?: Prisma.PremiumPurchaseCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSentMessagesInput = {
@@ -2245,6 +2518,7 @@ export type UserUncheckedCreateWithoutSentMessagesInput = {
   bio?: string | null
   location?: string | null
   role?: $Enums.UserRole
+  premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
   method: $Enums.AuthMethod
@@ -2261,6 +2535,7 @@ export type UserUncheckedCreateWithoutSentMessagesInput = {
   blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
   adReports?: Prisma.AdReportUncheckedCreateNestedManyWithoutUserInput
   adBumps?: Prisma.AdBumpUncheckedCreateNestedManyWithoutUserInput
+  premiumPurchases?: Prisma.PremiumPurchaseUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSentMessagesInput = {
@@ -2289,6 +2564,7 @@ export type UserUpdateWithoutSentMessagesInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
@@ -2305,6 +2581,7 @@ export type UserUpdateWithoutSentMessagesInput = {
   blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
   adReports?: Prisma.AdReportUpdateManyWithoutUserNestedInput
   adBumps?: Prisma.AdBumpUpdateManyWithoutUserNestedInput
+  premiumPurchases?: Prisma.PremiumPurchaseUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSentMessagesInput = {
@@ -2317,6 +2594,7 @@ export type UserUncheckedUpdateWithoutSentMessagesInput = {
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
@@ -2333,6 +2611,7 @@ export type UserUncheckedUpdateWithoutSentMessagesInput = {
   blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
   adReports?: Prisma.AdReportUncheckedUpdateManyWithoutUserNestedInput
   adBumps?: Prisma.AdBumpUncheckedUpdateManyWithoutUserNestedInput
+  premiumPurchases?: Prisma.PremiumPurchaseUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -2353,6 +2632,7 @@ export type UserCountOutputType = {
   blockedByUsers: number
   adReports: number
   adBumps: number
+  premiumPurchases: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2368,6 +2648,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   blockedByUsers?: boolean | UserCountOutputTypeCountBlockedByUsersArgs
   adReports?: boolean | UserCountOutputTypeCountAdReportsArgs
   adBumps?: boolean | UserCountOutputTypeCountAdBumpsArgs
+  premiumPurchases?: boolean | UserCountOutputTypeCountPremiumPurchasesArgs
 }
 
 /**
@@ -2464,6 +2745,13 @@ export type UserCountOutputTypeCountAdBumpsArgs<ExtArgs extends runtime.Types.Ex
   where?: Prisma.AdBumpWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountPremiumPurchasesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PremiumPurchaseWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2475,6 +2763,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   bio?: boolean
   location?: boolean
   role?: boolean
+  premiumUntil?: boolean
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
   method?: boolean
@@ -2492,6 +2781,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   blockedByUsers?: boolean | Prisma.User$blockedByUsersArgs<ExtArgs>
   adReports?: boolean | Prisma.User$adReportsArgs<ExtArgs>
   adBumps?: boolean | Prisma.User$adBumpsArgs<ExtArgs>
+  premiumPurchases?: boolean | Prisma.User$premiumPurchasesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -2505,6 +2795,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   bio?: boolean
   location?: boolean
   role?: boolean
+  premiumUntil?: boolean
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
   method?: boolean
@@ -2522,6 +2813,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   bio?: boolean
   location?: boolean
   role?: boolean
+  premiumUntil?: boolean
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
   method?: boolean
@@ -2539,6 +2831,7 @@ export type UserSelectScalar = {
   bio?: boolean
   location?: boolean
   role?: boolean
+  premiumUntil?: boolean
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
   method?: boolean
@@ -2546,7 +2839,7 @@ export type UserSelectScalar = {
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "password" | "email" | "displayName" | "picture" | "type" | "bio" | "location" | "role" | "isVerified" | "isTwoFactorEnabled" | "method" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "password" | "email" | "displayName" | "picture" | "type" | "bio" | "location" | "role" | "premiumUntil" | "isVerified" | "isTwoFactorEnabled" | "method" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   phones?: boolean | Prisma.User$phonesArgs<ExtArgs>
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
@@ -2560,6 +2853,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   blockedByUsers?: boolean | Prisma.User$blockedByUsersArgs<ExtArgs>
   adReports?: boolean | Prisma.User$adReportsArgs<ExtArgs>
   adBumps?: boolean | Prisma.User$adBumpsArgs<ExtArgs>
+  premiumPurchases?: boolean | Prisma.User$premiumPurchasesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -2580,6 +2874,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     blockedByUsers: Prisma.$BlockedUserPayload<ExtArgs>[]
     adReports: Prisma.$AdReportPayload<ExtArgs>[]
     adBumps: Prisma.$AdBumpPayload<ExtArgs>[]
+    premiumPurchases: Prisma.$PremiumPurchasePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2591,6 +2886,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     bio: string | null
     location: string | null
     role: $Enums.UserRole
+    premiumUntil: Date | null
     isVerified: boolean
     isTwoFactorEnabled: boolean
     method: $Enums.AuthMethod
@@ -3002,6 +3298,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   blockedByUsers<T extends Prisma.User$blockedByUsersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$blockedByUsersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BlockedUserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   adReports<T extends Prisma.User$adReportsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$adReportsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AdReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   adBumps<T extends Prisma.User$adBumpsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$adBumpsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AdBumpPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  premiumPurchases<T extends Prisma.User$premiumPurchasesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$premiumPurchasesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PremiumPurchasePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3040,6 +3337,7 @@ export interface UserFieldRefs {
   readonly bio: Prisma.FieldRef<"User", 'String'>
   readonly location: Prisma.FieldRef<"User", 'String'>
   readonly role: Prisma.FieldRef<"User", 'UserRole'>
+  readonly premiumUntil: Prisma.FieldRef<"User", 'DateTime'>
   readonly isVerified: Prisma.FieldRef<"User", 'Boolean'>
   readonly isTwoFactorEnabled: Prisma.FieldRef<"User", 'Boolean'>
   readonly method: Prisma.FieldRef<"User", 'AuthMethod'>
@@ -3718,6 +4016,30 @@ export type User$adBumpsArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
   take?: number
   skip?: number
   distinct?: Prisma.AdBumpScalarFieldEnum | Prisma.AdBumpScalarFieldEnum[]
+}
+
+/**
+ * User.premiumPurchases
+ */
+export type User$premiumPurchasesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PremiumPurchase
+   */
+  select?: Prisma.PremiumPurchaseSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PremiumPurchase
+   */
+  omit?: Prisma.PremiumPurchaseOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PremiumPurchaseInclude<ExtArgs> | null
+  where?: Prisma.PremiumPurchaseWhereInput
+  orderBy?: Prisma.PremiumPurchaseOrderByWithRelationInput | Prisma.PremiumPurchaseOrderByWithRelationInput[]
+  cursor?: Prisma.PremiumPurchaseWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PremiumPurchaseScalarFieldEnum | Prisma.PremiumPurchaseScalarFieldEnum[]
 }
 
 /**

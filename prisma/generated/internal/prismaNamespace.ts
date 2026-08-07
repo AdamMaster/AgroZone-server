@@ -394,6 +394,7 @@ export const ModelName = {
   Favorite: 'Favorite',
   AdReport: 'AdReport',
   AdBump: 'AdBump',
+  PremiumPurchase: 'PremiumPurchase',
   Conversation: 'Conversation',
   BlockedUser: 'BlockedUser',
   Message: 'Message',
@@ -413,7 +414,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "userPhone" | "account" | "token" | "category" | "categoryFeature" | "ad" | "favorite" | "adReport" | "adBump" | "conversation" | "blockedUser" | "message" | "ruCity"
+    modelProps: "user" | "userPhone" | "account" | "token" | "category" | "categoryFeature" | "ad" | "favorite" | "adReport" | "adBump" | "premiumPurchase" | "conversation" | "blockedUser" | "message" | "ruCity"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1157,6 +1158,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    PremiumPurchase: {
+      payload: Prisma.$PremiumPurchasePayload<ExtArgs>
+      fields: Prisma.PremiumPurchaseFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PremiumPurchaseFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PremiumPurchasePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PremiumPurchaseFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PremiumPurchasePayload>
+        }
+        findFirst: {
+          args: Prisma.PremiumPurchaseFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PremiumPurchasePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PremiumPurchaseFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PremiumPurchasePayload>
+        }
+        findMany: {
+          args: Prisma.PremiumPurchaseFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PremiumPurchasePayload>[]
+        }
+        create: {
+          args: Prisma.PremiumPurchaseCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PremiumPurchasePayload>
+        }
+        createMany: {
+          args: Prisma.PremiumPurchaseCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PremiumPurchaseCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PremiumPurchasePayload>[]
+        }
+        delete: {
+          args: Prisma.PremiumPurchaseDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PremiumPurchasePayload>
+        }
+        update: {
+          args: Prisma.PremiumPurchaseUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PremiumPurchasePayload>
+        }
+        deleteMany: {
+          args: Prisma.PremiumPurchaseDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PremiumPurchaseUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PremiumPurchaseUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PremiumPurchasePayload>[]
+        }
+        upsert: {
+          args: Prisma.PremiumPurchaseUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PremiumPurchasePayload>
+        }
+        aggregate: {
+          args: Prisma.PremiumPurchaseAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePremiumPurchase>
+        }
+        groupBy: {
+          args: Prisma.PremiumPurchaseGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PremiumPurchaseGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PremiumPurchaseCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PremiumPurchaseCountAggregateOutputType> | number
+        }
+      }
+    }
     Conversation: {
       payload: Prisma.$ConversationPayload<ExtArgs>
       fields: Prisma.ConversationFieldRefs
@@ -1502,6 +1577,7 @@ export const UserScalarFieldEnum = {
   bio: 'bio',
   location: 'location',
   role: 'role',
+  premiumUntil: 'premiumUntil',
   isVerified: 'isVerified',
   isTwoFactorEnabled: 'isTwoFactorEnabled',
   method: 'method',
@@ -1664,6 +1740,21 @@ export const AdBumpScalarFieldEnum = {
 export type AdBumpScalarFieldEnum = (typeof AdBumpScalarFieldEnum)[keyof typeof AdBumpScalarFieldEnum]
 
 
+export const PremiumPurchaseScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  amount: 'amount',
+  status: 'status',
+  yookassaPaymentId: 'yookassaPaymentId',
+  isRecurring: 'isRecurring',
+  yookassaPaymentMethodId: 'yookassaPaymentMethodId',
+  createdAt: 'createdAt',
+  paidAt: 'paidAt'
+} as const
+
+export type PremiumPurchaseScalarFieldEnum = (typeof PremiumPurchaseScalarFieldEnum)[keyof typeof PremiumPurchaseScalarFieldEnum]
+
+
 export const ConversationScalarFieldEnum = {
   id: 'id',
   adId: 'adId',
@@ -1815,6 +1906,20 @@ export type ListEnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$Pri
 
 
 /**
+ * Reference to a field of type 'DateTime'
+ */
+export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
+    
+
+
+/**
+ * Reference to a field of type 'DateTime[]'
+ */
+export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+/**
  * Reference to a field of type 'Boolean'
  */
 export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
@@ -1832,20 +1937,6 @@ export type EnumAuthMethodFieldRefInput<$PrismaModel> = FieldRefInputType<$Prism
  * Reference to a field of type 'AuthMethod[]'
  */
 export type ListEnumAuthMethodFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AuthMethod[]'>
-    
-
-
-/**
- * Reference to a field of type 'DateTime'
- */
-export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
-    
-
-
-/**
- * Reference to a field of type 'DateTime[]'
- */
-export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
     
 
 
@@ -2002,6 +2093,20 @@ export type EnumAdBumpStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$Pri
 export type ListEnumAdBumpStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AdBumpStatus[]'>
     
 
+
+/**
+ * Reference to a field of type 'PremiumPurchaseStatus'
+ */
+export type EnumPremiumPurchaseStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PremiumPurchaseStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'PremiumPurchaseStatus[]'
+ */
+export type ListEnumPremiumPurchaseStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PremiumPurchaseStatus[]'>
+    
+
 /**
  * Batch Payload for updateMany & deleteMany & createMany
  */
@@ -2107,6 +2212,7 @@ export type GlobalOmitConfig = {
   favorite?: Prisma.FavoriteOmit
   adReport?: Prisma.AdReportOmit
   adBump?: Prisma.AdBumpOmit
+  premiumPurchase?: Prisma.PremiumPurchaseOmit
   conversation?: Prisma.ConversationOmit
   blockedUser?: Prisma.BlockedUserOmit
   message?: Prisma.MessageOmit

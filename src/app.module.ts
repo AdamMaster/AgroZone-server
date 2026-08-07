@@ -22,6 +22,7 @@ import { ConversationsModule } from './conversations/conversations.module'
 import { BlockedUsersModule } from './blocked-users/blocked-users.module'
 import { AdReportsModule } from './ad-reports/ad-reports.module'
 import { AdBumpsModule } from './ad-bumps/ad-bumps.module'
+import { PremiumModule } from './premium/premium.module'
 
 @Module({
   imports: [
@@ -63,7 +64,8 @@ import { AdBumpsModule } from './ad-bumps/ad-bumps.module'
     ConversationsModule,
     BlockedUsersModule,
     AdReportsModule,
-    AdBumpsModule
+    AdBumpsModule,
+    PremiumModule
   ]
 })
 export class AppModule {}
