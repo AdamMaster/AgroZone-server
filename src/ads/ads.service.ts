@@ -581,6 +581,13 @@ export class AdsService {
             picture: true,
             createdAt: true,
             type: true,
+            // Для бейджа "Премиум" рядом с именем продавца на публичной
+            // карточке (см. AdDetail) — фронт сам решает, активен ли он
+            // прямо сейчас (premiumUntil > now), тут просто отдаём сырое
+            // значение, без is-premium-active.util (та утилита серверная,
+            // фронту нужна своя копия проверки — см. isPremiumActive в
+            // client/src/shared/utils/user.util.ts).
+            premiumUntil: true,
             // Считаем ДРУГИЕ активные объявления продавца прямо в этом же
             // запросе (filtered relation count), без отдельного round-trip
             // к базе. Фильтр совпадает с условием "объявление видно
