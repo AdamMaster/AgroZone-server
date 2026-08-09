@@ -5,15 +5,19 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  InternalServerErrorException,
   MaxFileSizeValidator,
   Param,
   ParseFilePipe,
   Patch,
   Post,
+  Req,
+  Res,
   UploadedFile,
   UseInterceptors,
   UseGuards
 } from '@nestjs/common'
+import { Request, Response } from 'express'
 import { UserService } from './user.service'
 import { Authorized } from '@/auth/decorators/authorized.decorator'
 import { Authorization } from '@/auth/decorators/auth.decorator'
@@ -25,13 +29,16 @@ import { PasswordChangeDto } from './dto/password-change.dto'
 import { PhoneChangeDto } from './dto/phone-change.dto'
 import { ConfirmPhoneChangeDto } from './dto/confirm-phone-change.dto'
 import { SetPrimaryPhoneDto } from './dto/set-primary-phone.dto'
+import { DeleteAccountDto } from './dto/delete-account.dto'
 import { PhoneThrottlerGuard } from '@/libs/common/guards/phone-throttler.guard'
+import { ConfigService } from '@nestjs/config'
 
 @Controller('users')
 export class UserController {
   constructor(
     private readonly userService: UserService,
-    private readonly fileService: FileService
+    private readonly fileService: FileService,
+    private readonly configService: ConfigService
   ) {}
 
   @Authorization()
@@ -125,5 +132,37 @@ export class UserController {
   @Patch('profile/phones/primary')
   async setPrimaryPhone(@Authorized('id') userId: string, @Body() dto: SetPrimaryPhoneDto) {
     return this.userService.setPrimaryPhone(userId, dto.phone)
+  }
+
+  // POST, а не DELETE — нужно передать пароль для подтверждения в теле
+  // запроса, а клиентский FetchClient.delete() тела не поддерживает (см.
+  // shared/fetch/fetch-client.ts). После удаления сразу же гасим сессию —
+  // тем же способом, что и AuthService.logout, — чтобы обезличенный аккаунт
+  // не остался залогинен в текущей вкладке.
+  @Authorization()
+  @HttpCode(HttpStatus.OK)
+  @Post('profile/delete')
+  async deleteAccount(
+    @Authorized('id') userId: string,
+    @Body() dto: DeleteAccountDto,
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response
+  ) {
+    await this.userService.deleteAccount(userId, dto)
+
+    return new Promise<{ success: boolean }>((resolve, reject) => {
+      req.session.destroy(err => {
+        if (err) {
+          return reject(
+            new InternalServerErrorException(
+              'Аккаунт удалён, но не удалось завершить текущую сессию. Пожалуйста, выйдите вручную.'
+            )
+          )
+        }
+
+        res.clearCookie(this.configService.getOrThrow<string>('SESSION_NAME'))
+        resolve({ success: true })
+      })
+    })
   }
 }

@@ -60,6 +60,7 @@ export type AdMinAggregateOutputType = {
   rejectionReason: string | null
   expiresAt: Date | null
   publishedAt: Date | null
+  archivedAt: Date | null
   bumpedAt: Date | null
   bumpServiceUntil: Date | null
   priceHighlightUntil: Date | null
@@ -91,6 +92,7 @@ export type AdMaxAggregateOutputType = {
   rejectionReason: string | null
   expiresAt: Date | null
   publishedAt: Date | null
+  archivedAt: Date | null
   bumpedAt: Date | null
   bumpServiceUntil: Date | null
   priceHighlightUntil: Date | null
@@ -125,6 +127,7 @@ export type AdCountAggregateOutputType = {
   rejectionReason: number
   expiresAt: number
   publishedAt: number
+  archivedAt: number
   bumpedAt: number
   bumpServiceUntil: number
   priceHighlightUntil: number
@@ -170,6 +173,7 @@ export type AdMinAggregateInputType = {
   rejectionReason?: true
   expiresAt?: true
   publishedAt?: true
+  archivedAt?: true
   bumpedAt?: true
   bumpServiceUntil?: true
   priceHighlightUntil?: true
@@ -201,6 +205,7 @@ export type AdMaxAggregateInputType = {
   rejectionReason?: true
   expiresAt?: true
   publishedAt?: true
+  archivedAt?: true
   bumpedAt?: true
   bumpServiceUntil?: true
   priceHighlightUntil?: true
@@ -235,6 +240,7 @@ export type AdCountAggregateInputType = {
   rejectionReason?: true
   expiresAt?: true
   publishedAt?: true
+  archivedAt?: true
   bumpedAt?: true
   bumpServiceUntil?: true
   priceHighlightUntil?: true
@@ -356,6 +362,7 @@ export type AdGroupByOutputType = {
   rejectionReason: string | null
   expiresAt: Date | null
   publishedAt: Date | null
+  archivedAt: Date | null
   bumpedAt: Date | null
   bumpServiceUntil: Date | null
   priceHighlightUntil: Date | null
@@ -413,6 +420,7 @@ export type AdWhereInput = {
   rejectionReason?: Prisma.StringNullableFilter<"Ad"> | string | null
   expiresAt?: Prisma.DateTimeNullableFilter<"Ad"> | Date | string | null
   publishedAt?: Prisma.DateTimeNullableFilter<"Ad"> | Date | string | null
+  archivedAt?: Prisma.DateTimeNullableFilter<"Ad"> | Date | string | null
   bumpedAt?: Prisma.DateTimeNullableFilter<"Ad"> | Date | string | null
   bumpServiceUntil?: Prisma.DateTimeNullableFilter<"Ad"> | Date | string | null
   priceHighlightUntil?: Prisma.DateTimeNullableFilter<"Ad"> | Date | string | null
@@ -454,6 +462,7 @@ export type AdOrderByWithRelationInput = {
   rejectionReason?: Prisma.SortOrderInput | Prisma.SortOrder
   expiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
   publishedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  archivedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   bumpedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   bumpServiceUntil?: Prisma.SortOrderInput | Prisma.SortOrder
   priceHighlightUntil?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -498,6 +507,7 @@ export type AdWhereUniqueInput = Prisma.AtLeast<{
   rejectionReason?: Prisma.StringNullableFilter<"Ad"> | string | null
   expiresAt?: Prisma.DateTimeNullableFilter<"Ad"> | Date | string | null
   publishedAt?: Prisma.DateTimeNullableFilter<"Ad"> | Date | string | null
+  archivedAt?: Prisma.DateTimeNullableFilter<"Ad"> | Date | string | null
   bumpedAt?: Prisma.DateTimeNullableFilter<"Ad"> | Date | string | null
   bumpServiceUntil?: Prisma.DateTimeNullableFilter<"Ad"> | Date | string | null
   priceHighlightUntil?: Prisma.DateTimeNullableFilter<"Ad"> | Date | string | null
@@ -539,6 +549,7 @@ export type AdOrderByWithAggregationInput = {
   rejectionReason?: Prisma.SortOrderInput | Prisma.SortOrder
   expiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
   publishedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  archivedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   bumpedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   bumpServiceUntil?: Prisma.SortOrderInput | Prisma.SortOrder
   priceHighlightUntil?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -581,6 +592,7 @@ export type AdScalarWhereWithAggregatesInput = {
   rejectionReason?: Prisma.StringNullableWithAggregatesFilter<"Ad"> | string | null
   expiresAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Ad"> | Date | string | null
   publishedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Ad"> | Date | string | null
+  archivedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Ad"> | Date | string | null
   bumpedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Ad"> | Date | string | null
   bumpServiceUntil?: Prisma.DateTimeNullableWithAggregatesFilter<"Ad"> | Date | string | null
   priceHighlightUntil?: Prisma.DateTimeNullableWithAggregatesFilter<"Ad"> | Date | string | null
@@ -613,6 +625,7 @@ export type AdCreateInput = {
   rejectionReason?: string | null
   expiresAt?: Date | string | null
   publishedAt?: Date | string | null
+  archivedAt?: Date | string | null
   bumpedAt?: Date | string | null
   bumpServiceUntil?: Date | string | null
   priceHighlightUntil?: Date | string | null
@@ -654,6 +667,7 @@ export type AdUncheckedCreateInput = {
   rejectionReason?: string | null
   expiresAt?: Date | string | null
   publishedAt?: Date | string | null
+  archivedAt?: Date | string | null
   bumpedAt?: Date | string | null
   bumpServiceUntil?: Date | string | null
   priceHighlightUntil?: Date | string | null
@@ -691,6 +705,7 @@ export type AdUpdateInput = {
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bumpedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bumpServiceUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   priceHighlightUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -732,6 +747,7 @@ export type AdUncheckedUpdateInput = {
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bumpedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bumpServiceUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   priceHighlightUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -771,6 +787,7 @@ export type AdCreateManyInput = {
   rejectionReason?: string | null
   expiresAt?: Date | string | null
   publishedAt?: Date | string | null
+  archivedAt?: Date | string | null
   bumpedAt?: Date | string | null
   bumpServiceUntil?: Date | string | null
   priceHighlightUntil?: Date | string | null
@@ -803,6 +820,7 @@ export type AdUpdateManyMutationInput = {
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bumpedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bumpServiceUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   priceHighlightUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -837,6 +855,7 @@ export type AdUncheckedUpdateManyInput = {
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bumpedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bumpServiceUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   priceHighlightUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -881,6 +900,7 @@ export type AdCountOrderByAggregateInput = {
   rejectionReason?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
   publishedAt?: Prisma.SortOrder
+  archivedAt?: Prisma.SortOrder
   bumpedAt?: Prisma.SortOrder
   bumpServiceUntil?: Prisma.SortOrder
   priceHighlightUntil?: Prisma.SortOrder
@@ -918,6 +938,7 @@ export type AdMaxOrderByAggregateInput = {
   rejectionReason?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
   publishedAt?: Prisma.SortOrder
+  archivedAt?: Prisma.SortOrder
   bumpedAt?: Prisma.SortOrder
   bumpServiceUntil?: Prisma.SortOrder
   priceHighlightUntil?: Prisma.SortOrder
@@ -949,6 +970,7 @@ export type AdMinOrderByAggregateInput = {
   rejectionReason?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
   publishedAt?: Prisma.SortOrder
+  archivedAt?: Prisma.SortOrder
   bumpedAt?: Prisma.SortOrder
   bumpServiceUntil?: Prisma.SortOrder
   priceHighlightUntil?: Prisma.SortOrder
@@ -1192,6 +1214,7 @@ export type AdCreateWithoutUserInput = {
   rejectionReason?: string | null
   expiresAt?: Date | string | null
   publishedAt?: Date | string | null
+  archivedAt?: Date | string | null
   bumpedAt?: Date | string | null
   bumpServiceUntil?: Date | string | null
   priceHighlightUntil?: Date | string | null
@@ -1231,6 +1254,7 @@ export type AdUncheckedCreateWithoutUserInput = {
   rejectionReason?: string | null
   expiresAt?: Date | string | null
   publishedAt?: Date | string | null
+  archivedAt?: Date | string | null
   bumpedAt?: Date | string | null
   bumpServiceUntil?: Date | string | null
   priceHighlightUntil?: Date | string | null
@@ -1299,6 +1323,7 @@ export type AdScalarWhereInput = {
   rejectionReason?: Prisma.StringNullableFilter<"Ad"> | string | null
   expiresAt?: Prisma.DateTimeNullableFilter<"Ad"> | Date | string | null
   publishedAt?: Prisma.DateTimeNullableFilter<"Ad"> | Date | string | null
+  archivedAt?: Prisma.DateTimeNullableFilter<"Ad"> | Date | string | null
   bumpedAt?: Prisma.DateTimeNullableFilter<"Ad"> | Date | string | null
   bumpServiceUntil?: Prisma.DateTimeNullableFilter<"Ad"> | Date | string | null
   priceHighlightUntil?: Prisma.DateTimeNullableFilter<"Ad"> | Date | string | null
@@ -1331,6 +1356,7 @@ export type AdCreateWithoutCategoryInput = {
   rejectionReason?: string | null
   expiresAt?: Date | string | null
   publishedAt?: Date | string | null
+  archivedAt?: Date | string | null
   bumpedAt?: Date | string | null
   bumpServiceUntil?: Date | string | null
   priceHighlightUntil?: Date | string | null
@@ -1370,6 +1396,7 @@ export type AdUncheckedCreateWithoutCategoryInput = {
   rejectionReason?: string | null
   expiresAt?: Date | string | null
   publishedAt?: Date | string | null
+  archivedAt?: Date | string | null
   bumpedAt?: Date | string | null
   bumpServiceUntil?: Date | string | null
   priceHighlightUntil?: Date | string | null
@@ -1433,6 +1460,7 @@ export type AdCreateWithoutFavoritesInput = {
   rejectionReason?: string | null
   expiresAt?: Date | string | null
   publishedAt?: Date | string | null
+  archivedAt?: Date | string | null
   bumpedAt?: Date | string | null
   bumpServiceUntil?: Date | string | null
   priceHighlightUntil?: Date | string | null
@@ -1473,6 +1501,7 @@ export type AdUncheckedCreateWithoutFavoritesInput = {
   rejectionReason?: string | null
   expiresAt?: Date | string | null
   publishedAt?: Date | string | null
+  archivedAt?: Date | string | null
   bumpedAt?: Date | string | null
   bumpServiceUntil?: Date | string | null
   priceHighlightUntil?: Date | string | null
@@ -1525,6 +1554,7 @@ export type AdUpdateWithoutFavoritesInput = {
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bumpedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bumpServiceUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   priceHighlightUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1565,6 +1595,7 @@ export type AdUncheckedUpdateWithoutFavoritesInput = {
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bumpedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bumpServiceUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   priceHighlightUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1601,6 +1632,7 @@ export type AdCreateWithoutReportsInput = {
   rejectionReason?: string | null
   expiresAt?: Date | string | null
   publishedAt?: Date | string | null
+  archivedAt?: Date | string | null
   bumpedAt?: Date | string | null
   bumpServiceUntil?: Date | string | null
   priceHighlightUntil?: Date | string | null
@@ -1641,6 +1673,7 @@ export type AdUncheckedCreateWithoutReportsInput = {
   rejectionReason?: string | null
   expiresAt?: Date | string | null
   publishedAt?: Date | string | null
+  archivedAt?: Date | string | null
   bumpedAt?: Date | string | null
   bumpServiceUntil?: Date | string | null
   priceHighlightUntil?: Date | string | null
@@ -1693,6 +1726,7 @@ export type AdUpdateWithoutReportsInput = {
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bumpedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bumpServiceUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   priceHighlightUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1733,6 +1767,7 @@ export type AdUncheckedUpdateWithoutReportsInput = {
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bumpedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bumpServiceUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   priceHighlightUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1769,6 +1804,7 @@ export type AdCreateWithoutBumpsInput = {
   rejectionReason?: string | null
   expiresAt?: Date | string | null
   publishedAt?: Date | string | null
+  archivedAt?: Date | string | null
   bumpedAt?: Date | string | null
   bumpServiceUntil?: Date | string | null
   priceHighlightUntil?: Date | string | null
@@ -1809,6 +1845,7 @@ export type AdUncheckedCreateWithoutBumpsInput = {
   rejectionReason?: string | null
   expiresAt?: Date | string | null
   publishedAt?: Date | string | null
+  archivedAt?: Date | string | null
   bumpedAt?: Date | string | null
   bumpServiceUntil?: Date | string | null
   priceHighlightUntil?: Date | string | null
@@ -1861,6 +1898,7 @@ export type AdUpdateWithoutBumpsInput = {
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bumpedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bumpServiceUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   priceHighlightUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1901,6 +1939,7 @@ export type AdUncheckedUpdateWithoutBumpsInput = {
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bumpedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bumpServiceUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   priceHighlightUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1937,6 +1976,7 @@ export type AdCreateWithoutServicePurchasesInput = {
   rejectionReason?: string | null
   expiresAt?: Date | string | null
   publishedAt?: Date | string | null
+  archivedAt?: Date | string | null
   bumpedAt?: Date | string | null
   bumpServiceUntil?: Date | string | null
   priceHighlightUntil?: Date | string | null
@@ -1977,6 +2017,7 @@ export type AdUncheckedCreateWithoutServicePurchasesInput = {
   rejectionReason?: string | null
   expiresAt?: Date | string | null
   publishedAt?: Date | string | null
+  archivedAt?: Date | string | null
   bumpedAt?: Date | string | null
   bumpServiceUntil?: Date | string | null
   priceHighlightUntil?: Date | string | null
@@ -2029,6 +2070,7 @@ export type AdUpdateWithoutServicePurchasesInput = {
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bumpedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bumpServiceUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   priceHighlightUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2069,6 +2111,7 @@ export type AdUncheckedUpdateWithoutServicePurchasesInput = {
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bumpedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bumpServiceUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   priceHighlightUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2105,6 +2148,7 @@ export type AdCreateWithoutConversationsInput = {
   rejectionReason?: string | null
   expiresAt?: Date | string | null
   publishedAt?: Date | string | null
+  archivedAt?: Date | string | null
   bumpedAt?: Date | string | null
   bumpServiceUntil?: Date | string | null
   priceHighlightUntil?: Date | string | null
@@ -2145,6 +2189,7 @@ export type AdUncheckedCreateWithoutConversationsInput = {
   rejectionReason?: string | null
   expiresAt?: Date | string | null
   publishedAt?: Date | string | null
+  archivedAt?: Date | string | null
   bumpedAt?: Date | string | null
   bumpServiceUntil?: Date | string | null
   priceHighlightUntil?: Date | string | null
@@ -2197,6 +2242,7 @@ export type AdUpdateWithoutConversationsInput = {
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bumpedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bumpServiceUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   priceHighlightUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2237,6 +2283,7 @@ export type AdUncheckedUpdateWithoutConversationsInput = {
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bumpedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bumpServiceUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   priceHighlightUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2274,6 +2321,7 @@ export type AdCreateManyUserInput = {
   rejectionReason?: string | null
   expiresAt?: Date | string | null
   publishedAt?: Date | string | null
+  archivedAt?: Date | string | null
   bumpedAt?: Date | string | null
   bumpServiceUntil?: Date | string | null
   priceHighlightUntil?: Date | string | null
@@ -2306,6 +2354,7 @@ export type AdUpdateWithoutUserInput = {
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bumpedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bumpServiceUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   priceHighlightUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2345,6 +2394,7 @@ export type AdUncheckedUpdateWithoutUserInput = {
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bumpedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bumpServiceUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   priceHighlightUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2383,6 +2433,7 @@ export type AdUncheckedUpdateManyWithoutUserInput = {
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bumpedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bumpServiceUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   priceHighlightUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2416,6 +2467,7 @@ export type AdCreateManyCategoryInput = {
   rejectionReason?: string | null
   expiresAt?: Date | string | null
   publishedAt?: Date | string | null
+  archivedAt?: Date | string | null
   bumpedAt?: Date | string | null
   bumpServiceUntil?: Date | string | null
   priceHighlightUntil?: Date | string | null
@@ -2448,6 +2500,7 @@ export type AdUpdateWithoutCategoryInput = {
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bumpedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bumpServiceUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   priceHighlightUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2487,6 +2540,7 @@ export type AdUncheckedUpdateWithoutCategoryInput = {
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bumpedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bumpServiceUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   priceHighlightUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2525,6 +2579,7 @@ export type AdUncheckedUpdateManyWithoutCategoryInput = {
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bumpedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   bumpServiceUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   priceHighlightUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2626,6 +2681,7 @@ export type AdSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = run
   rejectionReason?: boolean
   expiresAt?: boolean
   publishedAt?: boolean
+  archivedAt?: boolean
   bumpedAt?: boolean
   bumpServiceUntil?: boolean
   priceHighlightUntil?: boolean
@@ -2668,6 +2724,7 @@ export type AdSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions
   rejectionReason?: boolean
   expiresAt?: boolean
   publishedAt?: boolean
+  archivedAt?: boolean
   bumpedAt?: boolean
   bumpServiceUntil?: boolean
   priceHighlightUntil?: boolean
@@ -2704,6 +2761,7 @@ export type AdSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions
   rejectionReason?: boolean
   expiresAt?: boolean
   publishedAt?: boolean
+  archivedAt?: boolean
   bumpedAt?: boolean
   bumpServiceUntil?: boolean
   priceHighlightUntil?: boolean
@@ -2740,6 +2798,7 @@ export type AdSelectScalar = {
   rejectionReason?: boolean
   expiresAt?: boolean
   publishedAt?: boolean
+  archivedAt?: boolean
   bumpedAt?: boolean
   bumpServiceUntil?: boolean
   priceHighlightUntil?: boolean
@@ -2749,7 +2808,7 @@ export type AdSelectScalar = {
   updatedAt?: boolean
 }
 
-export type AdOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "title" | "description" | "price" | "unit" | "images" | "address" | "phone" | "features" | "lat" | "lng" | "region" | "regionIsoCode" | "locality" | "localityFiasId" | "categoryPath" | "seoPath" | "userId" | "categoryId" | "status" | "rejectionReason" | "expiresAt" | "publishedAt" | "bumpedAt" | "bumpServiceUntil" | "priceHighlightUntil" | "badge" | "badgeUntil" | "createdAt" | "updatedAt", ExtArgs["result"]["ad"]>
+export type AdOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "title" | "description" | "price" | "unit" | "images" | "address" | "phone" | "features" | "lat" | "lng" | "region" | "regionIsoCode" | "locality" | "localityFiasId" | "categoryPath" | "seoPath" | "userId" | "categoryId" | "status" | "rejectionReason" | "expiresAt" | "publishedAt" | "archivedAt" | "bumpedAt" | "bumpServiceUntil" | "priceHighlightUntil" | "badge" | "badgeUntil" | "createdAt" | "updatedAt", ExtArgs["result"]["ad"]>
 export type AdInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.Ad$userArgs<ExtArgs>
   category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>
@@ -2805,6 +2864,7 @@ export type $AdPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
     rejectionReason: string | null
     expiresAt: Date | null
     publishedAt: Date | null
+    archivedAt: Date | null
     bumpedAt: Date | null
     bumpServiceUntil: Date | null
     priceHighlightUntil: Date | null
@@ -3266,6 +3326,7 @@ export interface AdFieldRefs {
   readonly rejectionReason: Prisma.FieldRef<"Ad", 'String'>
   readonly expiresAt: Prisma.FieldRef<"Ad", 'DateTime'>
   readonly publishedAt: Prisma.FieldRef<"Ad", 'DateTime'>
+  readonly archivedAt: Prisma.FieldRef<"Ad", 'DateTime'>
   readonly bumpedAt: Prisma.FieldRef<"Ad", 'DateTime'>
   readonly bumpServiceUntil: Prisma.FieldRef<"Ad", 'DateTime'>
   readonly priceHighlightUntil: Prisma.FieldRef<"Ad", 'DateTime'>

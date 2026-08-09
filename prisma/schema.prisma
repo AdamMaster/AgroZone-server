@@ -33,6 +33,15 @@ model User {
   isVerified         Boolean @default(false) @map("is_verified")
   isTwoFactorEnabled Boolean @default(false) @map("is_two_factor_enabled")
 
+  // Мягкое удаление аккаунта — сама строка User не удаляется физически
+  // (иначе каскадом снесло бы Conversation/Message, которые принадлежат ещё
+  // и второй стороне переписки, см. комментарий у Conversation ниже), а
+  // персональные поля (email, password, displayName, picture, bio,
+  // location) обнуляются — см. UserService.deleteAccount. null — аккаунт
+  // активен, дата — когда был удалён. AuthGuard и логин отказывают всем, у
+  // кого тут не null.
+  deletedAt DateTime? @map("deleted_at")
+
   method   AuthMethod
   accounts Account[]
   tokens   Token[]
@@ -265,6 +274,15 @@ model Ad {
   expiresAt       DateTime? @map("expires_at")
   publishedAt     DateTime? @map("published_at")
 
+  // Когда объявление в последний раз ушло в статус ARCHIVED — null, если
+  // никогда (или уже вышло из архива обратно). НЕ переиспользуем updatedAt
+  // для этого — он сбивается любым другим изменением объявления, а не
+  // только уходом в архив. Нужен, чтобы AdsArchivePurgeWorker мог считать
+  // "объявление лежит в архиве больше 30 дней" именно от момента архивации,
+  // а не от последнего редактирования (см. AdsService.archive/activate/draft/publishDraft
+  // и AdsArchivePurgeWorker).
+  archivedAt DateTime? @map("archived_at")
+
   // Время последнего платного "поднятия" объявления (см. AdBumpsService) —
   // null, если ни разу не поднимали. Используется вместо createdAt в
   // сортировке каталога по умолчанию (COALESCE(bumped_at, created_at) —
@@ -310,6 +328,9 @@ model Ad {
 
   @@index([status])
   @@index([status, expiresAt])
+  // Под AdsArchivePurgeWorker: выборка архивных объявлений живых аккаунтов
+  // старше 30 дней (архив удалённых аккаунтов ищется через User.deletedAt).
+  @@index([status, archivedAt])
   @@index([userId])
   @@index([categoryId])
   // Под фильтр каталога: выбрана категория + сортировка/диапазон по цене.

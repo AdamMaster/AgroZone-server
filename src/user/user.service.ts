@@ -1,9 +1,10 @@
 import { PrismaService } from '@/prisma/prisma.service'
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
 import { hash, verify } from 'argon2'
-import { AuthMethod, TokenType } from 'prisma/generated/enums'
+import { AdStatus, AuthMethod, TokenType, UserRole } from 'prisma/generated/enums'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { PasswordChangeDto } from './dto/password-change.dto'
+import { DeleteAccountDto } from './dto/delete-account.dto'
 import { ConfigService } from '@nestjs/config'
 import { FileService } from '../file/file.service'
 import { AD_LIMITS } from '@/ads/constants/ads.constants'
@@ -450,5 +451,80 @@ export class UserService {
     })
 
     return { success: true, message: 'Основной номер изменён' }
+  }
+
+  // Удаление аккаунта — мягкое: строка User не удаляется физически, а
+  // обезличивается (deletedAt проставляется, персональные поля обнуляются).
+  // Причина — Conversation каскадно завязан и на buyerId, и на sellerId
+  // (см. schema.prisma): физическое удаление пользователя снесло бы
+  // переписку целиком, включая сообщения второй стороны, которая ничего не
+  // удаляла. По той же причине не удаляем и объявления пользователя
+  // физически — только переводим в ARCHIVED (у Ad тоже каскад в
+  // Conversation). Хвосты подчищает AdsArchivePurgeWorker через 30 дней.
+  async deleteAccount(userId: string, dto: DeleteAccountDto) {
+    const user = await this.findById(userId)
+
+    if (user.role === UserRole.ADMIN) {
+      throw new BadRequestException(
+        'Аккаунт администратора нельзя удалить самостоятельно — обратитесь к разработчику.'
+      )
+    }
+
+    if (user.password) {
+      if (!dto.password) {
+        throw new BadRequestException('Необходимо указать пароль для подтверждения')
+      }
+
+      const isValidPassword = await verify(user.password, dto.password)
+      if (!isValidPassword) {
+        throw new BadRequestException('Неверный пароль')
+      }
+    }
+
+    // Аватарку из S3 удаляем до транзакции — если это упадёт, лучше
+    // прервать удаление с понятной ошибкой, чем обезличить аккаунт с
+    // "осиротевшим" файлом в хранилище, о котором больше негде узнать.
+    if (user.picture) {
+      await this.fileService.deleteFileByUrl(user.picture)
+    }
+
+    await this.prismaService.$transaction(async tx => {
+      // Чисто персональные данные — ни на кого больше не ссылаются, можно
+      // удалить физически.
+      await tx.userPhone.deleteMany({ where: { userId } })
+      await tx.account.deleteMany({ where: { userId } })
+      await tx.token.deleteMany({ where: { userId } })
+      await tx.favorite.deleteMany({ where: { userId } })
+      await tx.notification.deleteMany({ where: { userId } })
+
+      // Объявления — не удаляем (см. комментарий к методу), просто прячем
+      // из каталога переводом в архив.
+      await tx.ad.updateMany({
+        where: { userId, status: { not: AdStatus.ARCHIVED } },
+        data: { status: AdStatus.ARCHIVED, archivedAt: new Date() }
+      })
+
+      // Сам аккаунт — обезличиваем и помечаем deletedAt. Conversation,
+      // Message, AdReport, PremiumPurchase, AdBump, AdServicePurchase не
+      // трогаем — они продолжают ссылаться на этот userId, просто теперь
+      // это анонимный пользователь (UI уже везде показывает "Пользователь"
+      // при пустом displayName — проверено, ничего дополнительно чинить не
+      // нужно).
+      await tx.user.update({
+        where: { id: userId },
+        data: {
+          email: null,
+          password: null,
+          displayName: null,
+          picture: null,
+          bio: null,
+          location: null,
+          isTwoFactorEnabled: false,
+          deletedAt: new Date()
+        }
+      })
+    })
+
+    return { success: true }
   }
 }

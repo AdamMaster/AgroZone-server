@@ -53,4 +53,19 @@ export class FileService {
 
     return { success: true }
   }
+
+  // Удобный шорткат поверх deleteFile — принимает не fileId (ключ в бакете),
+  // а полный URL, который и хранится в БД (User.picture, Ad.images).
+  // Раньше извлечение fileId из URL (url.split(bucketName/)[1]) было
+  // продублировано в UserService/AdsService — здесь центральное место для
+  // новых мест использования (см. UserService.deleteAccount,
+  // AdsArchivePurgeWorker), чтобы не плодить третью копию.
+  async deleteFileByUrl(url: string) {
+    const bucketName = this.configService.getOrThrow<string>('S3_BUCKET_NAME')
+    const fileId = url.split(`${bucketName}/`)[1]
+
+    if (fileId) {
+      await this.deleteFile(fileId)
+    }
+  }
 }

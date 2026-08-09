@@ -37,6 +37,7 @@ export type UserMinAggregateOutputType = {
   premiumUntil: Date | null
   isVerified: boolean | null
   isTwoFactorEnabled: boolean | null
+  deletedAt: Date | null
   method: $Enums.AuthMethod | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -55,6 +56,7 @@ export type UserMaxAggregateOutputType = {
   premiumUntil: Date | null
   isVerified: boolean | null
   isTwoFactorEnabled: boolean | null
+  deletedAt: Date | null
   method: $Enums.AuthMethod | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -73,6 +75,7 @@ export type UserCountAggregateOutputType = {
   premiumUntil: number
   isVerified: number
   isTwoFactorEnabled: number
+  deletedAt: number
   method: number
   createdAt: number
   updatedAt: number
@@ -93,6 +96,7 @@ export type UserMinAggregateInputType = {
   premiumUntil?: true
   isVerified?: true
   isTwoFactorEnabled?: true
+  deletedAt?: true
   method?: true
   createdAt?: true
   updatedAt?: true
@@ -111,6 +115,7 @@ export type UserMaxAggregateInputType = {
   premiumUntil?: true
   isVerified?: true
   isTwoFactorEnabled?: true
+  deletedAt?: true
   method?: true
   createdAt?: true
   updatedAt?: true
@@ -129,6 +134,7 @@ export type UserCountAggregateInputType = {
   premiumUntil?: true
   isVerified?: true
   isTwoFactorEnabled?: true
+  deletedAt?: true
   method?: true
   createdAt?: true
   updatedAt?: true
@@ -220,6 +226,7 @@ export type UserGroupByOutputType = {
   premiumUntil: Date | null
   isVerified: boolean
   isTwoFactorEnabled: boolean
+  deletedAt: Date | null
   method: $Enums.AuthMethod
   createdAt: Date
   updatedAt: Date
@@ -259,6 +266,7 @@ export type UserWhereInput = {
   premiumUntil?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   isVerified?: Prisma.BoolFilter<"User"> | boolean
   isTwoFactorEnabled?: Prisma.BoolFilter<"User"> | boolean
+  deletedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   method?: Prisma.EnumAuthMethodFilter<"User"> | $Enums.AuthMethod
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -292,6 +300,7 @@ export type UserOrderByWithRelationInput = {
   premiumUntil?: Prisma.SortOrderInput | Prisma.SortOrder
   isVerified?: Prisma.SortOrder
   isTwoFactorEnabled?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   method?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -328,6 +337,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   premiumUntil?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   isVerified?: Prisma.BoolFilter<"User"> | boolean
   isTwoFactorEnabled?: Prisma.BoolFilter<"User"> | boolean
+  deletedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   method?: Prisma.EnumAuthMethodFilter<"User"> | $Enums.AuthMethod
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -361,6 +371,7 @@ export type UserOrderByWithAggregationInput = {
   premiumUntil?: Prisma.SortOrderInput | Prisma.SortOrder
   isVerified?: Prisma.SortOrder
   isTwoFactorEnabled?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   method?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -385,6 +396,7 @@ export type UserScalarWhereWithAggregatesInput = {
   premiumUntil?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   isVerified?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   isTwoFactorEnabled?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
+  deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   method?: Prisma.EnumAuthMethodWithAggregatesFilter<"User"> | $Enums.AuthMethod
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
@@ -403,6 +415,7 @@ export type UserCreateInput = {
   premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
+  deletedAt?: Date | string | null
   method: $Enums.AuthMethod
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -436,6 +449,7 @@ export type UserUncheckedCreateInput = {
   premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
+  deletedAt?: Date | string | null
   method: $Enums.AuthMethod
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -469,6 +483,7 @@ export type UserUpdateInput = {
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -502,6 +517,7 @@ export type UserUncheckedUpdateInput = {
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -535,6 +551,7 @@ export type UserCreateManyInput = {
   premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
+  deletedAt?: Date | string | null
   method: $Enums.AuthMethod
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -553,6 +570,7 @@ export type UserUpdateManyMutationInput = {
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -571,6 +589,7 @@ export type UserUncheckedUpdateManyInput = {
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -589,6 +608,7 @@ export type UserCountOrderByAggregateInput = {
   premiumUntil?: Prisma.SortOrder
   isVerified?: Prisma.SortOrder
   isTwoFactorEnabled?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
   method?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -607,6 +627,7 @@ export type UserMaxOrderByAggregateInput = {
   premiumUntil?: Prisma.SortOrder
   isVerified?: Prisma.SortOrder
   isTwoFactorEnabled?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
   method?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -625,6 +646,7 @@ export type UserMinOrderByAggregateInput = {
   premiumUntil?: Prisma.SortOrder
   isVerified?: Prisma.SortOrder
   isTwoFactorEnabled?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
   method?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -901,6 +923,7 @@ export type UserCreateWithoutPhonesInput = {
   premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
+  deletedAt?: Date | string | null
   method: $Enums.AuthMethod
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -933,6 +956,7 @@ export type UserUncheckedCreateWithoutPhonesInput = {
   premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
+  deletedAt?: Date | string | null
   method: $Enums.AuthMethod
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -981,6 +1005,7 @@ export type UserUpdateWithoutPhonesInput = {
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1013,6 +1038,7 @@ export type UserUncheckedUpdateWithoutPhonesInput = {
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1045,6 +1071,7 @@ export type UserCreateWithoutAccountsInput = {
   premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
+  deletedAt?: Date | string | null
   method: $Enums.AuthMethod
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1077,6 +1104,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
+  deletedAt?: Date | string | null
   method: $Enums.AuthMethod
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1125,6 +1153,7 @@ export type UserUpdateWithoutAccountsInput = {
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1157,6 +1186,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1189,6 +1219,7 @@ export type UserCreateWithoutTokensInput = {
   premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
+  deletedAt?: Date | string | null
   method: $Enums.AuthMethod
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1221,6 +1252,7 @@ export type UserUncheckedCreateWithoutTokensInput = {
   premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
+  deletedAt?: Date | string | null
   method: $Enums.AuthMethod
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1269,6 +1301,7 @@ export type UserUpdateWithoutTokensInput = {
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1301,6 +1334,7 @@ export type UserUncheckedUpdateWithoutTokensInput = {
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1333,6 +1367,7 @@ export type UserCreateWithoutAdsInput = {
   premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
+  deletedAt?: Date | string | null
   method: $Enums.AuthMethod
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1365,6 +1400,7 @@ export type UserUncheckedCreateWithoutAdsInput = {
   premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
+  deletedAt?: Date | string | null
   method: $Enums.AuthMethod
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1413,6 +1449,7 @@ export type UserUpdateWithoutAdsInput = {
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1445,6 +1482,7 @@ export type UserUncheckedUpdateWithoutAdsInput = {
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1477,6 +1515,7 @@ export type UserCreateWithoutFavoritesInput = {
   premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
+  deletedAt?: Date | string | null
   method: $Enums.AuthMethod
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1509,6 +1548,7 @@ export type UserUncheckedCreateWithoutFavoritesInput = {
   premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
+  deletedAt?: Date | string | null
   method: $Enums.AuthMethod
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1557,6 +1597,7 @@ export type UserUpdateWithoutFavoritesInput = {
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1589,6 +1630,7 @@ export type UserUncheckedUpdateWithoutFavoritesInput = {
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1621,6 +1663,7 @@ export type UserCreateWithoutAdReportsInput = {
   premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
+  deletedAt?: Date | string | null
   method: $Enums.AuthMethod
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1653,6 +1696,7 @@ export type UserUncheckedCreateWithoutAdReportsInput = {
   premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
+  deletedAt?: Date | string | null
   method: $Enums.AuthMethod
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1701,6 +1745,7 @@ export type UserUpdateWithoutAdReportsInput = {
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1733,6 +1778,7 @@ export type UserUncheckedUpdateWithoutAdReportsInput = {
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1765,6 +1811,7 @@ export type UserCreateWithoutAdBumpsInput = {
   premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
+  deletedAt?: Date | string | null
   method: $Enums.AuthMethod
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1797,6 +1844,7 @@ export type UserUncheckedCreateWithoutAdBumpsInput = {
   premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
+  deletedAt?: Date | string | null
   method: $Enums.AuthMethod
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1845,6 +1893,7 @@ export type UserUpdateWithoutAdBumpsInput = {
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1877,6 +1926,7 @@ export type UserUncheckedUpdateWithoutAdBumpsInput = {
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1909,6 +1959,7 @@ export type UserCreateWithoutPremiumPurchasesInput = {
   premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
+  deletedAt?: Date | string | null
   method: $Enums.AuthMethod
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1941,6 +1992,7 @@ export type UserUncheckedCreateWithoutPremiumPurchasesInput = {
   premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
+  deletedAt?: Date | string | null
   method: $Enums.AuthMethod
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1989,6 +2041,7 @@ export type UserUpdateWithoutPremiumPurchasesInput = {
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2021,6 +2074,7 @@ export type UserUncheckedUpdateWithoutPremiumPurchasesInput = {
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2053,6 +2107,7 @@ export type UserCreateWithoutAdServicePurchasesInput = {
   premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
+  deletedAt?: Date | string | null
   method: $Enums.AuthMethod
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2085,6 +2140,7 @@ export type UserUncheckedCreateWithoutAdServicePurchasesInput = {
   premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
+  deletedAt?: Date | string | null
   method: $Enums.AuthMethod
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2133,6 +2189,7 @@ export type UserUpdateWithoutAdServicePurchasesInput = {
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2165,6 +2222,7 @@ export type UserUncheckedUpdateWithoutAdServicePurchasesInput = {
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2197,6 +2255,7 @@ export type UserCreateWithoutConversationsAsBuyerInput = {
   premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
+  deletedAt?: Date | string | null
   method: $Enums.AuthMethod
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2229,6 +2288,7 @@ export type UserUncheckedCreateWithoutConversationsAsBuyerInput = {
   premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
+  deletedAt?: Date | string | null
   method: $Enums.AuthMethod
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2266,6 +2326,7 @@ export type UserCreateWithoutConversationsAsSellerInput = {
   premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
+  deletedAt?: Date | string | null
   method: $Enums.AuthMethod
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2298,6 +2359,7 @@ export type UserUncheckedCreateWithoutConversationsAsSellerInput = {
   premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
+  deletedAt?: Date | string | null
   method: $Enums.AuthMethod
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2346,6 +2408,7 @@ export type UserUpdateWithoutConversationsAsBuyerInput = {
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2378,6 +2441,7 @@ export type UserUncheckedUpdateWithoutConversationsAsBuyerInput = {
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2421,6 +2485,7 @@ export type UserUpdateWithoutConversationsAsSellerInput = {
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2453,6 +2518,7 @@ export type UserUncheckedUpdateWithoutConversationsAsSellerInput = {
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2485,6 +2551,7 @@ export type UserCreateWithoutBlockedUsersInput = {
   premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
+  deletedAt?: Date | string | null
   method: $Enums.AuthMethod
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2517,6 +2584,7 @@ export type UserUncheckedCreateWithoutBlockedUsersInput = {
   premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
+  deletedAt?: Date | string | null
   method: $Enums.AuthMethod
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2554,6 +2622,7 @@ export type UserCreateWithoutBlockedByUsersInput = {
   premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
+  deletedAt?: Date | string | null
   method: $Enums.AuthMethod
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2586,6 +2655,7 @@ export type UserUncheckedCreateWithoutBlockedByUsersInput = {
   premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
+  deletedAt?: Date | string | null
   method: $Enums.AuthMethod
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2634,6 +2704,7 @@ export type UserUpdateWithoutBlockedUsersInput = {
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2666,6 +2737,7 @@ export type UserUncheckedUpdateWithoutBlockedUsersInput = {
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2709,6 +2781,7 @@ export type UserUpdateWithoutBlockedByUsersInput = {
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2741,6 +2814,7 @@ export type UserUncheckedUpdateWithoutBlockedByUsersInput = {
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2773,6 +2847,7 @@ export type UserCreateWithoutSentMessagesInput = {
   premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
+  deletedAt?: Date | string | null
   method: $Enums.AuthMethod
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2805,6 +2880,7 @@ export type UserUncheckedCreateWithoutSentMessagesInput = {
   premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
+  deletedAt?: Date | string | null
   method: $Enums.AuthMethod
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2853,6 +2929,7 @@ export type UserUpdateWithoutSentMessagesInput = {
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2885,6 +2962,7 @@ export type UserUncheckedUpdateWithoutSentMessagesInput = {
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2917,6 +2995,7 @@ export type UserCreateWithoutNotificationsInput = {
   premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
+  deletedAt?: Date | string | null
   method: $Enums.AuthMethod
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2949,6 +3028,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   premiumUntil?: Date | string | null
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
+  deletedAt?: Date | string | null
   method: $Enums.AuthMethod
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2997,6 +3077,7 @@ export type UserUpdateWithoutNotificationsInput = {
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3029,6 +3110,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3218,6 +3300,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   premiumUntil?: boolean
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
+  deletedAt?: boolean
   method?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -3252,6 +3335,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   premiumUntil?: boolean
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
+  deletedAt?: boolean
   method?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -3270,6 +3354,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   premiumUntil?: boolean
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
+  deletedAt?: boolean
   method?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -3288,12 +3373,13 @@ export type UserSelectScalar = {
   premiumUntil?: boolean
   isVerified?: boolean
   isTwoFactorEnabled?: boolean
+  deletedAt?: boolean
   method?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "password" | "email" | "displayName" | "picture" | "type" | "bio" | "location" | "role" | "premiumUntil" | "isVerified" | "isTwoFactorEnabled" | "method" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "password" | "email" | "displayName" | "picture" | "type" | "bio" | "location" | "role" | "premiumUntil" | "isVerified" | "isTwoFactorEnabled" | "deletedAt" | "method" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   phones?: boolean | Prisma.User$phonesArgs<ExtArgs>
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
@@ -3347,6 +3433,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     premiumUntil: Date | null
     isVerified: boolean
     isTwoFactorEnabled: boolean
+    deletedAt: Date | null
     method: $Enums.AuthMethod
     createdAt: Date
     updatedAt: Date
@@ -3800,6 +3887,7 @@ export interface UserFieldRefs {
   readonly premiumUntil: Prisma.FieldRef<"User", 'DateTime'>
   readonly isVerified: Prisma.FieldRef<"User", 'Boolean'>
   readonly isTwoFactorEnabled: Prisma.FieldRef<"User", 'Boolean'>
+  readonly deletedAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly method: Prisma.FieldRef<"User", 'AuthMethod'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>

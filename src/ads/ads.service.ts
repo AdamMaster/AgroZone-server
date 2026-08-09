@@ -996,7 +996,9 @@ export class AdsService {
 
     return this.prisma.ad.update({
       where: { id },
-      data: { status }
+      // archivedAt — момент, от которого AdsArchivePurgeWorker отсчитывает
+      // 30 дней хранения в архиве (см. schema.prisma, комментарий у поля).
+      data: { status, archivedAt: new Date() }
     })
   }
 
@@ -1008,7 +1010,10 @@ export class AdsService {
 
     return this.prisma.ad.update({
       where: { id },
-      data: { status: nextStatus }
+      // Объявление покинуло архив (если вообще было в нём) — сбрасываем
+      // archivedAt, иначе на нём осталась бы старая дата и оно могло бы
+      // попасть под очистку при повторной архивации раньше времени.
+      data: { status: nextStatus, archivedAt: null }
     })
   }
 
@@ -1022,7 +1027,8 @@ export class AdsService {
       where: { id },
       data: {
         status,
-        rejectionReason: null
+        rejectionReason: null,
+        archivedAt: null
       }
     })
   }
@@ -1138,7 +1144,9 @@ export class AdsService {
         status,
         publishedAt: now,
         expiresAt: this.getExpirationDateFrom(now, 30),
-        rejectionReason: null
+        rejectionReason: null,
+        // PUBLISH из ARCHIVED — тоже выход из архива, см. комментарий в activate().
+        archivedAt: null
       }
     })
   }

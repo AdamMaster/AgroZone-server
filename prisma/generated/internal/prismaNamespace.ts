@@ -1730,6 +1730,7 @@ export const UserScalarFieldEnum = {
   premiumUntil: 'premiumUntil',
   isVerified: 'isVerified',
   isTwoFactorEnabled: 'isTwoFactorEnabled',
+  deletedAt: 'deletedAt',
   method: 'method',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -1845,6 +1846,7 @@ export const AdScalarFieldEnum = {
   rejectionReason: 'rejectionReason',
   expiresAt: 'expiresAt',
   publishedAt: 'publishedAt',
+  archivedAt: 'archivedAt',
   bumpedAt: 'bumpedAt',
   bumpServiceUntil: 'bumpServiceUntil',
   priceHighlightUntil: 'priceHighlightUntil',

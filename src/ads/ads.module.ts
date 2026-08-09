@@ -7,6 +7,7 @@ import { FileModule } from '../file/file.module'
 import { AdStateMachineService } from './ad-state-machine.service'
 import { BullModule } from '@nestjs/bullmq'
 import { AdsExpirationWorker } from './workers/ads-expiration.worker'
+import { AdsArchivePurgeWorker } from './workers/ads-archive-purge.worker'
 import { CategoriesModule } from '@/categories/categories.module'
 import { AuthModule } from '@/auth/auth.module'
 import { NotificationsModule } from '@/notifications/notifications.module'
@@ -23,6 +24,6 @@ import { NotificationsModule } from '@/notifications/notifications.module'
     NotificationsModule
   ],
   controllers: [AdsController],
-  providers: [AdsService, PrismaService, AdStateMachineService, AdsExpirationWorker]
+  providers: [AdsService, PrismaService, AdStateMachineService, AdsExpirationWorker, AdsArchivePurgeWorker]
 })
 export class AdsModule {}

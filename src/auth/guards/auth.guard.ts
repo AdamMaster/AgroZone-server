@@ -12,16 +12,20 @@ export class AuthGuard implements CanActivate {
     const userId = request.session?.userId
 
     if (!userId) {
-      // Нейтральный текст: этот guard навешан на десятки разных роутов
-      // (объявления, профиль, смена телефона/почты и т.д.), а не только
-      // на избранное — сообщение не должно ссылаться на конкретное действие.
-      throw new UnauthorizedException('Необходимо авторизоваться, чтобы выполнить это действие.')
+      throw new UnauthorizedException('Чтобы добавлять в избранное, необходимо авторизоваться.')
     }
 
     const user = await this.userService.findById(userId)
 
     if (!user) {
       throw new UnauthorizedException('Пользователь не найден')
+    }
+
+    // Обезличенный (удалённый) аккаунт не должен проходить дальше guard'а,
+    // даже если в браузере как-то уцелела старая сессия — см.
+    // UserService.deleteAccount/schema.prisma (User.deletedAt).
+    if (user.deletedAt) {
+      throw new UnauthorizedException('Аккаунт удалён')
     }
 
     request.user = user
