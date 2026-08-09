@@ -24,6 +24,7 @@ import { AdReportsModule } from './ad-reports/ad-reports.module'
 import { AdBumpsModule } from './ad-bumps/ad-bumps.module'
 import { PremiumModule } from './premium/premium.module'
 import { AdServicesModule } from './ad-services/ad-services.module'
+import { NotificationsModule } from './notifications/notifications.module'
 
 @Module({
   imports: [
@@ -67,7 +68,8 @@ import { AdServicesModule } from './ad-services/ad-services.module'
     AdReportsModule,
     AdBumpsModule,
     PremiumModule,
-    AdServicesModule
+    AdServicesModule,
+    NotificationsModule
   ]
 })
 export class AppModule {}

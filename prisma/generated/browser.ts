@@ -97,3 +97,8 @@ export type Message = Prisma.MessageModel
  * 
  */
 export type RuCity = Prisma.RuCityModel
+/**
+ * Model Notification
+ * 
+ */
+export type Notification = Prisma.NotificationModel

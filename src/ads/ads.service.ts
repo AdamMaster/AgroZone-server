@@ -16,6 +16,7 @@ import { randomBytes } from 'crypto'
 import slugify from 'slugify'
 import { UserService } from '@/user/user.service'
 import { normalizePhone } from '@/libs/common/utils/phone.util'
+import { NotificationsService } from '@/notifications/notifications.service'
 
 // Города федерального значения — у них DaData отдаёт city == region, из-за
 // чего city_fias_id/city_with_type в ответе DaData пустые (см.
@@ -101,7 +102,8 @@ export class AdsService {
     private readonly configService: ConfigService,
     private readonly adStateMachine: AdStateMachineService,
     private readonly categoriesService: CategoriesService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    private readonly notificationsService: NotificationsService
   ) {}
 
   async create(
@@ -884,13 +886,23 @@ export class AdsService {
 
     const status = this.adStateMachine.transition(ad.status, 'REJECT')
 
-    return this.prisma.ad.update({
+    const updatedAd = await this.prisma.ad.update({
       where: { id },
       data: {
         status,
         rejectionReason: reason ?? null
       }
     })
+
+    // Раньше об отклонении продавец узнавал, только если сам заходил в
+    // "Мои объявления" и замечал иконку с причиной (см. обсуждение с
+    // пользователем) — теперь дополнительно кладём уведомление. Намеренно
+    // не оборачиваем в try/catch: если запись уведомления не создалась,
+    // лучше явно увидеть ошибку 500 и разобраться, чем молча оставить
+    // продавца без единственного способа узнать о решении модератора.
+    await this.notificationsService.notifyAdRejected(ad.userId, ad.id, ad.title, reason ?? null)
+
+    return updatedAd
   }
 
   async findPending(page = 1, limit = 20) {

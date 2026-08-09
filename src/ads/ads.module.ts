@@ -9,6 +9,7 @@ import { BullModule } from '@nestjs/bullmq'
 import { AdsExpirationWorker } from './workers/ads-expiration.worker'
 import { CategoriesModule } from '@/categories/categories.module'
 import { AuthModule } from '@/auth/auth.module'
+import { NotificationsModule } from '@/notifications/notifications.module'
 
 @Module({
   imports: [
@@ -18,7 +19,8 @@ import { AuthModule } from '@/auth/auth.module'
       name: 'ads'
     }),
     CategoriesModule,
-    AuthModule
+    AuthModule,
+    NotificationsModule
   ],
   controllers: [AdsController],
   providers: [AdsService, PrismaService, AdStateMachineService, AdsExpirationWorker]

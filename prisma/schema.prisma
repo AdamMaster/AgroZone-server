@@ -66,6 +66,12 @@ model User {
   // платёж (см. AdServicePurchase).
   adServicePurchases AdServicePurchase[]
 
+  // Уведомления этого юзера (см. Notification) — сейчас только про
+  // отклонение объявления модератором, но сущность универсальная и
+  // рассчитана на будущие типы (одобрили объявление, истекает премиум и
+  // т.п.).
+  notifications Notification[]
+
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
@@ -719,4 +725,37 @@ enum PriceUnit {
   RUNNING_METER
   HA
   HOUR
+}
+
+// Уведомление юзеру про событие, которое ему стоит увидеть, даже если он
+// сам не зайдёт целенаправленно проверять (см. обсуждение — раньше
+// отклонение объявления модератором было видно ТОЛЬКО если продавец сам
+// откроет "Мои объявления"). Сущность универсальная (не "AdRejection..."),
+// чтобы под новые события (одобрили объявление, истекает премиум и т.п.)
+// не заводить отдельную таблицу каждый раз — достаточно добавить значение
+// в NotificationType.
+model Notification {
+  id     String @id @default(uuid())
+  userId String @map("user_id")
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  type    NotificationType
+  title   String
+  message String
+
+  // Куда ведёт клик по уведомлению (например /ads/{id}/edit для
+  // отклонённого объявления) — опционально, не все уведомления обязаны
+  // куда-то вести.
+  link String?
+
+  isRead Boolean @default(false) @map("is_read")
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([userId, isRead])
+  @@map("notifications")
+}
+
+enum NotificationType {
+  AD_REJECTED
 }

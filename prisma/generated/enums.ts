@@ -152,3 +152,10 @@ export const PriceUnit = {
 } as const
 
 export type PriceUnit = (typeof PriceUnit)[keyof typeof PriceUnit]
+
+
+export const NotificationType = {
+  AD_REJECTED: 'AD_REJECTED'
+} as const
+
+export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]

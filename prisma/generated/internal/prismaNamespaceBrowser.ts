@@ -66,7 +66,8 @@ export const ModelName = {
   Conversation: 'Conversation',
   BlockedUser: 'BlockedUser',
   Message: 'Message',
-  RuCity: 'RuCity'
+  RuCity: 'RuCity',
+  Notification: 'Notification'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -345,6 +346,20 @@ export const RuCityScalarFieldEnum = {
 } as const
 
 export type RuCityScalarFieldEnum = (typeof RuCityScalarFieldEnum)[keyof typeof RuCityScalarFieldEnum]
+
+
+export const NotificationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  type: 'type',
+  title: 'title',
+  message: 'message',
+  link: 'link',
+  isRead: 'isRead',
+  createdAt: 'createdAt'
+} as const
+
+export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
 
 
 export const SortOrder = {
