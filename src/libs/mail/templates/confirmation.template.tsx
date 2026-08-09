@@ -16,7 +16,7 @@ export function ConfirmationTemplate({ domain, token }: ConfirmationTemplateProp
         <Body className='text-black'>
           <Heading as='h2'>Подтверждение почты</Heading>
           <Text>Пожалуйста, перейдите по следующей ссылке, чтобы подтвердить адрес электронной почты:</Text>
-          <Link className='px-3 py-1.5 block rounded-lg text-white mb-8 bg-[#5ea500] w-fit' href={confirmLink}>
+          <Link className='px-3 py-1.5 inline-block rounded-lg text-white mb-8 bg-[#5ea500]' href={confirmLink}>
             Подтвердить почту
           </Link>
           <Text className='text-gray-500'>

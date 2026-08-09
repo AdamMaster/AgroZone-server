@@ -6,6 +6,7 @@ import { ConfirmationTemplate } from './templates/confirmation.template'
 import { ResetPasswordTemplate } from './templates/reset-password.template'
 import { TwoFactorAuthTemplate } from './templates/two-factor-auth.tamplate'
 import { EmailChangeTemplate } from './templates/email-change.tamplate'
+import { AdRejectedTemplate } from './templates/ad-rejected.template'
 
 @Injectable()
 export class MailService {
@@ -39,6 +40,13 @@ export class MailService {
     const html = await render(EmailChangeTemplate({ domain, token }))
 
     return this.sendMail(email, 'Подтверждение смены адреса электронной почты', html)
+  }
+
+  async sendAdRejectedEmail(email: string, adId: string, adTitle: string, reason: string | null) {
+    const domain = this.configService.getOrThrow<string>('ALLOWED_ORIGIN')
+    const html = await render(AdRejectedTemplate({ domain, adId, adTitle, reason }))
+
+    return this.sendMail(email, `Объявление «${adTitle}» отклонено`, html)
   }
 
   private sendMail(email: string, subject: string, html: string) {

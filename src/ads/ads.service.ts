@@ -765,7 +765,17 @@ export class AdsService {
       }
     }
 
-    const nextStatus = ad.status === AdStatus.PUBLISHED ? AdStatus.PENDING : ad.status
+    // PUBLISHED после правок уходит на повторную модерацию — уже было так.
+    // REJECTED — та же логика (и тот же переход REJECTED -> PENDING, что
+    // разрешён в AdStateMachineService по действию ACTIVATE): раз продавец
+    // специально зашёл поправить отклонённое объявление и жмёт "Сохранить",
+    // это и есть намерение отправить его на повторную проверку. Без этого
+    // объявление молча остаётся REJECTED навсегда — оно пропадает из
+    // очереди модератора (findPending видит только PENDING) и никаким
+    // действием на этой странице обратно вернуть его было нельзя (см.
+    // обсуждение с пользователем).
+    const nextStatus =
+      ad.status === AdStatus.PUBLISHED || ad.status === AdStatus.REJECTED ? AdStatus.PENDING : ad.status
 
     return this.prisma.ad.update({
       where: { id },
