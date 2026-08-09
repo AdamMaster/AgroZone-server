@@ -395,6 +395,7 @@ export const ModelName = {
   AdReport: 'AdReport',
   AdBump: 'AdBump',
   PremiumPurchase: 'PremiumPurchase',
+  AdServicePurchase: 'AdServicePurchase',
   Conversation: 'Conversation',
   BlockedUser: 'BlockedUser',
   Message: 'Message',
@@ -414,7 +415,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "userPhone" | "account" | "token" | "category" | "categoryFeature" | "ad" | "favorite" | "adReport" | "adBump" | "premiumPurchase" | "conversation" | "blockedUser" | "message" | "ruCity"
+    modelProps: "user" | "userPhone" | "account" | "token" | "category" | "categoryFeature" | "ad" | "favorite" | "adReport" | "adBump" | "premiumPurchase" | "adServicePurchase" | "conversation" | "blockedUser" | "message" | "ruCity"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1232,6 +1233,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    AdServicePurchase: {
+      payload: Prisma.$AdServicePurchasePayload<ExtArgs>
+      fields: Prisma.AdServicePurchaseFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AdServicePurchaseFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdServicePurchasePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AdServicePurchaseFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdServicePurchasePayload>
+        }
+        findFirst: {
+          args: Prisma.AdServicePurchaseFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdServicePurchasePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AdServicePurchaseFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdServicePurchasePayload>
+        }
+        findMany: {
+          args: Prisma.AdServicePurchaseFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdServicePurchasePayload>[]
+        }
+        create: {
+          args: Prisma.AdServicePurchaseCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdServicePurchasePayload>
+        }
+        createMany: {
+          args: Prisma.AdServicePurchaseCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AdServicePurchaseCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdServicePurchasePayload>[]
+        }
+        delete: {
+          args: Prisma.AdServicePurchaseDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdServicePurchasePayload>
+        }
+        update: {
+          args: Prisma.AdServicePurchaseUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdServicePurchasePayload>
+        }
+        deleteMany: {
+          args: Prisma.AdServicePurchaseDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AdServicePurchaseUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AdServicePurchaseUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdServicePurchasePayload>[]
+        }
+        upsert: {
+          args: Prisma.AdServicePurchaseUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdServicePurchasePayload>
+        }
+        aggregate: {
+          args: Prisma.AdServicePurchaseAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAdServicePurchase>
+        }
+        groupBy: {
+          args: Prisma.AdServicePurchaseGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AdServicePurchaseGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AdServicePurchaseCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AdServicePurchaseCountAggregateOutputType> | number
+        }
+      }
+    }
     Conversation: {
       payload: Prisma.$ConversationPayload<ExtArgs>
       fields: Prisma.ConversationFieldRefs
@@ -1697,6 +1772,9 @@ export const AdScalarFieldEnum = {
   publishedAt: 'publishedAt',
   bumpedAt: 'bumpedAt',
   bumpServiceUntil: 'bumpServiceUntil',
+  priceHighlightUntil: 'priceHighlightUntil',
+  badge: 'badge',
+  badgeUntil: 'badgeUntil',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1754,6 +1832,22 @@ export const PremiumPurchaseScalarFieldEnum = {
 } as const
 
 export type PremiumPurchaseScalarFieldEnum = (typeof PremiumPurchaseScalarFieldEnum)[keyof typeof PremiumPurchaseScalarFieldEnum]
+
+
+export const AdServicePurchaseScalarFieldEnum = {
+  id: 'id',
+  adId: 'adId',
+  userId: 'userId',
+  amount: 'amount',
+  services: 'services',
+  badge: 'badge',
+  status: 'status',
+  yookassaPaymentId: 'yookassaPaymentId',
+  createdAt: 'createdAt',
+  paidAt: 'paidAt'
+} as const
+
+export type AdServicePurchaseScalarFieldEnum = (typeof AdServicePurchaseScalarFieldEnum)[keyof typeof AdServicePurchaseScalarFieldEnum]
 
 
 export const ConversationScalarFieldEnum = {
@@ -2054,6 +2148,20 @@ export type ListEnumAdStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$Pri
 
 
 /**
+ * Reference to a field of type 'AdBadge'
+ */
+export type EnumAdBadgeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AdBadge'>
+    
+
+
+/**
+ * Reference to a field of type 'AdBadge[]'
+ */
+export type ListEnumAdBadgeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AdBadge[]'>
+    
+
+
+/**
  * Reference to a field of type 'AdReportReason'
  */
 export type EnumAdReportReasonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AdReportReason'>
@@ -2106,6 +2214,34 @@ export type EnumPremiumPurchaseStatusFieldRefInput<$PrismaModel> = FieldRefInput
  * Reference to a field of type 'PremiumPurchaseStatus[]'
  */
 export type ListEnumPremiumPurchaseStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PremiumPurchaseStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'AdServiceType[]'
+ */
+export type ListEnumAdServiceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AdServiceType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'AdServiceType'
+ */
+export type EnumAdServiceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AdServiceType'>
+    
+
+
+/**
+ * Reference to a field of type 'AdServicePurchaseStatus'
+ */
+export type EnumAdServicePurchaseStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AdServicePurchaseStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'AdServicePurchaseStatus[]'
+ */
+export type ListEnumAdServicePurchaseStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AdServicePurchaseStatus[]'>
     
 
 /**
@@ -2214,6 +2350,7 @@ export type GlobalOmitConfig = {
   adReport?: Prisma.AdReportOmit
   adBump?: Prisma.AdBumpOmit
   premiumPurchase?: Prisma.PremiumPurchaseOmit
+  adServicePurchase?: Prisma.AdServicePurchaseOmit
   conversation?: Prisma.ConversationOmit
   blockedUser?: Prisma.BlockedUserOmit
   message?: Prisma.MessageOmit

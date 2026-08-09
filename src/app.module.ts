@@ -23,6 +23,7 @@ import { BlockedUsersModule } from './blocked-users/blocked-users.module'
 import { AdReportsModule } from './ad-reports/ad-reports.module'
 import { AdBumpsModule } from './ad-bumps/ad-bumps.module'
 import { PremiumModule } from './premium/premium.module'
+import { AdServicesModule } from './ad-services/ad-services.module'
 
 @Module({
   imports: [
@@ -65,7 +66,8 @@ import { PremiumModule } from './premium/premium.module'
     BlockedUsersModule,
     AdReportsModule,
     AdBumpsModule,
-    PremiumModule
+    PremiumModule,
+    AdServicesModule
   ]
 })
 export class AppModule {}

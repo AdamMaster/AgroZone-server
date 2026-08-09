@@ -275,6 +275,7 @@ export type UserWhereInput = {
   adReports?: Prisma.AdReportListRelationFilter
   adBumps?: Prisma.AdBumpListRelationFilter
   premiumPurchases?: Prisma.PremiumPurchaseListRelationFilter
+  adServicePurchases?: Prisma.AdServicePurchaseListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -306,6 +307,7 @@ export type UserOrderByWithRelationInput = {
   adReports?: Prisma.AdReportOrderByRelationAggregateInput
   adBumps?: Prisma.AdBumpOrderByRelationAggregateInput
   premiumPurchases?: Prisma.PremiumPurchaseOrderByRelationAggregateInput
+  adServicePurchases?: Prisma.AdServicePurchaseOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -340,6 +342,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   adReports?: Prisma.AdReportListRelationFilter
   adBumps?: Prisma.AdBumpListRelationFilter
   premiumPurchases?: Prisma.PremiumPurchaseListRelationFilter
+  adServicePurchases?: Prisma.AdServicePurchaseListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -413,6 +416,7 @@ export type UserCreateInput = {
   adReports?: Prisma.AdReportCreateNestedManyWithoutUserInput
   adBumps?: Prisma.AdBumpCreateNestedManyWithoutUserInput
   premiumPurchases?: Prisma.PremiumPurchaseCreateNestedManyWithoutUserInput
+  adServicePurchases?: Prisma.AdServicePurchaseCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -444,6 +448,7 @@ export type UserUncheckedCreateInput = {
   adReports?: Prisma.AdReportUncheckedCreateNestedManyWithoutUserInput
   adBumps?: Prisma.AdBumpUncheckedCreateNestedManyWithoutUserInput
   premiumPurchases?: Prisma.PremiumPurchaseUncheckedCreateNestedManyWithoutUserInput
+  adServicePurchases?: Prisma.AdServicePurchaseUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -475,6 +480,7 @@ export type UserUpdateInput = {
   adReports?: Prisma.AdReportUpdateManyWithoutUserNestedInput
   adBumps?: Prisma.AdBumpUpdateManyWithoutUserNestedInput
   premiumPurchases?: Prisma.PremiumPurchaseUpdateManyWithoutUserNestedInput
+  adServicePurchases?: Prisma.AdServicePurchaseUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -506,6 +512,7 @@ export type UserUncheckedUpdateInput = {
   adReports?: Prisma.AdReportUncheckedUpdateManyWithoutUserNestedInput
   adBumps?: Prisma.AdBumpUncheckedUpdateManyWithoutUserNestedInput
   premiumPurchases?: Prisma.PremiumPurchaseUncheckedUpdateManyWithoutUserNestedInput
+  adServicePurchases?: Prisma.AdServicePurchaseUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -776,6 +783,20 @@ export type UserUpdateOneRequiredWithoutPremiumPurchasesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPremiumPurchasesInput, Prisma.UserUpdateWithoutPremiumPurchasesInput>, Prisma.UserUncheckedUpdateWithoutPremiumPurchasesInput>
 }
 
+export type UserCreateNestedOneWithoutAdServicePurchasesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAdServicePurchasesInput, Prisma.UserUncheckedCreateWithoutAdServicePurchasesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAdServicePurchasesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutAdServicePurchasesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAdServicePurchasesInput, Prisma.UserUncheckedCreateWithoutAdServicePurchasesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAdServicePurchasesInput
+  upsert?: Prisma.UserUpsertWithoutAdServicePurchasesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAdServicePurchasesInput, Prisma.UserUpdateWithoutAdServicePurchasesInput>, Prisma.UserUncheckedUpdateWithoutAdServicePurchasesInput>
+}
+
 export type UserCreateNestedOneWithoutConversationsAsBuyerInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutConversationsAsBuyerInput, Prisma.UserUncheckedCreateWithoutConversationsAsBuyerInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutConversationsAsBuyerInput
@@ -874,6 +895,7 @@ export type UserCreateWithoutPhonesInput = {
   adReports?: Prisma.AdReportCreateNestedManyWithoutUserInput
   adBumps?: Prisma.AdBumpCreateNestedManyWithoutUserInput
   premiumPurchases?: Prisma.PremiumPurchaseCreateNestedManyWithoutUserInput
+  adServicePurchases?: Prisma.AdServicePurchaseCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPhonesInput = {
@@ -904,6 +926,7 @@ export type UserUncheckedCreateWithoutPhonesInput = {
   adReports?: Prisma.AdReportUncheckedCreateNestedManyWithoutUserInput
   adBumps?: Prisma.AdBumpUncheckedCreateNestedManyWithoutUserInput
   premiumPurchases?: Prisma.PremiumPurchaseUncheckedCreateNestedManyWithoutUserInput
+  adServicePurchases?: Prisma.AdServicePurchaseUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPhonesInput = {
@@ -950,6 +973,7 @@ export type UserUpdateWithoutPhonesInput = {
   adReports?: Prisma.AdReportUpdateManyWithoutUserNestedInput
   adBumps?: Prisma.AdBumpUpdateManyWithoutUserNestedInput
   premiumPurchases?: Prisma.PremiumPurchaseUpdateManyWithoutUserNestedInput
+  adServicePurchases?: Prisma.AdServicePurchaseUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPhonesInput = {
@@ -980,6 +1004,7 @@ export type UserUncheckedUpdateWithoutPhonesInput = {
   adReports?: Prisma.AdReportUncheckedUpdateManyWithoutUserNestedInput
   adBumps?: Prisma.AdBumpUncheckedUpdateManyWithoutUserNestedInput
   premiumPurchases?: Prisma.PremiumPurchaseUncheckedUpdateManyWithoutUserNestedInput
+  adServicePurchases?: Prisma.AdServicePurchaseUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAccountsInput = {
@@ -1010,6 +1035,7 @@ export type UserCreateWithoutAccountsInput = {
   adReports?: Prisma.AdReportCreateNestedManyWithoutUserInput
   adBumps?: Prisma.AdBumpCreateNestedManyWithoutUserInput
   premiumPurchases?: Prisma.PremiumPurchaseCreateNestedManyWithoutUserInput
+  adServicePurchases?: Prisma.AdServicePurchaseCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -1040,6 +1066,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   adReports?: Prisma.AdReportUncheckedCreateNestedManyWithoutUserInput
   adBumps?: Prisma.AdBumpUncheckedCreateNestedManyWithoutUserInput
   premiumPurchases?: Prisma.PremiumPurchaseUncheckedCreateNestedManyWithoutUserInput
+  adServicePurchases?: Prisma.AdServicePurchaseUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -1086,6 +1113,7 @@ export type UserUpdateWithoutAccountsInput = {
   adReports?: Prisma.AdReportUpdateManyWithoutUserNestedInput
   adBumps?: Prisma.AdBumpUpdateManyWithoutUserNestedInput
   premiumPurchases?: Prisma.PremiumPurchaseUpdateManyWithoutUserNestedInput
+  adServicePurchases?: Prisma.AdServicePurchaseUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -1116,6 +1144,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   adReports?: Prisma.AdReportUncheckedUpdateManyWithoutUserNestedInput
   adBumps?: Prisma.AdBumpUncheckedUpdateManyWithoutUserNestedInput
   premiumPurchases?: Prisma.PremiumPurchaseUncheckedUpdateManyWithoutUserNestedInput
+  adServicePurchases?: Prisma.AdServicePurchaseUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutTokensInput = {
@@ -1146,6 +1175,7 @@ export type UserCreateWithoutTokensInput = {
   adReports?: Prisma.AdReportCreateNestedManyWithoutUserInput
   adBumps?: Prisma.AdBumpCreateNestedManyWithoutUserInput
   premiumPurchases?: Prisma.PremiumPurchaseCreateNestedManyWithoutUserInput
+  adServicePurchases?: Prisma.AdServicePurchaseCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutTokensInput = {
@@ -1176,6 +1206,7 @@ export type UserUncheckedCreateWithoutTokensInput = {
   adReports?: Prisma.AdReportUncheckedCreateNestedManyWithoutUserInput
   adBumps?: Prisma.AdBumpUncheckedCreateNestedManyWithoutUserInput
   premiumPurchases?: Prisma.PremiumPurchaseUncheckedCreateNestedManyWithoutUserInput
+  adServicePurchases?: Prisma.AdServicePurchaseUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutTokensInput = {
@@ -1222,6 +1253,7 @@ export type UserUpdateWithoutTokensInput = {
   adReports?: Prisma.AdReportUpdateManyWithoutUserNestedInput
   adBumps?: Prisma.AdBumpUpdateManyWithoutUserNestedInput
   premiumPurchases?: Prisma.PremiumPurchaseUpdateManyWithoutUserNestedInput
+  adServicePurchases?: Prisma.AdServicePurchaseUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTokensInput = {
@@ -1252,6 +1284,7 @@ export type UserUncheckedUpdateWithoutTokensInput = {
   adReports?: Prisma.AdReportUncheckedUpdateManyWithoutUserNestedInput
   adBumps?: Prisma.AdBumpUncheckedUpdateManyWithoutUserNestedInput
   premiumPurchases?: Prisma.PremiumPurchaseUncheckedUpdateManyWithoutUserNestedInput
+  adServicePurchases?: Prisma.AdServicePurchaseUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAdsInput = {
@@ -1282,6 +1315,7 @@ export type UserCreateWithoutAdsInput = {
   adReports?: Prisma.AdReportCreateNestedManyWithoutUserInput
   adBumps?: Prisma.AdBumpCreateNestedManyWithoutUserInput
   premiumPurchases?: Prisma.PremiumPurchaseCreateNestedManyWithoutUserInput
+  adServicePurchases?: Prisma.AdServicePurchaseCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAdsInput = {
@@ -1312,6 +1346,7 @@ export type UserUncheckedCreateWithoutAdsInput = {
   adReports?: Prisma.AdReportUncheckedCreateNestedManyWithoutUserInput
   adBumps?: Prisma.AdBumpUncheckedCreateNestedManyWithoutUserInput
   premiumPurchases?: Prisma.PremiumPurchaseUncheckedCreateNestedManyWithoutUserInput
+  adServicePurchases?: Prisma.AdServicePurchaseUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAdsInput = {
@@ -1358,6 +1393,7 @@ export type UserUpdateWithoutAdsInput = {
   adReports?: Prisma.AdReportUpdateManyWithoutUserNestedInput
   adBumps?: Prisma.AdBumpUpdateManyWithoutUserNestedInput
   premiumPurchases?: Prisma.PremiumPurchaseUpdateManyWithoutUserNestedInput
+  adServicePurchases?: Prisma.AdServicePurchaseUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAdsInput = {
@@ -1388,6 +1424,7 @@ export type UserUncheckedUpdateWithoutAdsInput = {
   adReports?: Prisma.AdReportUncheckedUpdateManyWithoutUserNestedInput
   adBumps?: Prisma.AdBumpUncheckedUpdateManyWithoutUserNestedInput
   premiumPurchases?: Prisma.PremiumPurchaseUncheckedUpdateManyWithoutUserNestedInput
+  adServicePurchases?: Prisma.AdServicePurchaseUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutFavoritesInput = {
@@ -1418,6 +1455,7 @@ export type UserCreateWithoutFavoritesInput = {
   adReports?: Prisma.AdReportCreateNestedManyWithoutUserInput
   adBumps?: Prisma.AdBumpCreateNestedManyWithoutUserInput
   premiumPurchases?: Prisma.PremiumPurchaseCreateNestedManyWithoutUserInput
+  adServicePurchases?: Prisma.AdServicePurchaseCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutFavoritesInput = {
@@ -1448,6 +1486,7 @@ export type UserUncheckedCreateWithoutFavoritesInput = {
   adReports?: Prisma.AdReportUncheckedCreateNestedManyWithoutUserInput
   adBumps?: Prisma.AdBumpUncheckedCreateNestedManyWithoutUserInput
   premiumPurchases?: Prisma.PremiumPurchaseUncheckedCreateNestedManyWithoutUserInput
+  adServicePurchases?: Prisma.AdServicePurchaseUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutFavoritesInput = {
@@ -1494,6 +1533,7 @@ export type UserUpdateWithoutFavoritesInput = {
   adReports?: Prisma.AdReportUpdateManyWithoutUserNestedInput
   adBumps?: Prisma.AdBumpUpdateManyWithoutUserNestedInput
   premiumPurchases?: Prisma.PremiumPurchaseUpdateManyWithoutUserNestedInput
+  adServicePurchases?: Prisma.AdServicePurchaseUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutFavoritesInput = {
@@ -1524,6 +1564,7 @@ export type UserUncheckedUpdateWithoutFavoritesInput = {
   adReports?: Prisma.AdReportUncheckedUpdateManyWithoutUserNestedInput
   adBumps?: Prisma.AdBumpUncheckedUpdateManyWithoutUserNestedInput
   premiumPurchases?: Prisma.PremiumPurchaseUncheckedUpdateManyWithoutUserNestedInput
+  adServicePurchases?: Prisma.AdServicePurchaseUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAdReportsInput = {
@@ -1554,6 +1595,7 @@ export type UserCreateWithoutAdReportsInput = {
   blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
   adBumps?: Prisma.AdBumpCreateNestedManyWithoutUserInput
   premiumPurchases?: Prisma.PremiumPurchaseCreateNestedManyWithoutUserInput
+  adServicePurchases?: Prisma.AdServicePurchaseCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAdReportsInput = {
@@ -1584,6 +1626,7 @@ export type UserUncheckedCreateWithoutAdReportsInput = {
   blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
   adBumps?: Prisma.AdBumpUncheckedCreateNestedManyWithoutUserInput
   premiumPurchases?: Prisma.PremiumPurchaseUncheckedCreateNestedManyWithoutUserInput
+  adServicePurchases?: Prisma.AdServicePurchaseUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAdReportsInput = {
@@ -1630,6 +1673,7 @@ export type UserUpdateWithoutAdReportsInput = {
   blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
   adBumps?: Prisma.AdBumpUpdateManyWithoutUserNestedInput
   premiumPurchases?: Prisma.PremiumPurchaseUpdateManyWithoutUserNestedInput
+  adServicePurchases?: Prisma.AdServicePurchaseUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAdReportsInput = {
@@ -1660,6 +1704,7 @@ export type UserUncheckedUpdateWithoutAdReportsInput = {
   blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
   adBumps?: Prisma.AdBumpUncheckedUpdateManyWithoutUserNestedInput
   premiumPurchases?: Prisma.PremiumPurchaseUncheckedUpdateManyWithoutUserNestedInput
+  adServicePurchases?: Prisma.AdServicePurchaseUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAdBumpsInput = {
@@ -1690,6 +1735,7 @@ export type UserCreateWithoutAdBumpsInput = {
   blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
   adReports?: Prisma.AdReportCreateNestedManyWithoutUserInput
   premiumPurchases?: Prisma.PremiumPurchaseCreateNestedManyWithoutUserInput
+  adServicePurchases?: Prisma.AdServicePurchaseCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAdBumpsInput = {
@@ -1720,6 +1766,7 @@ export type UserUncheckedCreateWithoutAdBumpsInput = {
   blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
   adReports?: Prisma.AdReportUncheckedCreateNestedManyWithoutUserInput
   premiumPurchases?: Prisma.PremiumPurchaseUncheckedCreateNestedManyWithoutUserInput
+  adServicePurchases?: Prisma.AdServicePurchaseUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAdBumpsInput = {
@@ -1766,6 +1813,7 @@ export type UserUpdateWithoutAdBumpsInput = {
   blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
   adReports?: Prisma.AdReportUpdateManyWithoutUserNestedInput
   premiumPurchases?: Prisma.PremiumPurchaseUpdateManyWithoutUserNestedInput
+  adServicePurchases?: Prisma.AdServicePurchaseUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAdBumpsInput = {
@@ -1796,6 +1844,7 @@ export type UserUncheckedUpdateWithoutAdBumpsInput = {
   blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
   adReports?: Prisma.AdReportUncheckedUpdateManyWithoutUserNestedInput
   premiumPurchases?: Prisma.PremiumPurchaseUncheckedUpdateManyWithoutUserNestedInput
+  adServicePurchases?: Prisma.AdServicePurchaseUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutPremiumPurchasesInput = {
@@ -1826,6 +1875,7 @@ export type UserCreateWithoutPremiumPurchasesInput = {
   blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
   adReports?: Prisma.AdReportCreateNestedManyWithoutUserInput
   adBumps?: Prisma.AdBumpCreateNestedManyWithoutUserInput
+  adServicePurchases?: Prisma.AdServicePurchaseCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPremiumPurchasesInput = {
@@ -1856,6 +1906,7 @@ export type UserUncheckedCreateWithoutPremiumPurchasesInput = {
   blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
   adReports?: Prisma.AdReportUncheckedCreateNestedManyWithoutUserInput
   adBumps?: Prisma.AdBumpUncheckedCreateNestedManyWithoutUserInput
+  adServicePurchases?: Prisma.AdServicePurchaseUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPremiumPurchasesInput = {
@@ -1902,6 +1953,7 @@ export type UserUpdateWithoutPremiumPurchasesInput = {
   blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
   adReports?: Prisma.AdReportUpdateManyWithoutUserNestedInput
   adBumps?: Prisma.AdBumpUpdateManyWithoutUserNestedInput
+  adServicePurchases?: Prisma.AdServicePurchaseUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPremiumPurchasesInput = {
@@ -1932,6 +1984,147 @@ export type UserUncheckedUpdateWithoutPremiumPurchasesInput = {
   blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
   adReports?: Prisma.AdReportUncheckedUpdateManyWithoutUserNestedInput
   adBumps?: Prisma.AdBumpUncheckedUpdateManyWithoutUserNestedInput
+  adServicePurchases?: Prisma.AdServicePurchaseUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutAdServicePurchasesInput = {
+  id?: string
+  password?: string | null
+  email?: string | null
+  displayName?: string | null
+  picture?: string | null
+  type?: $Enums.UserType
+  bio?: string | null
+  location?: string | null
+  role?: $Enums.UserRole
+  premiumUntil?: Date | string | null
+  isVerified?: boolean
+  isTwoFactorEnabled?: boolean
+  method: $Enums.AuthMethod
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  phones?: Prisma.UserPhoneCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  tokens?: Prisma.TokenCreateNestedManyWithoutUserInput
+  ads?: Prisma.AdCreateNestedManyWithoutUserInput
+  favorites?: Prisma.FavoriteCreateNestedManyWithoutUserInput
+  conversationsAsBuyer?: Prisma.ConversationCreateNestedManyWithoutBuyerInput
+  conversationsAsSeller?: Prisma.ConversationCreateNestedManyWithoutSellerInput
+  sentMessages?: Prisma.MessageCreateNestedManyWithoutSenderInput
+  blockedUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserCreateNestedManyWithoutBlockedInput
+  adReports?: Prisma.AdReportCreateNestedManyWithoutUserInput
+  adBumps?: Prisma.AdBumpCreateNestedManyWithoutUserInput
+  premiumPurchases?: Prisma.PremiumPurchaseCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutAdServicePurchasesInput = {
+  id?: string
+  password?: string | null
+  email?: string | null
+  displayName?: string | null
+  picture?: string | null
+  type?: $Enums.UserType
+  bio?: string | null
+  location?: string | null
+  role?: $Enums.UserRole
+  premiumUntil?: Date | string | null
+  isVerified?: boolean
+  isTwoFactorEnabled?: boolean
+  method: $Enums.AuthMethod
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  phones?: Prisma.UserPhoneUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  tokens?: Prisma.TokenUncheckedCreateNestedManyWithoutUserInput
+  ads?: Prisma.AdUncheckedCreateNestedManyWithoutUserInput
+  favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutUserInput
+  conversationsAsBuyer?: Prisma.ConversationUncheckedCreateNestedManyWithoutBuyerInput
+  conversationsAsSeller?: Prisma.ConversationUncheckedCreateNestedManyWithoutSellerInput
+  sentMessages?: Prisma.MessageUncheckedCreateNestedManyWithoutSenderInput
+  blockedUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedCreateNestedManyWithoutBlockedInput
+  adReports?: Prisma.AdReportUncheckedCreateNestedManyWithoutUserInput
+  adBumps?: Prisma.AdBumpUncheckedCreateNestedManyWithoutUserInput
+  premiumPurchases?: Prisma.PremiumPurchaseUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutAdServicePurchasesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutAdServicePurchasesInput, Prisma.UserUncheckedCreateWithoutAdServicePurchasesInput>
+}
+
+export type UserUpsertWithoutAdServicePurchasesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAdServicePurchasesInput, Prisma.UserUncheckedUpdateWithoutAdServicePurchasesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAdServicePurchasesInput, Prisma.UserUncheckedCreateWithoutAdServicePurchasesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutAdServicePurchasesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAdServicePurchasesInput, Prisma.UserUncheckedUpdateWithoutAdServicePurchasesInput>
+}
+
+export type UserUpdateWithoutAdServicePurchasesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  picture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  phones?: Prisma.UserPhoneUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  tokens?: Prisma.TokenUpdateManyWithoutUserNestedInput
+  ads?: Prisma.AdUpdateManyWithoutUserNestedInput
+  favorites?: Prisma.FavoriteUpdateManyWithoutUserNestedInput
+  conversationsAsBuyer?: Prisma.ConversationUpdateManyWithoutBuyerNestedInput
+  conversationsAsSeller?: Prisma.ConversationUpdateManyWithoutSellerNestedInput
+  sentMessages?: Prisma.MessageUpdateManyWithoutSenderNestedInput
+  blockedUsers?: Prisma.BlockedUserUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUpdateManyWithoutBlockedNestedInput
+  adReports?: Prisma.AdReportUpdateManyWithoutUserNestedInput
+  adBumps?: Prisma.AdBumpUpdateManyWithoutUserNestedInput
+  premiumPurchases?: Prisma.PremiumPurchaseUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutAdServicePurchasesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  picture?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isTwoFactorEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  phones?: Prisma.UserPhoneUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  tokens?: Prisma.TokenUncheckedUpdateManyWithoutUserNestedInput
+  ads?: Prisma.AdUncheckedUpdateManyWithoutUserNestedInput
+  favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutUserNestedInput
+  conversationsAsBuyer?: Prisma.ConversationUncheckedUpdateManyWithoutBuyerNestedInput
+  conversationsAsSeller?: Prisma.ConversationUncheckedUpdateManyWithoutSellerNestedInput
+  sentMessages?: Prisma.MessageUncheckedUpdateManyWithoutSenderNestedInput
+  blockedUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockedUserUncheckedUpdateManyWithoutBlockedNestedInput
+  adReports?: Prisma.AdReportUncheckedUpdateManyWithoutUserNestedInput
+  adBumps?: Prisma.AdBumpUncheckedUpdateManyWithoutUserNestedInput
+  premiumPurchases?: Prisma.PremiumPurchaseUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutConversationsAsBuyerInput = {
@@ -1962,6 +2155,7 @@ export type UserCreateWithoutConversationsAsBuyerInput = {
   adReports?: Prisma.AdReportCreateNestedManyWithoutUserInput
   adBumps?: Prisma.AdBumpCreateNestedManyWithoutUserInput
   premiumPurchases?: Prisma.PremiumPurchaseCreateNestedManyWithoutUserInput
+  adServicePurchases?: Prisma.AdServicePurchaseCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutConversationsAsBuyerInput = {
@@ -1992,6 +2186,7 @@ export type UserUncheckedCreateWithoutConversationsAsBuyerInput = {
   adReports?: Prisma.AdReportUncheckedCreateNestedManyWithoutUserInput
   adBumps?: Prisma.AdBumpUncheckedCreateNestedManyWithoutUserInput
   premiumPurchases?: Prisma.PremiumPurchaseUncheckedCreateNestedManyWithoutUserInput
+  adServicePurchases?: Prisma.AdServicePurchaseUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutConversationsAsBuyerInput = {
@@ -2027,6 +2222,7 @@ export type UserCreateWithoutConversationsAsSellerInput = {
   adReports?: Prisma.AdReportCreateNestedManyWithoutUserInput
   adBumps?: Prisma.AdBumpCreateNestedManyWithoutUserInput
   premiumPurchases?: Prisma.PremiumPurchaseCreateNestedManyWithoutUserInput
+  adServicePurchases?: Prisma.AdServicePurchaseCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutConversationsAsSellerInput = {
@@ -2057,6 +2253,7 @@ export type UserUncheckedCreateWithoutConversationsAsSellerInput = {
   adReports?: Prisma.AdReportUncheckedCreateNestedManyWithoutUserInput
   adBumps?: Prisma.AdBumpUncheckedCreateNestedManyWithoutUserInput
   premiumPurchases?: Prisma.PremiumPurchaseUncheckedCreateNestedManyWithoutUserInput
+  adServicePurchases?: Prisma.AdServicePurchaseUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutConversationsAsSellerInput = {
@@ -2103,6 +2300,7 @@ export type UserUpdateWithoutConversationsAsBuyerInput = {
   adReports?: Prisma.AdReportUpdateManyWithoutUserNestedInput
   adBumps?: Prisma.AdBumpUpdateManyWithoutUserNestedInput
   premiumPurchases?: Prisma.PremiumPurchaseUpdateManyWithoutUserNestedInput
+  adServicePurchases?: Prisma.AdServicePurchaseUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutConversationsAsBuyerInput = {
@@ -2133,6 +2331,7 @@ export type UserUncheckedUpdateWithoutConversationsAsBuyerInput = {
   adReports?: Prisma.AdReportUncheckedUpdateManyWithoutUserNestedInput
   adBumps?: Prisma.AdBumpUncheckedUpdateManyWithoutUserNestedInput
   premiumPurchases?: Prisma.PremiumPurchaseUncheckedUpdateManyWithoutUserNestedInput
+  adServicePurchases?: Prisma.AdServicePurchaseUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUpsertWithoutConversationsAsSellerInput = {
@@ -2174,6 +2373,7 @@ export type UserUpdateWithoutConversationsAsSellerInput = {
   adReports?: Prisma.AdReportUpdateManyWithoutUserNestedInput
   adBumps?: Prisma.AdBumpUpdateManyWithoutUserNestedInput
   premiumPurchases?: Prisma.PremiumPurchaseUpdateManyWithoutUserNestedInput
+  adServicePurchases?: Prisma.AdServicePurchaseUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutConversationsAsSellerInput = {
@@ -2204,6 +2404,7 @@ export type UserUncheckedUpdateWithoutConversationsAsSellerInput = {
   adReports?: Prisma.AdReportUncheckedUpdateManyWithoutUserNestedInput
   adBumps?: Prisma.AdBumpUncheckedUpdateManyWithoutUserNestedInput
   premiumPurchases?: Prisma.PremiumPurchaseUncheckedUpdateManyWithoutUserNestedInput
+  adServicePurchases?: Prisma.AdServicePurchaseUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutBlockedUsersInput = {
@@ -2234,6 +2435,7 @@ export type UserCreateWithoutBlockedUsersInput = {
   adReports?: Prisma.AdReportCreateNestedManyWithoutUserInput
   adBumps?: Prisma.AdBumpCreateNestedManyWithoutUserInput
   premiumPurchases?: Prisma.PremiumPurchaseCreateNestedManyWithoutUserInput
+  adServicePurchases?: Prisma.AdServicePurchaseCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutBlockedUsersInput = {
@@ -2264,6 +2466,7 @@ export type UserUncheckedCreateWithoutBlockedUsersInput = {
   adReports?: Prisma.AdReportUncheckedCreateNestedManyWithoutUserInput
   adBumps?: Prisma.AdBumpUncheckedCreateNestedManyWithoutUserInput
   premiumPurchases?: Prisma.PremiumPurchaseUncheckedCreateNestedManyWithoutUserInput
+  adServicePurchases?: Prisma.AdServicePurchaseUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutBlockedUsersInput = {
@@ -2299,6 +2502,7 @@ export type UserCreateWithoutBlockedByUsersInput = {
   adReports?: Prisma.AdReportCreateNestedManyWithoutUserInput
   adBumps?: Prisma.AdBumpCreateNestedManyWithoutUserInput
   premiumPurchases?: Prisma.PremiumPurchaseCreateNestedManyWithoutUserInput
+  adServicePurchases?: Prisma.AdServicePurchaseCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutBlockedByUsersInput = {
@@ -2329,6 +2533,7 @@ export type UserUncheckedCreateWithoutBlockedByUsersInput = {
   adReports?: Prisma.AdReportUncheckedCreateNestedManyWithoutUserInput
   adBumps?: Prisma.AdBumpUncheckedCreateNestedManyWithoutUserInput
   premiumPurchases?: Prisma.PremiumPurchaseUncheckedCreateNestedManyWithoutUserInput
+  adServicePurchases?: Prisma.AdServicePurchaseUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutBlockedByUsersInput = {
@@ -2375,6 +2580,7 @@ export type UserUpdateWithoutBlockedUsersInput = {
   adReports?: Prisma.AdReportUpdateManyWithoutUserNestedInput
   adBumps?: Prisma.AdBumpUpdateManyWithoutUserNestedInput
   premiumPurchases?: Prisma.PremiumPurchaseUpdateManyWithoutUserNestedInput
+  adServicePurchases?: Prisma.AdServicePurchaseUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBlockedUsersInput = {
@@ -2405,6 +2611,7 @@ export type UserUncheckedUpdateWithoutBlockedUsersInput = {
   adReports?: Prisma.AdReportUncheckedUpdateManyWithoutUserNestedInput
   adBumps?: Prisma.AdBumpUncheckedUpdateManyWithoutUserNestedInput
   premiumPurchases?: Prisma.PremiumPurchaseUncheckedUpdateManyWithoutUserNestedInput
+  adServicePurchases?: Prisma.AdServicePurchaseUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUpsertWithoutBlockedByUsersInput = {
@@ -2446,6 +2653,7 @@ export type UserUpdateWithoutBlockedByUsersInput = {
   adReports?: Prisma.AdReportUpdateManyWithoutUserNestedInput
   adBumps?: Prisma.AdBumpUpdateManyWithoutUserNestedInput
   premiumPurchases?: Prisma.PremiumPurchaseUpdateManyWithoutUserNestedInput
+  adServicePurchases?: Prisma.AdServicePurchaseUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBlockedByUsersInput = {
@@ -2476,6 +2684,7 @@ export type UserUncheckedUpdateWithoutBlockedByUsersInput = {
   adReports?: Prisma.AdReportUncheckedUpdateManyWithoutUserNestedInput
   adBumps?: Prisma.AdBumpUncheckedUpdateManyWithoutUserNestedInput
   premiumPurchases?: Prisma.PremiumPurchaseUncheckedUpdateManyWithoutUserNestedInput
+  adServicePurchases?: Prisma.AdServicePurchaseUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSentMessagesInput = {
@@ -2506,6 +2715,7 @@ export type UserCreateWithoutSentMessagesInput = {
   adReports?: Prisma.AdReportCreateNestedManyWithoutUserInput
   adBumps?: Prisma.AdBumpCreateNestedManyWithoutUserInput
   premiumPurchases?: Prisma.PremiumPurchaseCreateNestedManyWithoutUserInput
+  adServicePurchases?: Prisma.AdServicePurchaseCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSentMessagesInput = {
@@ -2536,6 +2746,7 @@ export type UserUncheckedCreateWithoutSentMessagesInput = {
   adReports?: Prisma.AdReportUncheckedCreateNestedManyWithoutUserInput
   adBumps?: Prisma.AdBumpUncheckedCreateNestedManyWithoutUserInput
   premiumPurchases?: Prisma.PremiumPurchaseUncheckedCreateNestedManyWithoutUserInput
+  adServicePurchases?: Prisma.AdServicePurchaseUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSentMessagesInput = {
@@ -2582,6 +2793,7 @@ export type UserUpdateWithoutSentMessagesInput = {
   adReports?: Prisma.AdReportUpdateManyWithoutUserNestedInput
   adBumps?: Prisma.AdBumpUpdateManyWithoutUserNestedInput
   premiumPurchases?: Prisma.PremiumPurchaseUpdateManyWithoutUserNestedInput
+  adServicePurchases?: Prisma.AdServicePurchaseUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSentMessagesInput = {
@@ -2612,6 +2824,7 @@ export type UserUncheckedUpdateWithoutSentMessagesInput = {
   adReports?: Prisma.AdReportUncheckedUpdateManyWithoutUserNestedInput
   adBumps?: Prisma.AdBumpUncheckedUpdateManyWithoutUserNestedInput
   premiumPurchases?: Prisma.PremiumPurchaseUncheckedUpdateManyWithoutUserNestedInput
+  adServicePurchases?: Prisma.AdServicePurchaseUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -2633,6 +2846,7 @@ export type UserCountOutputType = {
   adReports: number
   adBumps: number
   premiumPurchases: number
+  adServicePurchases: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2649,6 +2863,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   adReports?: boolean | UserCountOutputTypeCountAdReportsArgs
   adBumps?: boolean | UserCountOutputTypeCountAdBumpsArgs
   premiumPurchases?: boolean | UserCountOutputTypeCountPremiumPurchasesArgs
+  adServicePurchases?: boolean | UserCountOutputTypeCountAdServicePurchasesArgs
 }
 
 /**
@@ -2752,6 +2967,13 @@ export type UserCountOutputTypeCountPremiumPurchasesArgs<ExtArgs extends runtime
   where?: Prisma.PremiumPurchaseWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountAdServicePurchasesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AdServicePurchaseWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2782,6 +3004,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   adReports?: boolean | Prisma.User$adReportsArgs<ExtArgs>
   adBumps?: boolean | Prisma.User$adBumpsArgs<ExtArgs>
   premiumPurchases?: boolean | Prisma.User$premiumPurchasesArgs<ExtArgs>
+  adServicePurchases?: boolean | Prisma.User$adServicePurchasesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -2854,6 +3077,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   adReports?: boolean | Prisma.User$adReportsArgs<ExtArgs>
   adBumps?: boolean | Prisma.User$adBumpsArgs<ExtArgs>
   premiumPurchases?: boolean | Prisma.User$premiumPurchasesArgs<ExtArgs>
+  adServicePurchases?: boolean | Prisma.User$adServicePurchasesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -2875,6 +3099,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     adReports: Prisma.$AdReportPayload<ExtArgs>[]
     adBumps: Prisma.$AdBumpPayload<ExtArgs>[]
     premiumPurchases: Prisma.$PremiumPurchasePayload<ExtArgs>[]
+    adServicePurchases: Prisma.$AdServicePurchasePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -3299,6 +3524,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   adReports<T extends Prisma.User$adReportsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$adReportsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AdReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   adBumps<T extends Prisma.User$adBumpsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$adBumpsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AdBumpPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   premiumPurchases<T extends Prisma.User$premiumPurchasesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$premiumPurchasesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PremiumPurchasePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  adServicePurchases<T extends Prisma.User$adServicePurchasesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$adServicePurchasesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AdServicePurchasePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4040,6 +4266,30 @@ export type User$premiumPurchasesArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   distinct?: Prisma.PremiumPurchaseScalarFieldEnum | Prisma.PremiumPurchaseScalarFieldEnum[]
+}
+
+/**
+ * User.adServicePurchases
+ */
+export type User$adServicePurchasesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AdServicePurchase
+   */
+  select?: Prisma.AdServicePurchaseSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AdServicePurchase
+   */
+  omit?: Prisma.AdServicePurchaseOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AdServicePurchaseInclude<ExtArgs> | null
+  where?: Prisma.AdServicePurchaseWhereInput
+  orderBy?: Prisma.AdServicePurchaseOrderByWithRelationInput | Prisma.AdServicePurchaseOrderByWithRelationInput[]
+  cursor?: Prisma.AdServicePurchaseWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AdServicePurchaseScalarFieldEnum | Prisma.AdServicePurchaseScalarFieldEnum[]
 }
 
 /**

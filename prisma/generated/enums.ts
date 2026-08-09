@@ -20,6 +20,15 @@ export const FeatureType = {
 export type FeatureType = (typeof FeatureType)[keyof typeof FeatureType]
 
 
+export const AdBadge = {
+  URGENT: 'URGENT',
+  NEGOTIABLE: 'NEGOTIABLE',
+  NEW: 'NEW'
+} as const
+
+export type AdBadge = (typeof AdBadge)[keyof typeof AdBadge]
+
+
 export const AdReportReason = {
   SCAM: 'SCAM',
   WRONG_CATEGORY: 'WRONG_CATEGORY',
@@ -57,6 +66,24 @@ export const PremiumPurchaseStatus = {
 } as const
 
 export type PremiumPurchaseStatus = (typeof PremiumPurchaseStatus)[keyof typeof PremiumPurchaseStatus]
+
+
+export const AdServiceType = {
+  BUMP: 'BUMP',
+  PRICE_HIGHLIGHT: 'PRICE_HIGHLIGHT',
+  BADGE: 'BADGE'
+} as const
+
+export type AdServiceType = (typeof AdServiceType)[keyof typeof AdServiceType]
+
+
+export const AdServicePurchaseStatus = {
+  PENDING: 'PENDING',
+  SUCCEEDED: 'SUCCEEDED',
+  CANCELED: 'CANCELED'
+} as const
+
+export type AdServicePurchaseStatus = (typeof AdServicePurchaseStatus)[keyof typeof AdServicePurchaseStatus]
 
 
 export const UserRole = {

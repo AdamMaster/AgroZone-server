@@ -62,6 +62,10 @@ model User {
   // Покупки премиум-статуса этого юзера (см. PremiumPurchase).
   premiumPurchases PremiumPurchase[]
 
+  // Покупки на странице "Поднять просмотры" — набор из услуг за один
+  // платёж (см. AdServicePurchase).
+  adServicePurchases AdServicePurchase[]
+
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
@@ -274,6 +278,27 @@ model Ad {
   // поверх текущего значения, если оно ещё не истекло), а не перезаписывает.
   bumpServiceUntil DateTime? @map("bump_service_until")
 
+  // До какого момента активна платная услуга "Выделить цену" — тот же
+  // принцип, что у bumpServiceUntil (повторная покупка складывает 7 дней
+  // поверх текущего значения, если оно ещё не истекло). В отличие от
+  // bumpServiceUntil, фоновому воркеру тут делать нечего — это чисто
+  // визуальный флаг, читает его фронт напрямую (AdShortCard/AdDetail),
+  // чтобы условно стилизовать цену.
+  priceHighlightUntil DateTime? @map("price_highlight_until")
+
+  // Значок на объявлении ("Срочно"/"Торг уместен"/"Новинка", см. AdBadge)
+  // и до какого момента он активен. Один активный значок за раз, не
+  // массив — сознательно не стали разрешать выбирать несколько сразу (см.
+  // обсуждение). Повторная покупка НЕ складывается лесенкой, как у двух
+  // услуг выше: если продавец меняет значок, пока старый ещё активен, это
+  // просто замена (новые badge + badgeUntil), а не сложение сроков.
+  badge      AdBadge?  @map("badge")
+  badgeUntil DateTime? @map("badge_until")
+
+  // Комбинированные покупки услуг "Поднять/Выделить цену/Значок" одним
+  // платежом — см. AdServicePurchase.
+  servicePurchases AdServicePurchase[]
+
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
@@ -287,6 +312,17 @@ model Ad {
   @@index([regionIsoCode])
   @@index([localityFiasId])
   @@map("ads")
+}
+
+// "Срочно" / "Торг уместен" / "Новинка" — только субъективные пометки
+// продавца о самой сделке, никогда факты о цене (см. обсуждение, почему
+// сюда осознанно не попала "Скидка" — это отдельный автоматический
+// признак на основе реальной истории цены, не значок, который можно
+// просто купить).
+enum AdBadge {
+  URGENT
+  NEGOTIABLE
+  NEW
 }
 
 model Favorite {
@@ -439,6 +475,63 @@ model PremiumPurchase {
   @@index([userId])
   @@index([status])
   @@map("premium_purchases")
+}
+
+enum AdServiceType {
+  BUMP
+  PRICE_HIGHLIGHT
+  BADGE
+}
+
+enum AdServicePurchaseStatus {
+  PENDING
+  SUCCEEDED
+  CANCELED
+}
+
+// Единая страница "Поднять просмотры" (см. AdServicesService) — продавец
+// выбирает переключателями любой набор из трёх услуг (поднятие, выделение
+// цены, значок) и платит ОДНИМ платежом за всё выбранное, а не отдельно
+// за каждую. services — какие услуги входят в эту покупку ('BUMP' |
+// 'PRICE_HIGHLIGHT' | 'BADGE'), badge — какой именно значок выбран, если
+// 'BADGE' среди services (иначе null).
+//
+// Специально НЕ переиспользует AdBump/его таблицу — тот остаётся
+// самостоятельным для случаев точечной покупки одного поднятия (см.
+// AdBumpsService), а тут именно "пакет" из произвольного набора услуг.
+// AdServicesService.reconcilePayment при успехе применяет эффект каждой
+// услуги из массива к соответствующему полю Ad (bumpServiceUntil /
+// priceHighlightUntil / badge+badgeUntil) в одной транзакции — та же
+// логика продления "лесенкой", что и в AdBumpsService/PremiumService.
+model AdServicePurchase {
+  id String @id @default(uuid())
+
+  adId String @map("ad_id")
+  ad   Ad     @relation(fields: [adId], references: [id], onDelete: Cascade)
+
+  userId String @map("user_id")
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // В копейках, как и AdBump.amount — сумма ВСЕХ выбранных услуг разом,
+  // считается на сервере из AD_SERVICE_PRICES_KOPECKS (см. константы),
+  // никогда не принимается от клиента.
+  amount Int
+
+  services AdServiceType[]
+
+  badge AdBadge?
+
+  status AdServicePurchaseStatus @default(PENDING)
+
+  yookassaPaymentId String? @unique @map("yookassa_payment_id")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  paidAt    DateTime? @map("paid_at")
+
+  @@index([adId])
+  @@index([userId])
+  @@index([status])
+  @@map("ad_service_purchases")
 }
 
 // Диалог между покупателем и продавцом ПО КОНКРЕТНОМУ объявлению — не

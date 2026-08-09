@@ -316,7 +316,13 @@ export class AdsService {
         user: {
           select: {
             id: true,
-            displayName: true
+            displayName: true,
+            // Премиум сам поднимает объявление и выделяет цену (см.
+            // PromoteAd/AdCard на фронте — оба эффекта считаются на клиенте
+            // как ad.priceHighlightUntil в будущем ИЛИ владелец с активным
+            // премиумом), для каталога это поле не было нужно раньше —
+            // фронт нигде его тут не показывал.
+            premiumUntil: true
           }
         },
         category: true,

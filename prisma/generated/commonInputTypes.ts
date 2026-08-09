@@ -371,6 +371,13 @@ export type EnumAdStatusFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumAdStatusFilter<$PrismaModel> | $Enums.AdStatus
 }
 
+export type EnumAdBadgeNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.AdBadge | Prisma.EnumAdBadgeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.AdBadge[] | Prisma.ListEnumAdBadgeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.AdBadge[] | Prisma.ListEnumAdBadgeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumAdBadgeNullableFilter<$PrismaModel> | $Enums.AdBadge | null
+}
+
 export type BigIntNullableWithAggregatesFilter<$PrismaModel = never> = {
   equals?: bigint | number | Prisma.BigIntFieldRefInput<$PrismaModel> | null
   in?: bigint[] | number[] | Prisma.ListBigIntFieldRefInput<$PrismaModel> | null
@@ -450,6 +457,16 @@ export type EnumAdStatusWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumAdStatusFilter<$PrismaModel>
 }
 
+export type EnumAdBadgeNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.AdBadge | Prisma.EnumAdBadgeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.AdBadge[] | Prisma.ListEnumAdBadgeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.AdBadge[] | Prisma.ListEnumAdBadgeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumAdBadgeNullableWithAggregatesFilter<$PrismaModel> | $Enums.AdBadge | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumAdBadgeNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumAdBadgeNullableFilter<$PrismaModel>
+}
+
 export type EnumAdReportReasonFilter<$PrismaModel = never> = {
   equals?: $Enums.AdReportReason | Prisma.EnumAdReportReasonFieldRefInput<$PrismaModel>
   in?: $Enums.AdReportReason[] | Prisma.ListEnumAdReportReasonFieldRefInput<$PrismaModel>
@@ -516,6 +533,23 @@ export type EnumPremiumPurchaseStatusWithAggregatesFilter<$PrismaModel = never> 
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumPremiumPurchaseStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumPremiumPurchaseStatusFilter<$PrismaModel>
+}
+
+export type EnumAdServicePurchaseStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.AdServicePurchaseStatus | Prisma.EnumAdServicePurchaseStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.AdServicePurchaseStatus[] | Prisma.ListEnumAdServicePurchaseStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AdServicePurchaseStatus[] | Prisma.ListEnumAdServicePurchaseStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAdServicePurchaseStatusFilter<$PrismaModel> | $Enums.AdServicePurchaseStatus
+}
+
+export type EnumAdServicePurchaseStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.AdServicePurchaseStatus | Prisma.EnumAdServicePurchaseStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.AdServicePurchaseStatus[] | Prisma.ListEnumAdServicePurchaseStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AdServicePurchaseStatus[] | Prisma.ListEnumAdServicePurchaseStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAdServicePurchaseStatusWithAggregatesFilter<$PrismaModel> | $Enums.AdServicePurchaseStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumAdServicePurchaseStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumAdServicePurchaseStatusFilter<$PrismaModel>
 }
 
 export type NestedStringFilter<$PrismaModel = never> = {
@@ -826,6 +860,13 @@ export type NestedEnumAdStatusFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumAdStatusFilter<$PrismaModel> | $Enums.AdStatus
 }
 
+export type NestedEnumAdBadgeNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.AdBadge | Prisma.EnumAdBadgeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.AdBadge[] | Prisma.ListEnumAdBadgeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.AdBadge[] | Prisma.ListEnumAdBadgeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumAdBadgeNullableFilter<$PrismaModel> | $Enums.AdBadge | null
+}
+
 export type NestedBigIntNullableWithAggregatesFilter<$PrismaModel = never> = {
   equals?: bigint | number | Prisma.BigIntFieldRefInput<$PrismaModel> | null
   in?: bigint[] | number[] | Prisma.ListBigIntFieldRefInput<$PrismaModel> | null
@@ -913,6 +954,16 @@ export type NestedEnumAdStatusWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumAdStatusFilter<$PrismaModel>
 }
 
+export type NestedEnumAdBadgeNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.AdBadge | Prisma.EnumAdBadgeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.AdBadge[] | Prisma.ListEnumAdBadgeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.AdBadge[] | Prisma.ListEnumAdBadgeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumAdBadgeNullableWithAggregatesFilter<$PrismaModel> | $Enums.AdBadge | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumAdBadgeNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumAdBadgeNullableFilter<$PrismaModel>
+}
+
 export type NestedEnumAdReportReasonFilter<$PrismaModel = never> = {
   equals?: $Enums.AdReportReason | Prisma.EnumAdReportReasonFieldRefInput<$PrismaModel>
   in?: $Enums.AdReportReason[] | Prisma.ListEnumAdReportReasonFieldRefInput<$PrismaModel>
@@ -979,6 +1030,23 @@ export type NestedEnumPremiumPurchaseStatusWithAggregatesFilter<$PrismaModel = n
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumPremiumPurchaseStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumPremiumPurchaseStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumAdServicePurchaseStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.AdServicePurchaseStatus | Prisma.EnumAdServicePurchaseStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.AdServicePurchaseStatus[] | Prisma.ListEnumAdServicePurchaseStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AdServicePurchaseStatus[] | Prisma.ListEnumAdServicePurchaseStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAdServicePurchaseStatusFilter<$PrismaModel> | $Enums.AdServicePurchaseStatus
+}
+
+export type NestedEnumAdServicePurchaseStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.AdServicePurchaseStatus | Prisma.EnumAdServicePurchaseStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.AdServicePurchaseStatus[] | Prisma.ListEnumAdServicePurchaseStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.AdServicePurchaseStatus[] | Prisma.ListEnumAdServicePurchaseStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumAdServicePurchaseStatusWithAggregatesFilter<$PrismaModel> | $Enums.AdServicePurchaseStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumAdServicePurchaseStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumAdServicePurchaseStatusFilter<$PrismaModel>
 }
 
 
