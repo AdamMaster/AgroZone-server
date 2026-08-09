@@ -13,6 +13,6 @@ export const getMailerConfig = async (configService: ConfigService): Promise<Mai
     }
   },
   defaults: {
-    from: `"GreenBase" ${configService.getOrThrow<string>('MAIL_LOGIN')}`
+    from: `"AgroZone" ${configService.getOrThrow<string>('MAIL_LOGIN')}`
   }
 })
