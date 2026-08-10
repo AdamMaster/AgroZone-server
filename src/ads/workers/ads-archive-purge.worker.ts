@@ -4,31 +4,25 @@ import { PrismaService } from '@/prisma/prisma.service'
 import { FileService } from '@/file/file.service'
 import { AdStatus } from 'prisma/generated/client'
 
-// Физически удаляет объявления, пролежавшие в архиве (ARCHIVED) дольше 30
-// дней — вместе с их фотографиями в S3.
+// Физически удаляет объявления, лежащие в архиве (ARCHIVED) — вместе с их
+// фотографиями в S3.
 //
-// Осознанно удаляем именно строку целиком, а не только фото. Conversation
-// каскадно завязан на Ad (onDelete: Cascade, см. schema.prisma) — то есть
-// удаление объявления сносит и переписку по нему, включая сообщения
-// собеседника, который ничего не удалял. Это НЕ побочный эффект, который
-// не заметили, а сознательное решение: те же 30 дней, что дают
-// удалённому/архивированному объявлению, служат и окном на переписку —
-// собеседник успевает её увидеть и сохранить нужное, а после — она уходит
-// вместе с объявлением, как и всё остальное, что с ним связано (Favorite,
-// AdReport и т.д. — тоже каскадом). Хранить вечно тощую строку объявления
-// ради теоретической переписки, которую никто не откроет, признано
-// избыточным — 30 дней уже достаточно щедрый срок (столько же, кстати,
-// живёт обычное опубликованное объявление до истечения, см.
-// AdsService.getExpirationDateFrom).
+// Переписка по объявлению эту чистку больше не блокирует и не страдает от
+// неё: Conversation.adId — nullable, onDelete SetNull (см. schema.prisma),
+// так что удаление Ad просто обнуляет ссылку в диалоге, а не сносит его
+// каскадом. Диалог живёт своей жизнью и удаляется отдельно, только когда
+// оба его участника удалили аккаунты (см. UserService.deleteAccount).
 //
-// Два независимых источника отсчёта этих 30 дней (см. комментарии у
-// User.deletedAt и Ad.archivedAt в schema.prisma):
+// Два независимых источника архивации — и у каждого свой срок:
 //
-// 1. Владелец удалил аккаунт — считаем от User.deletedAt. Такие объявления
-//    точно никто не оживит, предупреждать некого (почта уже обезличена).
-// 2. Живой пользователь заархивировал объявление сам — считаем от
-//    Ad.archivedAt. Он теоретически может зайти и восстановить объявление
-//    из архива, поэтому это не должно случиться раньше согласованных 30 дней.
+// 1. Владелец удалил аккаунт (User.deletedAt) — предупреждать/ждать больше
+//    некого, почта уже обезличена, восстановить объявление он не сможет.
+//    Искусственной задержки нет — такие объявления попадают в самую
+//    ближайшую ночную чистку.
+// 2. Живой пользователь заархивировал объявление сам (Ad.archivedAt) — он
+//    может зайти и восстановить его из архива, поэтому даём ему 30 дней на
+//    то, чтобы передумать (тот же срок, что у обычного объявления до
+//    истечения, см. AdsService.getExpirationDateFrom).
 @Injectable()
 export class AdsArchivePurgeWorker {
   private readonly logger = new Logger(AdsArchivePurgeWorker.name)
@@ -40,17 +34,17 @@ export class AdsArchivePurgeWorker {
 
   @Cron('0 3 * * *') // каждый день в 3:00
   async purgeArchivedAds() {
-    const cutoff = new Date()
-    cutoff.setDate(cutoff.getDate() - 30)
+    const selfArchiveCutoff = new Date()
+    selfArchiveCutoff.setDate(selfArchiveCutoff.getDate() - 30)
 
     const adsToPurge = await this.prisma.ad.findMany({
       where: {
         status: AdStatus.ARCHIVED,
         OR: [
-          // Случай 1: аккаунт удалён 30+ дней назад
-          { user: { deletedAt: { lte: cutoff } } },
-          // Случай 2: живой аккаунт, объявление заархивировано 30+ дней назад
-          { archivedAt: { lte: cutoff }, user: { deletedAt: null } }
+          // Случай 1: аккаунт-владелец удалён — без задержки.
+          { user: { deletedAt: { not: null } } },
+          // Случай 2: живой аккаунт, объявление заархивировано 30+ дней назад.
+          { archivedAt: { lte: selfArchiveCutoff }, user: { deletedAt: null } }
         ]
       },
       select: { id: true, images: true }
@@ -60,7 +54,7 @@ export class AdsArchivePurgeWorker {
       return
     }
 
-    this.logger.log(`Найдено ${adsToPurge.length} архивных объявлений старше 30 дней — удаляю`)
+    this.logger.log(`Найдено ${adsToPurge.length} архивных объявлений на удаление`)
 
     for (const ad of adsToPurge) {
       try {
@@ -68,8 +62,9 @@ export class AdsArchivePurgeWorker {
           await Promise.all(ad.images.map(url => this.fileService.deleteFileByUrl(url)))
         }
 
-        // Удаляет и связанные Conversation/Message/Favorite/AdReport и т.д.
-        // каскадом — см. комментарий к классу, это осознанно.
+        // Каскадом снесёт Favorite/AdReport/AdBump/AdServicePurchase этого
+        // объявления — это осознанно. Conversation НЕ каскадит (SetNull),
+        // переписка по объявлению переживает его удаление.
         await this.prisma.ad.delete({ where: { id: ad.id } })
       } catch (error) {
         // Одно проблемное объявление (например, файл в S3 уже не найден) не

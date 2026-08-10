@@ -991,6 +991,11 @@ export type AdScalarRelationFilter = {
   isNot?: Prisma.AdWhereInput
 }
 
+export type AdNullableScalarRelationFilter = {
+  is?: Prisma.AdWhereInput | null
+  isNot?: Prisma.AdWhereInput | null
+}
+
 export type AdCreateNestedManyWithoutUserInput = {
   create?: Prisma.XOR<Prisma.AdCreateWithoutUserInput, Prisma.AdUncheckedCreateWithoutUserInput> | Prisma.AdCreateWithoutUserInput[] | Prisma.AdUncheckedCreateWithoutUserInput[]
   connectOrCreate?: Prisma.AdCreateOrConnectWithoutUserInput | Prisma.AdCreateOrConnectWithoutUserInput[]
@@ -1183,10 +1188,12 @@ export type AdCreateNestedOneWithoutConversationsInput = {
   connect?: Prisma.AdWhereUniqueInput
 }
 
-export type AdUpdateOneRequiredWithoutConversationsNestedInput = {
+export type AdUpdateOneWithoutConversationsNestedInput = {
   create?: Prisma.XOR<Prisma.AdCreateWithoutConversationsInput, Prisma.AdUncheckedCreateWithoutConversationsInput>
   connectOrCreate?: Prisma.AdCreateOrConnectWithoutConversationsInput
   upsert?: Prisma.AdUpsertWithoutConversationsInput
+  disconnect?: Prisma.AdWhereInput | boolean
+  delete?: Prisma.AdWhereInput | boolean
   connect?: Prisma.AdWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.AdUpdateToOneWithWhereWithoutConversationsInput, Prisma.AdUpdateWithoutConversationsInput>, Prisma.AdUncheckedUpdateWithoutConversationsInput>
 }

@@ -45,8 +45,9 @@ export class ConversationsController {
     return this.conversationsService.markRead(id, userId)
   }
 
-  // Скрывает диалог только у вызывающего — не физическое удаление (см.
-  // комментарий к ConversationsService.deleteConversation).
+  // Обычно скрывает диалог только у вызывающего (не физическое удаление) —
+  // но если собеседник уже удалил свой аккаунт, удаляет диалог физически и
+  // навсегда (см. комментарий к ConversationsService.deleteConversation).
   @Delete(':id')
   delete(@Param('id', ParseUUIDPipe) id: string, @CurrentUser('id') userId: string) {
     return this.conversationsService.deleteConversation(id, userId)

@@ -299,6 +299,7 @@ export type AdServicePurchaseScalarFieldEnum = (typeof AdServicePurchaseScalarFi
 export const ConversationScalarFieldEnum = {
   id: 'id',
   adId: 'adId',
+  adTitleSnapshot: 'adTitleSnapshot',
   buyerId: 'buyerId',
   sellerId: 'sellerId',
   lastMessageAt: 'lastMessageAt',

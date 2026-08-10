@@ -458,9 +458,12 @@ export class UserService {
   // Причина — Conversation каскадно завязан и на buyerId, и на sellerId
   // (см. schema.prisma): физическое удаление пользователя снесло бы
   // переписку целиком, включая сообщения второй стороны, которая ничего не
-  // удаляла. По той же причине не удаляем и объявления пользователя
-  // физически — только переводим в ARCHIVED (у Ad тоже каскад в
-  // Conversation). Хвосты подчищает AdsArchivePurgeWorker через 30 дней.
+  // удаляла. Объявления по той же логике не удаляются физически прямо
+  // сейчас — переводятся в ARCHIVED, дальше их подчищает
+  // AdsArchivePurgeWorker (для удалённого аккаунта — без задержки, при
+  // следующей ночной чистке). Переписка от судьбы объявления больше не
+  // зависит (Conversation.adId — SetNull, не Cascade) и живёт, пока жив хотя
+  // бы один из двух её участников — см. шаг с orphanConversationIds ниже.
   async deleteAccount(userId: string, dto: DeleteAccountDto) {
     const user = await this.findById(userId)
 
@@ -504,12 +507,41 @@ export class UserService {
         data: { status: AdStatus.ARCHIVED, archivedAt: new Date() }
       })
 
-      // Сам аккаунт — обезличиваем и помечаем deletedAt. Conversation,
-      // Message, AdReport, PremiumPurchase, AdBump, AdServicePurchase не
-      // трогаем — они продолжают ссылаться на этот userId, просто теперь
-      // это анонимный пользователь (UI уже везде показывает "Пользователь"
-      // при пустом displayName — проверено, ничего дополнительно чинить не
-      // нужно).
+      // Диалоги этого юзера, где собеседник уже тоже удалил свой аккаунт
+      // раньше — теперь, когда уходит и этот участник, диалог гарантированно
+      // бесхозный: залогиниться в него не сможет уже ни один из двух (см.
+      // AuthGuard). Такие удаляем физически сразу (Message каскадом уйдёт
+      // вместе с Conversation — Message.conversation остался на Cascade, это
+      // ок, оба владельца этих сообщений уже ушли). Диалоги, где собеседник
+      // ещё жив, не трогаем — это его личная история переписки.
+      const conversations = await tx.conversation.findMany({
+        where: { OR: [{ buyerId: userId }, { sellerId: userId }] },
+        select: {
+          id: true,
+          buyerId: true,
+          buyer: { select: { deletedAt: true } },
+          seller: { select: { deletedAt: true } }
+        }
+      })
+
+      const orphanConversationIds = conversations
+        .filter(conversation => {
+          const counterpart = conversation.buyerId === userId ? conversation.seller : conversation.buyer
+          return counterpart.deletedAt !== null
+        })
+        .map(conversation => conversation.id)
+
+      if (orphanConversationIds.length) {
+        await tx.conversation.deleteMany({ where: { id: { in: orphanConversationIds } } })
+      }
+
+      // Сам аккаунт — обезличиваем и помечаем deletedAt. Оставшиеся (не
+      // бесхозные) Conversation/Message, а также AdReport, PremiumPurchase,
+      // AdBump, AdServicePurchase не трогаем — они продолжают ссылаться на
+      // этот userId, просто теперь это анонимный пользователь. В чате
+      // собеседник увидит явную подпись "Пользователь удалил аккаунт" по
+      // deletedAt (см. ChatHeader/ConversationListItem на клиенте) — не
+      // просто пустое имя, как раньше.
       await tx.user.update({
         where: { id: userId },
         data: {

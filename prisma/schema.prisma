@@ -583,8 +583,17 @@ model AdServicePurchase {
 model Conversation {
   id String @id @default(uuid())
 
-  adId String @map("ad_id")
-  ad   Ad     @relation(fields: [adId], references: [id], onDelete: Cascade)
+  // Nullable + SetNull (не Cascade) — сознательно: объявление может быть
+  // физически удалено (см. AdsArchivePurgeWorker) НЕЗАВИСИМО от судьбы
+  // переписки по нему. Раньше здесь был Cascade, и удаление объявления
+  // сносило переписку целиком — в том числе у собеседника, который ничего
+  // не удалял и не мог на это повлиять. adTitleSnapshot хранит заголовок на
+  // момент создания диалога, чтобы после удаления объявления в интерфейсе
+  // не было пустоты (см. ConversationsService.startConversation).
+  adId String? @map("ad_id")
+  ad   Ad?     @relation(fields: [adId], references: [id], onDelete: SetNull)
+
+  adTitleSnapshot String? @map("ad_title_snapshot")
 
   buyerId String @map("buyer_id")
   buyer   User   @relation("ConversationsAsBuyer", fields: [buyerId], references: [id], onDelete: Cascade)
@@ -612,6 +621,12 @@ model Conversation {
   hiddenByBuyer  Boolean @default(false) @map("hidden_by_buyer")
   hiddenBySeller Boolean @default(false) @map("hidden_by_seller")
 
+  // Диалог физически удаляется (не скрывается) целиком, когда ОБА участника
+  // уже удалили свои аккаунты — тогда он гарантированно бесхозный: ни один
+  // из них не сможет в него зайти (AuthGuard отклоняет юзеров с deletedAt).
+  // Пока жив хотя бы один — диалог остаётся как есть, это его личная
+  // история переписки, второй показывается с обезличенным профилем и
+  // соответствующей подписью в интерфейсе (см. UserService.deleteAccount).
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 

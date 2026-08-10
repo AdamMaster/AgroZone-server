@@ -1,4 +1,5 @@
 import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common'
+import { AdStatus } from 'prisma/generated/enums'
 
 import { BlockedUsersService } from '@/blocked-users/blocked-users.service'
 import { PrismaService } from '@/prisma/prisma.service'
@@ -22,7 +23,7 @@ export class ConversationsService {
   async startConversation(userId: string, dto: StartConversationDto) {
     const ad = await this.prisma.ad.findUnique({
       where: { id: dto.adId },
-      select: { id: true, userId: true }
+      select: { id: true, userId: true, title: true }
     })
 
     if (!ad) {
@@ -43,7 +44,10 @@ export class ConversationsService {
     const conversation = await this.prisma.conversation.upsert({
       where: { adId_buyerId: { adId: dto.adId, buyerId: userId } },
       update: {},
-      create: { adId: dto.adId, buyerId: userId, sellerId: ad.userId }
+      // adTitleSnapshot — на случай, если объявление позже будет физически
+      // удалено (Conversation.adId тогда обнулится, см. schema.prisma), чтобы
+      // в списке диалогов не было пустоты (см. getConversations ниже).
+      create: { adId: dto.adId, buyerId: userId, sellerId: ad.userId, adTitleSnapshot: ad.title }
     })
 
     const message = await this.createMessage(conversation.id, userId, dto.text)
@@ -82,9 +86,9 @@ export class ConversationsService {
       },
       orderBy: [{ lastMessageAt: 'desc' }, { createdAt: 'desc' }],
       include: {
-        ad: { select: { id: true, title: true, images: true, slug: true } },
-        buyer: { select: { id: true, displayName: true, picture: true } },
-        seller: { select: { id: true, displayName: true, picture: true } },
+        ad: { select: { id: true, title: true, images: true, slug: true, status: true } },
+        buyer: { select: { id: true, displayName: true, picture: true, deletedAt: true } },
+        seller: { select: { id: true, displayName: true, picture: true, deletedAt: true } },
         messages: { orderBy: { createdAt: 'desc' }, take: 1 }
       }
     })
@@ -95,9 +99,28 @@ export class ConversationsService {
       const lastReadAt = isBuyer ? conversation.buyerLastReadAt : conversation.sellerLastReadAt
       const lastMessage = conversation.messages[0] ?? null
 
+      // Объявление считаем "доступным" по ссылке, только пока оно реально
+      // открывается публично (status PUBLISHED) — так же строго, как это уже
+      // проверяет AdsService.findOne. Архивированное объявление 404-ится там
+      // мгновенно, в момент архивации, а не через 30 дней при физическом
+      // удалении (см. AdsArchivePurgeWorker) — так что отдавать живую
+      // ссылку на него нельзя, даже пока строка Ad ещё существует в базе.
+      // В обоих случаях (архивировано или уже физически удалено — тогда
+      // conversation.ad вообще null, см. onDelete: SetNull в schema.prisma)
+      // отдаём id: null, а заголовок берём из живых данных, если строка ещё
+      // есть, иначе — из снепшота, снятого при создании диалога.
+      const ad = conversation.ad
+
       return {
         id: conversation.id,
-        ad: conversation.ad,
+        ad: ad && ad.status === AdStatus.PUBLISHED
+          ? { id: ad.id, title: ad.title, images: ad.images, slug: ad.slug }
+          : {
+              id: null,
+              title: ad?.title ?? conversation.adTitleSnapshot ?? 'Объявление удалено',
+              images: ad?.images ?? [],
+              slug: null
+            },
         counterpart,
         lastMessage,
         dealConfirmed: conversation.dealConfirmed,
@@ -137,12 +160,42 @@ export class ConversationsService {
     })
   }
 
-  // "Удаление" диалога из списка — скрывает его только у того, кто нажал
-  // удалить (см. комментарий к hiddenByBuyer/hiddenBySeller в schema.prisma).
-  // У второго участника переписка остаётся как есть.
+  // "Удаление" диалога — по умолчанию скрывает его только у того, кто нажал
+  // удалить (см. комментарий к hiddenByBuyer/hiddenBySeller в schema.prisma):
+  // переписка принадлежит обоим участникам, физически стереть её по воле
+  // одного было бы нечестно ко второму. НО если собеседник уже удалил свой
+  // аккаунт (deletedAt) — это правило больше не применимо: второй стороне
+  // терять нечего, зайти в диалог она физически не может (AuthGuard
+  // отклоняет юзеров с deletedAt), так что оставшийся живой участник —
+  // единственный реальный владелец записи, и ему отдаём настоящее,
+  // необратимое удаление (Message уйдёт каскадом, см. Message.conversation
+  // onDelete: Cascade).
   async deleteConversation(conversationId: string, userId: string) {
-    const conversation = await this.getConversationForParticipant(conversationId, userId)
+    const conversation = await this.prisma.conversation.findUnique({
+      where: { id: conversationId },
+      select: {
+        buyerId: true,
+        sellerId: true,
+        buyer: { select: { deletedAt: true } },
+        seller: { select: { deletedAt: true } }
+      }
+    })
+
+    if (!conversation) {
+      throw new NotFoundException('Диалог не найден')
+    }
+
+    if (conversation.buyerId !== userId && conversation.sellerId !== userId) {
+      throw new ForbiddenException('Это не ваш диалог')
+    }
+
     const isBuyer = conversation.buyerId === userId
+    const counterpart = isBuyer ? conversation.seller : conversation.buyer
+
+    if (counterpart.deletedAt) {
+      await this.prisma.conversation.delete({ where: { id: conversationId } })
+      return
+    }
 
     await this.prisma.conversation.update({
       where: { id: conversationId },

@@ -27,6 +27,7 @@ export type AggregateConversation = {
 export type ConversationMinAggregateOutputType = {
   id: string | null
   adId: string | null
+  adTitleSnapshot: string | null
   buyerId: string | null
   sellerId: string | null
   lastMessageAt: Date | null
@@ -42,6 +43,7 @@ export type ConversationMinAggregateOutputType = {
 export type ConversationMaxAggregateOutputType = {
   id: string | null
   adId: string | null
+  adTitleSnapshot: string | null
   buyerId: string | null
   sellerId: string | null
   lastMessageAt: Date | null
@@ -57,6 +59,7 @@ export type ConversationMaxAggregateOutputType = {
 export type ConversationCountAggregateOutputType = {
   id: number
   adId: number
+  adTitleSnapshot: number
   buyerId: number
   sellerId: number
   lastMessageAt: number
@@ -74,6 +77,7 @@ export type ConversationCountAggregateOutputType = {
 export type ConversationMinAggregateInputType = {
   id?: true
   adId?: true
+  adTitleSnapshot?: true
   buyerId?: true
   sellerId?: true
   lastMessageAt?: true
@@ -89,6 +93,7 @@ export type ConversationMinAggregateInputType = {
 export type ConversationMaxAggregateInputType = {
   id?: true
   adId?: true
+  adTitleSnapshot?: true
   buyerId?: true
   sellerId?: true
   lastMessageAt?: true
@@ -104,6 +109,7 @@ export type ConversationMaxAggregateInputType = {
 export type ConversationCountAggregateInputType = {
   id?: true
   adId?: true
+  adTitleSnapshot?: true
   buyerId?: true
   sellerId?: true
   lastMessageAt?: true
@@ -191,7 +197,8 @@ export type ConversationGroupByArgs<ExtArgs extends runtime.Types.Extensions.Int
 
 export type ConversationGroupByOutputType = {
   id: string
-  adId: string
+  adId: string | null
+  adTitleSnapshot: string | null
   buyerId: string
   sellerId: string
   lastMessageAt: Date | null
@@ -227,7 +234,8 @@ export type ConversationWhereInput = {
   OR?: Prisma.ConversationWhereInput[]
   NOT?: Prisma.ConversationWhereInput | Prisma.ConversationWhereInput[]
   id?: Prisma.StringFilter<"Conversation"> | string
-  adId?: Prisma.StringFilter<"Conversation"> | string
+  adId?: Prisma.StringNullableFilter<"Conversation"> | string | null
+  adTitleSnapshot?: Prisma.StringNullableFilter<"Conversation"> | string | null
   buyerId?: Prisma.StringFilter<"Conversation"> | string
   sellerId?: Prisma.StringFilter<"Conversation"> | string
   lastMessageAt?: Prisma.DateTimeNullableFilter<"Conversation"> | Date | string | null
@@ -238,7 +246,7 @@ export type ConversationWhereInput = {
   hiddenBySeller?: Prisma.BoolFilter<"Conversation"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Conversation"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Conversation"> | Date | string
-  ad?: Prisma.XOR<Prisma.AdScalarRelationFilter, Prisma.AdWhereInput>
+  ad?: Prisma.XOR<Prisma.AdNullableScalarRelationFilter, Prisma.AdWhereInput> | null
   buyer?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   seller?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   messages?: Prisma.MessageListRelationFilter
@@ -246,7 +254,8 @@ export type ConversationWhereInput = {
 
 export type ConversationOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  adId?: Prisma.SortOrder
+  adId?: Prisma.SortOrderInput | Prisma.SortOrder
+  adTitleSnapshot?: Prisma.SortOrderInput | Prisma.SortOrder
   buyerId?: Prisma.SortOrder
   sellerId?: Prisma.SortOrder
   lastMessageAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -269,7 +278,8 @@ export type ConversationWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.ConversationWhereInput | Prisma.ConversationWhereInput[]
   OR?: Prisma.ConversationWhereInput[]
   NOT?: Prisma.ConversationWhereInput | Prisma.ConversationWhereInput[]
-  adId?: Prisma.StringFilter<"Conversation"> | string
+  adId?: Prisma.StringNullableFilter<"Conversation"> | string | null
+  adTitleSnapshot?: Prisma.StringNullableFilter<"Conversation"> | string | null
   buyerId?: Prisma.StringFilter<"Conversation"> | string
   sellerId?: Prisma.StringFilter<"Conversation"> | string
   lastMessageAt?: Prisma.DateTimeNullableFilter<"Conversation"> | Date | string | null
@@ -280,7 +290,7 @@ export type ConversationWhereUniqueInput = Prisma.AtLeast<{
   hiddenBySeller?: Prisma.BoolFilter<"Conversation"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Conversation"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Conversation"> | Date | string
-  ad?: Prisma.XOR<Prisma.AdScalarRelationFilter, Prisma.AdWhereInput>
+  ad?: Prisma.XOR<Prisma.AdNullableScalarRelationFilter, Prisma.AdWhereInput> | null
   buyer?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   seller?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   messages?: Prisma.MessageListRelationFilter
@@ -288,7 +298,8 @@ export type ConversationWhereUniqueInput = Prisma.AtLeast<{
 
 export type ConversationOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  adId?: Prisma.SortOrder
+  adId?: Prisma.SortOrderInput | Prisma.SortOrder
+  adTitleSnapshot?: Prisma.SortOrderInput | Prisma.SortOrder
   buyerId?: Prisma.SortOrder
   sellerId?: Prisma.SortOrder
   lastMessageAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -309,7 +320,8 @@ export type ConversationScalarWhereWithAggregatesInput = {
   OR?: Prisma.ConversationScalarWhereWithAggregatesInput[]
   NOT?: Prisma.ConversationScalarWhereWithAggregatesInput | Prisma.ConversationScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Conversation"> | string
-  adId?: Prisma.StringWithAggregatesFilter<"Conversation"> | string
+  adId?: Prisma.StringNullableWithAggregatesFilter<"Conversation"> | string | null
+  adTitleSnapshot?: Prisma.StringNullableWithAggregatesFilter<"Conversation"> | string | null
   buyerId?: Prisma.StringWithAggregatesFilter<"Conversation"> | string
   sellerId?: Prisma.StringWithAggregatesFilter<"Conversation"> | string
   lastMessageAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Conversation"> | Date | string | null
@@ -324,6 +336,7 @@ export type ConversationScalarWhereWithAggregatesInput = {
 
 export type ConversationCreateInput = {
   id?: string
+  adTitleSnapshot?: string | null
   lastMessageAt?: Date | string | null
   buyerLastReadAt?: Date | string | null
   sellerLastReadAt?: Date | string | null
@@ -332,7 +345,7 @@ export type ConversationCreateInput = {
   hiddenBySeller?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  ad: Prisma.AdCreateNestedOneWithoutConversationsInput
+  ad?: Prisma.AdCreateNestedOneWithoutConversationsInput
   buyer: Prisma.UserCreateNestedOneWithoutConversationsAsBuyerInput
   seller: Prisma.UserCreateNestedOneWithoutConversationsAsSellerInput
   messages?: Prisma.MessageCreateNestedManyWithoutConversationInput
@@ -340,7 +353,8 @@ export type ConversationCreateInput = {
 
 export type ConversationUncheckedCreateInput = {
   id?: string
-  adId: string
+  adId?: string | null
+  adTitleSnapshot?: string | null
   buyerId: string
   sellerId: string
   lastMessageAt?: Date | string | null
@@ -356,6 +370,7 @@ export type ConversationUncheckedCreateInput = {
 
 export type ConversationUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  adTitleSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   buyerLastReadAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sellerLastReadAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -364,7 +379,7 @@ export type ConversationUpdateInput = {
   hiddenBySeller?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  ad?: Prisma.AdUpdateOneRequiredWithoutConversationsNestedInput
+  ad?: Prisma.AdUpdateOneWithoutConversationsNestedInput
   buyer?: Prisma.UserUpdateOneRequiredWithoutConversationsAsBuyerNestedInput
   seller?: Prisma.UserUpdateOneRequiredWithoutConversationsAsSellerNestedInput
   messages?: Prisma.MessageUpdateManyWithoutConversationNestedInput
@@ -372,7 +387,8 @@ export type ConversationUpdateInput = {
 
 export type ConversationUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  adId?: Prisma.StringFieldUpdateOperationsInput | string
+  adId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adTitleSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerId?: Prisma.StringFieldUpdateOperationsInput | string
   sellerId?: Prisma.StringFieldUpdateOperationsInput | string
   lastMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -388,7 +404,8 @@ export type ConversationUncheckedUpdateInput = {
 
 export type ConversationCreateManyInput = {
   id?: string
-  adId: string
+  adId?: string | null
+  adTitleSnapshot?: string | null
   buyerId: string
   sellerId: string
   lastMessageAt?: Date | string | null
@@ -403,6 +420,7 @@ export type ConversationCreateManyInput = {
 
 export type ConversationUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  adTitleSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   buyerLastReadAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sellerLastReadAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -415,7 +433,8 @@ export type ConversationUpdateManyMutationInput = {
 
 export type ConversationUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  adId?: Prisma.StringFieldUpdateOperationsInput | string
+  adId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adTitleSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerId?: Prisma.StringFieldUpdateOperationsInput | string
   sellerId?: Prisma.StringFieldUpdateOperationsInput | string
   lastMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -446,6 +465,7 @@ export type ConversationAdIdBuyerIdCompoundUniqueInput = {
 export type ConversationCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   adId?: Prisma.SortOrder
+  adTitleSnapshot?: Prisma.SortOrder
   buyerId?: Prisma.SortOrder
   sellerId?: Prisma.SortOrder
   lastMessageAt?: Prisma.SortOrder
@@ -461,6 +481,7 @@ export type ConversationCountOrderByAggregateInput = {
 export type ConversationMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   adId?: Prisma.SortOrder
+  adTitleSnapshot?: Prisma.SortOrder
   buyerId?: Prisma.SortOrder
   sellerId?: Prisma.SortOrder
   lastMessageAt?: Prisma.SortOrder
@@ -476,6 +497,7 @@ export type ConversationMaxOrderByAggregateInput = {
 export type ConversationMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   adId?: Prisma.SortOrder
+  adTitleSnapshot?: Prisma.SortOrder
   buyerId?: Prisma.SortOrder
   sellerId?: Prisma.SortOrder
   lastMessageAt?: Prisma.SortOrder
@@ -635,6 +657,7 @@ export type ConversationUpdateOneRequiredWithoutMessagesNestedInput = {
 
 export type ConversationCreateWithoutBuyerInput = {
   id?: string
+  adTitleSnapshot?: string | null
   lastMessageAt?: Date | string | null
   buyerLastReadAt?: Date | string | null
   sellerLastReadAt?: Date | string | null
@@ -643,14 +666,15 @@ export type ConversationCreateWithoutBuyerInput = {
   hiddenBySeller?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  ad: Prisma.AdCreateNestedOneWithoutConversationsInput
+  ad?: Prisma.AdCreateNestedOneWithoutConversationsInput
   seller: Prisma.UserCreateNestedOneWithoutConversationsAsSellerInput
   messages?: Prisma.MessageCreateNestedManyWithoutConversationInput
 }
 
 export type ConversationUncheckedCreateWithoutBuyerInput = {
   id?: string
-  adId: string
+  adId?: string | null
+  adTitleSnapshot?: string | null
   sellerId: string
   lastMessageAt?: Date | string | null
   buyerLastReadAt?: Date | string | null
@@ -675,6 +699,7 @@ export type ConversationCreateManyBuyerInputEnvelope = {
 
 export type ConversationCreateWithoutSellerInput = {
   id?: string
+  adTitleSnapshot?: string | null
   lastMessageAt?: Date | string | null
   buyerLastReadAt?: Date | string | null
   sellerLastReadAt?: Date | string | null
@@ -683,14 +708,15 @@ export type ConversationCreateWithoutSellerInput = {
   hiddenBySeller?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  ad: Prisma.AdCreateNestedOneWithoutConversationsInput
+  ad?: Prisma.AdCreateNestedOneWithoutConversationsInput
   buyer: Prisma.UserCreateNestedOneWithoutConversationsAsBuyerInput
   messages?: Prisma.MessageCreateNestedManyWithoutConversationInput
 }
 
 export type ConversationUncheckedCreateWithoutSellerInput = {
   id?: string
-  adId: string
+  adId?: string | null
+  adTitleSnapshot?: string | null
   buyerId: string
   lastMessageAt?: Date | string | null
   buyerLastReadAt?: Date | string | null
@@ -734,7 +760,8 @@ export type ConversationScalarWhereInput = {
   OR?: Prisma.ConversationScalarWhereInput[]
   NOT?: Prisma.ConversationScalarWhereInput | Prisma.ConversationScalarWhereInput[]
   id?: Prisma.StringFilter<"Conversation"> | string
-  adId?: Prisma.StringFilter<"Conversation"> | string
+  adId?: Prisma.StringNullableFilter<"Conversation"> | string | null
+  adTitleSnapshot?: Prisma.StringNullableFilter<"Conversation"> | string | null
   buyerId?: Prisma.StringFilter<"Conversation"> | string
   sellerId?: Prisma.StringFilter<"Conversation"> | string
   lastMessageAt?: Prisma.DateTimeNullableFilter<"Conversation"> | Date | string | null
@@ -765,6 +792,7 @@ export type ConversationUpdateManyWithWhereWithoutSellerInput = {
 
 export type ConversationCreateWithoutAdInput = {
   id?: string
+  adTitleSnapshot?: string | null
   lastMessageAt?: Date | string | null
   buyerLastReadAt?: Date | string | null
   sellerLastReadAt?: Date | string | null
@@ -780,6 +808,7 @@ export type ConversationCreateWithoutAdInput = {
 
 export type ConversationUncheckedCreateWithoutAdInput = {
   id?: string
+  adTitleSnapshot?: string | null
   buyerId: string
   sellerId: string
   lastMessageAt?: Date | string | null
@@ -821,6 +850,7 @@ export type ConversationUpdateManyWithWhereWithoutAdInput = {
 
 export type ConversationCreateWithoutMessagesInput = {
   id?: string
+  adTitleSnapshot?: string | null
   lastMessageAt?: Date | string | null
   buyerLastReadAt?: Date | string | null
   sellerLastReadAt?: Date | string | null
@@ -829,14 +859,15 @@ export type ConversationCreateWithoutMessagesInput = {
   hiddenBySeller?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  ad: Prisma.AdCreateNestedOneWithoutConversationsInput
+  ad?: Prisma.AdCreateNestedOneWithoutConversationsInput
   buyer: Prisma.UserCreateNestedOneWithoutConversationsAsBuyerInput
   seller: Prisma.UserCreateNestedOneWithoutConversationsAsSellerInput
 }
 
 export type ConversationUncheckedCreateWithoutMessagesInput = {
   id?: string
-  adId: string
+  adId?: string | null
+  adTitleSnapshot?: string | null
   buyerId: string
   sellerId: string
   lastMessageAt?: Date | string | null
@@ -867,6 +898,7 @@ export type ConversationUpdateToOneWithWhereWithoutMessagesInput = {
 
 export type ConversationUpdateWithoutMessagesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  adTitleSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   buyerLastReadAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sellerLastReadAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -875,14 +907,15 @@ export type ConversationUpdateWithoutMessagesInput = {
   hiddenBySeller?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  ad?: Prisma.AdUpdateOneRequiredWithoutConversationsNestedInput
+  ad?: Prisma.AdUpdateOneWithoutConversationsNestedInput
   buyer?: Prisma.UserUpdateOneRequiredWithoutConversationsAsBuyerNestedInput
   seller?: Prisma.UserUpdateOneRequiredWithoutConversationsAsSellerNestedInput
 }
 
 export type ConversationUncheckedUpdateWithoutMessagesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  adId?: Prisma.StringFieldUpdateOperationsInput | string
+  adId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adTitleSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerId?: Prisma.StringFieldUpdateOperationsInput | string
   sellerId?: Prisma.StringFieldUpdateOperationsInput | string
   lastMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -897,7 +930,8 @@ export type ConversationUncheckedUpdateWithoutMessagesInput = {
 
 export type ConversationCreateManyBuyerInput = {
   id?: string
-  adId: string
+  adId?: string | null
+  adTitleSnapshot?: string | null
   sellerId: string
   lastMessageAt?: Date | string | null
   buyerLastReadAt?: Date | string | null
@@ -911,7 +945,8 @@ export type ConversationCreateManyBuyerInput = {
 
 export type ConversationCreateManySellerInput = {
   id?: string
-  adId: string
+  adId?: string | null
+  adTitleSnapshot?: string | null
   buyerId: string
   lastMessageAt?: Date | string | null
   buyerLastReadAt?: Date | string | null
@@ -925,6 +960,7 @@ export type ConversationCreateManySellerInput = {
 
 export type ConversationUpdateWithoutBuyerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  adTitleSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   buyerLastReadAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sellerLastReadAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -933,14 +969,15 @@ export type ConversationUpdateWithoutBuyerInput = {
   hiddenBySeller?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  ad?: Prisma.AdUpdateOneRequiredWithoutConversationsNestedInput
+  ad?: Prisma.AdUpdateOneWithoutConversationsNestedInput
   seller?: Prisma.UserUpdateOneRequiredWithoutConversationsAsSellerNestedInput
   messages?: Prisma.MessageUpdateManyWithoutConversationNestedInput
 }
 
 export type ConversationUncheckedUpdateWithoutBuyerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  adId?: Prisma.StringFieldUpdateOperationsInput | string
+  adId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adTitleSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sellerId?: Prisma.StringFieldUpdateOperationsInput | string
   lastMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   buyerLastReadAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -955,7 +992,8 @@ export type ConversationUncheckedUpdateWithoutBuyerInput = {
 
 export type ConversationUncheckedUpdateManyWithoutBuyerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  adId?: Prisma.StringFieldUpdateOperationsInput | string
+  adId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adTitleSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sellerId?: Prisma.StringFieldUpdateOperationsInput | string
   lastMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   buyerLastReadAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -969,6 +1007,7 @@ export type ConversationUncheckedUpdateManyWithoutBuyerInput = {
 
 export type ConversationUpdateWithoutSellerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  adTitleSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   buyerLastReadAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sellerLastReadAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -977,14 +1016,15 @@ export type ConversationUpdateWithoutSellerInput = {
   hiddenBySeller?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  ad?: Prisma.AdUpdateOneRequiredWithoutConversationsNestedInput
+  ad?: Prisma.AdUpdateOneWithoutConversationsNestedInput
   buyer?: Prisma.UserUpdateOneRequiredWithoutConversationsAsBuyerNestedInput
   messages?: Prisma.MessageUpdateManyWithoutConversationNestedInput
 }
 
 export type ConversationUncheckedUpdateWithoutSellerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  adId?: Prisma.StringFieldUpdateOperationsInput | string
+  adId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adTitleSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerId?: Prisma.StringFieldUpdateOperationsInput | string
   lastMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   buyerLastReadAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -999,7 +1039,8 @@ export type ConversationUncheckedUpdateWithoutSellerInput = {
 
 export type ConversationUncheckedUpdateManyWithoutSellerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  adId?: Prisma.StringFieldUpdateOperationsInput | string
+  adId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  adTitleSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerId?: Prisma.StringFieldUpdateOperationsInput | string
   lastMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   buyerLastReadAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1013,6 +1054,7 @@ export type ConversationUncheckedUpdateManyWithoutSellerInput = {
 
 export type ConversationCreateManyAdInput = {
   id?: string
+  adTitleSnapshot?: string | null
   buyerId: string
   sellerId: string
   lastMessageAt?: Date | string | null
@@ -1027,6 +1069,7 @@ export type ConversationCreateManyAdInput = {
 
 export type ConversationUpdateWithoutAdInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  adTitleSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   buyerLastReadAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sellerLastReadAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1042,6 +1085,7 @@ export type ConversationUpdateWithoutAdInput = {
 
 export type ConversationUncheckedUpdateWithoutAdInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  adTitleSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerId?: Prisma.StringFieldUpdateOperationsInput | string
   sellerId?: Prisma.StringFieldUpdateOperationsInput | string
   lastMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1057,6 +1101,7 @@ export type ConversationUncheckedUpdateWithoutAdInput = {
 
 export type ConversationUncheckedUpdateManyWithoutAdInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  adTitleSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   buyerId?: Prisma.StringFieldUpdateOperationsInput | string
   sellerId?: Prisma.StringFieldUpdateOperationsInput | string
   lastMessageAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1103,6 +1148,7 @@ export type ConversationCountOutputTypeCountMessagesArgs<ExtArgs extends runtime
 export type ConversationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   adId?: boolean
+  adTitleSnapshot?: boolean
   buyerId?: boolean
   sellerId?: boolean
   lastMessageAt?: boolean
@@ -1113,7 +1159,7 @@ export type ConversationSelect<ExtArgs extends runtime.Types.Extensions.Internal
   hiddenBySeller?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  ad?: boolean | Prisma.AdDefaultArgs<ExtArgs>
+  ad?: boolean | Prisma.Conversation$adArgs<ExtArgs>
   buyer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   seller?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   messages?: boolean | Prisma.Conversation$messagesArgs<ExtArgs>
@@ -1123,6 +1169,7 @@ export type ConversationSelect<ExtArgs extends runtime.Types.Extensions.Internal
 export type ConversationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   adId?: boolean
+  adTitleSnapshot?: boolean
   buyerId?: boolean
   sellerId?: boolean
   lastMessageAt?: boolean
@@ -1133,7 +1180,7 @@ export type ConversationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   hiddenBySeller?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  ad?: boolean | Prisma.AdDefaultArgs<ExtArgs>
+  ad?: boolean | Prisma.Conversation$adArgs<ExtArgs>
   buyer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   seller?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["conversation"]>
@@ -1141,6 +1188,7 @@ export type ConversationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
 export type ConversationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   adId?: boolean
+  adTitleSnapshot?: boolean
   buyerId?: boolean
   sellerId?: boolean
   lastMessageAt?: boolean
@@ -1151,7 +1199,7 @@ export type ConversationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   hiddenBySeller?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  ad?: boolean | Prisma.AdDefaultArgs<ExtArgs>
+  ad?: boolean | Prisma.Conversation$adArgs<ExtArgs>
   buyer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   seller?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["conversation"]>
@@ -1159,6 +1207,7 @@ export type ConversationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
 export type ConversationSelectScalar = {
   id?: boolean
   adId?: boolean
+  adTitleSnapshot?: boolean
   buyerId?: boolean
   sellerId?: boolean
   lastMessageAt?: boolean
@@ -1171,21 +1220,21 @@ export type ConversationSelectScalar = {
   updatedAt?: boolean
 }
 
-export type ConversationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "adId" | "buyerId" | "sellerId" | "lastMessageAt" | "buyerLastReadAt" | "sellerLastReadAt" | "dealConfirmed" | "hiddenByBuyer" | "hiddenBySeller" | "createdAt" | "updatedAt", ExtArgs["result"]["conversation"]>
+export type ConversationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "adId" | "adTitleSnapshot" | "buyerId" | "sellerId" | "lastMessageAt" | "buyerLastReadAt" | "sellerLastReadAt" | "dealConfirmed" | "hiddenByBuyer" | "hiddenBySeller" | "createdAt" | "updatedAt", ExtArgs["result"]["conversation"]>
 export type ConversationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  ad?: boolean | Prisma.AdDefaultArgs<ExtArgs>
+  ad?: boolean | Prisma.Conversation$adArgs<ExtArgs>
   buyer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   seller?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   messages?: boolean | Prisma.Conversation$messagesArgs<ExtArgs>
   _count?: boolean | Prisma.ConversationCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ConversationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  ad?: boolean | Prisma.AdDefaultArgs<ExtArgs>
+  ad?: boolean | Prisma.Conversation$adArgs<ExtArgs>
   buyer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   seller?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type ConversationIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  ad?: boolean | Prisma.AdDefaultArgs<ExtArgs>
+  ad?: boolean | Prisma.Conversation$adArgs<ExtArgs>
   buyer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   seller?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -1193,14 +1242,15 @@ export type ConversationIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types
 export type $ConversationPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Conversation"
   objects: {
-    ad: Prisma.$AdPayload<ExtArgs>
+    ad: Prisma.$AdPayload<ExtArgs> | null
     buyer: Prisma.$UserPayload<ExtArgs>
     seller: Prisma.$UserPayload<ExtArgs>
     messages: Prisma.$MessagePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    adId: string
+    adId: string | null
+    adTitleSnapshot: string | null
     buyerId: string
     sellerId: string
     lastMessageAt: Date | null
@@ -1605,7 +1655,7 @@ readonly fields: ConversationFieldRefs;
  */
 export interface Prisma__ConversationClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  ad<T extends Prisma.AdDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AdDefaultArgs<ExtArgs>>): Prisma.Prisma__AdClient<runtime.Types.Result.GetResult<Prisma.$AdPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  ad<T extends Prisma.Conversation$adArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Conversation$adArgs<ExtArgs>>): Prisma.Prisma__AdClient<runtime.Types.Result.GetResult<Prisma.$AdPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   buyer<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   seller<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   messages<T extends Prisma.Conversation$messagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Conversation$messagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -1640,6 +1690,7 @@ export interface Prisma__ConversationClient<T, Null = never, ExtArgs extends run
 export interface ConversationFieldRefs {
   readonly id: Prisma.FieldRef<"Conversation", 'String'>
   readonly adId: Prisma.FieldRef<"Conversation", 'String'>
+  readonly adTitleSnapshot: Prisma.FieldRef<"Conversation", 'String'>
   readonly buyerId: Prisma.FieldRef<"Conversation", 'String'>
   readonly sellerId: Prisma.FieldRef<"Conversation", 'String'>
   readonly lastMessageAt: Prisma.FieldRef<"Conversation", 'DateTime'>
@@ -2043,6 +2094,25 @@ export type ConversationDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.
    * Limit how many Conversations to delete.
    */
   limit?: number
+}
+
+/**
+ * Conversation.ad
+ */
+export type Conversation$adArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Ad
+   */
+  select?: Prisma.AdSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Ad
+   */
+  omit?: Prisma.AdOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AdInclude<ExtArgs> | null
+  where?: Prisma.AdWhereInput
 }
 
 /**
