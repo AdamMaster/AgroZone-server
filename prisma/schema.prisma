@@ -23,23 +23,11 @@ model User {
 
   role UserRole @default(REGULAR)
 
-  // Премиум-статус НЕ хранится в role (UserRole.PREMIUM оставлен только
-  // для обратной совместимости, новым кодом не используется) — role это
-  // права доступа (REGULAR/ADMIN), а премиум это оплаченный статус с
-  // сроком действия, ролью такое не выразить. Активен, если это поле в
-  // будущем (см. PremiumService).
   premiumUntil DateTime? @map("premium_until")
 
   isVerified         Boolean @default(false) @map("is_verified")
   isTwoFactorEnabled Boolean @default(false) @map("is_two_factor_enabled")
 
-  // Мягкое удаление аккаунта — сама строка User не удаляется физически
-  // (иначе каскадом снесло бы Conversation/Message, которые принадлежат ещё
-  // и второй стороне переписки, см. комментарий у Conversation ниже), а
-  // персональные поля (email, password, displayName, picture, bio,
-  // location) обнуляются — см. UserService.deleteAccount. null — аккаунт
-  // активен, дата — когда был удалён. AuthGuard и логин отказывают всем, у
-  // кого тут не null.
   deletedAt DateTime? @map("deleted_at")
 
   method   AuthMethod
@@ -49,36 +37,21 @@ model User {
   ads       Ad[]
   favorites Favorite[]
 
-  // Диалоги, где этот юзер выступает покупателем/продавцом — раздельные
-  // связи, а не одна общая, чтобы можно было отдельно и дёшево (без доп.
-  // условий в WHERE) получить "мои диалоги как покупателя" и "как
-  // продавца" (см. Conversation).
   conversationsAsBuyer  Conversation[] @relation("ConversationsAsBuyer")
   conversationsAsSeller Conversation[] @relation("ConversationsAsSeller")
   sentMessages          Message[]
 
-  // Кого этот юзер заблокировал / кто заблокировал этого юзера (см.
-  // BlockedUser) — раздельные связи по той же причине, что и с диалогами.
   blockedUsers   BlockedUser[] @relation("BlockerOf")
   blockedByUsers BlockedUser[] @relation("BlockedBy")
 
-  // Жалобы, которые этот юзер отправил на чужие объявления (см. AdReport).
   adReports AdReport[]
 
-  // Платные "поднятия" объявлений этого юзера (см. AdBump).
   adBumps AdBump[]
 
-  // Покупки премиум-статуса этого юзера (см. PremiumPurchase).
   premiumPurchases PremiumPurchase[]
 
-  // Покупки на странице "Поднять просмотры" — набор из услуг за один
-  // платёж (см. AdServicePurchase).
   adServicePurchases AdServicePurchase[]
 
-  // Уведомления этого юзера (см. Notification) — сейчас только про
-  // отклонение объявления модератором, но сущность универсальная и
-  // рассчитана на будущие типы (одобрили объявление, истекает премиум и
-  // т.п.).
   notifications Notification[]
 
   createdAt DateTime @default(now()) @map("created_at")
