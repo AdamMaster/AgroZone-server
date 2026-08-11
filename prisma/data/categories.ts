@@ -1042,11 +1042,129 @@ const AGRO_SEED_FEATURES = [
   { name: 'batch_weight', label: 'Масса/количество партии', type: 'NUMBER', units: ['г', 'кг', 'т', 'шт.'] }
 ] satisfies CategoryFeatureSeed[]
 
+// Саженцы — раньше делили AGRO_SEED_FEATURES с семенами, а там половина
+// полей чисто семенные и для живого саженца бессмысленны (всхожесть,
+// чистота, масса 1000 семян). Тут — параметры, которые реально важны при
+// покупке саженца: подвой (актуально для плодовых), возраст, высота, тип
+// корневой системы (ОКС/ЗКС — стандартные термины питомниководства),
+// объём контейнера, сезон посадки.
+const AGRO_SAPLING_FEATURES = [
+  { name: 'crop', label: 'Культура/порода', type: 'TEXT', required: true },
+  { name: 'variety', label: 'Сорт', type: 'TEXT' },
+  // Подвой — актуален для плодовых саженцев (яблоня, груша и т.п.),
+  // необязательное текстовое поле — для декоративных/лесных пород (туя,
+  // ель) обычно не заполняется.
+  { name: 'rootstock', label: 'Подвой', type: 'TEXT', filterable: false },
+  { name: 'age', label: 'Возраст саженца', type: 'NUMBER', unit: 'лет' },
+  { name: 'height', label: 'Высота', type: 'NUMBER', units: ['см', 'м'] },
+  {
+    name: 'root_system',
+    label: 'Корневая система',
+    type: 'SELECT',
+    options: ['Открытая (ОКС)', 'Закрытая, в контейнере (ЗКС)', 'С комом земли'],
+    required: true
+  },
+  { name: 'container_volume', label: 'Объём контейнера', type: 'NUMBER', unit: 'л' },
+  {
+    name: 'planting_season',
+    label: 'Сезон посадки',
+    type: 'MULTI_SELECT',
+    options: ['Весна', 'Осень', 'Круглый год (в контейнере)']
+  },
+  { name: 'nursery', label: 'Питомник/производитель', type: 'TEXT' },
+  { name: 'certificate', label: 'Есть сортовой/карантинный сертификат', type: 'BOOLEAN' },
+  { name: 'quantity', label: 'Количество', type: 'NUMBER', unit: 'шт.', min: 1 }
+] satisfies CategoryFeatureSeed[]
+
 const OTHER_DEFAULT_FEATURES = [
   { name: 'usage', label: 'Назначение', type: 'TEXT' },
   // Переименовано из 'origin' — тот же общий ключ 'manufacturer', что и
   // везде остальные (см. OTHER_GOODS_FEATURES).
   { name: 'manufacturer', label: 'Производитель/Бренд', type: 'TEXT' }
+] satisfies CategoryFeatureSeed[]
+
+// Ветеринарные препараты (лекарства для животных) — раньше в дереве была
+// только "Ветеринарное оборудование" (инструменты/техника) и один общий
+// лист "Ветеринарные и зоотехнические товары" в "Прочем", без какой-либо
+// детализации самих препаратов — асимметрично по сравнению с растительной
+// "Агрохимией" (10 категорий с этим же уровнем детализации). animal_type —
+// вид животных, для которых предназначен препарат, MULTI_SELECT, а не TEXT,
+// т.к. один и тот же препарат часто указан сразу для нескольких видов.
+const VET_MED_STANDARD = [
+  {
+    name: 'animal_type',
+    label: 'Вид животных',
+    type: 'MULTI_SELECT',
+    options: ['КРС', 'Свиньи', 'Овцы, козы', 'Лошади', 'Птица', 'Кролики', 'Пчёлы', 'Рыба', 'Универсальный']
+  },
+  {
+    name: 'form',
+    label: 'Форма выпуска',
+    type: 'SELECT',
+    options: [
+      'Раствор для инъекций',
+      'Таблетки',
+      'Порошок',
+      'Суспензия',
+      'Гель/Мазь',
+      'Капли',
+      'Аэрозоль/Спрей',
+      'Болюсы',
+      'Премикс',
+      'Другое'
+    ],
+    required: true
+  },
+  { name: 'active_ingredient', label: 'Действующее вещество', type: 'TEXT', required: true },
+  { name: 'dosage', label: 'Дозировка/Способ применения', type: 'TEXT', filterable: false },
+  { name: 'manufacturer', label: 'Производитель', type: 'TEXT' },
+  // Уникальный номер регистрационного удостоверения препарата — справочное
+  // поле, не факт фильтрации (по аналогии с registration_number в
+  // AGRO_CHEM_STANDARD).
+  { name: 'registration_number', label: 'Регистрационный номер', type: 'TEXT', filterable: false },
+  { name: 'prescription_required', label: 'Отпускается по рецепту', type: 'BOOLEAN' },
+  { name: 'expiry_date', label: 'Срок годности', type: 'TEXT', filterable: false },
+  {
+    name: 'packaging_type',
+    label: 'Упаковка/Тара',
+    type: 'SELECT',
+    options: ['Флакон', 'Ампулы', 'Блистер', 'Пачка/Коробка', 'Канистра', 'Мешок', 'Другое']
+  },
+  {
+    name: 'package_size',
+    label: 'Масса/объём/количество упаковки',
+    type: 'NUMBER',
+    units: ['мл', 'л', 'г', 'кг', 'шт.']
+  }
+] satisfies CategoryFeatureSeed[]
+
+// Расходники для ветеринарного применения (шприцы, иглы, перевязочные) —
+// отдельно от VET_MED_STANDARD (это не сам препарат) и отдельно от
+// "Ветеринарного оборудования" в "Оборудование > Для животноводства" (там
+// многоразовая техника/приборы, тут одноразовые/расходуемые материалы).
+const VET_CONSUMABLES_FEATURES = [
+  {
+    name: 'item_type',
+    label: 'Тип товара',
+    type: 'SELECT',
+    options: ['Шприцы', 'Иглы', 'Катетеры/Канюли', 'Перевязочные материалы', 'Одноразовые перчатки', 'Другое'],
+    required: true
+  },
+  {
+    name: 'animal_type',
+    label: 'Вид животных',
+    type: 'MULTI_SELECT',
+    options: ['КРС', 'Свиньи', 'Овцы, козы', 'Лошади', 'Птица', 'Кролики', 'Пчёлы', 'Рыба', 'Универсальный']
+  },
+  { name: 'size', label: 'Типоразмер/объём', type: 'TEXT' },
+  { name: 'manufacturer', label: 'Производитель', type: 'TEXT' },
+  {
+    name: 'packaging_type',
+    label: 'Упаковка',
+    type: 'SELECT',
+    options: ['Поштучно', 'Упаковка', 'Коробка', 'Блок']
+  },
+  { name: 'quantity_per_pack', label: 'Количество в упаковке', type: 'NUMBER', unit: 'шт.' }
 ] satisfies CategoryFeatureSeed[]
 
 // Значения — из enum Prisma PriceUnit ('ITEM' | 'TON' | 'KG' | 'LITER' |
@@ -1102,7 +1220,10 @@ const DEFAULT_PRICE_UNITS_BY_FEATURES = new Map<CategoryFeatureSeed[], string[]>
   [AGRO_TECHNICAL_FEATURES, ['TON', 'KG', 'BAG']],
   [AGRO_INDUSTRIAL_RAW_FEATURES, ['KG', 'ITEM']],
   [AGRO_SEED_FEATURES, ['KG', 'TON', 'DOSE', 'BAG']],
-  [OTHER_DEFAULT_FEATURES, ['ITEM']]
+  [AGRO_SAPLING_FEATURES, ['ITEM']],
+  [OTHER_DEFAULT_FEATURES, ['ITEM']],
+  [VET_MED_STANDARD, ['ITEM', 'DOSE', 'KG', 'LITER']],
+  [VET_CONSUMABLES_FEATURES, ['ITEM', 'BAG']]
 ])
 
 function inferPriceUnits(categoryFeatures?: CategoryFeatureSeed[]): string[] {
@@ -1163,6 +1284,60 @@ const CATEGORY_TREE = [
         children: [],
         categoryFeatures: ANIMAL_FEATURES
       }
+    ]
+  },
+  {
+    name: 'Ветеринария',
+    id: 'cat_1rb9vs9',
+    aliases: ['Ветпрепараты', 'Ветеринарные препараты', 'Зоотовары'],
+    iconId: 'Syringe',
+    children: [
+      { name: 'Вакцины', id: 'cat_1ns3f59', children: [], categoryFeatures: VET_MED_STANDARD },
+      {
+        name: 'Антибиотики и противомикробные препараты',
+        id: 'cat_1ohcyxo',
+        children: [],
+        categoryFeatures: VET_MED_STANDARD
+      },
+      { name: 'Антипаразитарные средства', id: 'cat_0ep3uii', children: [], categoryFeatures: VET_MED_STANDARD },
+      {
+        name: 'Витамины, минералы и лечебные добавки',
+        id: 'cat_072wci4',
+        children: [],
+        categoryFeatures: VET_MED_STANDARD
+      },
+      {
+        name: 'Гормональные и репродуктивные препараты',
+        id: 'cat_1yuqgbv',
+        children: [],
+        categoryFeatures: VET_MED_STANDARD
+      },
+      {
+        name: 'Обезболивающие и противовоспалительные',
+        id: 'cat_0tozcu1',
+        children: [],
+        categoryFeatures: VET_MED_STANDARD
+      },
+      {
+        name: 'Дезинфицирующие средства для животноводческих помещений',
+        id: 'cat_1br1ual',
+        children: [],
+        categoryFeatures: AGRO_CLEAN_FEATURES
+      },
+      {
+        name: 'Инфузионные растворы и препараты для инъекций',
+        id: 'cat_1ed4ocz',
+        children: [],
+        categoryFeatures: VET_MED_STANDARD
+      },
+      {
+        name: 'Расходные материалы',
+        id: 'cat_0gbvkad',
+        aliases: ['Ветеринарные расходные материалы'],
+        children: [],
+        categoryFeatures: VET_CONSUMABLES_FEATURES
+      },
+      { name: 'Прочие ветпрепараты', id: 'cat_0ya7zj7', children: [], categoryFeatures: VET_MED_STANDARD }
     ]
   },
   {
@@ -2010,10 +2185,17 @@ const CATEGORY_TREE = [
           { name: 'Семена масличных культур', id: 'cat_0he395e', children: [], categoryFeatures: AGRO_SEED_FEATURES },
           { name: 'Рассада овощных культур', id: 'cat_1n1tqpe', children: [], categoryFeatures: AGRO_SEED_FEATURES },
           {
-            name: 'Саженцы деревьев и кустарников',
+            // Переименовано из "Саженцы деревьев и кустарников" — раньше
+            // непонятно было, куда девать плодовые саженцы (яблоня и т.п.):
+            // сюда или в "...плодово-ягодных культур" ниже. Явно сузили
+            // область до декоративных/лесных/хвойных пород (туя, ель,
+            // берёза), плодовые однозначно уходят в плодово-ягодную
+            // категорию. id не меняем — переименование категории безопасно
+            // (см. seed.ts, матчинг по id), объявления не пострадают.
+            name: 'Саженцы декоративных и лесных деревьев и кустарников',
             id: 'cat_0gv6igf',
             children: [],
-            categoryFeatures: AGRO_SEED_FEATURES
+            categoryFeatures: AGRO_SAPLING_FEATURES
           },
           { name: 'Семена бахчевых культур', id: 'cat_16ttg4a', children: [], categoryFeatures: AGRO_SEED_FEATURES },
           {
@@ -2026,10 +2208,26 @@ const CATEGORY_TREE = [
           { name: 'Семена овощных культур', id: 'cat_1gzr2wi', children: [], categoryFeatures: AGRO_SEED_FEATURES },
           { name: 'Семена технических культур', id: 'cat_1fh9oor', children: [], categoryFeatures: AGRO_SEED_FEATURES },
           {
-            name: 'Семена, рассада и саженцы плодово-ягодных культур',
+            // Разделили на "Семена..." и "Рассада, саженцы..." — старое
+            // название "Семена, рассада и саженцы плодово-ягодных культур"
+            // объединяло два разных товара под одним AGRO_SEED_FEATURES:
+            // семена (для них важны всхожесть/чистота/масса 1000 семян) и
+            // рассаду/саженцы (для них — подвой/возраст/корневая система,
+            // см. AGRO_SAPLING_FEATURES). Один общий набор фич был не
+            // оптимален ни для тех, ни для других. id старой категории
+            // оставляем здесь, за "Семена" — переименование безопасно
+            // (матчинг по id, см. seed.ts), для новой "Рассада, саженцы..."
+            // считаем отдельный id (см. ниже).
+            name: 'Семена плодово-ягодных культур',
             id: 'cat_0a49sh6',
             children: [],
             categoryFeatures: AGRO_SEED_FEATURES
+          },
+          {
+            name: 'Рассада, саженцы плодово-ягодных культур',
+            id: 'cat_14y5w5k',
+            children: [],
+            categoryFeatures: AGRO_SAPLING_FEATURES
           },
           {
             name: 'Семена, рассада, саженцы цветов и декоративных культур',
