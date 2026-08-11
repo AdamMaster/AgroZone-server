@@ -1115,41 +1115,50 @@ function inferPriceUnits(categoryFeatures?: CategoryFeatureSeed[]): string[] {
 const CATEGORY_TREE = [
   {
     name: 'Агрохимия',
+    id: 'cat_0jo0tv4',
     iconId: 'FlaskConical',
     children: [
-      { name: 'Биопрепараты', children: [], categoryFeatures: AGRO_CHEM_STANDARD },
-      { name: 'Грунты', children: [], categoryFeatures: AGRO_SOIL_FEATURES },
-      { name: 'Микроудобрения', children: [], categoryFeatures: AGRO_CHEM_STANDARD },
-      { name: 'Минеральные удобрения', children: [], categoryFeatures: AGRO_CHEM_STANDARD },
-      { name: 'Моющие и дезинфицирующие средства', children: [], categoryFeatures: AGRO_CLEAN_FEATURES },
-      { name: 'Органические удобрения', children: [], categoryFeatures: AGRO_CHEM_STANDARD },
-      { name: 'Органоминеральные удобрения', children: [], categoryFeatures: AGRO_CHEM_STANDARD },
-      { name: 'Регуляторы роста', children: [], categoryFeatures: AGRO_CHEM_STANDARD },
-      { name: 'Дезинсекция и дератизация', children: [], categoryFeatures: AGRO_CHEM_STANDARD },
-      { name: 'Средства защиты растений', children: [], categoryFeatures: AGRO_CHEM_STANDARD }
+      { name: 'Биопрепараты', id: 'cat_0hcxiwr', children: [], categoryFeatures: AGRO_CHEM_STANDARD },
+      { name: 'Грунты', id: 'cat_11h0ntu', children: [], categoryFeatures: AGRO_SOIL_FEATURES },
+      { name: 'Микроудобрения', id: 'cat_1dmwsqf', children: [], categoryFeatures: AGRO_CHEM_STANDARD },
+      { name: 'Минеральные удобрения', id: 'cat_06jcd9j', children: [], categoryFeatures: AGRO_CHEM_STANDARD },
+      {
+        name: 'Моющие и дезинфицирующие средства',
+        id: 'cat_134mucl',
+        children: [],
+        categoryFeatures: AGRO_CLEAN_FEATURES
+      },
+      { name: 'Органические удобрения', id: 'cat_1hrek7v', children: [], categoryFeatures: AGRO_CHEM_STANDARD },
+      { name: 'Органоминеральные удобрения', id: 'cat_0070v9p', children: [], categoryFeatures: AGRO_CHEM_STANDARD },
+      { name: 'Регуляторы роста', id: 'cat_0inw257', children: [], categoryFeatures: AGRO_CHEM_STANDARD },
+      { name: 'Дезинсекция и дератизация', id: 'cat_0mx0jqn', children: [], categoryFeatures: AGRO_CHEM_STANDARD },
+      { name: 'Средства защиты растений', id: 'cat_0jjjycq', children: [], categoryFeatures: AGRO_CHEM_STANDARD }
     ]
   },
   {
     name: 'С/х животные и птица',
+    id: 'cat_157gz92',
     aliases: ['Сельскохозяйственные животные, птица и аквакультура', 'Сельхозживотные'],
     iconId: 'Bird',
     children: [
-      { name: 'Крупный рогатый скот (КРС)', children: [], categoryFeatures: ANIMAL_FEATURES },
-      { name: 'Свиньи', children: [], categoryFeatures: ANIMAL_FEATURES },
-      { name: 'Овцы и бараны', children: [], categoryFeatures: ANIMAL_FEATURES },
-      { name: 'Козы', children: [], categoryFeatures: ANIMAL_FEATURES },
-      { name: 'Лошади', children: [], categoryFeatures: ANIMAL_FEATURES },
-      { name: 'Сельхозптица', children: [], categoryFeatures: POULTRY_FEATURES },
-      { name: 'Кролики', children: [], categoryFeatures: ANIMAL_FEATURES },
+      { name: 'Крупный рогатый скот (КРС)', id: 'cat_0v9u8md', children: [], categoryFeatures: ANIMAL_FEATURES },
+      { name: 'Свиньи', id: 'cat_1ir8arw', children: [], categoryFeatures: ANIMAL_FEATURES },
+      { name: 'Овцы и бараны', id: 'cat_085p4hk', children: [], categoryFeatures: ANIMAL_FEATURES },
+      { name: 'Козы', id: 'cat_1iv91fq', children: [], categoryFeatures: ANIMAL_FEATURES },
+      { name: 'Лошади', id: 'cat_08jlumt', children: [], categoryFeatures: ANIMAL_FEATURES },
+      { name: 'Сельхозптица', id: 'cat_1cf6mzs', children: [], categoryFeatures: POULTRY_FEATURES },
+      { name: 'Кролики', id: 'cat_1rlh4fd', children: [], categoryFeatures: ANIMAL_FEATURES },
       {
         name: 'Пчёлы, пчелосемьи и пчеломатки',
+        id: 'cat_1jwshhn',
         aliases: ['Пчеловодство', 'Пчелопакеты', 'Пчеломатки'],
         children: [],
         categoryFeatures: BEES_FEATURES
       },
-      { name: 'Рыбопосадочный материал и малёк', children: [], categoryFeatures: FISH_FEATURES },
+      { name: 'Рыбопосадочный материал и малёк', id: 'cat_11uo9em', children: [], categoryFeatures: FISH_FEATURES },
       {
         name: 'Другие сельскохозяйственные животные',
+        id: 'cat_026yvmi',
         aliases: ['Другие с/х животные'],
         children: [],
         categoryFeatures: ANIMAL_FEATURES
@@ -1158,518 +1167,679 @@ const CATEGORY_TREE = [
   },
   {
     name: 'Корма и компоненты',
+    id: 'cat_16k707o',
     aliases: ['Корма и кормовые компоненты', 'Корма для животных'],
     iconId: 'Wheat',
     children: [
       {
         name: 'Готовые корма и комбикорма',
+        id: 'cat_0mlwoim',
         children: [
-          { name: 'Комбикорма, зерносмеси', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
-          { name: 'Корма для рыб', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
+          { name: 'Комбикорма, зерносмеси', id: 'cat_09ifvxj', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
+          { name: 'Корма для рыб', id: 'cat_11bu5s2', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
           {
             name: 'Корма для кошек и собак',
+            id: 'cat_117k4fl',
             aliases: ['Корма для кошек, собак'],
             children: [],
             categoryFeatures: ANIMAL_FEED_EXTENDED
           },
-          { name: 'Корма экструдированные', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
-          { name: 'Жидкие корма', children: [], categoryFeatures: FEED_LIQUID_FEATURES },
-          { name: 'Заменители цельного молока', children: [], categoryFeatures: FEED_HIGH_PROTEIN }
+          { name: 'Корма экструдированные', id: 'cat_01prdg7', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
+          { name: 'Жидкие корма', id: 'cat_1q6sgf3', children: [], categoryFeatures: FEED_LIQUID_FEATURES },
+          { name: 'Заменители цельного молока', id: 'cat_0zyqqke', children: [], categoryFeatures: FEED_HIGH_PROTEIN }
         ]
       },
       {
         name: 'Кормовое сырьё',
+        id: 'cat_17jgwuw',
         children: [
-          { name: 'Барда, пивная дробина', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
-          { name: 'Жмых, шрот, жом, патока', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
-          { name: 'Зерно фуражное', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
-          { name: 'Отруби', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
-          { name: 'Сено, солома, силос', children: [], categoryFeatures: FEED_BULK_FEATURES },
-          { name: 'Кормовые корнеплоды', children: [], categoryFeatures: FEED_BULK_FEATURES },
-          { name: 'Некондиционные продукты на корм', children: [], categoryFeatures: FEED_HIGH_PROTEIN }
+          { name: 'Барда, пивная дробина', id: 'cat_14t1224', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
+          { name: 'Жмых, шрот, жом, патока', id: 'cat_0duhpr9', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
+          { name: 'Зерно фуражное', id: 'cat_1x4xjf6', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
+          { name: 'Отруби', id: 'cat_0f6lqia', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
+          { name: 'Сено, солома, силос', id: 'cat_143qdak', children: [], categoryFeatures: FEED_BULK_FEATURES },
+          { name: 'Кормовые корнеплоды', id: 'cat_1pcg4ux', children: [], categoryFeatures: FEED_BULK_FEATURES },
+          {
+            name: 'Некондиционные продукты на корм',
+            id: 'cat_1qg7msh',
+            children: [],
+            categoryFeatures: FEED_HIGH_PROTEIN
+          }
         ]
       },
       {
         name: 'Белковые и минеральные компоненты',
+        id: 'cat_13rm8mq',
         children: [
-          { name: 'Мука мясокостная', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
-          { name: 'Мука кровяная', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
-          { name: 'Мука мясная', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
-          { name: 'Мука перьевая', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
-          { name: 'Мука рыбная', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
-          { name: 'Мука травяная', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
-          { name: 'Кормовые дрожжи', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
-          { name: 'Соль кормовая', children: [], categoryFeatures: FEED_ADDITIVES }
+          { name: 'Мука мясокостная', id: 'cat_1z009fa', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
+          { name: 'Мука кровяная', id: 'cat_1lrofi2', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
+          { name: 'Мука мясная', id: 'cat_1xl6lxz', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
+          { name: 'Мука перьевая', id: 'cat_1yq33bb', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
+          { name: 'Мука рыбная', id: 'cat_10pqfdj', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
+          { name: 'Мука травяная', id: 'cat_1p0fsng', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
+          { name: 'Кормовые дрожжи', id: 'cat_09ppzhy', children: [], categoryFeatures: FEED_HIGH_PROTEIN },
+          { name: 'Соль кормовая', id: 'cat_1lr8gh5', children: [], categoryFeatures: FEED_ADDITIVES }
         ]
       },
       {
         name: 'Добавки, премиксы и пробиотики',
+        id: 'cat_1efebmd',
         children: [
-          { name: 'Кормовые добавки', children: [], categoryFeatures: FEED_ADDITIVES },
-          { name: 'Ингредиенты для кормов', children: [], categoryFeatures: FEED_ADDITIVES },
-          { name: 'Пробиотики', children: [], categoryFeatures: FEED_ADDITIVES }
+          { name: 'Кормовые добавки', id: 'cat_1wltahs', children: [], categoryFeatures: FEED_ADDITIVES },
+          { name: 'Ингредиенты для кормов', id: 'cat_1xb66p1', children: [], categoryFeatures: FEED_ADDITIVES },
+          { name: 'Пробиотики', id: 'cat_0arml3x', children: [], categoryFeatures: FEED_ADDITIVES }
         ]
       },
       {
         name: 'Силосование и консервация кормов',
+        id: 'cat_12jo06z',
         children: [
           {
             name: 'Средства для силосования',
+            id: 'cat_1btmuyl',
             aliases: ['Для силосования'],
             children: [],
             categoryFeatures: ENSILAGE_FEATURES
           }
         ]
       },
-      { name: 'Прочие корма', children: [], categoryFeatures: FEED_HIGH_PROTEIN }
+      { name: 'Прочие корма', id: 'cat_02cax95', children: [], categoryFeatures: FEED_HIGH_PROTEIN }
     ]
   },
   {
     name: 'Оборудование',
+    id: 'cat_0x5sbm5',
     iconId: 'Wrench',
     children: [
       {
         name: 'Зерноперерабатывающее оборудование',
+        id: 'cat_0x86zdo',
         children: [
-          { name: 'Зерноочистительное оборудование', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Зернопогрузчики, зернометатели', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Зерносушильное оборудование (зерносушилки)', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Зернотранспортное оборудование', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Мукомольно-крупяное оборудование', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Оборудование для анализа качества зерна', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Оборудование для хранения зерна', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Прочее оборудование', children: [], categoryFeatures: EQUIP_BASE }
+          { name: 'Зерноочистительное оборудование', id: 'cat_1267uqj', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Зернопогрузчики, зернометатели', id: 'cat_10krk0k', children: [], categoryFeatures: EQUIP_BASE },
+          {
+            name: 'Зерносушильное оборудование (зерносушилки)',
+            id: 'cat_0elmm51',
+            children: [],
+            categoryFeatures: EQUIP_BASE
+          },
+          { name: 'Зернотранспортное оборудование', id: 'cat_0ui9gha', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Мукомольно-крупяное оборудование', id: 'cat_1mbj7xv', children: [], categoryFeatures: EQUIP_BASE },
+          {
+            name: 'Оборудование для анализа качества зерна',
+            id: 'cat_0dng2e9',
+            children: [],
+            categoryFeatures: EQUIP_BASE
+          },
+          { name: 'Оборудование для хранения зерна', id: 'cat_0gzuj5c', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Прочее оборудование', id: 'cat_1jz7zio', children: [], categoryFeatures: EQUIP_BASE }
         ]
       },
-      { name: 'Компрессорное и насосное оборудование', children: [], categoryFeatures: EQUIP_BASE },
+      { name: 'Компрессорное и насосное оборудование', id: 'cat_01kjjy8', children: [], categoryFeatures: EQUIP_BASE },
       {
         name: 'Мясоперерабатывающее оборудование',
+        id: 'cat_0tav5xh',
         children: [
-          { name: 'Блокорезки', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Волчки', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Запчасти и расходные материалы', children: [], categoryFeatures: EQUIP_PARTS },
-          { name: 'Инъекторы', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Клипсаторы, перекрутчики', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Коптильни, термокамеры, рамы', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Котлетные автоматы', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Куттеры', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Линии для разделки птицы', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Льдогенераторы', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Массажеры', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Машины для нарезки', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Модульные мясные цеха и мини-заводы', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Мясорубки', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Для обработки субпродуктов', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Оборудование для убоя', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Пельменные аппараты', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Пилы для разделки мяса', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Подвесные пути, подъемники', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Пресса механической обвалки', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Прочее мясное оборудование', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Станки для заточки ножей', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Тендерайзеры', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Фаршемешалки', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Шкуросъемные машины', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Шпигорезки', children: [], categoryFeatures: EQUIP_BASE }
+          { name: 'Блокорезки', id: 'cat_0y1qast', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Волчки', id: 'cat_01slc9x', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Запчасти и расходные материалы', id: 'cat_0eih9mn', children: [], categoryFeatures: EQUIP_PARTS },
+          { name: 'Инъекторы', id: 'cat_1g91g7y', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Клипсаторы, перекрутчики', id: 'cat_1ydvho6', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Коптильни, термокамеры, рамы', id: 'cat_1uc0x7u', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Котлетные автоматы', id: 'cat_0w4cuil', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Куттеры', id: 'cat_0xqgnvw', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Линии для разделки птицы', id: 'cat_1bgvfo0', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Льдогенераторы', id: 'cat_17yyow7', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Массажеры', id: 'cat_1d4v36l', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Машины для нарезки', id: 'cat_1b0lihu', children: [], categoryFeatures: EQUIP_BASE },
+          {
+            name: 'Модульные мясные цеха и мини-заводы',
+            id: 'cat_1l1k0gz',
+            children: [],
+            categoryFeatures: EQUIP_BASE
+          },
+          { name: 'Мясорубки', id: 'cat_1d4355v', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Для обработки субпродуктов', id: 'cat_194lfiq', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Оборудование для убоя', id: 'cat_06w3w5i', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Пельменные аппараты', id: 'cat_0h1ffrc', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Пилы для разделки мяса', id: 'cat_05z4pkp', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Подвесные пути, подъемники', id: 'cat_07m0ruc', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Пресса механической обвалки', id: 'cat_1sexpcc', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Прочее мясное оборудование', id: 'cat_1a7nuhh', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Станки для заточки ножей', id: 'cat_0kbjl9i', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Тендерайзеры', id: 'cat_1sd6hae', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Фаршемешалки', id: 'cat_1dud0mi', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Шкуросъемные машины', id: 'cat_07v3byp', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Шпигорезки', id: 'cat_0s43lgl', children: [], categoryFeatures: EQUIP_BASE }
         ]
       },
       {
         name: 'Для животноводства',
+        id: 'cat_0uz0tc7',
         children: [
-          { name: 'Весы для взвешивания животных', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Ветеринарное оборудование', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Доильное оборудование', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Домики и загоны для телят', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Клеточное оборудование', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Климатическое оборудование', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Машинки для стрижки животных', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Навозоуборочное оборудование', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Для кормления и поения', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Стойловое оборудование', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Электропастухи', children: [], categoryFeatures: EQUIP_BASE }
+          { name: 'Весы для взвешивания животных', id: 'cat_1191s81', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Ветеринарное оборудование', id: 'cat_1ftnokg', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Доильное оборудование', id: 'cat_1alnvl2', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Домики и загоны для телят', id: 'cat_11ts7p2', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Клеточное оборудование', id: 'cat_03bes0m', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Климатическое оборудование', id: 'cat_0vtvho0', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Машинки для стрижки животных', id: 'cat_1k5p77u', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Навозоуборочное оборудование', id: 'cat_02tyi9c', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Для кормления и поения', id: 'cat_11jlvst', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Стойловое оборудование', id: 'cat_0c2hm81', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Электропастухи', id: 'cat_0e9ofo8', children: [], categoryFeatures: EQUIP_BASE }
         ]
       },
       {
         name: 'Для молочной промышленности',
+        id: 'cat_0ycv4g4',
         children: [
-          { name: 'Емкости для приемки и хранения', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Заквасочники', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Запчасти и комплектующие', children: [], categoryFeatures: EQUIP_PARTS },
-          { name: 'Модульные молочные заводы', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Насосы пищевые молочные', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Для производства сгущенного молока', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Для производства сливочного масла и спредов', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Для производства сухого молока', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Для производства сыра', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Для производства творога', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Пастеризаторы и охладители', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Прочее молокоперерабатывающее оборудование', children: [], categoryFeatures: EQUIP_BASE }
+          { name: 'Емкости для приемки и хранения', id: 'cat_07upmmt', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Заквасочники', id: 'cat_189rqva', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Запчасти и комплектующие', id: 'cat_0bl67li', children: [], categoryFeatures: EQUIP_PARTS },
+          { name: 'Модульные молочные заводы', id: 'cat_0y05s1q', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Насосы пищевые молочные', id: 'cat_18vyzj0', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Для производства сгущенного молока', id: 'cat_1dt8ytu', children: [], categoryFeatures: EQUIP_BASE },
+          {
+            name: 'Для производства сливочного масла и спредов',
+            id: 'cat_1anp28z',
+            children: [],
+            categoryFeatures: EQUIP_BASE
+          },
+          { name: 'Для производства сухого молока', id: 'cat_1uw6sz0', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Для производства сыра', id: 'cat_11ynejx', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Для производства творога', id: 'cat_0ey4jas', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Пастеризаторы и охладители', id: 'cat_0a8y9i9', children: [], categoryFeatures: EQUIP_BASE },
+          {
+            name: 'Прочее молокоперерабатывающее оборудование',
+            id: 'cat_10f1jhx',
+            children: [],
+            categoryFeatures: EQUIP_BASE
+          }
         ]
       },
       {
         name: 'Для переработки овощей, фруктов, ягод',
+        id: 'cat_1erlpm1',
         children: [
-          { name: 'Линии для предпродажной подготовки', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Для варки, выпаривания, бланширования', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Оборудование для консервирования', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Для мойки и подготовки', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Для производства паст, соков, пюре', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Для производства сахара', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Для разделки, нарезки, шинковки', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Для сушки', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Протирочные машины', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Прочее оборудование', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Сортировщики и калибровщики', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Столы переборочные', children: [], categoryFeatures: EQUIP_BASE }
+          { name: 'Линии для предпродажной подготовки', id: 'cat_18ge3po', children: [], categoryFeatures: EQUIP_BASE },
+          {
+            name: 'Для варки, выпаривания, бланширования',
+            id: 'cat_1hqghlm',
+            children: [],
+            categoryFeatures: EQUIP_BASE
+          },
+          { name: 'Оборудование для консервирования', id: 'cat_1utns82', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Для мойки и подготовки', id: 'cat_17g4c08', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Для производства паст, соков, пюре', id: 'cat_1ogpl89', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Для производства сахара', id: 'cat_0fxxpa8', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Для разделки, нарезки, шинковки', id: 'cat_034m69i', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Для сушки', id: 'cat_1py0jwb', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Протирочные машины', id: 'cat_16ltrb4', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Прочее оборудование', id: 'cat_0rhhrtt', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Сортировщики и калибровщики', id: 'cat_0zu5fza', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Столы переборочные', id: 'cat_182p1as', children: [], categoryFeatures: EQUIP_BASE }
         ]
       },
-      { name: 'Для производства кормов', children: [], categoryFeatures: EQUIP_BASE },
+      { name: 'Для производства кормов', id: 'cat_1ycnt1w', children: [], categoryFeatures: EQUIP_BASE },
       {
         name: 'Для производства продуктов питания',
+        id: 'cat_0ktt4hr',
         children: [
-          { name: 'Варочно-жарочное оборудование', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Для консервирования продуктов', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Для масложирового производства', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Для переработки рыбы и морепродуктов', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Для переработки яиц', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Для производства безалкогольных напитков', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Для производства готовых завтраков, чипсов, снеков', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Для производства соусов, майонеза, кетчупов', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Для производства чая', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'По переработке зерновых продуктов', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'По переработке орехов, семечек', children: [], categoryFeatures: EQUIP_BASE }
+          { name: 'Варочно-жарочное оборудование', id: 'cat_0fs9lsp', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Для консервирования продуктов', id: 'cat_11hr5jk', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Для масложирового производства', id: 'cat_1rhv2yj', children: [], categoryFeatures: EQUIP_BASE },
+          {
+            name: 'Для переработки рыбы и морепродуктов',
+            id: 'cat_0eb709l',
+            children: [],
+            categoryFeatures: EQUIP_BASE
+          },
+          { name: 'Для переработки яиц', id: 'cat_0odmz9w', children: [], categoryFeatures: EQUIP_BASE },
+          {
+            name: 'Для производства безалкогольных напитков',
+            id: 'cat_1mp7g8x',
+            children: [],
+            categoryFeatures: EQUIP_BASE
+          },
+          {
+            name: 'Для производства готовых завтраков, чипсов, снеков',
+            id: 'cat_0kqwsxu',
+            children: [],
+            categoryFeatures: EQUIP_BASE
+          },
+          {
+            name: 'Для производства соусов, майонеза, кетчупов',
+            id: 'cat_0wlyeyf',
+            children: [],
+            categoryFeatures: EQUIP_BASE
+          },
+          { name: 'Для производства чая', id: 'cat_0du9n3i', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'По переработке зерновых продуктов', id: 'cat_16j86si', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'По переработке орехов, семечек', id: 'cat_0njy3v4', children: [], categoryFeatures: EQUIP_BASE }
         ]
       },
       {
         name: 'Для растениеводства',
+        id: 'cat_0c53ce6',
         children: [
-          { name: 'Климатические шкафы', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Лабораторное оборудование', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Машины семяочистительные', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Для гидропоники', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Для грибоводства', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Для контроля окружающей среды', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Для полива и орошения', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Для приготовления растворов удобрений', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Для садоводства', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Для цветоводства', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Посадочное оборудование', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Протравливатели семян', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Теплицы', children: [], categoryFeatures: EQUIP_BASE }
+          { name: 'Климатические шкафы', id: 'cat_0nyy37c', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Лабораторное оборудование', id: 'cat_03ktlcu', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Машины семяочистительные', id: 'cat_02jwrte', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Для гидропоники', id: 'cat_0xdrt3j', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Для грибоводства', id: 'cat_1184h15', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Для контроля окружающей среды', id: 'cat_1xmfsme', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Для полива и орошения', id: 'cat_1nbzrfh', children: [], categoryFeatures: EQUIP_BASE },
+          {
+            name: 'Для приготовления растворов удобрений',
+            id: 'cat_1b636p0',
+            children: [],
+            categoryFeatures: EQUIP_BASE
+          },
+          { name: 'Для садоводства', id: 'cat_0bqr2ii', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Для цветоводства', id: 'cat_0iub1be', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Посадочное оборудование', id: 'cat_0iuv3rx', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Протравливатели семян', id: 'cat_0l4y9fa', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Теплицы', id: 'cat_1g26x1i', children: [], categoryFeatures: EQUIP_BASE }
         ]
       },
       {
         name: 'Хлебопекарное и кондитерское оборудование',
+        id: 'cat_12s9vc7',
         children: [
-          { name: 'Глазировочные, дражировочные машины', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Дозаторы начинок, шприцы, депозиторы', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Запчасти для оборудования', children: [], categoryFeatures: EQUIP_PARTS },
-          { name: 'Миксеры, кремовзбивальные машины', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Мукопросеиватели', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Для производства макаронных изделий', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Отсадочные машины', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Печи хлебопекарные', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Прочее оборудование', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Тестоделительные машины', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Тестозакаточные, формующие машины', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Тестомесильные машины', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Тестоокруглительные машины', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Тестораскатывающие машины', children: [], categoryFeatures: EQUIP_BASE }
+          {
+            name: 'Глазировочные, дражировочные машины',
+            id: 'cat_1fh5hzy',
+            children: [],
+            categoryFeatures: EQUIP_BASE
+          },
+          {
+            name: 'Дозаторы начинок, шприцы, депозиторы',
+            id: 'cat_0krmpy0',
+            children: [],
+            categoryFeatures: EQUIP_BASE
+          },
+          { name: 'Запчасти для оборудования', id: 'cat_0mfcatl', children: [], categoryFeatures: EQUIP_PARTS },
+          { name: 'Миксеры, кремовзбивальные машины', id: 'cat_1x93cct', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Мукопросеиватели', id: 'cat_0agu2j9', children: [], categoryFeatures: EQUIP_BASE },
+          {
+            name: 'Для производства макаронных изделий',
+            id: 'cat_0cwgfo0',
+            children: [],
+            categoryFeatures: EQUIP_BASE
+          },
+          { name: 'Отсадочные машины', id: 'cat_08k2y1g', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Печи хлебопекарные', id: 'cat_179b77p', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Прочее оборудование', id: 'cat_12w7jpn', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Тестоделительные машины', id: 'cat_0oxatmy', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Тестозакаточные, формующие машины', id: 'cat_1u71jrb', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Тестомесильные машины', id: 'cat_1x3aisl', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Тестоокруглительные машины', id: 'cat_0lcz0eh', children: [], categoryFeatures: EQUIP_BASE },
+          { name: 'Тестораскатывающие машины', id: 'cat_1q6vhr7', children: [], categoryFeatures: EQUIP_BASE }
         ]
       },
-      { name: 'Весоизмерительное', children: [], categoryFeatures: EQUIP_BASE },
-      { name: 'Емкостное', children: [], categoryFeatures: EQUIP_BASE },
-      { name: 'Моечное и санитарно-гигиеническое', children: [], categoryFeatures: EQUIP_BASE },
-      { name: 'Для переработки с/х отходов', children: [], categoryFeatures: EQUIP_BASE },
-      { name: 'Для птицеводства', children: [], categoryFeatures: EQUIP_BASE },
+      { name: 'Весоизмерительное', id: 'cat_1sg54nb', children: [], categoryFeatures: EQUIP_BASE },
+      { name: 'Емкостное', id: 'cat_0dgu93v', children: [], categoryFeatures: EQUIP_BASE },
+      { name: 'Моечное и санитарно-гигиеническое', id: 'cat_1878n6b', children: [], categoryFeatures: EQUIP_BASE },
+      { name: 'Для переработки с/х отходов', id: 'cat_0shylhr', children: [], categoryFeatures: EQUIP_BASE },
+      { name: 'Для птицеводства', id: 'cat_1kh028g', children: [], categoryFeatures: EQUIP_BASE },
       {
         name: 'Для пчеловодства',
+        id: 'cat_19kor32',
         children: [
-          { name: 'Ульи и комплектующие', children: [], categoryFeatures: OTHER_GOODS_FEATURES },
-          { name: 'Медогонки и оборудование для переработки мёда', children: [], categoryFeatures: EQUIP_BASE },
-          { name: 'Прочее оборудование', children: [], categoryFeatures: EQUIP_BASE }
+          { name: 'Ульи и комплектующие', id: 'cat_1qktnpu', children: [], categoryFeatures: OTHER_GOODS_FEATURES },
+          {
+            name: 'Медогонки и оборудование для переработки мёда',
+            id: 'cat_1h00i18',
+            children: [],
+            categoryFeatures: EQUIP_BASE
+          },
+          { name: 'Прочее оборудование', id: 'cat_13jzr1i', children: [], categoryFeatures: EQUIP_BASE }
         ]
       },
-      { name: 'Для рыбоводства', children: [], categoryFeatures: EQUIP_BASE },
-      { name: 'Для складов и хранилищ', children: [], categoryFeatures: EQUIP_BASE },
-      { name: 'Сушильное', children: [], categoryFeatures: EQUIP_BASE },
-      { name: 'Холодильное', children: [], categoryFeatures: EQUIP_BASE },
-      { name: 'Маркировочное и этикетировочное оборудование', children: [], categoryFeatures: EQUIP_BASE },
-      { name: 'Оборудование для производства упаковки', children: [], categoryFeatures: EQUIP_BASE },
-      { name: 'Упаковочное и фасовочное оборудование', children: [], categoryFeatures: EQUIP_BASE }
+      { name: 'Для рыбоводства', id: 'cat_0bjuehy', children: [], categoryFeatures: EQUIP_BASE },
+      { name: 'Для складов и хранилищ', id: 'cat_0vq6l83', children: [], categoryFeatures: EQUIP_BASE },
+      { name: 'Сушильное', id: 'cat_1qiw8t4', children: [], categoryFeatures: EQUIP_BASE },
+      { name: 'Холодильное', id: 'cat_1ra8dd6', children: [], categoryFeatures: EQUIP_BASE },
+      {
+        name: 'Маркировочное и этикетировочное оборудование',
+        id: 'cat_1sr462l',
+        children: [],
+        categoryFeatures: EQUIP_BASE
+      },
+      { name: 'Оборудование для производства упаковки', id: 'cat_1aoame0', children: [], categoryFeatures: EQUIP_BASE },
+      { name: 'Упаковочное и фасовочное оборудование', id: 'cat_1wez252', children: [], categoryFeatures: EQUIP_BASE }
     ]
   },
   {
     name: 'Продукты переработки',
+    id: 'cat_0o7ofkm',
     iconId: 'Factory',
     children: [
-      { name: 'Замороженные овощи и фрукты', children: [], categoryFeatures: FOOD_BASE },
+      { name: 'Замороженные овощи и фрукты', id: 'cat_0x8n8vv', children: [], categoryFeatures: FOOD_BASE },
       {
         name: 'Консервированные продукты',
+        id: 'cat_18kkn2q',
         children: [
-          { name: 'Грибы солёные, солено-отварные, маринованные', children: [], categoryFeatures: FOOD_CANNED },
-          { name: 'Консервы молочные', children: [], categoryFeatures: FOOD_CANNED },
-          { name: 'Консервы мясные', children: [], categoryFeatures: FOOD_CANNED },
-          { name: 'Консервы мясорастительные', children: [], categoryFeatures: FOOD_CANNED },
-          { name: 'Консервы овощные, соления, квашения', children: [], categoryFeatures: FOOD_CANNED },
-          { name: 'Консервы рыбные', children: [], categoryFeatures: FOOD_CANNED },
-          { name: 'Консервы фруктово-ягодные', children: [], categoryFeatures: FOOD_CANNED }
+          {
+            name: 'Грибы солёные, солено-отварные, маринованные',
+            id: 'cat_0wt0wvk',
+            children: [],
+            categoryFeatures: FOOD_CANNED
+          },
+          { name: 'Консервы молочные', id: 'cat_1dkw97f', children: [], categoryFeatures: FOOD_CANNED },
+          { name: 'Консервы мясные', id: 'cat_0zlshpz', children: [], categoryFeatures: FOOD_CANNED },
+          { name: 'Консервы мясорастительные', id: 'cat_1co2low', children: [], categoryFeatures: FOOD_CANNED },
+          {
+            name: 'Консервы овощные, соления, квашения',
+            id: 'cat_0brh0fo',
+            children: [],
+            categoryFeatures: FOOD_CANNED
+          },
+          { name: 'Консервы рыбные', id: 'cat_0of1v0n', children: [], categoryFeatures: FOOD_CANNED },
+          { name: 'Консервы фруктово-ягодные', id: 'cat_11q3g5j', children: [], categoryFeatures: FOOD_CANNED }
         ]
       },
       {
         name: 'Крупы и бобовые',
+        id: 'cat_0r4735v',
         children: [
-          { name: 'Булгур, кускус', children: [], categoryFeatures: FOOD_GROCERY },
-          { name: 'Горох сушеный (целый, колотый)', children: [], categoryFeatures: FOOD_GROCERY },
-          { name: 'Крупа гречневая', children: [], categoryFeatures: FOOD_GROCERY },
-          { name: 'Крупа киноа', children: [], categoryFeatures: FOOD_GROCERY },
-          { name: 'Крупа кукурузная', children: [], categoryFeatures: FOOD_GROCERY },
-          { name: 'Крупа манная', children: [], categoryFeatures: FOOD_GROCERY },
-          { name: 'Крупа овсяная', children: [], categoryFeatures: FOOD_GROCERY },
-          { name: 'Крупа перловая', children: [], categoryFeatures: FOOD_GROCERY },
-          { name: 'Крупа полбяная', children: [], categoryFeatures: FOOD_GROCERY },
-          { name: 'Крупа пшеничная', children: [], categoryFeatures: FOOD_GROCERY },
-          { name: 'Крупа пшенная', children: [], categoryFeatures: FOOD_GROCERY },
-          { name: 'Крупа рисовая', children: [], categoryFeatures: FOOD_GROCERY },
-          { name: 'Крупа ячневая', children: [], categoryFeatures: FOOD_GROCERY },
-          { name: 'Хлопья овсяные и зерновые', children: [], categoryFeatures: FOOD_GROCERY },
-          { name: 'Прочие бобовые (чечевица, фасоль, нут, маш)', children: [], categoryFeatures: FOOD_GROCERY }
+          { name: 'Булгур, кускус', id: 'cat_18tizcm', children: [], categoryFeatures: FOOD_GROCERY },
+          { name: 'Горох сушеный (целый, колотый)', id: 'cat_087tdjx', children: [], categoryFeatures: FOOD_GROCERY },
+          { name: 'Крупа гречневая', id: 'cat_0s0ief1', children: [], categoryFeatures: FOOD_GROCERY },
+          { name: 'Крупа киноа', id: 'cat_0v7zcm6', children: [], categoryFeatures: FOOD_GROCERY },
+          { name: 'Крупа кукурузная', id: 'cat_1szm2cr', children: [], categoryFeatures: FOOD_GROCERY },
+          { name: 'Крупа манная', id: 'cat_0iggkc0', children: [], categoryFeatures: FOOD_GROCERY },
+          { name: 'Крупа овсяная', id: 'cat_0lono8j', children: [], categoryFeatures: FOOD_GROCERY },
+          { name: 'Крупа перловая', id: 'cat_1kv4x1v', children: [], categoryFeatures: FOOD_GROCERY },
+          { name: 'Крупа полбяная', id: 'cat_1xoh8pf', children: [], categoryFeatures: FOOD_GROCERY },
+          { name: 'Крупа пшеничная', id: 'cat_1tgp0pb', children: [], categoryFeatures: FOOD_GROCERY },
+          { name: 'Крупа пшенная', id: 'cat_1hc3150', children: [], categoryFeatures: FOOD_GROCERY },
+          { name: 'Крупа рисовая', id: 'cat_0fmctmz', children: [], categoryFeatures: FOOD_GROCERY },
+          { name: 'Крупа ячневая', id: 'cat_07w3fse', children: [], categoryFeatures: FOOD_GROCERY },
+          { name: 'Хлопья овсяные и зерновые', id: 'cat_055rfhx', children: [], categoryFeatures: FOOD_GROCERY },
+          {
+            name: 'Прочие бобовые (чечевица, фасоль, нут, маш)',
+            id: 'cat_0051qg3',
+            children: [],
+            categoryFeatures: FOOD_GROCERY
+          }
         ]
       },
-      { name: 'Масложировая продукция', children: [], categoryFeatures: FOOD_READY },
+      { name: 'Масложировая продукция', id: 'cat_1ht4nyi', children: [], categoryFeatures: FOOD_READY },
       {
         name: 'Молоко, молочные продукты',
+        id: 'cat_1f8acr3',
         children: [
-          { name: 'Йогурт', children: [], categoryFeatures: FOOD_DAIRY },
-          { name: 'Кефир', children: [], categoryFeatures: FOOD_DAIRY },
-          { name: 'Кумыс', children: [], categoryFeatures: FOOD_DAIRY },
-          { name: 'Кисломолочные продукты', children: [], categoryFeatures: FOOD_DAIRY },
-          { name: 'Масло сливочное, пасты масляные', children: [], categoryFeatures: FOOD_DAIRY },
-          { name: 'Молоко', children: [], categoryFeatures: FOOD_DAIRY },
-          { name: 'Молочные десерты', children: [], categoryFeatures: FOOD_DAIRY },
-          { name: 'Молочные коктейли', children: [], categoryFeatures: FOOD_DAIRY },
-          { name: 'Молочные продукты для детей', children: [], categoryFeatures: FOOD_DAIRY },
-          { name: 'Молочный белок', children: [], categoryFeatures: FOOD_DAIRY },
-          { name: 'Молочный жир', children: [], categoryFeatures: FOOD_DAIRY },
-          { name: 'Мороженое', children: [], categoryFeatures: FOOD_DAIRY },
-          { name: 'Растительные заменители пищевого молока и сливок', children: [], categoryFeatures: FOOD_DAIRY },
-          { name: 'Ряженка', children: [], categoryFeatures: FOOD_DAIRY },
-          { name: 'Сгущенное молоко', children: [], categoryFeatures: FOOD_DAIRY },
-          { name: 'Сливки', children: [], categoryFeatures: FOOD_DAIRY },
-          { name: 'Сметана', children: [], categoryFeatures: FOOD_DAIRY },
-          { name: 'Сухое молоко, сухие натуральные сливки', children: [], categoryFeatures: FOOD_DAIRY },
-          { name: 'Сыворотка', children: [], categoryFeatures: FOOD_DAIRY },
-          { name: 'Сыры', children: [], categoryFeatures: FOOD_DAIRY },
-          { name: 'Творог и творожные изделия', children: [], categoryFeatures: FOOD_DAIRY }
+          { name: 'Йогурт', id: 'cat_06foxzk', children: [], categoryFeatures: FOOD_DAIRY },
+          { name: 'Кефир', id: 'cat_0drchyi', children: [], categoryFeatures: FOOD_DAIRY },
+          { name: 'Кумыс', id: 'cat_1y1qsok', children: [], categoryFeatures: FOOD_DAIRY },
+          { name: 'Кисломолочные продукты', id: 'cat_0b5yn8d', children: [], categoryFeatures: FOOD_DAIRY },
+          { name: 'Масло сливочное, пасты масляные', id: 'cat_01my04p', children: [], categoryFeatures: FOOD_DAIRY },
+          { name: 'Молоко', id: 'cat_1oeu6m8', children: [], categoryFeatures: FOOD_DAIRY },
+          { name: 'Молочные десерты', id: 'cat_1ne5hw4', children: [], categoryFeatures: FOOD_DAIRY },
+          { name: 'Молочные коктейли', id: 'cat_0lrz5kh', children: [], categoryFeatures: FOOD_DAIRY },
+          { name: 'Молочные продукты для детей', id: 'cat_1tkrst4', children: [], categoryFeatures: FOOD_DAIRY },
+          { name: 'Молочный белок', id: 'cat_1jg2vhr', children: [], categoryFeatures: FOOD_DAIRY },
+          { name: 'Молочный жир', id: 'cat_1np298a', children: [], categoryFeatures: FOOD_DAIRY },
+          { name: 'Мороженое', id: 'cat_0xckxgk', children: [], categoryFeatures: FOOD_DAIRY },
+          {
+            name: 'Растительные заменители пищевого молока и сливок',
+            id: 'cat_1cipgrd',
+            children: [],
+            categoryFeatures: FOOD_DAIRY
+          },
+          { name: 'Ряженка', id: 'cat_19wp3hc', children: [], categoryFeatures: FOOD_DAIRY },
+          { name: 'Сгущенное молоко', id: 'cat_19e3ji8', children: [], categoryFeatures: FOOD_DAIRY },
+          { name: 'Сливки', id: 'cat_0uqhci7', children: [], categoryFeatures: FOOD_DAIRY },
+          { name: 'Сметана', id: 'cat_1e4irry', children: [], categoryFeatures: FOOD_DAIRY },
+          {
+            name: 'Сухое молоко, сухие натуральные сливки',
+            id: 'cat_1hm2hlm',
+            children: [],
+            categoryFeatures: FOOD_DAIRY
+          },
+          { name: 'Сыворотка', id: 'cat_0101aov', children: [], categoryFeatures: FOOD_DAIRY },
+          { name: 'Сыры', id: 'cat_0ka7lyq', children: [], categoryFeatures: FOOD_DAIRY },
+          { name: 'Творог и творожные изделия', id: 'cat_1a45kl1', children: [], categoryFeatures: FOOD_DAIRY }
         ]
       },
       {
         name: 'Мясо и мясные продукты',
+        id: 'cat_1lieiao',
         children: [
-          { name: 'Баранина', children: [], categoryFeatures: FOOD_MEAT },
-          { name: 'Говядина', children: [], categoryFeatures: FOOD_MEAT },
-          { name: 'Готовые мясные продукты, полуфабрикаты', children: [], categoryFeatures: FOOD_MEAT },
-          { name: 'Козлятина', children: [], categoryFeatures: FOOD_MEAT },
-          { name: 'Конина', children: [], categoryFeatures: FOOD_MEAT },
-          { name: 'Колбасные изделия и мясные деликатесы', children: [], categoryFeatures: FOOD_MEAT },
-          { name: 'Кролик', children: [], categoryFeatures: FOOD_MEAT },
-          { name: 'Птица', children: [], categoryFeatures: FOOD_MEAT },
-          { name: 'Свинина', children: [], categoryFeatures: FOOD_MEAT },
-          { name: 'Субпродукты', children: [], categoryFeatures: FOOD_MEAT },
-          { name: 'Сырое сало (шпик), жир-сырец', children: [], categoryFeatures: FOOD_MEAT },
-          { name: 'Фарш', children: [], categoryFeatures: FOOD_MEAT }
+          { name: 'Баранина', id: 'cat_0bdia8v', children: [], categoryFeatures: FOOD_MEAT },
+          { name: 'Говядина', id: 'cat_0q9u2f9', children: [], categoryFeatures: FOOD_MEAT },
+          {
+            name: 'Готовые мясные продукты, полуфабрикаты',
+            id: 'cat_094vcd8',
+            children: [],
+            categoryFeatures: FOOD_MEAT
+          },
+          { name: 'Козлятина', id: 'cat_0x49d8a', children: [], categoryFeatures: FOOD_MEAT },
+          { name: 'Конина', id: 'cat_02e2546', children: [], categoryFeatures: FOOD_MEAT },
+          {
+            name: 'Колбасные изделия и мясные деликатесы',
+            id: 'cat_0jsk680',
+            children: [],
+            categoryFeatures: FOOD_MEAT
+          },
+          { name: 'Кролик', id: 'cat_0mqnt59', children: [], categoryFeatures: FOOD_MEAT },
+          { name: 'Птица', id: 'cat_11py8cf', children: [], categoryFeatures: FOOD_MEAT },
+          { name: 'Свинина', id: 'cat_1d60fe7', children: [], categoryFeatures: FOOD_MEAT },
+          { name: 'Субпродукты', id: 'cat_0o4wq56', children: [], categoryFeatures: FOOD_MEAT },
+          { name: 'Сырое сало (шпик), жир-сырец', id: 'cat_171xb33', children: [], categoryFeatures: FOOD_MEAT },
+          { name: 'Фарш', id: 'cat_0ehvtia', children: [], categoryFeatures: FOOD_MEAT }
         ]
       },
-      { name: 'Пряности, специи, приправы', children: [], categoryFeatures: FOOD_GROCERY },
-      { name: 'Сушёные овощи, фрукты, сухофрукты', children: [], categoryFeatures: FOOD_GROCERY },
-      { name: 'Чай, кофе, какао-напитки', children: [], categoryFeatures: FOOD_GROCERY },
-      { name: 'Экстракты растительные пищевые', children: [], categoryFeatures: FOOD_GROCERY },
-      { name: 'Безалкогольные напитки, соки, воды', children: [], categoryFeatures: FOOD_CANNED },
-      { name: 'Изоляты, текстураты, соевые белки', children: [], categoryFeatures: FOOD_GROCERY },
-      { name: 'Какао-порошок, какао-бобы, кэроб', children: [], categoryFeatures: FOOD_GROCERY },
-      { name: 'Кондитерские изделия', children: [], categoryFeatures: FOOD_READY },
-      { name: 'Крахмало-паточная продукция, сиропы', children: [], categoryFeatures: FOOD_BASE },
-      { name: 'Макаронные изделия', children: [], categoryFeatures: FOOD_GROCERY },
+      { name: 'Пряности, специи, приправы', id: 'cat_14gaaqi', children: [], categoryFeatures: FOOD_GROCERY },
+      { name: 'Сушёные овощи, фрукты, сухофрукты', id: 'cat_0ilnm76', children: [], categoryFeatures: FOOD_GROCERY },
+      { name: 'Чай, кофе, какао-напитки', id: 'cat_02ejdeq', children: [], categoryFeatures: FOOD_GROCERY },
+      { name: 'Экстракты растительные пищевые', id: 'cat_07ii45g', children: [], categoryFeatures: FOOD_GROCERY },
+      { name: 'Безалкогольные напитки, соки, воды', id: 'cat_14kwtft', children: [], categoryFeatures: FOOD_CANNED },
+      { name: 'Изоляты, текстураты, соевые белки', id: 'cat_1usdrs9', children: [], categoryFeatures: FOOD_GROCERY },
+      { name: 'Какао-порошок, какао-бобы, кэроб', id: 'cat_1kzzueq', children: [], categoryFeatures: FOOD_GROCERY },
+      { name: 'Кондитерские изделия', id: 'cat_0bqao0g', children: [], categoryFeatures: FOOD_READY },
+      { name: 'Крахмало-паточная продукция, сиропы', id: 'cat_1k63nfz', children: [], categoryFeatures: FOOD_BASE },
+      { name: 'Макаронные изделия', id: 'cat_06yp324', children: [], categoryFeatures: FOOD_GROCERY },
       {
         name: 'Мука',
+        id: 'cat_1ptgrij',
         children: [
-          { name: 'Мука амарантовая', children: [], categoryFeatures: FOOD_GROCERY },
-          { name: 'Мука гороховая', children: [], categoryFeatures: FOOD_GROCERY },
-          { name: 'Мука грецкого ореха', children: [], categoryFeatures: FOOD_GROCERY },
-          { name: 'Мука гречневая', children: [], categoryFeatures: FOOD_GROCERY },
-          { name: 'Мука из зародышей пшеницы', children: [], categoryFeatures: FOOD_GROCERY },
-          { name: 'Мука кукурузная', children: [], categoryFeatures: FOOD_GROCERY },
-          { name: 'Мука кунжутная', children: [], categoryFeatures: FOOD_GROCERY },
-          { name: 'Мука льняная', children: [], categoryFeatures: FOOD_GROCERY },
-          { name: 'Мука нутовая', children: [], categoryFeatures: FOOD_GROCERY },
-          { name: 'Мука овсяная', children: [], categoryFeatures: FOOD_GROCERY },
-          { name: 'Мука ореховая', children: [], categoryFeatures: FOOD_GROCERY },
-          { name: 'Мука полбяная', children: [], categoryFeatures: FOOD_GROCERY },
-          { name: 'Мука пшеничная', children: [], categoryFeatures: FOOD_GROCERY },
-          { name: 'Мука расторопши', children: [], categoryFeatures: FOOD_GROCERY },
-          { name: 'Мука ржаная', children: [], categoryFeatures: FOOD_GROCERY },
-          { name: 'Мука рисовая', children: [], categoryFeatures: FOOD_GROCERY }
+          { name: 'Мука амарантовая', id: 'cat_1adlv1e', children: [], categoryFeatures: FOOD_GROCERY },
+          { name: 'Мука гороховая', id: 'cat_1yt9573', children: [], categoryFeatures: FOOD_GROCERY },
+          { name: 'Мука грецкого ореха', id: 'cat_0g9wash', children: [], categoryFeatures: FOOD_GROCERY },
+          { name: 'Мука гречневая', id: 'cat_1tdbef4', children: [], categoryFeatures: FOOD_GROCERY },
+          { name: 'Мука из зародышей пшеницы', id: 'cat_14eczyn', children: [], categoryFeatures: FOOD_GROCERY },
+          { name: 'Мука кукурузная', id: 'cat_0szarc0', children: [], categoryFeatures: FOOD_GROCERY },
+          { name: 'Мука кунжутная', id: 'cat_0eennb1', children: [], categoryFeatures: FOOD_GROCERY },
+          { name: 'Мука льняная', id: 'cat_0teogk7', children: [], categoryFeatures: FOOD_GROCERY },
+          { name: 'Мука нутовая', id: 'cat_1b4cf2f', children: [], categoryFeatures: FOOD_GROCERY },
+          { name: 'Мука овсяная', id: 'cat_1o32j72', children: [], categoryFeatures: FOOD_GROCERY },
+          { name: 'Мука ореховая', id: 'cat_1qmtwtp', children: [], categoryFeatures: FOOD_GROCERY },
+          { name: 'Мука полбяная', id: 'cat_1gio414', children: [], categoryFeatures: FOOD_GROCERY },
+          { name: 'Мука пшеничная', id: 'cat_0d5ibu6', children: [], categoryFeatures: FOOD_GROCERY },
+          { name: 'Мука расторопши', id: 'cat_1cxc1va', children: [], categoryFeatures: FOOD_GROCERY },
+          { name: 'Мука ржаная', id: 'cat_1bbdsio', children: [], categoryFeatures: FOOD_GROCERY },
+          { name: 'Мука рисовая', id: 'cat_0xfj7be', children: [], categoryFeatures: FOOD_GROCERY }
         ]
       },
-      { name: 'Пасты, пюре', children: [], categoryFeatures: FOOD_CANNED },
-      { name: 'Продукты быстрого приготовления', children: [], categoryFeatures: FOOD_READY },
-      { name: 'Прочая пищевая продукция', children: [], categoryFeatures: FOOD_READY },
+      { name: 'Пасты, пюре', id: 'cat_1tb9kij', children: [], categoryFeatures: FOOD_CANNED },
+      { name: 'Продукты быстрого приготовления', id: 'cat_1by04ct', children: [], categoryFeatures: FOOD_READY },
+      { name: 'Прочая пищевая продукция', id: 'cat_131epti', children: [], categoryFeatures: FOOD_READY },
       {
         name: 'Рыба и морепродукты',
+        id: 'cat_0cw9tgq',
         children: [
-          { name: 'Готовые рыбные продукты и полуфабрикаты', children: [], categoryFeatures: FOOD_FISH },
-          { name: 'Икра рыбы', children: [], categoryFeatures: FOOD_FISH },
-          { name: 'Моллюски и ракообразные', children: [], categoryFeatures: FOOD_FISH },
-          { name: 'Морская капуста, водоросли', children: [], categoryFeatures: FOOD_FISH },
-          { name: 'Прочие морепродукты', children: [], categoryFeatures: FOOD_FISH },
-          { name: 'Рыба вяленая, сушеная', children: [], categoryFeatures: FOOD_FISH },
-          { name: 'Рыба живая, охлаждённая', children: [], categoryFeatures: FOOD_FISH },
-          { name: 'Рыба копчёная', children: [], categoryFeatures: FOOD_FISH },
-          { name: 'Рыба свежемороженая', children: [], categoryFeatures: FOOD_FISH },
-          { name: 'Рыба соленая', children: [], categoryFeatures: FOOD_FISH },
-          { name: 'Рыбные субпродукты', children: [], categoryFeatures: FOOD_FISH },
-          { name: 'Фарш рыбный', children: [], categoryFeatures: FOOD_FISH }
+          {
+            name: 'Готовые рыбные продукты и полуфабрикаты',
+            id: 'cat_060tjc4',
+            children: [],
+            categoryFeatures: FOOD_FISH
+          },
+          { name: 'Икра рыбы', id: 'cat_09vzt23', children: [], categoryFeatures: FOOD_FISH },
+          { name: 'Моллюски и ракообразные', id: 'cat_1127w0o', children: [], categoryFeatures: FOOD_FISH },
+          { name: 'Морская капуста, водоросли', id: 'cat_1xxlijr', children: [], categoryFeatures: FOOD_FISH },
+          { name: 'Прочие морепродукты', id: 'cat_13oki8z', children: [], categoryFeatures: FOOD_FISH },
+          { name: 'Рыба вяленая, сушеная', id: 'cat_0z3rjq6', children: [], categoryFeatures: FOOD_FISH },
+          { name: 'Рыба живая, охлаждённая', id: 'cat_05cprr7', children: [], categoryFeatures: FOOD_FISH },
+          { name: 'Рыба копчёная', id: 'cat_00iv7u5', children: [], categoryFeatures: FOOD_FISH },
+          { name: 'Рыба свежемороженая', id: 'cat_0eoptbs', children: [], categoryFeatures: FOOD_FISH },
+          { name: 'Рыба соленая', id: 'cat_05ta2xf', children: [], categoryFeatures: FOOD_FISH },
+          { name: 'Рыбные субпродукты', id: 'cat_0gqvavb', children: [], categoryFeatures: FOOD_FISH },
+          { name: 'Фарш рыбный', id: 'cat_0j5woj7', children: [], categoryFeatures: FOOD_FISH }
         ]
       },
-      { name: 'Сахар', children: [], categoryFeatures: FOOD_GROCERY },
-      { name: 'Снековая продукция', children: [], categoryFeatures: FOOD_READY },
-      { name: 'Солод', children: [], categoryFeatures: FOOD_GROCERY },
-      { name: 'Соусы, кетчуп, майонез', children: [], categoryFeatures: FOOD_CANNED },
-      { name: 'Хлебобулочные изделия', children: [], categoryFeatures: FOOD_READY },
-      { name: 'Яичный порошок, меланж', children: [], categoryFeatures: FOOD_GROCERY }
+      { name: 'Сахар', id: 'cat_09ly9uo', children: [], categoryFeatures: FOOD_GROCERY },
+      { name: 'Снековая продукция', id: 'cat_1xvbkpn', children: [], categoryFeatures: FOOD_READY },
+      { name: 'Солод', id: 'cat_0fg18i2', children: [], categoryFeatures: FOOD_GROCERY },
+      { name: 'Соусы, кетчуп, майонез', id: 'cat_048gjwq', children: [], categoryFeatures: FOOD_CANNED },
+      { name: 'Хлебобулочные изделия', id: 'cat_0lqh3en', children: [], categoryFeatures: FOOD_READY },
+      { name: 'Яичный порошок, меланж', id: 'cat_1c60ue9', children: [], categoryFeatures: FOOD_GROCERY }
     ]
   },
   {
     name: 'Свежая сельхозпродукция',
+    id: 'cat_052ud0i',
     aliases: ['Продукты питания', 'Свежие продукты'],
     iconId: 'Apple',
     children: [
-      { name: 'Грибы пищевые', children: [], categoryFeatures: AGRO_MUSHROOM_FEATURES },
+      { name: 'Грибы пищевые', id: 'cat_0o79fu8', children: [], categoryFeatures: AGRO_MUSHROOM_FEATURES },
       {
         name: 'Зелень, салатные культуры, травы',
+        id: 'cat_0fffom1',
         children: [
-          { name: 'Базилик', children: [], categoryFeatures: AGRO_GREEN_FEATURES },
-          { name: 'Кинза', children: [], categoryFeatures: AGRO_GREEN_FEATURES },
-          { name: 'Лук зелёный (перо)', children: [], categoryFeatures: AGRO_GREEN_FEATURES },
-          { name: 'Микрозелень', children: [], categoryFeatures: AGRO_GREEN_FEATURES },
-          { name: 'Петрушка', children: [], categoryFeatures: AGRO_GREEN_FEATURES },
-          { name: 'Рукола', children: [], categoryFeatures: AGRO_GREEN_FEATURES },
-          { name: 'Салат листовой', children: [], categoryFeatures: AGRO_GREEN_FEATURES },
-          { name: 'Укроп', children: [], categoryFeatures: AGRO_GREEN_FEATURES },
-          { name: 'Шпинат', children: [], categoryFeatures: AGRO_GREEN_FEATURES }
+          { name: 'Базилик', id: 'cat_1w3gz06', children: [], categoryFeatures: AGRO_GREEN_FEATURES },
+          { name: 'Кинза', id: 'cat_1rkp3fl', children: [], categoryFeatures: AGRO_GREEN_FEATURES },
+          { name: 'Лук зелёный (перо)', id: 'cat_1j97q8l', children: [], categoryFeatures: AGRO_GREEN_FEATURES },
+          { name: 'Микрозелень', id: 'cat_0lx6sh6', children: [], categoryFeatures: AGRO_GREEN_FEATURES },
+          { name: 'Петрушка', id: 'cat_1hiolyq', children: [], categoryFeatures: AGRO_GREEN_FEATURES },
+          { name: 'Рукола', id: 'cat_1z0c8kn', children: [], categoryFeatures: AGRO_GREEN_FEATURES },
+          { name: 'Салат листовой', id: 'cat_0lifuwk', children: [], categoryFeatures: AGRO_GREEN_FEATURES },
+          { name: 'Укроп', id: 'cat_07ue3an', children: [], categoryFeatures: AGRO_GREEN_FEATURES },
+          { name: 'Шпинат', id: 'cat_0bf43a5', children: [], categoryFeatures: AGRO_GREEN_FEATURES }
         ]
       },
       {
         name: 'Овощи',
+        id: 'cat_0mbqycj',
         children: [
-          { name: 'Баклажаны', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Батат', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Кабачки', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Капуста белокочанная', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Капуста пекинская', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Капуста цветная и брокколи', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Картофель', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Лук репчатый', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Морковь', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Огурцы', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Пастернак', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Перец болгарский', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Перец острый', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Помидоры', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Ревень', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Редис', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Редька', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Сахарная кукуруза', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Свекла столовая', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Сельдерей', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Топинамбур', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Тыква', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Фасоль стручковая', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Чеснок', children: [], categoryFeatures: AGRO_FRESH_FEATURES }
+          { name: 'Баклажаны', id: 'cat_01smflp', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Батат', id: 'cat_0er2qyi', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Кабачки', id: 'cat_1qxozdn', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Капуста белокочанная', id: 'cat_1429kfn', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Капуста пекинская', id: 'cat_01ytrgz', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          {
+            name: 'Капуста цветная и брокколи',
+            id: 'cat_10pzif3',
+            children: [],
+            categoryFeatures: AGRO_FRESH_FEATURES
+          },
+          { name: 'Картофель', id: 'cat_1gs2dw7', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Лук репчатый', id: 'cat_1mqk3yg', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Морковь', id: 'cat_1lcfzd9', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Огурцы', id: 'cat_1enxy04', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Пастернак', id: 'cat_1qm3omj', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Перец болгарский', id: 'cat_0pq66uz', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Перец острый', id: 'cat_1i4au99', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Помидоры', id: 'cat_0e3pwnl', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Ревень', id: 'cat_0p30ulk', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Редис', id: 'cat_1gz9nbz', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Редька', id: 'cat_0hjcwky', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Сахарная кукуруза', id: 'cat_0mxrdqt', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Свекла столовая', id: 'cat_1allj51', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Сельдерей', id: 'cat_0ynb6jx', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Топинамбур', id: 'cat_1bb388h', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Тыква', id: 'cat_1d7wlco', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Фасоль стручковая', id: 'cat_0cq8tv3', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Чеснок', id: 'cat_0mmm80p', children: [], categoryFeatures: AGRO_FRESH_FEATURES }
         ]
       },
       {
         name: 'Орехи и семечки',
+        id: 'cat_0zkcdxk',
         children: [
-          { name: 'Арахис', children: [], categoryFeatures: AGRO_RAW_FEATURES },
-          { name: 'Бразильский орех', children: [], categoryFeatures: AGRO_RAW_FEATURES },
-          { name: 'Грецкий орех', children: [], categoryFeatures: AGRO_RAW_FEATURES },
-          { name: 'Каштаны', children: [], categoryFeatures: AGRO_RAW_FEATURES },
-          { name: 'Кедровый орех', children: [], categoryFeatures: AGRO_RAW_FEATURES },
-          { name: 'Кешью', children: [], categoryFeatures: AGRO_RAW_FEATURES },
-          { name: 'Кокосовый орех', children: [], categoryFeatures: AGRO_RAW_FEATURES },
-          { name: 'Макадамия', children: [], categoryFeatures: AGRO_RAW_FEATURES },
-          { name: 'Миндаль', children: [], categoryFeatures: AGRO_RAW_FEATURES },
-          { name: 'Орех кола', children: [], categoryFeatures: AGRO_RAW_FEATURES },
-          { name: 'Пекан', children: [], categoryFeatures: AGRO_RAW_FEATURES },
-          { name: 'Семена тыквы', children: [], categoryFeatures: AGRO_RAW_FEATURES },
-          { name: 'Фисташки', children: [], categoryFeatures: AGRO_RAW_FEATURES },
-          { name: 'Фундук', children: [], categoryFeatures: AGRO_RAW_FEATURES },
-          { name: 'Прочие орехи', children: [], categoryFeatures: AGRO_RAW_FEATURES }
+          { name: 'Арахис', id: 'cat_1x0uk0y', children: [], categoryFeatures: AGRO_RAW_FEATURES },
+          { name: 'Бразильский орех', id: 'cat_08nn1g3', children: [], categoryFeatures: AGRO_RAW_FEATURES },
+          { name: 'Грецкий орех', id: 'cat_03z9m0h', children: [], categoryFeatures: AGRO_RAW_FEATURES },
+          { name: 'Каштаны', id: 'cat_1fttldi', children: [], categoryFeatures: AGRO_RAW_FEATURES },
+          { name: 'Кедровый орех', id: 'cat_05hgenl', children: [], categoryFeatures: AGRO_RAW_FEATURES },
+          { name: 'Кешью', id: 'cat_1pluf2j', children: [], categoryFeatures: AGRO_RAW_FEATURES },
+          { name: 'Кокосовый орех', id: 'cat_10y3mbv', children: [], categoryFeatures: AGRO_RAW_FEATURES },
+          { name: 'Макадамия', id: 'cat_08pv2h9', children: [], categoryFeatures: AGRO_RAW_FEATURES },
+          { name: 'Миндаль', id: 'cat_0lzm79i', children: [], categoryFeatures: AGRO_RAW_FEATURES },
+          { name: 'Орех кола', id: 'cat_1yhtjhd', children: [], categoryFeatures: AGRO_RAW_FEATURES },
+          { name: 'Пекан', id: 'cat_0g1jdhz', children: [], categoryFeatures: AGRO_RAW_FEATURES },
+          { name: 'Семена тыквы', id: 'cat_0zjfh26', children: [], categoryFeatures: AGRO_RAW_FEATURES },
+          { name: 'Фисташки', id: 'cat_1xe0vwj', children: [], categoryFeatures: AGRO_RAW_FEATURES },
+          { name: 'Фундук', id: 'cat_0skf4n3', children: [], categoryFeatures: AGRO_RAW_FEATURES },
+          { name: 'Прочие орехи', id: 'cat_12m32pd', children: [], categoryFeatures: AGRO_RAW_FEATURES }
         ]
       },
       {
         name: 'Фрукты, ягоды',
+        id: 'cat_1mzwnm3',
         children: [
-          { name: 'Абрикосы', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Авокадо', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Айва', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Алыча', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Ананасы', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Апельсины', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Арбузы', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Бананы', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Барбарис', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Боярышник', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Брусника', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Виноград', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Вишня', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Годжи', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Голубика', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Гранат', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Грейпфрут', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Груши', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Гуава', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Дыни', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Ежевика', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Жимолость', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Земляника', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Инжир', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Ирга', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Калина', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Киви', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Клубника', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Клюква', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Крыжовник', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Лайм', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Лимоны', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Малина', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Манго', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Мандарины', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Маракуйя', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Можжевеловая ягода', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Морошка', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Нектарины', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Персики', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Облепиха', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Папайя', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Помело', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Рябина', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Сливы', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Смородина', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Фейхоа', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Финики', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Хурма', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Черёмуха', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Черешня', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Черника', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Шиповник', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Экзотические фрукты', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
-          { name: 'Яблоки', children: [], categoryFeatures: AGRO_FRESH_FEATURES }
+          { name: 'Абрикосы', id: 'cat_01wc55w', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Авокадо', id: 'cat_1f4un0x', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Айва', id: 'cat_1ktn8ye', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Алыча', id: 'cat_1wy16hw', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Ананасы', id: 'cat_0ovomul', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Апельсины', id: 'cat_1jjy8kv', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Арбузы', id: 'cat_1ni48fx', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Бананы', id: 'cat_0wlt41f', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Барбарис', id: 'cat_1q5sz7y', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Боярышник', id: 'cat_1eko779', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Брусника', id: 'cat_1if0qad', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Виноград', id: 'cat_1c33ry5', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Вишня', id: 'cat_11n1hyr', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Годжи', id: 'cat_1wstkzs', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Голубика', id: 'cat_1d340an', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Гранат', id: 'cat_1g5jlwx', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Грейпфрут', id: 'cat_0o22lqq', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Груши', id: 'cat_0a7lc3x', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Гуава', id: 'cat_1pdr19p', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Дыни', id: 'cat_0gj915n', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Ежевика', id: 'cat_1tubs67', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Жимолость', id: 'cat_02b7j0v', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Земляника', id: 'cat_12x1fms', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Инжир', id: 'cat_1xtfm9m', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Ирга', id: 'cat_1djpfn8', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Калина', id: 'cat_1e10bar', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Киви', id: 'cat_0id5rdb', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Клубника', id: 'cat_18z6b5v', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Клюква', id: 'cat_0xo56oe', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Крыжовник', id: 'cat_1q6gint', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Лайм', id: 'cat_0mf8ojt', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Лимоны', id: 'cat_0uyalki', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Малина', id: 'cat_1q1rjvp', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Манго', id: 'cat_0owq1vz', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Мандарины', id: 'cat_13ohhf2', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Маракуйя', id: 'cat_0ujoi0s', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Можжевеловая ягода', id: 'cat_1tmpvkf', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Морошка', id: 'cat_06wz08b', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Нектарины', id: 'cat_0s8p3fv', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Персики', id: 'cat_12puq3i', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Облепиха', id: 'cat_0gtgnpg', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Папайя', id: 'cat_14sbsfb', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Помело', id: 'cat_1iqef8k', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Рябина', id: 'cat_0fbfqwy', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Сливы', id: 'cat_162jwym', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Смородина', id: 'cat_0ylz32v', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Фейхоа', id: 'cat_0mvfn1k', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Финики', id: 'cat_12eamms', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Хурма', id: 'cat_0dv6489', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Черёмуха', id: 'cat_0w7j6zo', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Черешня', id: 'cat_0na35xk', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Черника', id: 'cat_1gzl52q', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Шиповник', id: 'cat_0r78pv1', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Экзотические фрукты', id: 'cat_19q2o4r', children: [], categoryFeatures: AGRO_FRESH_FEATURES },
+          { name: 'Яблоки', id: 'cat_0tie794', children: [], categoryFeatures: AGRO_FRESH_FEATURES }
         ]
       },
       {
         name: 'Яйцо',
+        id: 'cat_1qdd6co',
         children: [],
         categoryFeatures: [
           {
@@ -1683,99 +1853,132 @@ const CATEGORY_TREE = [
       },
       {
         name: 'Мёд и продукция пчеловодства',
+        id: 'cat_0cucvez',
         children: [
-          { name: 'Мёд натуральный (монофлорный, полифлорный)', children: [], categoryFeatures: AGRO_HONEY_FEATURES },
-          { name: 'Мёд в сотах', children: [], categoryFeatures: AGRO_HONEY_FEATURES },
-          { name: 'Перга, пыльца (обножка)', children: [], categoryFeatures: BEE_PRODUCT_FEATURES },
-          { name: 'Прополис', children: [], categoryFeatures: BEE_PRODUCT_FEATURES },
-          { name: 'Маточное молочко, трутневый гомогенат', children: [], categoryFeatures: BEE_PRODUCT_FEATURES },
-          { name: 'Воск пчелиный', children: [], categoryFeatures: BEE_WAX_FEATURES }
+          {
+            name: 'Мёд натуральный (монофлорный, полифлорный)',
+            id: 'cat_1gle48u',
+            children: [],
+            categoryFeatures: AGRO_HONEY_FEATURES
+          },
+          { name: 'Мёд в сотах', id: 'cat_09mvioa', children: [], categoryFeatures: AGRO_HONEY_FEATURES },
+          { name: 'Перга, пыльца (обножка)', id: 'cat_0jp7o5w', children: [], categoryFeatures: BEE_PRODUCT_FEATURES },
+          { name: 'Прополис', id: 'cat_0ebj1vf', children: [], categoryFeatures: BEE_PRODUCT_FEATURES },
+          {
+            name: 'Маточное молочко, трутневый гомогенат',
+            id: 'cat_10zckab',
+            children: [],
+            categoryFeatures: BEE_PRODUCT_FEATURES
+          },
+          { name: 'Воск пчелиный', id: 'cat_18a1tul', children: [], categoryFeatures: BEE_WAX_FEATURES }
         ]
       }
     ]
   },
   {
     name: 'Агрокультуры',
+    id: 'cat_08197mo',
     aliases: ['Сельхозпродукция и растительное сырьё', 'Сельхозсырьё и агрокультуры'],
     iconId: 'Sprout',
     children: [
       {
         name: 'Зерно, зернобобовые',
+        id: 'cat_0zw6ple',
         children: [
-          { name: 'Бобы', children: [], categoryFeatures: AGRO_RAW_FEATURES },
-          { name: 'Горох', children: [], categoryFeatures: AGRO_RAW_FEATURES },
-          { name: 'Гречиха', children: [], categoryFeatures: AGRO_RAW_FEATURES },
-          { name: 'Кукуруза', children: [], categoryFeatures: AGRO_RAW_FEATURES },
-          { name: 'Люпин', children: [], categoryFeatures: AGRO_RAW_FEATURES },
-          { name: 'Маш', children: [], categoryFeatures: AGRO_RAW_FEATURES },
-          { name: 'Нут', children: [], categoryFeatures: AGRO_RAW_FEATURES },
-          { name: 'Овёс', children: [], categoryFeatures: AGRO_RAW_FEATURES },
-          { name: 'Полба', children: [], categoryFeatures: AGRO_RAW_FEATURES },
-          { name: 'Просо', children: [], categoryFeatures: AGRO_RAW_FEATURES },
-          { name: 'Пшеница', children: [], categoryFeatures: AGRO_RAW_FEATURES },
-          { name: 'Рожь', children: [], categoryFeatures: AGRO_RAW_FEATURES },
-          { name: 'Сорго', children: [], categoryFeatures: AGRO_RAW_FEATURES },
-          { name: 'Соя', children: [], categoryFeatures: AGRO_RAW_FEATURES },
-          { name: 'Тритикале', children: [], categoryFeatures: AGRO_RAW_FEATURES },
-          { name: 'Фасоль', children: [], categoryFeatures: AGRO_RAW_FEATURES },
-          { name: 'Чечевица', children: [], categoryFeatures: AGRO_RAW_FEATURES },
-          { name: 'Ячмень', children: [], categoryFeatures: AGRO_RAW_FEATURES }
+          { name: 'Бобы', id: 'cat_0siotdf', children: [], categoryFeatures: AGRO_RAW_FEATURES },
+          { name: 'Горох', id: 'cat_19zmvje', children: [], categoryFeatures: AGRO_RAW_FEATURES },
+          { name: 'Гречиха', id: 'cat_1q43jts', children: [], categoryFeatures: AGRO_RAW_FEATURES },
+          { name: 'Кукуруза', id: 'cat_0wtf5fu', children: [], categoryFeatures: AGRO_RAW_FEATURES },
+          { name: 'Люпин', id: 'cat_03zxral', children: [], categoryFeatures: AGRO_RAW_FEATURES },
+          { name: 'Маш', id: 'cat_0kgy49w', children: [], categoryFeatures: AGRO_RAW_FEATURES },
+          { name: 'Нут', id: 'cat_1csqohe', children: [], categoryFeatures: AGRO_RAW_FEATURES },
+          { name: 'Овёс', id: 'cat_0y3g1cm', children: [], categoryFeatures: AGRO_RAW_FEATURES },
+          { name: 'Полба', id: 'cat_0ge6nyv', children: [], categoryFeatures: AGRO_RAW_FEATURES },
+          { name: 'Просо', id: 'cat_1jhb608', children: [], categoryFeatures: AGRO_RAW_FEATURES },
+          { name: 'Пшеница', id: 'cat_1fxba3p', children: [], categoryFeatures: AGRO_RAW_FEATURES },
+          { name: 'Рожь', id: 'cat_1j1qlb4', children: [], categoryFeatures: AGRO_RAW_FEATURES },
+          { name: 'Сорго', id: 'cat_099yfzw', children: [], categoryFeatures: AGRO_RAW_FEATURES },
+          { name: 'Соя', id: 'cat_1svp874', children: [], categoryFeatures: AGRO_RAW_FEATURES },
+          { name: 'Тритикале', id: 'cat_1vxpbp2', children: [], categoryFeatures: AGRO_RAW_FEATURES },
+          { name: 'Фасоль', id: 'cat_1cdkep0', children: [], categoryFeatures: AGRO_RAW_FEATURES },
+          { name: 'Чечевица', id: 'cat_16bh5h0', children: [], categoryFeatures: AGRO_RAW_FEATURES },
+          { name: 'Ячмень', id: 'cat_1qubdew', children: [], categoryFeatures: AGRO_RAW_FEATURES }
         ]
       },
       {
         name: 'Технические культуры',
+        id: 'cat_10as97r',
         children: [
-          { name: 'Анис', children: [], categoryFeatures: AGRO_TECHNICAL_FEATURES },
-          { name: 'Горчица', children: [], categoryFeatures: AGRO_TECHNICAL_FEATURES },
-          { name: 'Имбирь', children: [], categoryFeatures: AGRO_TECHNICAL_FEATURES },
-          { name: 'Конопля техническая', children: [], categoryFeatures: AGRO_TECHNICAL_FEATURES },
-          { name: 'Кориандр', children: [], categoryFeatures: AGRO_TECHNICAL_FEATURES },
-          { name: 'Лавровый лист', children: [], categoryFeatures: AGRO_TECHNICAL_FEATURES },
-          { name: 'Лекарственное растительное сырьё', children: [], categoryFeatures: AGRO_TECHNICAL_FEATURES },
-          { name: 'Лён технический/Лён-долгунец', children: [], categoryFeatures: AGRO_TECHNICAL_FEATURES },
-          { name: 'Мак', children: [], categoryFeatures: AGRO_TECHNICAL_FEATURES },
-          { name: 'Мята', children: [], categoryFeatures: AGRO_TECHNICAL_FEATURES },
-          { name: 'Прядильные культуры', children: [], categoryFeatures: AGRO_TECHNICAL_FEATURES },
-          { name: 'Сахарный тростник', children: [], categoryFeatures: AGRO_TECHNICAL_FEATURES },
-          { name: 'Сахарная свекла', children: [], categoryFeatures: AGRO_TECHNICAL_FEATURES },
-          { name: 'Стевия', children: [], categoryFeatures: AGRO_TECHNICAL_FEATURES },
-          { name: 'Хлопчатник', children: [], categoryFeatures: AGRO_TECHNICAL_FEATURES },
-          { name: 'Хмель', children: [], categoryFeatures: AGRO_TECHNICAL_FEATURES },
-          { name: 'Хрен', children: [], categoryFeatures: AGRO_TECHNICAL_FEATURES }
+          { name: 'Анис', id: 'cat_1cuzeav', children: [], categoryFeatures: AGRO_TECHNICAL_FEATURES },
+          { name: 'Горчица', id: 'cat_0r0f6xj', children: [], categoryFeatures: AGRO_TECHNICAL_FEATURES },
+          { name: 'Имбирь', id: 'cat_1dfd402', children: [], categoryFeatures: AGRO_TECHNICAL_FEATURES },
+          { name: 'Конопля техническая', id: 'cat_147zcow', children: [], categoryFeatures: AGRO_TECHNICAL_FEATURES },
+          { name: 'Кориандр', id: 'cat_0gofn04', children: [], categoryFeatures: AGRO_TECHNICAL_FEATURES },
+          { name: 'Лавровый лист', id: 'cat_1ii9cyu', children: [], categoryFeatures: AGRO_TECHNICAL_FEATURES },
+          {
+            name: 'Лекарственное растительное сырьё',
+            id: 'cat_17s3uwa',
+            children: [],
+            categoryFeatures: AGRO_TECHNICAL_FEATURES
+          },
+          {
+            name: 'Лён технический/Лён-долгунец',
+            id: 'cat_1b6n7zd',
+            children: [],
+            categoryFeatures: AGRO_TECHNICAL_FEATURES
+          },
+          { name: 'Мак', id: 'cat_1paaixj', children: [], categoryFeatures: AGRO_TECHNICAL_FEATURES },
+          { name: 'Мята', id: 'cat_0v3ovqc', children: [], categoryFeatures: AGRO_TECHNICAL_FEATURES },
+          { name: 'Прядильные культуры', id: 'cat_0n0ueux', children: [], categoryFeatures: AGRO_TECHNICAL_FEATURES },
+          { name: 'Сахарный тростник', id: 'cat_0a19atc', children: [], categoryFeatures: AGRO_TECHNICAL_FEATURES },
+          { name: 'Сахарная свекла', id: 'cat_1yhcqv8', children: [], categoryFeatures: AGRO_TECHNICAL_FEATURES },
+          { name: 'Стевия', id: 'cat_0m2khoi', children: [], categoryFeatures: AGRO_TECHNICAL_FEATURES },
+          { name: 'Хлопчатник', id: 'cat_059n8yg', children: [], categoryFeatures: AGRO_TECHNICAL_FEATURES },
+          { name: 'Хмель', id: 'cat_0jvhtay', children: [], categoryFeatures: AGRO_TECHNICAL_FEATURES },
+          { name: 'Хрен', id: 'cat_0v59u0s', children: [], categoryFeatures: AGRO_TECHNICAL_FEATURES }
         ]
       },
       {
         name: 'Масличные культуры',
+        id: 'cat_1tyw4gs',
         children: [
-          { name: 'Горчица', children: [], categoryFeatures: AGRO_RAW_FEATURES },
-          { name: 'Конопля техническая', children: [], categoryFeatures: AGRO_RAW_FEATURES },
-          { name: 'Кориандр', children: [], categoryFeatures: AGRO_RAW_FEATURES },
-          { name: 'Косточки облепихи', children: [], categoryFeatures: AGRO_RAW_FEATURES },
-          { name: 'Кунжут', children: [], categoryFeatures: AGRO_RAW_FEATURES },
-          { name: 'Лён', children: [], categoryFeatures: AGRO_RAW_FEATURES },
-          { name: 'Подсолнечник', children: [], categoryFeatures: AGRO_RAW_FEATURES },
-          { name: 'Рапс', children: [], categoryFeatures: AGRO_RAW_FEATURES },
-          { name: 'Расторопша', children: [], categoryFeatures: AGRO_RAW_FEATURES },
-          { name: 'Редька масличная', children: [], categoryFeatures: AGRO_RAW_FEATURES },
-          { name: 'Рыжик', children: [], categoryFeatures: AGRO_RAW_FEATURES },
-          { name: 'Сафлор', children: [], categoryFeatures: AGRO_RAW_FEATURES },
-          { name: 'Семечки тыквенные', children: [], categoryFeatures: AGRO_RAW_FEATURES },
-          { name: 'Соя (соевые бобы)', children: [], categoryFeatures: AGRO_RAW_FEATURES },
-          { name: 'Тмин', children: [], categoryFeatures: AGRO_RAW_FEATURES },
-          { name: 'Чиа', children: [], categoryFeatures: AGRO_RAW_FEATURES }
+          { name: 'Горчица', id: 'cat_0ojrf90', children: [], categoryFeatures: AGRO_RAW_FEATURES },
+          { name: 'Конопля техническая', id: 'cat_1cgy2zr', children: [], categoryFeatures: AGRO_RAW_FEATURES },
+          { name: 'Кориандр', id: 'cat_02ti52l', children: [], categoryFeatures: AGRO_RAW_FEATURES },
+          { name: 'Косточки облепихи', id: 'cat_0ag9mof', children: [], categoryFeatures: AGRO_RAW_FEATURES },
+          { name: 'Кунжут', id: 'cat_0liade7', children: [], categoryFeatures: AGRO_RAW_FEATURES },
+          { name: 'Лён', id: 'cat_0enceu9', children: [], categoryFeatures: AGRO_RAW_FEATURES },
+          { name: 'Подсолнечник', id: 'cat_0u9kbn3', children: [], categoryFeatures: AGRO_RAW_FEATURES },
+          { name: 'Рапс', id: 'cat_0kefy2i', children: [], categoryFeatures: AGRO_RAW_FEATURES },
+          { name: 'Расторопша', id: 'cat_12wbj0c', children: [], categoryFeatures: AGRO_RAW_FEATURES },
+          { name: 'Редька масличная', id: 'cat_05lw8vy', children: [], categoryFeatures: AGRO_RAW_FEATURES },
+          { name: 'Рыжик', id: 'cat_032ra3t', children: [], categoryFeatures: AGRO_RAW_FEATURES },
+          { name: 'Сафлор', id: 'cat_0q0imxw', children: [], categoryFeatures: AGRO_RAW_FEATURES },
+          { name: 'Семечки тыквенные', id: 'cat_16ndgam', children: [], categoryFeatures: AGRO_RAW_FEATURES },
+          { name: 'Соя (соевые бобы)', id: 'cat_04wtv4g', children: [], categoryFeatures: AGRO_RAW_FEATURES },
+          { name: 'Тмин', id: 'cat_1rmmd8j', children: [], categoryFeatures: AGRO_RAW_FEATURES },
+          { name: 'Чиа', id: 'cat_02ogivb', children: [], categoryFeatures: AGRO_RAW_FEATURES }
         ]
       },
       {
         name: 'Прочее сырьё растительного происхождения',
+        id: 'cat_09gdlc0',
         children: [
-          { name: 'Лекарственные травы, дикоросы', children: [], categoryFeatures: AGRO_RAW_FEATURES },
+          {
+            name: 'Лекарственные травы, дикоросы',
+            id: 'cat_1wa40zv',
+            children: [],
+            categoryFeatures: AGRO_RAW_FEATURES
+          },
           {
             name: 'Семена цветов, газонных трав, декоративных культур',
+            id: 'cat_19hsc6m',
             children: [],
             categoryFeatures: AGRO_RAW_FEATURES
           },
           {
             name: 'Сушёные цветы для кондитерских изделий и чая',
+            id: 'cat_1yj1jmo',
             children: [],
             categoryFeatures: DEFAULT_FEATURES
           }
@@ -1783,34 +1986,54 @@ const CATEGORY_TREE = [
       },
       {
         name: 'Семена, посевной материал',
+        id: 'cat_1m6upyf',
         children: [
-          { name: 'Мицелий, грибные блоки', children: [], categoryFeatures: AGRO_SEED_FEATURES },
+          { name: 'Мицелий, грибные блоки', id: 'cat_0tbcnmz', children: [], categoryFeatures: AGRO_SEED_FEATURES },
           {
             name: 'Семена зерновых и зернобобовых культур',
+            id: 'cat_1rps3f4',
             children: [],
             categoryFeatures: AGRO_SEED_FEATURES
           },
           {
             name: 'Семена кормовых, силосных и пастбищных трав',
+            id: 'cat_1b5c9iq',
             children: [],
             categoryFeatures: AGRO_SEED_FEATURES
           },
-          { name: 'Семена лекарственных растений', children: [], categoryFeatures: AGRO_SEED_FEATURES },
-          { name: 'Семена масличных культур', children: [], categoryFeatures: AGRO_SEED_FEATURES },
-          { name: 'Рассада овощных культур', children: [], categoryFeatures: AGRO_SEED_FEATURES },
-          { name: 'Саженцы деревьев и кустарников', children: [], categoryFeatures: AGRO_SEED_FEATURES },
-          { name: 'Семена бахчевых культур', children: [], categoryFeatures: AGRO_SEED_FEATURES },
-          { name: 'Семена деревьев и кустарников', children: [], categoryFeatures: AGRO_SEED_FEATURES },
-          { name: 'Семена медоносных растений', children: [], categoryFeatures: AGRO_SEED_FEATURES },
-          { name: 'Семена овощных культур', children: [], categoryFeatures: AGRO_SEED_FEATURES },
-          { name: 'Семена технических культур', children: [], categoryFeatures: AGRO_SEED_FEATURES },
+          {
+            name: 'Семена лекарственных растений',
+            id: 'cat_1q41av5',
+            children: [],
+            categoryFeatures: AGRO_SEED_FEATURES
+          },
+          { name: 'Семена масличных культур', id: 'cat_0he395e', children: [], categoryFeatures: AGRO_SEED_FEATURES },
+          { name: 'Рассада овощных культур', id: 'cat_1n1tqpe', children: [], categoryFeatures: AGRO_SEED_FEATURES },
+          {
+            name: 'Саженцы деревьев и кустарников',
+            id: 'cat_0gv6igf',
+            children: [],
+            categoryFeatures: AGRO_SEED_FEATURES
+          },
+          { name: 'Семена бахчевых культур', id: 'cat_16ttg4a', children: [], categoryFeatures: AGRO_SEED_FEATURES },
+          {
+            name: 'Семена деревьев и кустарников',
+            id: 'cat_0w2yt75',
+            children: [],
+            categoryFeatures: AGRO_SEED_FEATURES
+          },
+          { name: 'Семена медоносных растений', id: 'cat_0boimcd', children: [], categoryFeatures: AGRO_SEED_FEATURES },
+          { name: 'Семена овощных культур', id: 'cat_1gzr2wi', children: [], categoryFeatures: AGRO_SEED_FEATURES },
+          { name: 'Семена технических культур', id: 'cat_1fh9oor', children: [], categoryFeatures: AGRO_SEED_FEATURES },
           {
             name: 'Семена, рассада и саженцы плодово-ягодных культур',
+            id: 'cat_0a49sh6',
             children: [],
             categoryFeatures: AGRO_SEED_FEATURES
           },
           {
             name: 'Семена, рассада, саженцы цветов и декоративных культур',
+            id: 'cat_0l8i3z5',
             children: [],
             categoryFeatures: AGRO_SEED_FEATURES
           }
@@ -1820,169 +2043,269 @@ const CATEGORY_TREE = [
   },
   {
     name: 'С/х техника',
+    id: 'cat_1owojcn',
     aliases: ['Сельскохозяйственная техника'],
     iconId: 'Truck',
     children: [
       {
         name: 'Запчасти для сельхозтехники',
+        id: 'cat_0vi787l',
         children: [
-          { name: 'Двигатели и узлы в сборе (КПП, мосты)', children: [], categoryFeatures: TECH_PARTS },
-          { name: 'Для животноводческого и фермерского оборудования', children: [], categoryFeatures: TECH_PARTS },
-          { name: 'Для кормозаготовительной техники', children: [], categoryFeatures: TECH_PARTS },
-          { name: 'Для опрыскивателей', children: [], categoryFeatures: TECH_PARTS },
-          { name: 'Для погрузчиков', children: [], categoryFeatures: TECH_PARTS },
-          { name: 'Для посевной техники', children: [], categoryFeatures: TECH_PARTS },
-          { name: 'Для почвообрабатывающей техники', children: [], categoryFeatures: TECH_PARTS },
-          { name: 'Для прочих с/х полевых машин', children: [], categoryFeatures: TECH_PARTS },
-          { name: 'Для с/х прицепов', children: [], categoryFeatures: TECH_PARTS },
-          { name: 'Для тракторов', children: [], categoryFeatures: TECH_PARTS },
-          { name: 'Для уборочной техники', children: [], categoryFeatures: TECH_PARTS }
+          {
+            name: 'Двигатели и узлы в сборе (КПП, мосты)',
+            id: 'cat_172a5ce',
+            children: [],
+            categoryFeatures: TECH_PARTS
+          },
+          {
+            name: 'Для животноводческого и фермерского оборудования',
+            id: 'cat_1dcmo42',
+            children: [],
+            categoryFeatures: TECH_PARTS
+          },
+          { name: 'Для кормозаготовительной техники', id: 'cat_1e7ees6', children: [], categoryFeatures: TECH_PARTS },
+          { name: 'Для опрыскивателей', id: 'cat_1jmmpvo', children: [], categoryFeatures: TECH_PARTS },
+          { name: 'Для погрузчиков', id: 'cat_1ve4x6a', children: [], categoryFeatures: TECH_PARTS },
+          { name: 'Для посевной техники', id: 'cat_1qqlnl7', children: [], categoryFeatures: TECH_PARTS },
+          { name: 'Для почвообрабатывающей техники', id: 'cat_0qht1fa', children: [], categoryFeatures: TECH_PARTS },
+          { name: 'Для прочих с/х полевых машин', id: 'cat_0srcn0p', children: [], categoryFeatures: TECH_PARTS },
+          { name: 'Для с/х прицепов', id: 'cat_09qkr8z', children: [], categoryFeatures: TECH_PARTS },
+          { name: 'Для тракторов', id: 'cat_0h2r76l', children: [], categoryFeatures: TECH_PARTS },
+          { name: 'Для уборочной техники', id: 'cat_1shw3nb', children: [], categoryFeatures: TECH_PARTS }
         ]
       },
-      { name: 'Кормозаготовительная техника', children: [], categoryFeatures: TECH_ATTACHED },
+      { name: 'Кормозаготовительная техника', id: 'cat_0sd5rk6', children: [], categoryFeatures: TECH_ATTACHED },
       {
         name: 'Оборудование для тракторов и с/х транспорта',
+        id: 'cat_14d9fwz',
         children: [
-          { name: 'Бульдозерные отвалы', children: [], categoryFeatures: TECH_ATTACHED },
-          { name: 'Грузозахватные механизмы', children: [], categoryFeatures: TECH_ATTACHED },
-          { name: 'Грузоподъемное оборудование', children: [], categoryFeatures: TECH_ATTACHED },
-          { name: 'Грунторезы (баровое оборудование)', children: [], categoryFeatures: TECH_ATTACHED },
-          { name: 'Загрузочные шнеки', children: [], categoryFeatures: TECH_ATTACHED }
+          { name: 'Бульдозерные отвалы', id: 'cat_1t320o7', children: [], categoryFeatures: TECH_ATTACHED },
+          { name: 'Грузозахватные механизмы', id: 'cat_1ooogwc', children: [], categoryFeatures: TECH_ATTACHED },
+          { name: 'Грузоподъемное оборудование', id: 'cat_0ordji0', children: [], categoryFeatures: TECH_ATTACHED },
+          {
+            name: 'Грунторезы (баровое оборудование)',
+            id: 'cat_09omyeu',
+            children: [],
+            categoryFeatures: TECH_ATTACHED
+          },
+          { name: 'Загрузочные шнеки', id: 'cat_1bqyg7h', children: [], categoryFeatures: TECH_ATTACHED }
         ]
       },
-      { name: 'Опрыскиватели', children: [], categoryFeatures: TECH_ATTACHED },
-      { name: 'Посевная техника', children: [], categoryFeatures: TECH_ATTACHED },
+      { name: 'Опрыскиватели', id: 'cat_061bu4i', children: [], categoryFeatures: TECH_ATTACHED },
+      { name: 'Посевная техника', id: 'cat_1hsvyq7', children: [], categoryFeatures: TECH_ATTACHED },
       {
         name: 'Почвообрабатывающая техника',
+        id: 'cat_0dun2w5',
         children: [
-          { name: 'Бороны', children: [], categoryFeatures: TECH_ATTACHED },
-          { name: 'Глубокорыхлители', children: [], categoryFeatures: TECH_ATTACHED },
-          { name: 'Гребнеобразователи', children: [], categoryFeatures: TECH_ATTACHED },
-          { name: 'Камнеподборщики', children: [], categoryFeatures: TECH_ATTACHED },
-          { name: 'Канавокопатели', children: [], categoryFeatures: TECH_ATTACHED },
-          { name: 'Катки', children: [], categoryFeatures: TECH_ATTACHED },
-          { name: 'Комбинированные агрегаты', children: [], categoryFeatures: TECH_ATTACHED },
-          { name: 'Компакторы', children: [], categoryFeatures: TECH_ATTACHED },
-          { name: 'Культиваторы', children: [], categoryFeatures: TECH_ATTACHED },
-          { name: 'Лущильники', children: [], categoryFeatures: TECH_ATTACHED },
-          { name: 'Машины для формирования парников', children: [], categoryFeatures: TECH_ATTACHED },
-          { name: 'Мульчировщики', children: [], categoryFeatures: TECH_ATTACHED },
-          { name: 'Окучники', children: [], categoryFeatures: TECH_ATTACHED },
-          { name: 'Планировщики почвы', children: [], categoryFeatures: TECH_ATTACHED },
-          { name: 'Пленкоукладчики', children: [], categoryFeatures: TECH_ATTACHED },
-          { name: 'Плуги', children: [], categoryFeatures: TECH_ATTACHED },
-          { name: 'Прополочные машины', children: [], categoryFeatures: TECH_ATTACHED },
-          { name: 'Фрезы', children: [], categoryFeatures: TECH_ATTACHED }
+          { name: 'Бороны', id: 'cat_0f3wo5o', children: [], categoryFeatures: TECH_ATTACHED },
+          { name: 'Глубокорыхлители', id: 'cat_1eynrtk', children: [], categoryFeatures: TECH_ATTACHED },
+          { name: 'Гребнеобразователи', id: 'cat_0tk72ui', children: [], categoryFeatures: TECH_ATTACHED },
+          { name: 'Камнеподборщики', id: 'cat_0xat15o', children: [], categoryFeatures: TECH_ATTACHED },
+          { name: 'Канавокопатели', id: 'cat_1opjg7b', children: [], categoryFeatures: TECH_ATTACHED },
+          { name: 'Катки', id: 'cat_19r8oc1', children: [], categoryFeatures: TECH_ATTACHED },
+          { name: 'Комбинированные агрегаты', id: 'cat_0nseq21', children: [], categoryFeatures: TECH_ATTACHED },
+          { name: 'Компакторы', id: 'cat_0etckuv', children: [], categoryFeatures: TECH_ATTACHED },
+          { name: 'Культиваторы', id: 'cat_0qaykr0', children: [], categoryFeatures: TECH_ATTACHED },
+          { name: 'Лущильники', id: 'cat_0qg2a3y', children: [], categoryFeatures: TECH_ATTACHED },
+          {
+            name: 'Машины для формирования парников',
+            id: 'cat_090fq69',
+            children: [],
+            categoryFeatures: TECH_ATTACHED
+          },
+          { name: 'Мульчировщики', id: 'cat_0m7gsjb', children: [], categoryFeatures: TECH_ATTACHED },
+          { name: 'Окучники', id: 'cat_114av9s', children: [], categoryFeatures: TECH_ATTACHED },
+          { name: 'Планировщики почвы', id: 'cat_0jkazjm', children: [], categoryFeatures: TECH_ATTACHED },
+          { name: 'Пленкоукладчики', id: 'cat_1emhud8', children: [], categoryFeatures: TECH_ATTACHED },
+          { name: 'Плуги', id: 'cat_0j04nwb', children: [], categoryFeatures: TECH_ATTACHED },
+          { name: 'Прополочные машины', id: 'cat_0ud9fic', children: [], categoryFeatures: TECH_ATTACHED },
+          { name: 'Фрезы', id: 'cat_0ucklcq', children: [], categoryFeatures: TECH_ATTACHED }
         ]
       },
-      { name: 'Прицепы и полуприцепы', children: [], categoryFeatures: TECH_ATTACHED },
-      { name: 'Техника для внесения удобрения', children: [], categoryFeatures: TECH_ATTACHED },
-      { name: 'Тракторы сельскохозяйственные', children: [], categoryFeatures: TECH_ATTACHED },
+      { name: 'Прицепы и полуприцепы', id: 'cat_06sqbm4', children: [], categoryFeatures: TECH_ATTACHED },
+      { name: 'Техника для внесения удобрения', id: 'cat_1mietyh', children: [], categoryFeatures: TECH_ATTACHED },
+      { name: 'Тракторы сельскохозяйственные', id: 'cat_1a5miey', children: [], categoryFeatures: TECH_ATTACHED },
       {
         name: 'Уборочная техника',
+        id: 'cat_1le0bdv',
         children: [
-          { name: 'Ботвоудалители', children: [], categoryFeatures: TECH_ATTACHED },
-          { name: 'Жатки', children: [], categoryFeatures: TECH_ATTACHED },
-          { name: 'Измельчитель соломы', children: [], categoryFeatures: TECH_ATTACHED },
-          { name: 'Картофелекопатели', children: [], categoryFeatures: TECH_ATTACHED },
-          { name: 'Комбайны', children: [], categoryFeatures: TECH_ATTACHED },
-          { name: 'Лукокопатели', children: [], categoryFeatures: TECH_ATTACHED }
+          { name: 'Ботвоудалители', id: 'cat_0udqdxa', children: [], categoryFeatures: TECH_ATTACHED },
+          { name: 'Жатки', id: 'cat_1puznjn', children: [], categoryFeatures: TECH_ATTACHED },
+          { name: 'Измельчитель соломы', id: 'cat_0asbpja', children: [], categoryFeatures: TECH_ATTACHED },
+          { name: 'Картофелекопатели', id: 'cat_0kibh0p', children: [], categoryFeatures: TECH_ATTACHED },
+          { name: 'Комбайны', id: 'cat_1xhdsxj', children: [], categoryFeatures: TECH_ATTACHED },
+          { name: 'Лукокопатели', id: 'cat_0e8dp30', children: [], categoryFeatures: TECH_ATTACHED }
         ]
       },
-      { name: 'Агродроны', children: [], categoryFeatures: TECH_ATTACHED },
+      { name: 'Агродроны', id: 'cat_0wboir6', children: [], categoryFeatures: TECH_ATTACHED },
       {
         name: 'Грузовой с/х транспорт',
+        id: 'cat_1i7hdpb',
         children: [
-          { name: 'Зерновозы', children: [], categoryFeatures: TECH_ATTACHED },
-          { name: 'Кормовозы', children: [], categoryFeatures: TECH_ATTACHED },
-          { name: 'Молоковозы', children: [], categoryFeatures: TECH_ATTACHED },
-          { name: 'Сельхозники', children: [], categoryFeatures: TECH_ATTACHED },
-          { name: 'Скотовозы', children: [], categoryFeatures: TECH_ATTACHED }
+          { name: 'Зерновозы', id: 'cat_0xkh2c8', children: [], categoryFeatures: TECH_ATTACHED },
+          { name: 'Кормовозы', id: 'cat_1ijqwul', children: [], categoryFeatures: TECH_ATTACHED },
+          { name: 'Молоковозы', id: 'cat_09bszjm', children: [], categoryFeatures: TECH_ATTACHED },
+          { name: 'Сельхозники', id: 'cat_0vvlt81', children: [], categoryFeatures: TECH_ATTACHED },
+          { name: 'Скотовозы', id: 'cat_03udhbs', children: [], categoryFeatures: TECH_ATTACHED }
         ]
       },
-      { name: 'Мини-техника, мотокультиваторы, мотоблоки', children: [], categoryFeatures: TECH_ATTACHED },
-      { name: 'Навигационные и контрольные системы', children: [], categoryFeatures: TECH_ATTACHED },
-      { name: 'Погрузчики', children: [], categoryFeatures: TECH_ATTACHED },
-      { name: 'Прочая с/х техника', children: [], categoryFeatures: TECH_ATTACHED },
-      { name: 'Техника для животноводства', children: [], categoryFeatures: TECH_ATTACHED },
-      { name: 'Техника для полива и орошения', children: [], categoryFeatures: TECH_ATTACHED },
-      { name: 'Техника для садоводства', children: [], categoryFeatures: TECH_ATTACHED },
-      { name: 'Техника для хранения зерна в рукавах', children: [], categoryFeatures: TECH_ATTACHED }
+      {
+        name: 'Мини-техника, мотокультиваторы, мотоблоки',
+        id: 'cat_0rfa6jj',
+        children: [],
+        categoryFeatures: TECH_ATTACHED
+      },
+      { name: 'Навигационные и контрольные системы', id: 'cat_1dttw86', children: [], categoryFeatures: TECH_ATTACHED },
+      { name: 'Погрузчики', id: 'cat_1pkkqxu', children: [], categoryFeatures: TECH_ATTACHED },
+      { name: 'Прочая с/х техника', id: 'cat_0x2s13e', children: [], categoryFeatures: TECH_ATTACHED },
+      { name: 'Техника для животноводства', id: 'cat_0p7ecm8', children: [], categoryFeatures: TECH_ATTACHED },
+      { name: 'Техника для полива и орошения', id: 'cat_06fxstz', children: [], categoryFeatures: TECH_ATTACHED },
+      { name: 'Техника для садоводства', id: 'cat_19kg2us', children: [], categoryFeatures: TECH_ATTACHED },
+      { name: 'Техника для хранения зерна в рукавах', id: 'cat_1i19yje', children: [], categoryFeatures: TECH_ATTACHED }
     ]
   },
   {
     name: 'Тара и упаковка',
+    id: 'cat_0l8ic37',
     iconId: 'Box',
     children: [
-      { name: 'Пластиковые емкости крупногабаритные', children: [], categoryFeatures: PACKAGING_MATERIAL_FEATURES },
-      { name: 'Тара, упаковка', children: [], categoryFeatures: PACKAGING_MATERIAL_FEATURES },
-      { name: 'Упаковочные материалы и сырьё', children: [], categoryFeatures: PACKAGING_MATERIAL_FEATURES }
+      {
+        name: 'Пластиковые емкости крупногабаритные',
+        id: 'cat_1ucc3cw',
+        children: [],
+        categoryFeatures: PACKAGING_MATERIAL_FEATURES
+      },
+      { name: 'Тара, упаковка', id: 'cat_0pwxnvr', children: [], categoryFeatures: PACKAGING_MATERIAL_FEATURES },
+      {
+        name: 'Упаковочные материалы и сырьё',
+        id: 'cat_1bypbd1',
+        children: [],
+        categoryFeatures: PACKAGING_MATERIAL_FEATURES
+      }
     ]
   },
   {
     name: 'Животное сырьё',
+    id: 'cat_1fbekco',
     iconId: 'Shell',
     aliases: ['Сырьё животного происхождения', 'Техническое сырьё'],
     children: [
-      { name: 'Натуральные оболочки', children: [], categoryFeatures: AGRO_INDUSTRIAL_RAW_FEATURES },
-      { name: 'Овечьи шкуры', children: [], categoryFeatures: AGRO_INDUSTRIAL_RAW_FEATURES },
-      { name: 'Перо, пух', children: [], categoryFeatures: AGRO_INDUSTRIAL_RAW_FEATURES },
-      { name: 'Шерсть', children: [], categoryFeatures: AGRO_INDUSTRIAL_RAW_FEATURES },
-      { name: 'Шкуры', children: [], categoryFeatures: AGRO_INDUSTRIAL_RAW_FEATURES }
+      { name: 'Натуральные оболочки', id: 'cat_187w6vh', children: [], categoryFeatures: AGRO_INDUSTRIAL_RAW_FEATURES },
+      { name: 'Овечьи шкуры', id: 'cat_1ahqgys', children: [], categoryFeatures: AGRO_INDUSTRIAL_RAW_FEATURES },
+      { name: 'Перо, пух', id: 'cat_1oz8wnl', children: [], categoryFeatures: AGRO_INDUSTRIAL_RAW_FEATURES },
+      { name: 'Шерсть', id: 'cat_1hxlpw4', children: [], categoryFeatures: AGRO_INDUSTRIAL_RAW_FEATURES },
+      { name: 'Шкуры', id: 'cat_0vspqr4', children: [], categoryFeatures: AGRO_INDUSTRIAL_RAW_FEATURES }
     ]
   },
   {
     name: 'Прочее',
+    id: 'cat_06m2bvv',
     iconId: 'EqualApproximately',
     children: [
-      { name: 'Ангары и каркасно-тентовые конструкции', children: [], categoryFeatures: OTHER_GOODS_FEATURES },
-      { name: 'Веники и травы для бани', children: [], categoryFeatures: OTHER_DEFAULT_FEATURES },
-      { name: 'Горюче-смазочные материалы', children: [], categoryFeatures: OTHER_FUEL_FEATURES },
+      {
+        name: 'Ангары и каркасно-тентовые конструкции',
+        id: 'cat_03y6e5a',
+        children: [],
+        categoryFeatures: OTHER_GOODS_FEATURES
+      },
+      { name: 'Веники и травы для бани', id: 'cat_0htqm0u', children: [], categoryFeatures: OTHER_DEFAULT_FEATURES },
+      { name: 'Горюче-смазочные материалы', id: 'cat_0abat4y', children: [], categoryFeatures: OTHER_FUEL_FEATURES },
       {
         name: 'Пеллеты, дрова, топливные брикеты, уголь древесный',
+        id: 'cat_1rcfclg',
         children: [],
         categoryFeatures: OTHER_FUEL_FEATURES
       },
       {
         name: 'Программное обеспечение АПК',
+        id: 'cat_0vhvwcn',
         children: [],
         categoryFeatures: [{ name: 'version', label: 'Версия', type: 'TEXT', filterable: false }]
       },
-      { name: 'Прочие с/х товары', children: [], categoryFeatures: OTHER_DEFAULT_FEATURES },
-      { name: 'Различные товары для пищевой промышленности', children: [], categoryFeatures: OTHER_DEFAULT_FEATURES },
+      { name: 'Прочие с/х товары', id: 'cat_001g8zu', children: [], categoryFeatures: OTHER_DEFAULT_FEATURES },
+      {
+        name: 'Различные товары для пищевой промышленности',
+        id: 'cat_0oyyx0j',
+        children: [],
+        categoryFeatures: OTHER_DEFAULT_FEATURES
+      },
       {
         name: 'Различные товары для сельского хозяйства',
+        id: 'cat_1m5cwko',
         children: [
-          { name: 'Амуниция для лошадей', children: [], categoryFeatures: OTHER_DEFAULT_FEATURES },
-          { name: 'Ветеринарные и зоотехнические товары', children: [], categoryFeatures: OTHER_DEFAULT_FEATURES },
-          { name: 'Влагомеры', children: [], categoryFeatures: OTHER_GOODS_FEATURES },
-          { name: 'Кассеты и горшки для рассады', children: [], categoryFeatures: OTHER_GOODS_FEATURES },
-          { name: 'Комплектующие', children: [], categoryFeatures: OTHER_GOODS_FEATURES },
-          { name: 'Опрыскиватели садовые ручные', children: [], categoryFeatures: OTHER_GOODS_FEATURES },
-          { name: 'Органический материал для мульчирования', children: [], categoryFeatures: OTHER_WASTE_FEATURES },
-          { name: 'Подстилки для с/х животных', children: [], categoryFeatures: OTHER_WASTE_FEATURES },
+          { name: 'Амуниция для лошадей', id: 'cat_00klv4u', children: [], categoryFeatures: OTHER_DEFAULT_FEATURES },
           {
-            name: 'Полимерные рукава для хранения сельхозпродукции',
+            name: 'Ветеринарные и зоотехнические товары',
+            id: 'cat_1gidzmd',
+            children: [],
+            categoryFeatures: OTHER_DEFAULT_FEATURES
+          },
+          { name: 'Влагомеры', id: 'cat_0rh26og', children: [], categoryFeatures: OTHER_GOODS_FEATURES },
+          {
+            name: 'Кассеты и горшки для рассады',
+            id: 'cat_1dlnmps',
             children: [],
             categoryFeatures: OTHER_GOODS_FEATURES
           },
-          { name: 'Расходные материалы', children: [], categoryFeatures: OTHER_DEFAULT_FEATURES },
-          { name: 'Садовый инвентарь', children: [], categoryFeatures: OTHER_GOODS_FEATURES },
-          { name: 'Сеялки ручные', children: [], categoryFeatures: OTHER_GOODS_FEATURES },
-          { name: 'Спецодежда', children: [], categoryFeatures: OTHER_GOODS_FEATURES },
-          { name: 'Средства защиты от насекомых и грызунов', children: [], categoryFeatures: OTHER_DEFAULT_FEATURES },
-          { name: 'Укрывной материал, пленка, агроткань', children: [], categoryFeatures: OTHER_GOODS_FEATURES },
+          { name: 'Комплектующие', id: 'cat_0ez1mzi', children: [], categoryFeatures: OTHER_GOODS_FEATURES },
+          {
+            name: 'Опрыскиватели садовые ручные',
+            id: 'cat_0zl07p7',
+            children: [],
+            categoryFeatures: OTHER_GOODS_FEATURES
+          },
+          {
+            name: 'Органический материал для мульчирования',
+            id: 'cat_1glk7sd',
+            children: [],
+            categoryFeatures: OTHER_WASTE_FEATURES
+          },
+          {
+            name: 'Подстилки для с/х животных',
+            id: 'cat_11x7isb',
+            children: [],
+            categoryFeatures: OTHER_WASTE_FEATURES
+          },
+          {
+            name: 'Полимерные рукава для хранения сельхозпродукции',
+            id: 'cat_0hpazuf',
+            children: [],
+            categoryFeatures: OTHER_GOODS_FEATURES
+          },
+          { name: 'Расходные материалы', id: 'cat_0mq29i4', children: [], categoryFeatures: OTHER_DEFAULT_FEATURES },
+          { name: 'Садовый инвентарь', id: 'cat_114ijs6', children: [], categoryFeatures: OTHER_GOODS_FEATURES },
+          { name: 'Сеялки ручные', id: 'cat_0geyn71', children: [], categoryFeatures: OTHER_GOODS_FEATURES },
+          { name: 'Спецодежда', id: 'cat_0cgu5i4', children: [], categoryFeatures: OTHER_GOODS_FEATURES },
+          {
+            name: 'Средства защиты от насекомых и грызунов',
+            id: 'cat_1t05xk2',
+            children: [],
+            categoryFeatures: OTHER_DEFAULT_FEATURES
+          },
+          {
+            name: 'Укрывной материал, пленка, агроткань',
+            id: 'cat_1s0uuw0',
+            children: [],
+            categoryFeatures: OTHER_GOODS_FEATURES
+          },
           {
             name: 'Шпагат и сетка',
+            id: 'cat_1deh59a',
             children: [],
             categoryFeatures: OTHER_GOODS_FEATURES,
             priceUnits: ['RUNNING_METER', 'ITEM']
           }
         ]
       },
-      { name: 'С/х отходы и побочные продукты производства', children: [], categoryFeatures: OTHER_WASTE_FEATURES },
+      {
+        name: 'С/х отходы и побочные продукты производства',
+        id: 'cat_0ssree4',
+        children: [],
+        categoryFeatures: OTHER_WASTE_FEATURES
+      },
       {
         name: 'Книги, документация, аграрные издания',
+        id: 'cat_0dvtic0',
         children: [],
         categoryFeatures: [{ name: 'author', label: 'Автор/Издательство', type: 'TEXT', filterable: false }]
       }

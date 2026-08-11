@@ -42,7 +42,12 @@ const PRICE_UNIT_MAP: Record<string, PriceUnit> = {
 }
 
 type CategoryInput = {
-  id?: string
+  // Обязательный и стабильный — см. data/categories.ts, materializeCategories()
+  // проставляет его автоматически (хэш от пути названий), если не задан явно.
+  // Именно по нему матчим категорию при сидировании (см. upsertCategory) —
+  // переименование/перенос категории меняют name/slug/fullPath, но НЕ id,
+  // поэтому больше не создают дубль вместо обновления существующей строки.
+  id: string
   name: string
   description?: string
   iconId?: string
@@ -105,36 +110,53 @@ async function upsertCategory(
   const priceUnits = mapPriceUnits(data.priceUnits)
   const sortOrder = data.sortOrder ?? defaultSortOrder
 
-  // 1. Создаем или обновляем категорию со всеми новыми полями
-  const category = await prisma.category.upsert({
-    where: { fullPath },
-    update: {
-      name: data.name,
-      description: data.description ?? null, // 👈 Добавлено
-      slug,
-      path,
-      code,
-      iconId: data.iconId,
-      priceUnits, // 👈 Добавлено
-      level,
-      sortOrder, // 👈 Добавлено
-      parentId
-    },
-    create: {
-      ...(data.id ? { id: data.id } : {}),
-      name: data.name,
-      description: data.description ?? null,
-      slug,
-      path,
-      fullPath,
-      code,
-      iconId: data.iconId,
-      priceUnits, // 👈 Добавлено
-      level,
-      sortOrder, // 👈 Добавлено
-      parentId
+  // 1. Ищем существующую категорию — ПО ID, а не по fullPath. fullPath
+  // (и code) считаются из текущего name, поэтому меняются при
+  // переименовании/переносе категории; матчить по ним означало, что сид не
+  // находил старую строку и создавал дубликат с новым id вместо обновления
+  // существующей — объявления при этом не ломались (FK на старую строку
+  // оставался валиден), но в дереве копился висящий дубль-призрак со старым
+  // названием (см. обсуждение с пользователем). id стабилен (см. CategoryInput
+  // выше), поэтому такого больше не происходит.
+  //
+  // Фолбэк на fullPath оставлен только на случай, если для какой-то строки
+  // в базе ещё нет соответствия по id (не должно случаться для дерева из
+  // data/categories.ts — там id проставлены для всех узлов, — но подстрахует
+  // ручные правки в базе или более старые данные). В этом случае id
+  // существующей строки НЕ трогаем (менять первичный ключ у строки, на
+  // которую уже могут ссылаться объявления, — плохая идея), только
+  // предупреждаем в консоль.
+  let existing = await prisma.category.findUnique({ where: { id: data.id } })
+
+  if (!existing) {
+    existing = await prisma.category.findUnique({ where: { fullPath } })
+
+    if (existing) {
+      console.warn(
+        `⚠ Категория "${data.name}" найдена по fullPath, а не по id (ожидался ${data.id}, у существующей строки id=${existing.id}). ` +
+          `Использую существующую строку без изменения id. Если категория была переименована — убедитесь, что в CATEGORY_TREE ` +
+          `для неё явно указан id: '${existing.id}'.`
+      )
     }
-  })
+  }
+
+  const categoryData = {
+    name: data.name,
+    description: data.description ?? null,
+    slug,
+    path,
+    fullPath,
+    code,
+    iconId: data.iconId,
+    priceUnits,
+    level,
+    sortOrder,
+    parentId
+  }
+
+  const category = existing
+    ? await prisma.category.update({ where: { id: existing.id }, data: categoryData })
+    : await prisma.category.create({ data: { id: data.id, ...categoryData } })
 
   // 2. Пересоздаем характеристики в транзакции
   await prisma.$transaction([
