@@ -1,4 +1,4 @@
-import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common'
+import { BadRequestException, ConflictException, Injectable, Logger, NotFoundException } from '@nestjs/common'
 import { PrismaService } from '@/prisma/prisma.service'
 import { FileService } from '../file/file.service'
 import { ConfigService } from '@nestjs/config'
@@ -96,6 +96,8 @@ function buildRegionMatchPattern(name: string): string {
 
 @Injectable()
 export class AdsService {
+  private readonly logger = new Logger(AdsService.name)
+
   constructor(
     private readonly prisma: PrismaService,
     private readonly fileService: FileService,
@@ -575,7 +577,7 @@ export class AdsService {
   // Раньше userId сюда вообще не передавался, и это поле не отдавалось в
   // ответе — карточка объявления никогда не показывала, что оно уже в
   // избранном, даже у залогиненного и реально добавившего его пользователя.
-  async findOne(id: string, userId?: string) {
+  async findOne(id: string, userId?: string, viewerKey?: string, trackView = false) {
     const now = new Date()
 
     const ad = await this.prisma.ad.findUnique({
@@ -636,6 +638,18 @@ export class AdsService {
       throw new NotFoundException('Объявление не найдено')
     }
 
+    // Не блокируем ответ записью статистики — посетитель должен увидеть
+    // объявление в любом случае, даже если запись просмотра не удастся (см.
+    // recordView). Владельца, смотрящего своё же объявление, не считаем.
+    // trackView=false — SSR-вызов (см. AdsController.findOne), у него нет ни
+    // реальной сессии, ни реального IP/UA посетителя, поэтому запись оттуда
+    // была бы либо мимо владельца, либо схлопывала бы всех посетителей в
+    // один viewerKey. Пишем статистику только по настоящему клиентскому
+    // запросу.
+    if (trackView && viewerKey && ad.userId !== userId) {
+      void this.recordView(id, viewerKey)
+    }
+
     const { user, favorites, ...rest } = ad
 
     let userWithAdsCount: (Omit<NonNullable<typeof user>, '_count'> & { adsCount: number }) | null = null
@@ -646,6 +660,150 @@ export class AdsService {
     }
 
     return { ...rest, user: userWithAdsCount, isFavorite: userId ? (favorites?.length ?? 0) > 0 : false }
+  }
+
+  private async recordView(adId: string, viewerKey: string) {
+    try {
+      const viewDate = new Date()
+      viewDate.setHours(0, 0, 0, 0)
+
+      await this.prisma.adView.create({ data: { adId, viewerKey, viewDate } })
+    } catch (error) {
+      // P2002 — уникальный индекс (adId, viewerKey, viewDate): повторный
+      // просмотр того же посетителя в тот же день, это ожидаемо и не
+      // ошибка (см. схему AdView). Остальные сбои не должны ронять показ
+      // объявления посетителю — оно уже отдано, статистика подождёт до
+      // следующего просмотра.
+      if ((error as { code?: string })?.code !== 'P2002') {
+        this.logger.error(`Не удалось записать просмотр объявления ${adId}`, error)
+      }
+    }
+  }
+
+  // Максимум недель назад, которые можно пролистать (0 — текущая неделя) —
+  // 12 недель всего вместе с текущей. Не про экономию базы (AdViewDaily и
+  // так копеечная, живёт по каскаду с самим объявлением) — просто
+  // объявления обычно не живут дольше пары месяцев, листать статистику на
+  // полгода назад не нужно (см. обсуждение).
+  private readonly MAX_WEEK_OFFSET = 11
+
+  // Статистика просмотров — приватная (см. обсуждение и schema.prisma):
+  // владелец видит через getViewStatsForOwner, админ — через
+  // getViewStatsForAdmin, оба зовут один и тот же приватный getViewStats
+  // после своей собственной проверки доступа.
+  async getViewStatsForOwner(adId: string, userId: string, weekOffset: number) {
+    const ad = await this.getUserAdOrThrow(adId, userId)
+
+    return this.getViewStats(adId, weekOffset, ad.publishedAt)
+  }
+
+  async getViewStatsForAdmin(adId: string, weekOffset: number) {
+    const ad = await this.prisma.ad.findUnique({ where: { id: adId }, select: { id: true, publishedAt: true } })
+
+    if (!ad) {
+      throw new NotFoundException('Объявление не найдено')
+    }
+
+    return this.getViewStats(adId, weekOffset, ad.publishedAt)
+  }
+
+  // Неделя — понедельник-воскресенье (тот же принцип, что у большинства
+  // маркетплейсов). weekOffset считаем от текущей недели: 0 — она и есть,
+  // 1 — прошлая, и так далее, зажимаем в [0, maxWeekOffset], где
+  // maxWeekOffset — не просто константа MAX_WEEK_OFFSET, а она же
+  // дополнительно урезанная возрастом самого объявления (см.
+  // computeMaxWeekOffset) — иначе можно было пролистать в недели, которые
+  // существовали ДО публикации объявления (там заведомо пусто, но кнопка
+  // "назад" оставалась активной — баг, замеченный пользователем).
+  private async getViewStats(adId: string, weekOffset: number, publishedAt: Date | null) {
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+
+    // getDay(): 0 — воскресенье, 1 — понедельник... приводим к "0 — понедельник".
+    const daysSinceMonday = (today.getDay() + 6) % 7
+    const currentWeekStart = new Date(today)
+    currentWeekStart.setDate(currentWeekStart.getDate() - daysSinceMonday)
+
+    const maxWeekOffset = this.computeMaxWeekOffset(currentWeekStart, publishedAt)
+    const clampedOffset = Math.min(Math.max(weekOffset, 0), maxWeekOffset)
+
+    const weekStart = new Date(currentWeekStart)
+    weekStart.setDate(weekStart.getDate() - clampedOffset * 7)
+
+    const weekDates = Array.from({ length: 7 }, (_, index) => {
+      const date = new Date(weekStart)
+      date.setDate(date.getDate() + index)
+      return date
+    })
+
+    const [rolledUp, rawViews] = await Promise.all([
+      this.prisma.adViewDaily.findMany({
+        where: { adId, date: { gte: weekStart, lte: weekDates[6] } },
+        select: { date: true, views: true }
+      }),
+      // Не полагаемся на то, что AdViewsRollupWorker гарантированно
+      // отработал этой ночью (кроном в 2:00) — если сервер в этот момент
+      // был выключен/перезапускался (обычное дело на деве), сворачивание
+      // просто не произошло, и пропущенный день навсегда выпадал бы из
+      // ответа, хотя сами просмотры никуда не делись и всё ещё лежат в
+      // AdView (баг, замеченный пользователем). Поэтому досчитываем сырые
+      // записи не только за сегодня, а за ВСЮ запрошенную неделю — для уже
+      // свёрнутых дней тут будет 0 (их raw-строки удаляются транзакционно
+      // вместе со сверткой, см. AdViewsRollupWorker), так что суммирование
+      // с rolledUp ниже не даёт двойного счёта. Благодаря уникальному
+      // индексу (adId, viewerKey, viewDate) на AdView обычный count уже
+      // равен числу уникальных посетителей за день, без distinct.
+      this.prisma.adView.groupBy({
+        by: ['viewDate'],
+        where: { adId, viewDate: { gte: weekStart, lte: weekDates[6] } },
+        _count: { _all: true }
+      })
+    ])
+
+    const rolledUpByDate = new Map(rolledUp.map(row => [row.date.toISOString().slice(0, 10), row.views]))
+    const rawByDate = new Map(rawViews.map(row => [row.viewDate.toISOString().slice(0, 10), row._count._all]))
+
+    // Будущие дни текущей недели (ещё не наступили) — 0 в обеих картах,
+    // ничего специально обрабатывать не нужно.
+    const days = weekDates.map(date => {
+      const iso = date.toISOString().slice(0, 10)
+      const views = (rolledUpByDate.get(iso) ?? 0) + (rawByDate.get(iso) ?? 0)
+
+      return { date: iso, views }
+    })
+
+    return {
+      weekStart: weekDates[0].toISOString().slice(0, 10),
+      weekEnd: weekDates[6].toISOString().slice(0, 10),
+      weekOffset: clampedOffset,
+      maxWeekOffset,
+      total: days.reduce((sum, day) => sum + day.views, 0),
+      days
+    }
+  }
+
+  // Сколько недель назад реально можно пролистать для конкретного
+  // объявления — минимум из глобального потолка (MAX_WEEK_OFFSET, см. выше)
+  // и возраста самого объявления. publishedAt может быть null (объявление
+  // ещё ни разу не публиковалось — например, всё ещё черновик, владелец
+  // мог дёрнуть эндпоинт статистики и для такого) — тогда прошлых недель
+  // просто нет, 0. currentWeekStart уже приведён к полуночи понедельника
+  // текущей недели вызывающим кодом.
+  private computeMaxWeekOffset(currentWeekStart: Date, publishedAt: Date | null): number {
+    if (!publishedAt) return 0
+
+    const publishedDate = new Date(publishedAt)
+    publishedDate.setHours(0, 0, 0, 0)
+
+    const publishedDaysSinceMonday = (publishedDate.getDay() + 6) % 7
+    const publishedWeekStart = new Date(publishedDate)
+    publishedWeekStart.setDate(publishedWeekStart.getDate() - publishedDaysSinceMonday)
+
+    const weeksSincePublished = Math.round(
+      (currentWeekStart.getTime() - publishedWeekStart.getTime()) / (7 * 24 * 60 * 60 * 1000)
+    )
+
+    return Math.min(this.MAX_WEEK_OFFSET, Math.max(weeksSincePublished, 0))
   }
 
   async findOneForOwner(id: string, userId: string) {

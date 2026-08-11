@@ -12,6 +12,7 @@ import {
   UnauthorizedException,
   ParseUUIDPipe,
   ParseIntPipe,
+  ParseBoolPipe,
   DefaultValuePipe
 } from '@nestjs/common'
 import { AdsService } from './ads.service'
@@ -28,6 +29,7 @@ import { RolesGuard } from '../auth/guards/roles.guard'
 import { UserRole } from 'prisma/generated/enums'
 import { UpdateAdDto } from './dto/update-ad.dto'
 import { CurrentUser } from '@/auth/decorators/decorators/user.decorator'
+import { computeViewerKey } from './utils/viewer-key.util'
 import { FindAdsQueryDto } from './dto/find-ads-query.dto'
 import { FindMyAdsQueryDto } from './dto/find-my-ads-query.dto'
 import { User } from 'prisma/generated/client'
@@ -144,14 +146,60 @@ export class AdsController {
     return this.adsService.findOneForOwner(id, userId)
   }
 
+  // Статистика просмотров — приватная, отдаём только владельцу объявления
+  // (см. AdsService.getViewStatsForOwner). Публичного эндпоинта для этого
+  // нет и не планируется (см. обсуждение). weekOffset — 0 текущая неделя,
+  // 1 прошлая и так далее, сервис сам зажимает в допустимый диапазон.
+  @Get('my/:id/views')
+  @UseGuards(AuthGuard)
+  getMyAdViewStats(
+    @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser('id') userId: string,
+    @Query('weekOffset', new DefaultValuePipe(0), ParseIntPipe) weekOffset: number
+  ) {
+    return this.adsService.getViewStatsForOwner(id, userId, weekOffset)
+  }
+
+  // Та же статистика, но для админа — на любое объявление, не только своё
+  // (см. AdsService.getViewStatsForAdmin). ':id/views', а не 'my/:id/views' —
+  // тот же приём, что и с ':id/moderation' ниже: отдельный явный путь, а не
+  // расширение владельческого эндпоинта.
+  @Get(':id/views')
+  @Roles(UserRole.ADMIN)
+  @UseGuards(AuthGuard, RolesGuard)
+  getAdViewStatsForAdmin(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Query('weekOffset', new DefaultValuePipe(0), ParseIntPipe) weekOffset: number
+  ) {
+    return this.adsService.getViewStatsForAdmin(id, weekOffset)
+  }
+
   @Get(':id')
-  findOne(@Param('id') id: string, @Req() request: Request) {
+  findOne(
+    @Param('id') id: string,
+    @Req() request: Request,
+    // trackView — явный флаг "это настоящий визит браузера, а не серверный
+    // SSR-запрос страницы" (см. AdsService.findOne/recordView). SSR-вызов
+    // в client/src/app/(main)/ads/[id]/page.tsx делает обычный
+    // adsService.findOne(id) без этого флага — у него нет ни сессионной
+    // куки, ни реального IP/UA посетителя (Next.js сервер их не
+    // прокидывает), поэтому запись просмотра оттуда была бы либо мимо
+    // владельца (userId всегда undefined → исключение владельца не
+    // срабатывает), либо схлопывала бы всех разных посетителей в один
+    // viewerKey (один и тот же IP/UA у самого Next.js сервера). Настоящий
+    // клиентский рефетч в useAd (см. use-ad.ts) передаёт trackView=true —
+    // у него уже есть куки и реальные IP/UA браузера.
+    @Query('trackView', new DefaultValuePipe(false), ParseBoolPipe) trackView: boolean
+  ) {
     // Эндпоинт публичный (без @UseGuards) — доступен и без авторизации, но
     // если сессия есть, передаём userId в сервис, чтобы корректно посчитать
     // isFavorite именно для текущего пользователя (см. AdsService.findOne).
+    // viewerKey — для дедупа статистики просмотров, см.
+    // ads/utils/viewer-key.util.ts и AdsService.findOne/recordView.
     const userId = request.session?.userId
+    const viewerKey = computeViewerKey(userId, request)
 
-    return this.adsService.findOne(id, userId)
+    return this.adsService.findOne(id, userId, viewerKey, trackView)
   }
 
   @Patch(':id')

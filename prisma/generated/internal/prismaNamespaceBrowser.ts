@@ -61,6 +61,8 @@ export const ModelName = {
   Favorite: 'Favorite',
   AdReport: 'AdReport',
   AdBump: 'AdBump',
+  AdView: 'AdView',
+  AdViewDaily: 'AdViewDaily',
   PremiumPurchase: 'PremiumPurchase',
   AdServicePurchase: 'AdServicePurchase',
   Conversation: 'Conversation',
@@ -263,6 +265,27 @@ export const AdBumpScalarFieldEnum = {
 } as const
 
 export type AdBumpScalarFieldEnum = (typeof AdBumpScalarFieldEnum)[keyof typeof AdBumpScalarFieldEnum]
+
+
+export const AdViewScalarFieldEnum = {
+  id: 'id',
+  adId: 'adId',
+  viewerKey: 'viewerKey',
+  viewDate: 'viewDate',
+  createdAt: 'createdAt'
+} as const
+
+export type AdViewScalarFieldEnum = (typeof AdViewScalarFieldEnum)[keyof typeof AdViewScalarFieldEnum]
+
+
+export const AdViewDailyScalarFieldEnum = {
+  id: 'id',
+  adId: 'adId',
+  date: 'date',
+  views: 'views'
+} as const
+
+export type AdViewDailyScalarFieldEnum = (typeof AdViewDailyScalarFieldEnum)[keyof typeof AdViewDailyScalarFieldEnum]
 
 
 export const PremiumPurchaseScalarFieldEnum = {

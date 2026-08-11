@@ -267,6 +267,8 @@ model Ad {
   conversations Conversation[]
   reports       AdReport[]
   bumps         AdBump[]
+  views         AdView[]
+  viewsDaily    AdViewDaily[]
 
   status AdStatus @default(PENDING)
 
@@ -460,6 +462,59 @@ model AdBump {
   @@index([userId])
   @@index([status])
   @@map("ad_bumps")
+}
+
+// Статистика просмотров — приватная, видит только владелец объявления и
+// админ (см. AdsService.getViewStatsForOwner/getViewStatsForAdmin), поэтому
+// не денормализуем счётчик прямо на Ad — читается редко, писать на каждый
+// публичный просмотр в саму широкую таблицу Ad было бы гораздо дороже (у
+// каждого UPDATE там пришлось бы переписывать всю строку с текстовыми
+// полями объявления, и это лишняя блокировка на самом горячем публичном
+// эндпоинте — см. AdsService.findOne).
+//
+// AdView — сырые события, максимум сутки данных: один посетитель считается
+// один раз в день (@@unique), AdViewsRollupWorker каждую ночь сворачивает
+// вчерашние строки в AdViewDaily и удаляет их отсюда — таблица никогда не
+// растёт бесконечно.
+model AdView {
+  id String @id @default(uuid())
+
+  adId String @map("ad_id")
+  ad   Ad     @relation(fields: [adId], references: [id], onDelete: Cascade)
+
+  // "user:{id}" для залогиненных, "anon:{sha256(ip+ua)}" для анонимов —
+  // сырой IP не храним (персональные данные, 152-ФЗ), хэша достаточно для
+  // дедупа (см. computeViewerKey в ads/utils/viewer-key.util.ts). Сам
+  // владелец объявления в эту таблицу не попадает вовсе — не считаем
+  // просмотром, когда он смотрит своё же объявление (см. AdsService.findOne).
+  viewerKey String @map("viewer_key")
+
+  // Без времени — только день, ради дедупа "один посетитель — один
+  // засчитанный просмотр в сутки".
+  viewDate DateTime @map("view_date") @db.Date
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@unique([adId, viewerKey, viewDate])
+  @@index([viewDate])
+  @@map("ad_views")
+}
+
+// Свёрнутые дневные суммы — постоянное хранилище статистики (в отличие от
+// AdView). Максимум одна строка на объявление в день, живёт вместе с
+// объявлением (Cascade) — отдельно чистить не нужно, всё уйдёт само при
+// физическом удалении объявления (см. AdsArchivePurgeWorker).
+model AdViewDaily {
+  id String @id @default(uuid())
+
+  adId String @map("ad_id")
+  ad   Ad     @relation(fields: [adId], references: [id], onDelete: Cascade)
+
+  date  DateTime @db.Date
+  views Int      @default(0)
+
+  @@unique([adId, date])
+  @@map("ad_views_daily")
 }
 
 enum PremiumPurchaseStatus {

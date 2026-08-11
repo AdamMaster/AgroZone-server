@@ -434,6 +434,8 @@ export type AdWhereInput = {
   conversations?: Prisma.ConversationListRelationFilter
   reports?: Prisma.AdReportListRelationFilter
   bumps?: Prisma.AdBumpListRelationFilter
+  views?: Prisma.AdViewListRelationFilter
+  viewsDaily?: Prisma.AdViewDailyListRelationFilter
   servicePurchases?: Prisma.AdServicePurchaseListRelationFilter
 }
 
@@ -476,6 +478,8 @@ export type AdOrderByWithRelationInput = {
   conversations?: Prisma.ConversationOrderByRelationAggregateInput
   reports?: Prisma.AdReportOrderByRelationAggregateInput
   bumps?: Prisma.AdBumpOrderByRelationAggregateInput
+  views?: Prisma.AdViewOrderByRelationAggregateInput
+  viewsDaily?: Prisma.AdViewDailyOrderByRelationAggregateInput
   servicePurchases?: Prisma.AdServicePurchaseOrderByRelationAggregateInput
 }
 
@@ -521,6 +525,8 @@ export type AdWhereUniqueInput = Prisma.AtLeast<{
   conversations?: Prisma.ConversationListRelationFilter
   reports?: Prisma.AdReportListRelationFilter
   bumps?: Prisma.AdBumpListRelationFilter
+  views?: Prisma.AdViewListRelationFilter
+  viewsDaily?: Prisma.AdViewDailyListRelationFilter
   servicePurchases?: Prisma.AdServicePurchaseListRelationFilter
 }, "id" | "slug">
 
@@ -639,6 +645,8 @@ export type AdCreateInput = {
   conversations?: Prisma.ConversationCreateNestedManyWithoutAdInput
   reports?: Prisma.AdReportCreateNestedManyWithoutAdInput
   bumps?: Prisma.AdBumpCreateNestedManyWithoutAdInput
+  views?: Prisma.AdViewCreateNestedManyWithoutAdInput
+  viewsDaily?: Prisma.AdViewDailyCreateNestedManyWithoutAdInput
   servicePurchases?: Prisma.AdServicePurchaseCreateNestedManyWithoutAdInput
 }
 
@@ -679,6 +687,8 @@ export type AdUncheckedCreateInput = {
   conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutAdInput
   reports?: Prisma.AdReportUncheckedCreateNestedManyWithoutAdInput
   bumps?: Prisma.AdBumpUncheckedCreateNestedManyWithoutAdInput
+  views?: Prisma.AdViewUncheckedCreateNestedManyWithoutAdInput
+  viewsDaily?: Prisma.AdViewDailyUncheckedCreateNestedManyWithoutAdInput
   servicePurchases?: Prisma.AdServicePurchaseUncheckedCreateNestedManyWithoutAdInput
 }
 
@@ -719,6 +729,8 @@ export type AdUpdateInput = {
   conversations?: Prisma.ConversationUpdateManyWithoutAdNestedInput
   reports?: Prisma.AdReportUpdateManyWithoutAdNestedInput
   bumps?: Prisma.AdBumpUpdateManyWithoutAdNestedInput
+  views?: Prisma.AdViewUpdateManyWithoutAdNestedInput
+  viewsDaily?: Prisma.AdViewDailyUpdateManyWithoutAdNestedInput
   servicePurchases?: Prisma.AdServicePurchaseUpdateManyWithoutAdNestedInput
 }
 
@@ -759,6 +771,8 @@ export type AdUncheckedUpdateInput = {
   conversations?: Prisma.ConversationUncheckedUpdateManyWithoutAdNestedInput
   reports?: Prisma.AdReportUncheckedUpdateManyWithoutAdNestedInput
   bumps?: Prisma.AdBumpUncheckedUpdateManyWithoutAdNestedInput
+  views?: Prisma.AdViewUncheckedUpdateManyWithoutAdNestedInput
+  viewsDaily?: Prisma.AdViewDailyUncheckedUpdateManyWithoutAdNestedInput
   servicePurchases?: Prisma.AdServicePurchaseUncheckedUpdateManyWithoutAdNestedInput
 }
 
@@ -1168,6 +1182,34 @@ export type AdUpdateOneRequiredWithoutBumpsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.AdUpdateToOneWithWhereWithoutBumpsInput, Prisma.AdUpdateWithoutBumpsInput>, Prisma.AdUncheckedUpdateWithoutBumpsInput>
 }
 
+export type AdCreateNestedOneWithoutViewsInput = {
+  create?: Prisma.XOR<Prisma.AdCreateWithoutViewsInput, Prisma.AdUncheckedCreateWithoutViewsInput>
+  connectOrCreate?: Prisma.AdCreateOrConnectWithoutViewsInput
+  connect?: Prisma.AdWhereUniqueInput
+}
+
+export type AdUpdateOneRequiredWithoutViewsNestedInput = {
+  create?: Prisma.XOR<Prisma.AdCreateWithoutViewsInput, Prisma.AdUncheckedCreateWithoutViewsInput>
+  connectOrCreate?: Prisma.AdCreateOrConnectWithoutViewsInput
+  upsert?: Prisma.AdUpsertWithoutViewsInput
+  connect?: Prisma.AdWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AdUpdateToOneWithWhereWithoutViewsInput, Prisma.AdUpdateWithoutViewsInput>, Prisma.AdUncheckedUpdateWithoutViewsInput>
+}
+
+export type AdCreateNestedOneWithoutViewsDailyInput = {
+  create?: Prisma.XOR<Prisma.AdCreateWithoutViewsDailyInput, Prisma.AdUncheckedCreateWithoutViewsDailyInput>
+  connectOrCreate?: Prisma.AdCreateOrConnectWithoutViewsDailyInput
+  connect?: Prisma.AdWhereUniqueInput
+}
+
+export type AdUpdateOneRequiredWithoutViewsDailyNestedInput = {
+  create?: Prisma.XOR<Prisma.AdCreateWithoutViewsDailyInput, Prisma.AdUncheckedCreateWithoutViewsDailyInput>
+  connectOrCreate?: Prisma.AdCreateOrConnectWithoutViewsDailyInput
+  upsert?: Prisma.AdUpsertWithoutViewsDailyInput
+  connect?: Prisma.AdWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AdUpdateToOneWithWhereWithoutViewsDailyInput, Prisma.AdUpdateWithoutViewsDailyInput>, Prisma.AdUncheckedUpdateWithoutViewsDailyInput>
+}
+
 export type AdCreateNestedOneWithoutServicePurchasesInput = {
   create?: Prisma.XOR<Prisma.AdCreateWithoutServicePurchasesInput, Prisma.AdUncheckedCreateWithoutServicePurchasesInput>
   connectOrCreate?: Prisma.AdCreateOrConnectWithoutServicePurchasesInput
@@ -1234,6 +1276,8 @@ export type AdCreateWithoutUserInput = {
   conversations?: Prisma.ConversationCreateNestedManyWithoutAdInput
   reports?: Prisma.AdReportCreateNestedManyWithoutAdInput
   bumps?: Prisma.AdBumpCreateNestedManyWithoutAdInput
+  views?: Prisma.AdViewCreateNestedManyWithoutAdInput
+  viewsDaily?: Prisma.AdViewDailyCreateNestedManyWithoutAdInput
   servicePurchases?: Prisma.AdServicePurchaseCreateNestedManyWithoutAdInput
 }
 
@@ -1273,6 +1317,8 @@ export type AdUncheckedCreateWithoutUserInput = {
   conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutAdInput
   reports?: Prisma.AdReportUncheckedCreateNestedManyWithoutAdInput
   bumps?: Prisma.AdBumpUncheckedCreateNestedManyWithoutAdInput
+  views?: Prisma.AdViewUncheckedCreateNestedManyWithoutAdInput
+  viewsDaily?: Prisma.AdViewDailyUncheckedCreateNestedManyWithoutAdInput
   servicePurchases?: Prisma.AdServicePurchaseUncheckedCreateNestedManyWithoutAdInput
 }
 
@@ -1376,6 +1422,8 @@ export type AdCreateWithoutCategoryInput = {
   conversations?: Prisma.ConversationCreateNestedManyWithoutAdInput
   reports?: Prisma.AdReportCreateNestedManyWithoutAdInput
   bumps?: Prisma.AdBumpCreateNestedManyWithoutAdInput
+  views?: Prisma.AdViewCreateNestedManyWithoutAdInput
+  viewsDaily?: Prisma.AdViewDailyCreateNestedManyWithoutAdInput
   servicePurchases?: Prisma.AdServicePurchaseCreateNestedManyWithoutAdInput
 }
 
@@ -1415,6 +1463,8 @@ export type AdUncheckedCreateWithoutCategoryInput = {
   conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutAdInput
   reports?: Prisma.AdReportUncheckedCreateNestedManyWithoutAdInput
   bumps?: Prisma.AdBumpUncheckedCreateNestedManyWithoutAdInput
+  views?: Prisma.AdViewUncheckedCreateNestedManyWithoutAdInput
+  viewsDaily?: Prisma.AdViewDailyUncheckedCreateNestedManyWithoutAdInput
   servicePurchases?: Prisma.AdServicePurchaseUncheckedCreateNestedManyWithoutAdInput
 }
 
@@ -1480,6 +1530,8 @@ export type AdCreateWithoutFavoritesInput = {
   conversations?: Prisma.ConversationCreateNestedManyWithoutAdInput
   reports?: Prisma.AdReportCreateNestedManyWithoutAdInput
   bumps?: Prisma.AdBumpCreateNestedManyWithoutAdInput
+  views?: Prisma.AdViewCreateNestedManyWithoutAdInput
+  viewsDaily?: Prisma.AdViewDailyCreateNestedManyWithoutAdInput
   servicePurchases?: Prisma.AdServicePurchaseCreateNestedManyWithoutAdInput
 }
 
@@ -1519,6 +1571,8 @@ export type AdUncheckedCreateWithoutFavoritesInput = {
   conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutAdInput
   reports?: Prisma.AdReportUncheckedCreateNestedManyWithoutAdInput
   bumps?: Prisma.AdBumpUncheckedCreateNestedManyWithoutAdInput
+  views?: Prisma.AdViewUncheckedCreateNestedManyWithoutAdInput
+  viewsDaily?: Prisma.AdViewDailyUncheckedCreateNestedManyWithoutAdInput
   servicePurchases?: Prisma.AdServicePurchaseUncheckedCreateNestedManyWithoutAdInput
 }
 
@@ -1574,6 +1628,8 @@ export type AdUpdateWithoutFavoritesInput = {
   conversations?: Prisma.ConversationUpdateManyWithoutAdNestedInput
   reports?: Prisma.AdReportUpdateManyWithoutAdNestedInput
   bumps?: Prisma.AdBumpUpdateManyWithoutAdNestedInput
+  views?: Prisma.AdViewUpdateManyWithoutAdNestedInput
+  viewsDaily?: Prisma.AdViewDailyUpdateManyWithoutAdNestedInput
   servicePurchases?: Prisma.AdServicePurchaseUpdateManyWithoutAdNestedInput
 }
 
@@ -1613,6 +1669,8 @@ export type AdUncheckedUpdateWithoutFavoritesInput = {
   conversations?: Prisma.ConversationUncheckedUpdateManyWithoutAdNestedInput
   reports?: Prisma.AdReportUncheckedUpdateManyWithoutAdNestedInput
   bumps?: Prisma.AdBumpUncheckedUpdateManyWithoutAdNestedInput
+  views?: Prisma.AdViewUncheckedUpdateManyWithoutAdNestedInput
+  viewsDaily?: Prisma.AdViewDailyUncheckedUpdateManyWithoutAdNestedInput
   servicePurchases?: Prisma.AdServicePurchaseUncheckedUpdateManyWithoutAdNestedInput
 }
 
@@ -1652,6 +1710,8 @@ export type AdCreateWithoutReportsInput = {
   favorites?: Prisma.FavoriteCreateNestedManyWithoutAdInput
   conversations?: Prisma.ConversationCreateNestedManyWithoutAdInput
   bumps?: Prisma.AdBumpCreateNestedManyWithoutAdInput
+  views?: Prisma.AdViewCreateNestedManyWithoutAdInput
+  viewsDaily?: Prisma.AdViewDailyCreateNestedManyWithoutAdInput
   servicePurchases?: Prisma.AdServicePurchaseCreateNestedManyWithoutAdInput
 }
 
@@ -1691,6 +1751,8 @@ export type AdUncheckedCreateWithoutReportsInput = {
   favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutAdInput
   conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutAdInput
   bumps?: Prisma.AdBumpUncheckedCreateNestedManyWithoutAdInput
+  views?: Prisma.AdViewUncheckedCreateNestedManyWithoutAdInput
+  viewsDaily?: Prisma.AdViewDailyUncheckedCreateNestedManyWithoutAdInput
   servicePurchases?: Prisma.AdServicePurchaseUncheckedCreateNestedManyWithoutAdInput
 }
 
@@ -1746,6 +1808,8 @@ export type AdUpdateWithoutReportsInput = {
   favorites?: Prisma.FavoriteUpdateManyWithoutAdNestedInput
   conversations?: Prisma.ConversationUpdateManyWithoutAdNestedInput
   bumps?: Prisma.AdBumpUpdateManyWithoutAdNestedInput
+  views?: Prisma.AdViewUpdateManyWithoutAdNestedInput
+  viewsDaily?: Prisma.AdViewDailyUpdateManyWithoutAdNestedInput
   servicePurchases?: Prisma.AdServicePurchaseUpdateManyWithoutAdNestedInput
 }
 
@@ -1785,6 +1849,8 @@ export type AdUncheckedUpdateWithoutReportsInput = {
   favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutAdNestedInput
   conversations?: Prisma.ConversationUncheckedUpdateManyWithoutAdNestedInput
   bumps?: Prisma.AdBumpUncheckedUpdateManyWithoutAdNestedInput
+  views?: Prisma.AdViewUncheckedUpdateManyWithoutAdNestedInput
+  viewsDaily?: Prisma.AdViewDailyUncheckedUpdateManyWithoutAdNestedInput
   servicePurchases?: Prisma.AdServicePurchaseUncheckedUpdateManyWithoutAdNestedInput
 }
 
@@ -1824,6 +1890,8 @@ export type AdCreateWithoutBumpsInput = {
   favorites?: Prisma.FavoriteCreateNestedManyWithoutAdInput
   conversations?: Prisma.ConversationCreateNestedManyWithoutAdInput
   reports?: Prisma.AdReportCreateNestedManyWithoutAdInput
+  views?: Prisma.AdViewCreateNestedManyWithoutAdInput
+  viewsDaily?: Prisma.AdViewDailyCreateNestedManyWithoutAdInput
   servicePurchases?: Prisma.AdServicePurchaseCreateNestedManyWithoutAdInput
 }
 
@@ -1863,6 +1931,8 @@ export type AdUncheckedCreateWithoutBumpsInput = {
   favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutAdInput
   conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutAdInput
   reports?: Prisma.AdReportUncheckedCreateNestedManyWithoutAdInput
+  views?: Prisma.AdViewUncheckedCreateNestedManyWithoutAdInput
+  viewsDaily?: Prisma.AdViewDailyUncheckedCreateNestedManyWithoutAdInput
   servicePurchases?: Prisma.AdServicePurchaseUncheckedCreateNestedManyWithoutAdInput
 }
 
@@ -1918,6 +1988,8 @@ export type AdUpdateWithoutBumpsInput = {
   favorites?: Prisma.FavoriteUpdateManyWithoutAdNestedInput
   conversations?: Prisma.ConversationUpdateManyWithoutAdNestedInput
   reports?: Prisma.AdReportUpdateManyWithoutAdNestedInput
+  views?: Prisma.AdViewUpdateManyWithoutAdNestedInput
+  viewsDaily?: Prisma.AdViewDailyUpdateManyWithoutAdNestedInput
   servicePurchases?: Prisma.AdServicePurchaseUpdateManyWithoutAdNestedInput
 }
 
@@ -1957,6 +2029,368 @@ export type AdUncheckedUpdateWithoutBumpsInput = {
   favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutAdNestedInput
   conversations?: Prisma.ConversationUncheckedUpdateManyWithoutAdNestedInput
   reports?: Prisma.AdReportUncheckedUpdateManyWithoutAdNestedInput
+  views?: Prisma.AdViewUncheckedUpdateManyWithoutAdNestedInput
+  viewsDaily?: Prisma.AdViewDailyUncheckedUpdateManyWithoutAdNestedInput
+  servicePurchases?: Prisma.AdServicePurchaseUncheckedUpdateManyWithoutAdNestedInput
+}
+
+export type AdCreateWithoutViewsInput = {
+  id?: string
+  slug?: string
+  title: string
+  description: string
+  price?: bigint | number | null
+  unit?: $Enums.PriceUnit
+  images?: Prisma.AdCreateimagesInput | string[]
+  address: string
+  phone: string
+  features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  lat: number
+  lng: number
+  region?: string | null
+  regionIsoCode?: string | null
+  locality?: string | null
+  localityFiasId?: string | null
+  categoryPath?: Prisma.AdCreatecategoryPathInput | string[]
+  seoPath: string
+  status?: $Enums.AdStatus
+  rejectionReason?: string | null
+  expiresAt?: Date | string | null
+  publishedAt?: Date | string | null
+  archivedAt?: Date | string | null
+  bumpedAt?: Date | string | null
+  bumpServiceUntil?: Date | string | null
+  priceHighlightUntil?: Date | string | null
+  badge?: $Enums.AdBadge | null
+  badgeUntil?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user?: Prisma.UserCreateNestedOneWithoutAdsInput
+  category: Prisma.CategoryCreateNestedOneWithoutAdsInput
+  favorites?: Prisma.FavoriteCreateNestedManyWithoutAdInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutAdInput
+  reports?: Prisma.AdReportCreateNestedManyWithoutAdInput
+  bumps?: Prisma.AdBumpCreateNestedManyWithoutAdInput
+  viewsDaily?: Prisma.AdViewDailyCreateNestedManyWithoutAdInput
+  servicePurchases?: Prisma.AdServicePurchaseCreateNestedManyWithoutAdInput
+}
+
+export type AdUncheckedCreateWithoutViewsInput = {
+  id?: string
+  slug?: string
+  title: string
+  description: string
+  price?: bigint | number | null
+  unit?: $Enums.PriceUnit
+  images?: Prisma.AdCreateimagesInput | string[]
+  address: string
+  phone: string
+  features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  lat: number
+  lng: number
+  region?: string | null
+  regionIsoCode?: string | null
+  locality?: string | null
+  localityFiasId?: string | null
+  categoryPath?: Prisma.AdCreatecategoryPathInput | string[]
+  seoPath: string
+  userId: string
+  categoryId: string
+  status?: $Enums.AdStatus
+  rejectionReason?: string | null
+  expiresAt?: Date | string | null
+  publishedAt?: Date | string | null
+  archivedAt?: Date | string | null
+  bumpedAt?: Date | string | null
+  bumpServiceUntil?: Date | string | null
+  priceHighlightUntil?: Date | string | null
+  badge?: $Enums.AdBadge | null
+  badgeUntil?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutAdInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutAdInput
+  reports?: Prisma.AdReportUncheckedCreateNestedManyWithoutAdInput
+  bumps?: Prisma.AdBumpUncheckedCreateNestedManyWithoutAdInput
+  viewsDaily?: Prisma.AdViewDailyUncheckedCreateNestedManyWithoutAdInput
+  servicePurchases?: Prisma.AdServicePurchaseUncheckedCreateNestedManyWithoutAdInput
+}
+
+export type AdCreateOrConnectWithoutViewsInput = {
+  where: Prisma.AdWhereUniqueInput
+  create: Prisma.XOR<Prisma.AdCreateWithoutViewsInput, Prisma.AdUncheckedCreateWithoutViewsInput>
+}
+
+export type AdUpsertWithoutViewsInput = {
+  update: Prisma.XOR<Prisma.AdUpdateWithoutViewsInput, Prisma.AdUncheckedUpdateWithoutViewsInput>
+  create: Prisma.XOR<Prisma.AdCreateWithoutViewsInput, Prisma.AdUncheckedCreateWithoutViewsInput>
+  where?: Prisma.AdWhereInput
+}
+
+export type AdUpdateToOneWithWhereWithoutViewsInput = {
+  where?: Prisma.AdWhereInput
+  data: Prisma.XOR<Prisma.AdUpdateWithoutViewsInput, Prisma.AdUncheckedUpdateWithoutViewsInput>
+}
+
+export type AdUpdateWithoutViewsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  price?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  unit?: Prisma.EnumPriceUnitFieldUpdateOperationsInput | $Enums.PriceUnit
+  images?: Prisma.AdUpdateimagesInput | string[]
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  lat?: Prisma.FloatFieldUpdateOperationsInput | number
+  lng?: Prisma.FloatFieldUpdateOperationsInput | number
+  region?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionIsoCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localityFiasId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryPath?: Prisma.AdUpdatecategoryPathInput | string[]
+  seoPath?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumAdStatusFieldUpdateOperationsInput | $Enums.AdStatus
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  bumpedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  bumpServiceUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  priceHighlightUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  badge?: Prisma.NullableEnumAdBadgeFieldUpdateOperationsInput | $Enums.AdBadge | null
+  badgeUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneWithoutAdsNestedInput
+  category?: Prisma.CategoryUpdateOneRequiredWithoutAdsNestedInput
+  favorites?: Prisma.FavoriteUpdateManyWithoutAdNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutAdNestedInput
+  reports?: Prisma.AdReportUpdateManyWithoutAdNestedInput
+  bumps?: Prisma.AdBumpUpdateManyWithoutAdNestedInput
+  viewsDaily?: Prisma.AdViewDailyUpdateManyWithoutAdNestedInput
+  servicePurchases?: Prisma.AdServicePurchaseUpdateManyWithoutAdNestedInput
+}
+
+export type AdUncheckedUpdateWithoutViewsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  price?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  unit?: Prisma.EnumPriceUnitFieldUpdateOperationsInput | $Enums.PriceUnit
+  images?: Prisma.AdUpdateimagesInput | string[]
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  lat?: Prisma.FloatFieldUpdateOperationsInput | number
+  lng?: Prisma.FloatFieldUpdateOperationsInput | number
+  region?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionIsoCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localityFiasId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryPath?: Prisma.AdUpdatecategoryPathInput | string[]
+  seoPath?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumAdStatusFieldUpdateOperationsInput | $Enums.AdStatus
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  bumpedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  bumpServiceUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  priceHighlightUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  badge?: Prisma.NullableEnumAdBadgeFieldUpdateOperationsInput | $Enums.AdBadge | null
+  badgeUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutAdNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutAdNestedInput
+  reports?: Prisma.AdReportUncheckedUpdateManyWithoutAdNestedInput
+  bumps?: Prisma.AdBumpUncheckedUpdateManyWithoutAdNestedInput
+  viewsDaily?: Prisma.AdViewDailyUncheckedUpdateManyWithoutAdNestedInput
+  servicePurchases?: Prisma.AdServicePurchaseUncheckedUpdateManyWithoutAdNestedInput
+}
+
+export type AdCreateWithoutViewsDailyInput = {
+  id?: string
+  slug?: string
+  title: string
+  description: string
+  price?: bigint | number | null
+  unit?: $Enums.PriceUnit
+  images?: Prisma.AdCreateimagesInput | string[]
+  address: string
+  phone: string
+  features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  lat: number
+  lng: number
+  region?: string | null
+  regionIsoCode?: string | null
+  locality?: string | null
+  localityFiasId?: string | null
+  categoryPath?: Prisma.AdCreatecategoryPathInput | string[]
+  seoPath: string
+  status?: $Enums.AdStatus
+  rejectionReason?: string | null
+  expiresAt?: Date | string | null
+  publishedAt?: Date | string | null
+  archivedAt?: Date | string | null
+  bumpedAt?: Date | string | null
+  bumpServiceUntil?: Date | string | null
+  priceHighlightUntil?: Date | string | null
+  badge?: $Enums.AdBadge | null
+  badgeUntil?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user?: Prisma.UserCreateNestedOneWithoutAdsInput
+  category: Prisma.CategoryCreateNestedOneWithoutAdsInput
+  favorites?: Prisma.FavoriteCreateNestedManyWithoutAdInput
+  conversations?: Prisma.ConversationCreateNestedManyWithoutAdInput
+  reports?: Prisma.AdReportCreateNestedManyWithoutAdInput
+  bumps?: Prisma.AdBumpCreateNestedManyWithoutAdInput
+  views?: Prisma.AdViewCreateNestedManyWithoutAdInput
+  servicePurchases?: Prisma.AdServicePurchaseCreateNestedManyWithoutAdInput
+}
+
+export type AdUncheckedCreateWithoutViewsDailyInput = {
+  id?: string
+  slug?: string
+  title: string
+  description: string
+  price?: bigint | number | null
+  unit?: $Enums.PriceUnit
+  images?: Prisma.AdCreateimagesInput | string[]
+  address: string
+  phone: string
+  features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  lat: number
+  lng: number
+  region?: string | null
+  regionIsoCode?: string | null
+  locality?: string | null
+  localityFiasId?: string | null
+  categoryPath?: Prisma.AdCreatecategoryPathInput | string[]
+  seoPath: string
+  userId: string
+  categoryId: string
+  status?: $Enums.AdStatus
+  rejectionReason?: string | null
+  expiresAt?: Date | string | null
+  publishedAt?: Date | string | null
+  archivedAt?: Date | string | null
+  bumpedAt?: Date | string | null
+  bumpServiceUntil?: Date | string | null
+  priceHighlightUntil?: Date | string | null
+  badge?: $Enums.AdBadge | null
+  badgeUntil?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutAdInput
+  conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutAdInput
+  reports?: Prisma.AdReportUncheckedCreateNestedManyWithoutAdInput
+  bumps?: Prisma.AdBumpUncheckedCreateNestedManyWithoutAdInput
+  views?: Prisma.AdViewUncheckedCreateNestedManyWithoutAdInput
+  servicePurchases?: Prisma.AdServicePurchaseUncheckedCreateNestedManyWithoutAdInput
+}
+
+export type AdCreateOrConnectWithoutViewsDailyInput = {
+  where: Prisma.AdWhereUniqueInput
+  create: Prisma.XOR<Prisma.AdCreateWithoutViewsDailyInput, Prisma.AdUncheckedCreateWithoutViewsDailyInput>
+}
+
+export type AdUpsertWithoutViewsDailyInput = {
+  update: Prisma.XOR<Prisma.AdUpdateWithoutViewsDailyInput, Prisma.AdUncheckedUpdateWithoutViewsDailyInput>
+  create: Prisma.XOR<Prisma.AdCreateWithoutViewsDailyInput, Prisma.AdUncheckedCreateWithoutViewsDailyInput>
+  where?: Prisma.AdWhereInput
+}
+
+export type AdUpdateToOneWithWhereWithoutViewsDailyInput = {
+  where?: Prisma.AdWhereInput
+  data: Prisma.XOR<Prisma.AdUpdateWithoutViewsDailyInput, Prisma.AdUncheckedUpdateWithoutViewsDailyInput>
+}
+
+export type AdUpdateWithoutViewsDailyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  price?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  unit?: Prisma.EnumPriceUnitFieldUpdateOperationsInput | $Enums.PriceUnit
+  images?: Prisma.AdUpdateimagesInput | string[]
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  lat?: Prisma.FloatFieldUpdateOperationsInput | number
+  lng?: Prisma.FloatFieldUpdateOperationsInput | number
+  region?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionIsoCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localityFiasId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryPath?: Prisma.AdUpdatecategoryPathInput | string[]
+  seoPath?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumAdStatusFieldUpdateOperationsInput | $Enums.AdStatus
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  bumpedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  bumpServiceUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  priceHighlightUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  badge?: Prisma.NullableEnumAdBadgeFieldUpdateOperationsInput | $Enums.AdBadge | null
+  badgeUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneWithoutAdsNestedInput
+  category?: Prisma.CategoryUpdateOneRequiredWithoutAdsNestedInput
+  favorites?: Prisma.FavoriteUpdateManyWithoutAdNestedInput
+  conversations?: Prisma.ConversationUpdateManyWithoutAdNestedInput
+  reports?: Prisma.AdReportUpdateManyWithoutAdNestedInput
+  bumps?: Prisma.AdBumpUpdateManyWithoutAdNestedInput
+  views?: Prisma.AdViewUpdateManyWithoutAdNestedInput
+  servicePurchases?: Prisma.AdServicePurchaseUpdateManyWithoutAdNestedInput
+}
+
+export type AdUncheckedUpdateWithoutViewsDailyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  price?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  unit?: Prisma.EnumPriceUnitFieldUpdateOperationsInput | $Enums.PriceUnit
+  images?: Prisma.AdUpdateimagesInput | string[]
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  features?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  lat?: Prisma.FloatFieldUpdateOperationsInput | number
+  lng?: Prisma.FloatFieldUpdateOperationsInput | number
+  region?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  regionIsoCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locality?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  localityFiasId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryPath?: Prisma.AdUpdatecategoryPathInput | string[]
+  seoPath?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumAdStatusFieldUpdateOperationsInput | $Enums.AdStatus
+  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  archivedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  bumpedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  bumpServiceUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  priceHighlightUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  badge?: Prisma.NullableEnumAdBadgeFieldUpdateOperationsInput | $Enums.AdBadge | null
+  badgeUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutAdNestedInput
+  conversations?: Prisma.ConversationUncheckedUpdateManyWithoutAdNestedInput
+  reports?: Prisma.AdReportUncheckedUpdateManyWithoutAdNestedInput
+  bumps?: Prisma.AdBumpUncheckedUpdateManyWithoutAdNestedInput
+  views?: Prisma.AdViewUncheckedUpdateManyWithoutAdNestedInput
   servicePurchases?: Prisma.AdServicePurchaseUncheckedUpdateManyWithoutAdNestedInput
 }
 
@@ -1997,6 +2431,8 @@ export type AdCreateWithoutServicePurchasesInput = {
   conversations?: Prisma.ConversationCreateNestedManyWithoutAdInput
   reports?: Prisma.AdReportCreateNestedManyWithoutAdInput
   bumps?: Prisma.AdBumpCreateNestedManyWithoutAdInput
+  views?: Prisma.AdViewCreateNestedManyWithoutAdInput
+  viewsDaily?: Prisma.AdViewDailyCreateNestedManyWithoutAdInput
 }
 
 export type AdUncheckedCreateWithoutServicePurchasesInput = {
@@ -2036,6 +2472,8 @@ export type AdUncheckedCreateWithoutServicePurchasesInput = {
   conversations?: Prisma.ConversationUncheckedCreateNestedManyWithoutAdInput
   reports?: Prisma.AdReportUncheckedCreateNestedManyWithoutAdInput
   bumps?: Prisma.AdBumpUncheckedCreateNestedManyWithoutAdInput
+  views?: Prisma.AdViewUncheckedCreateNestedManyWithoutAdInput
+  viewsDaily?: Prisma.AdViewDailyUncheckedCreateNestedManyWithoutAdInput
 }
 
 export type AdCreateOrConnectWithoutServicePurchasesInput = {
@@ -2091,6 +2529,8 @@ export type AdUpdateWithoutServicePurchasesInput = {
   conversations?: Prisma.ConversationUpdateManyWithoutAdNestedInput
   reports?: Prisma.AdReportUpdateManyWithoutAdNestedInput
   bumps?: Prisma.AdBumpUpdateManyWithoutAdNestedInput
+  views?: Prisma.AdViewUpdateManyWithoutAdNestedInput
+  viewsDaily?: Prisma.AdViewDailyUpdateManyWithoutAdNestedInput
 }
 
 export type AdUncheckedUpdateWithoutServicePurchasesInput = {
@@ -2130,6 +2570,8 @@ export type AdUncheckedUpdateWithoutServicePurchasesInput = {
   conversations?: Prisma.ConversationUncheckedUpdateManyWithoutAdNestedInput
   reports?: Prisma.AdReportUncheckedUpdateManyWithoutAdNestedInput
   bumps?: Prisma.AdBumpUncheckedUpdateManyWithoutAdNestedInput
+  views?: Prisma.AdViewUncheckedUpdateManyWithoutAdNestedInput
+  viewsDaily?: Prisma.AdViewDailyUncheckedUpdateManyWithoutAdNestedInput
 }
 
 export type AdCreateWithoutConversationsInput = {
@@ -2168,6 +2610,8 @@ export type AdCreateWithoutConversationsInput = {
   favorites?: Prisma.FavoriteCreateNestedManyWithoutAdInput
   reports?: Prisma.AdReportCreateNestedManyWithoutAdInput
   bumps?: Prisma.AdBumpCreateNestedManyWithoutAdInput
+  views?: Prisma.AdViewCreateNestedManyWithoutAdInput
+  viewsDaily?: Prisma.AdViewDailyCreateNestedManyWithoutAdInput
   servicePurchases?: Prisma.AdServicePurchaseCreateNestedManyWithoutAdInput
 }
 
@@ -2207,6 +2651,8 @@ export type AdUncheckedCreateWithoutConversationsInput = {
   favorites?: Prisma.FavoriteUncheckedCreateNestedManyWithoutAdInput
   reports?: Prisma.AdReportUncheckedCreateNestedManyWithoutAdInput
   bumps?: Prisma.AdBumpUncheckedCreateNestedManyWithoutAdInput
+  views?: Prisma.AdViewUncheckedCreateNestedManyWithoutAdInput
+  viewsDaily?: Prisma.AdViewDailyUncheckedCreateNestedManyWithoutAdInput
   servicePurchases?: Prisma.AdServicePurchaseUncheckedCreateNestedManyWithoutAdInput
 }
 
@@ -2262,6 +2708,8 @@ export type AdUpdateWithoutConversationsInput = {
   favorites?: Prisma.FavoriteUpdateManyWithoutAdNestedInput
   reports?: Prisma.AdReportUpdateManyWithoutAdNestedInput
   bumps?: Prisma.AdBumpUpdateManyWithoutAdNestedInput
+  views?: Prisma.AdViewUpdateManyWithoutAdNestedInput
+  viewsDaily?: Prisma.AdViewDailyUpdateManyWithoutAdNestedInput
   servicePurchases?: Prisma.AdServicePurchaseUpdateManyWithoutAdNestedInput
 }
 
@@ -2301,6 +2749,8 @@ export type AdUncheckedUpdateWithoutConversationsInput = {
   favorites?: Prisma.FavoriteUncheckedUpdateManyWithoutAdNestedInput
   reports?: Prisma.AdReportUncheckedUpdateManyWithoutAdNestedInput
   bumps?: Prisma.AdBumpUncheckedUpdateManyWithoutAdNestedInput
+  views?: Prisma.AdViewUncheckedUpdateManyWithoutAdNestedInput
+  viewsDaily?: Prisma.AdViewDailyUncheckedUpdateManyWithoutAdNestedInput
   servicePurchases?: Prisma.AdServicePurchaseUncheckedUpdateManyWithoutAdNestedInput
 }
 
@@ -2374,6 +2824,8 @@ export type AdUpdateWithoutUserInput = {
   conversations?: Prisma.ConversationUpdateManyWithoutAdNestedInput
   reports?: Prisma.AdReportUpdateManyWithoutAdNestedInput
   bumps?: Prisma.AdBumpUpdateManyWithoutAdNestedInput
+  views?: Prisma.AdViewUpdateManyWithoutAdNestedInput
+  viewsDaily?: Prisma.AdViewDailyUpdateManyWithoutAdNestedInput
   servicePurchases?: Prisma.AdServicePurchaseUpdateManyWithoutAdNestedInput
 }
 
@@ -2413,6 +2865,8 @@ export type AdUncheckedUpdateWithoutUserInput = {
   conversations?: Prisma.ConversationUncheckedUpdateManyWithoutAdNestedInput
   reports?: Prisma.AdReportUncheckedUpdateManyWithoutAdNestedInput
   bumps?: Prisma.AdBumpUncheckedUpdateManyWithoutAdNestedInput
+  views?: Prisma.AdViewUncheckedUpdateManyWithoutAdNestedInput
+  viewsDaily?: Prisma.AdViewDailyUncheckedUpdateManyWithoutAdNestedInput
   servicePurchases?: Prisma.AdServicePurchaseUncheckedUpdateManyWithoutAdNestedInput
 }
 
@@ -2520,6 +2974,8 @@ export type AdUpdateWithoutCategoryInput = {
   conversations?: Prisma.ConversationUpdateManyWithoutAdNestedInput
   reports?: Prisma.AdReportUpdateManyWithoutAdNestedInput
   bumps?: Prisma.AdBumpUpdateManyWithoutAdNestedInput
+  views?: Prisma.AdViewUpdateManyWithoutAdNestedInput
+  viewsDaily?: Prisma.AdViewDailyUpdateManyWithoutAdNestedInput
   servicePurchases?: Prisma.AdServicePurchaseUpdateManyWithoutAdNestedInput
 }
 
@@ -2559,6 +3015,8 @@ export type AdUncheckedUpdateWithoutCategoryInput = {
   conversations?: Prisma.ConversationUncheckedUpdateManyWithoutAdNestedInput
   reports?: Prisma.AdReportUncheckedUpdateManyWithoutAdNestedInput
   bumps?: Prisma.AdBumpUncheckedUpdateManyWithoutAdNestedInput
+  views?: Prisma.AdViewUncheckedUpdateManyWithoutAdNestedInput
+  viewsDaily?: Prisma.AdViewDailyUncheckedUpdateManyWithoutAdNestedInput
   servicePurchases?: Prisma.AdServicePurchaseUncheckedUpdateManyWithoutAdNestedInput
 }
 
@@ -2606,6 +3064,8 @@ export type AdCountOutputType = {
   conversations: number
   reports: number
   bumps: number
+  views: number
+  viewsDaily: number
   servicePurchases: number
 }
 
@@ -2614,6 +3074,8 @@ export type AdCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.Int
   conversations?: boolean | AdCountOutputTypeCountConversationsArgs
   reports?: boolean | AdCountOutputTypeCountReportsArgs
   bumps?: boolean | AdCountOutputTypeCountBumpsArgs
+  views?: boolean | AdCountOutputTypeCountViewsArgs
+  viewsDaily?: boolean | AdCountOutputTypeCountViewsDailyArgs
   servicePurchases?: boolean | AdCountOutputTypeCountServicePurchasesArgs
 }
 
@@ -2653,6 +3115,20 @@ export type AdCountOutputTypeCountReportsArgs<ExtArgs extends runtime.Types.Exte
  */
 export type AdCountOutputTypeCountBumpsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.AdBumpWhereInput
+}
+
+/**
+ * AdCountOutputType without action
+ */
+export type AdCountOutputTypeCountViewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AdViewWhereInput
+}
+
+/**
+ * AdCountOutputType without action
+ */
+export type AdCountOutputTypeCountViewsDailyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AdViewDailyWhereInput
 }
 
 /**
@@ -2702,6 +3178,8 @@ export type AdSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = run
   conversations?: boolean | Prisma.Ad$conversationsArgs<ExtArgs>
   reports?: boolean | Prisma.Ad$reportsArgs<ExtArgs>
   bumps?: boolean | Prisma.Ad$bumpsArgs<ExtArgs>
+  views?: boolean | Prisma.Ad$viewsArgs<ExtArgs>
+  viewsDaily?: boolean | Prisma.Ad$viewsDailyArgs<ExtArgs>
   servicePurchases?: boolean | Prisma.Ad$servicePurchasesArgs<ExtArgs>
   _count?: boolean | Prisma.AdCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["ad"]>
@@ -2823,6 +3301,8 @@ export type AdInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = ru
   conversations?: boolean | Prisma.Ad$conversationsArgs<ExtArgs>
   reports?: boolean | Prisma.Ad$reportsArgs<ExtArgs>
   bumps?: boolean | Prisma.Ad$bumpsArgs<ExtArgs>
+  views?: boolean | Prisma.Ad$viewsArgs<ExtArgs>
+  viewsDaily?: boolean | Prisma.Ad$viewsDailyArgs<ExtArgs>
   servicePurchases?: boolean | Prisma.Ad$servicePurchasesArgs<ExtArgs>
   _count?: boolean | Prisma.AdCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -2844,6 +3324,8 @@ export type $AdPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
     conversations: Prisma.$ConversationPayload<ExtArgs>[]
     reports: Prisma.$AdReportPayload<ExtArgs>[]
     bumps: Prisma.$AdBumpPayload<ExtArgs>[]
+    views: Prisma.$AdViewPayload<ExtArgs>[]
+    viewsDaily: Prisma.$AdViewDailyPayload<ExtArgs>[]
     servicePurchases: Prisma.$AdServicePurchasePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -3279,6 +3761,8 @@ export interface Prisma__AdClient<T, Null = never, ExtArgs extends runtime.Types
   conversations<T extends Prisma.Ad$conversationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Ad$conversationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConversationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   reports<T extends Prisma.Ad$reportsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Ad$reportsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AdReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   bumps<T extends Prisma.Ad$bumpsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Ad$bumpsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AdBumpPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  views<T extends Prisma.Ad$viewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Ad$viewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AdViewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  viewsDaily<T extends Prisma.Ad$viewsDailyArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Ad$viewsDailyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AdViewDailyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   servicePurchases<T extends Prisma.Ad$servicePurchasesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Ad$servicePurchasesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AdServicePurchasePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -3849,6 +4333,54 @@ export type Ad$bumpsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   take?: number
   skip?: number
   distinct?: Prisma.AdBumpScalarFieldEnum | Prisma.AdBumpScalarFieldEnum[]
+}
+
+/**
+ * Ad.views
+ */
+export type Ad$viewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AdView
+   */
+  select?: Prisma.AdViewSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AdView
+   */
+  omit?: Prisma.AdViewOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AdViewInclude<ExtArgs> | null
+  where?: Prisma.AdViewWhereInput
+  orderBy?: Prisma.AdViewOrderByWithRelationInput | Prisma.AdViewOrderByWithRelationInput[]
+  cursor?: Prisma.AdViewWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AdViewScalarFieldEnum | Prisma.AdViewScalarFieldEnum[]
+}
+
+/**
+ * Ad.viewsDaily
+ */
+export type Ad$viewsDailyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AdViewDaily
+   */
+  select?: Prisma.AdViewDailySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AdViewDaily
+   */
+  omit?: Prisma.AdViewDailyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AdViewDailyInclude<ExtArgs> | null
+  where?: Prisma.AdViewDailyWhereInput
+  orderBy?: Prisma.AdViewDailyOrderByWithRelationInput | Prisma.AdViewDailyOrderByWithRelationInput[]
+  cursor?: Prisma.AdViewDailyWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AdViewDailyScalarFieldEnum | Prisma.AdViewDailyScalarFieldEnum[]
 }
 
 /**

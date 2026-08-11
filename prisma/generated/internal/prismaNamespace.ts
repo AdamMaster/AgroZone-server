@@ -394,6 +394,8 @@ export const ModelName = {
   Favorite: 'Favorite',
   AdReport: 'AdReport',
   AdBump: 'AdBump',
+  AdView: 'AdView',
+  AdViewDaily: 'AdViewDaily',
   PremiumPurchase: 'PremiumPurchase',
   AdServicePurchase: 'AdServicePurchase',
   Conversation: 'Conversation',
@@ -416,7 +418,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "userPhone" | "account" | "token" | "category" | "categoryFeature" | "ad" | "favorite" | "adReport" | "adBump" | "premiumPurchase" | "adServicePurchase" | "conversation" | "blockedUser" | "message" | "ruCity" | "notification"
+    modelProps: "user" | "userPhone" | "account" | "token" | "category" | "categoryFeature" | "ad" | "favorite" | "adReport" | "adBump" | "adView" | "adViewDaily" | "premiumPurchase" | "adServicePurchase" | "conversation" | "blockedUser" | "message" | "ruCity" | "notification"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1160,6 +1162,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    AdView: {
+      payload: Prisma.$AdViewPayload<ExtArgs>
+      fields: Prisma.AdViewFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AdViewFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdViewPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AdViewFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdViewPayload>
+        }
+        findFirst: {
+          args: Prisma.AdViewFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdViewPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AdViewFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdViewPayload>
+        }
+        findMany: {
+          args: Prisma.AdViewFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdViewPayload>[]
+        }
+        create: {
+          args: Prisma.AdViewCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdViewPayload>
+        }
+        createMany: {
+          args: Prisma.AdViewCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AdViewCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdViewPayload>[]
+        }
+        delete: {
+          args: Prisma.AdViewDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdViewPayload>
+        }
+        update: {
+          args: Prisma.AdViewUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdViewPayload>
+        }
+        deleteMany: {
+          args: Prisma.AdViewDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AdViewUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AdViewUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdViewPayload>[]
+        }
+        upsert: {
+          args: Prisma.AdViewUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdViewPayload>
+        }
+        aggregate: {
+          args: Prisma.AdViewAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAdView>
+        }
+        groupBy: {
+          args: Prisma.AdViewGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AdViewGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AdViewCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AdViewCountAggregateOutputType> | number
+        }
+      }
+    }
+    AdViewDaily: {
+      payload: Prisma.$AdViewDailyPayload<ExtArgs>
+      fields: Prisma.AdViewDailyFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AdViewDailyFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdViewDailyPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AdViewDailyFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdViewDailyPayload>
+        }
+        findFirst: {
+          args: Prisma.AdViewDailyFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdViewDailyPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AdViewDailyFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdViewDailyPayload>
+        }
+        findMany: {
+          args: Prisma.AdViewDailyFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdViewDailyPayload>[]
+        }
+        create: {
+          args: Prisma.AdViewDailyCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdViewDailyPayload>
+        }
+        createMany: {
+          args: Prisma.AdViewDailyCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AdViewDailyCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdViewDailyPayload>[]
+        }
+        delete: {
+          args: Prisma.AdViewDailyDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdViewDailyPayload>
+        }
+        update: {
+          args: Prisma.AdViewDailyUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdViewDailyPayload>
+        }
+        deleteMany: {
+          args: Prisma.AdViewDailyDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AdViewDailyUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AdViewDailyUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdViewDailyPayload>[]
+        }
+        upsert: {
+          args: Prisma.AdViewDailyUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdViewDailyPayload>
+        }
+        aggregate: {
+          args: Prisma.AdViewDailyAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAdViewDaily>
+        }
+        groupBy: {
+          args: Prisma.AdViewDailyGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AdViewDailyGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AdViewDailyCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AdViewDailyCountAggregateOutputType> | number
+        }
+      }
+    }
     PremiumPurchase: {
       payload: Prisma.$PremiumPurchasePayload<ExtArgs>
       fields: Prisma.PremiumPurchaseFieldRefs
@@ -1896,6 +2046,27 @@ export const AdBumpScalarFieldEnum = {
 export type AdBumpScalarFieldEnum = (typeof AdBumpScalarFieldEnum)[keyof typeof AdBumpScalarFieldEnum]
 
 
+export const AdViewScalarFieldEnum = {
+  id: 'id',
+  adId: 'adId',
+  viewerKey: 'viewerKey',
+  viewDate: 'viewDate',
+  createdAt: 'createdAt'
+} as const
+
+export type AdViewScalarFieldEnum = (typeof AdViewScalarFieldEnum)[keyof typeof AdViewScalarFieldEnum]
+
+
+export const AdViewDailyScalarFieldEnum = {
+  id: 'id',
+  adId: 'adId',
+  date: 'date',
+  views: 'views'
+} as const
+
+export type AdViewDailyScalarFieldEnum = (typeof AdViewDailyScalarFieldEnum)[keyof typeof AdViewDailyScalarFieldEnum]
+
+
 export const PremiumPurchaseScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -2455,6 +2626,8 @@ export type GlobalOmitConfig = {
   favorite?: Prisma.FavoriteOmit
   adReport?: Prisma.AdReportOmit
   adBump?: Prisma.AdBumpOmit
+  adView?: Prisma.AdViewOmit
+  adViewDaily?: Prisma.AdViewDailyOmit
   premiumPurchase?: Prisma.PremiumPurchaseOmit
   adServicePurchase?: Prisma.AdServicePurchaseOmit
   conversation?: Prisma.ConversationOmit
