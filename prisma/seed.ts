@@ -95,6 +95,16 @@ function mapPriceUnits(units?: string[]): PriceUnit[] {
   return units.map(u => PRICE_UNIT_MAP[u] || PriceUnit.ITEM)
 }
 
+// Сводит feature.unit/feature.units (в data/categories.ts это два разных,
+// необязательных поля — единица бывает задана либо как одна фиксированная
+// строка, либо как список вариантов на выбор) к одному массиву. Первый
+// элемент — каноническая единица (см. CategoryFeature.units в schema.prisma).
+function normalizeUnits(feature: CategoryFeatureInput & { description?: string }): string[] {
+  if (feature.units?.length) return feature.units
+  if (feature.unit) return [feature.unit]
+  return []
+}
+
 async function upsertCategory(
   data: CategoryInput,
   parentId: string | null = null,
@@ -176,6 +186,15 @@ async function upsertCategory(
               filterable: feature.filterable ?? true,
               placeholder: feature.placeholder ?? null, // 👈 Добавлено
               unit: feature.unit ?? null, // 👈 Добавлено
+              // Раньше units (список единиц на выбор, например ['кВт',
+              // 'л.с.'] у мощности) вообще не сохранялся — сохранялся
+              // только unit (одна фиксированная единица), из-за чего поля
+              // с несколькими вариантами единицы приходили на клиент без
+              // единицы измерения вообще (см. обсуждение с пользователем
+              // про поле "Мощность"). normalizeUnits сводит оба случая к
+              // одному массиву — первый элемент считается канонической
+              // единицей, в ней же значение хранится в Ad.features.
+              units: normalizeUnits(feature),
               options: (feature.options ?? Prisma.JsonNull) as Prisma.InputJsonValue,
               sortOrder: feature.sortOrder ?? index
             }))

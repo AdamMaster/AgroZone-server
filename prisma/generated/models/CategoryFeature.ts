@@ -77,6 +77,7 @@ export type CategoryFeatureCountAggregateOutputType = {
   filterable: number
   placeholder: number
   unit: number
+  units: number
   options: number
   sortOrder: number
   createdAt: number
@@ -136,6 +137,7 @@ export type CategoryFeatureCountAggregateInputType = {
   filterable?: true
   placeholder?: true
   unit?: true
+  units?: true
   options?: true
   sortOrder?: true
   createdAt?: true
@@ -240,6 +242,7 @@ export type CategoryFeatureGroupByOutputType = {
   filterable: boolean
   placeholder: string | null
   unit: string | null
+  units: string[]
   options: runtime.JsonValue | null
   sortOrder: number
   createdAt: Date
@@ -280,6 +283,7 @@ export type CategoryFeatureWhereInput = {
   filterable?: Prisma.BoolFilter<"CategoryFeature"> | boolean
   placeholder?: Prisma.StringNullableFilter<"CategoryFeature"> | string | null
   unit?: Prisma.StringNullableFilter<"CategoryFeature"> | string | null
+  units?: Prisma.StringNullableListFilter<"CategoryFeature">
   options?: Prisma.JsonNullableFilter<"CategoryFeature">
   sortOrder?: Prisma.IntFilter<"CategoryFeature"> | number
   createdAt?: Prisma.DateTimeFilter<"CategoryFeature"> | Date | string
@@ -298,6 +302,7 @@ export type CategoryFeatureOrderByWithRelationInput = {
   filterable?: Prisma.SortOrder
   placeholder?: Prisma.SortOrderInput | Prisma.SortOrder
   unit?: Prisma.SortOrderInput | Prisma.SortOrder
+  units?: Prisma.SortOrder
   options?: Prisma.SortOrderInput | Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -319,6 +324,7 @@ export type CategoryFeatureWhereUniqueInput = Prisma.AtLeast<{
   filterable?: Prisma.BoolFilter<"CategoryFeature"> | boolean
   placeholder?: Prisma.StringNullableFilter<"CategoryFeature"> | string | null
   unit?: Prisma.StringNullableFilter<"CategoryFeature"> | string | null
+  units?: Prisma.StringNullableListFilter<"CategoryFeature">
   options?: Prisma.JsonNullableFilter<"CategoryFeature">
   sortOrder?: Prisma.IntFilter<"CategoryFeature"> | number
   createdAt?: Prisma.DateTimeFilter<"CategoryFeature"> | Date | string
@@ -337,6 +343,7 @@ export type CategoryFeatureOrderByWithAggregationInput = {
   filterable?: Prisma.SortOrder
   placeholder?: Prisma.SortOrderInput | Prisma.SortOrder
   unit?: Prisma.SortOrderInput | Prisma.SortOrder
+  units?: Prisma.SortOrder
   options?: Prisma.SortOrderInput | Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -362,6 +369,7 @@ export type CategoryFeatureScalarWhereWithAggregatesInput = {
   filterable?: Prisma.BoolWithAggregatesFilter<"CategoryFeature"> | boolean
   placeholder?: Prisma.StringNullableWithAggregatesFilter<"CategoryFeature"> | string | null
   unit?: Prisma.StringNullableWithAggregatesFilter<"CategoryFeature"> | string | null
+  units?: Prisma.StringNullableListFilter<"CategoryFeature">
   options?: Prisma.JsonNullableWithAggregatesFilter<"CategoryFeature">
   sortOrder?: Prisma.IntWithAggregatesFilter<"CategoryFeature"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"CategoryFeature"> | Date | string
@@ -378,6 +386,7 @@ export type CategoryFeatureCreateInput = {
   filterable?: boolean
   placeholder?: string | null
   unit?: string | null
+  units?: Prisma.CategoryFeatureCreateunitsInput | string[]
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   sortOrder?: number
   createdAt?: Date | string
@@ -396,6 +405,7 @@ export type CategoryFeatureUncheckedCreateInput = {
   filterable?: boolean
   placeholder?: string | null
   unit?: string | null
+  units?: Prisma.CategoryFeatureCreateunitsInput | string[]
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   sortOrder?: number
   createdAt?: Date | string
@@ -412,6 +422,7 @@ export type CategoryFeatureUpdateInput = {
   filterable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   placeholder?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unit?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  units?: Prisma.CategoryFeatureUpdateunitsInput | string[]
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -430,6 +441,7 @@ export type CategoryFeatureUncheckedUpdateInput = {
   filterable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   placeholder?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unit?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  units?: Prisma.CategoryFeatureUpdateunitsInput | string[]
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -447,6 +459,7 @@ export type CategoryFeatureCreateManyInput = {
   filterable?: boolean
   placeholder?: string | null
   unit?: string | null
+  units?: Prisma.CategoryFeatureCreateunitsInput | string[]
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   sortOrder?: number
   createdAt?: Date | string
@@ -463,6 +476,7 @@ export type CategoryFeatureUpdateManyMutationInput = {
   filterable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   placeholder?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unit?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  units?: Prisma.CategoryFeatureUpdateunitsInput | string[]
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -480,6 +494,7 @@ export type CategoryFeatureUncheckedUpdateManyInput = {
   filterable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   placeholder?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unit?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  units?: Prisma.CategoryFeatureUpdateunitsInput | string[]
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -507,6 +522,7 @@ export type CategoryFeatureCountOrderByAggregateInput = {
   filterable?: Prisma.SortOrder
   placeholder?: Prisma.SortOrder
   unit?: Prisma.SortOrder
+  units?: Prisma.SortOrder
   options?: Prisma.SortOrder
   sortOrder?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -595,8 +611,17 @@ export type CategoryFeatureUncheckedUpdateManyWithoutCategoryNestedInput = {
   deleteMany?: Prisma.CategoryFeatureScalarWhereInput | Prisma.CategoryFeatureScalarWhereInput[]
 }
 
+export type CategoryFeatureCreateunitsInput = {
+  set: string[]
+}
+
 export type EnumFeatureTypeFieldUpdateOperationsInput = {
   set?: $Enums.FeatureType
+}
+
+export type CategoryFeatureUpdateunitsInput = {
+  set?: string[]
+  push?: string | string[]
 }
 
 export type CategoryFeatureCreateWithoutCategoryInput = {
@@ -609,6 +634,7 @@ export type CategoryFeatureCreateWithoutCategoryInput = {
   filterable?: boolean
   placeholder?: string | null
   unit?: string | null
+  units?: Prisma.CategoryFeatureCreateunitsInput | string[]
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   sortOrder?: number
   createdAt?: Date | string
@@ -625,6 +651,7 @@ export type CategoryFeatureUncheckedCreateWithoutCategoryInput = {
   filterable?: boolean
   placeholder?: string | null
   unit?: string | null
+  units?: Prisma.CategoryFeatureCreateunitsInput | string[]
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   sortOrder?: number
   createdAt?: Date | string
@@ -671,6 +698,7 @@ export type CategoryFeatureScalarWhereInput = {
   filterable?: Prisma.BoolFilter<"CategoryFeature"> | boolean
   placeholder?: Prisma.StringNullableFilter<"CategoryFeature"> | string | null
   unit?: Prisma.StringNullableFilter<"CategoryFeature"> | string | null
+  units?: Prisma.StringNullableListFilter<"CategoryFeature">
   options?: Prisma.JsonNullableFilter<"CategoryFeature">
   sortOrder?: Prisma.IntFilter<"CategoryFeature"> | number
   createdAt?: Prisma.DateTimeFilter<"CategoryFeature"> | Date | string
@@ -687,6 +715,7 @@ export type CategoryFeatureCreateManyCategoryInput = {
   filterable?: boolean
   placeholder?: string | null
   unit?: string | null
+  units?: Prisma.CategoryFeatureCreateunitsInput | string[]
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   sortOrder?: number
   createdAt?: Date | string
@@ -703,6 +732,7 @@ export type CategoryFeatureUpdateWithoutCategoryInput = {
   filterable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   placeholder?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unit?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  units?: Prisma.CategoryFeatureUpdateunitsInput | string[]
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -719,6 +749,7 @@ export type CategoryFeatureUncheckedUpdateWithoutCategoryInput = {
   filterable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   placeholder?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unit?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  units?: Prisma.CategoryFeatureUpdateunitsInput | string[]
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -735,6 +766,7 @@ export type CategoryFeatureUncheckedUpdateManyWithoutCategoryInput = {
   filterable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   placeholder?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unit?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  units?: Prisma.CategoryFeatureUpdateunitsInput | string[]
   options?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   sortOrder?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -754,6 +786,7 @@ export type CategoryFeatureSelect<ExtArgs extends runtime.Types.Extensions.Inter
   filterable?: boolean
   placeholder?: boolean
   unit?: boolean
+  units?: boolean
   options?: boolean
   sortOrder?: boolean
   createdAt?: boolean
@@ -772,6 +805,7 @@ export type CategoryFeatureSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   filterable?: boolean
   placeholder?: boolean
   unit?: boolean
+  units?: boolean
   options?: boolean
   sortOrder?: boolean
   createdAt?: boolean
@@ -790,6 +824,7 @@ export type CategoryFeatureSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   filterable?: boolean
   placeholder?: boolean
   unit?: boolean
+  units?: boolean
   options?: boolean
   sortOrder?: boolean
   createdAt?: boolean
@@ -808,13 +843,14 @@ export type CategoryFeatureSelectScalar = {
   filterable?: boolean
   placeholder?: boolean
   unit?: boolean
+  units?: boolean
   options?: boolean
   sortOrder?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type CategoryFeatureOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "categoryId" | "name" | "label" | "description" | "type" | "required" | "filterable" | "placeholder" | "unit" | "options" | "sortOrder" | "createdAt" | "updatedAt", ExtArgs["result"]["categoryFeature"]>
+export type CategoryFeatureOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "categoryId" | "name" | "label" | "description" | "type" | "required" | "filterable" | "placeholder" | "unit" | "units" | "options" | "sortOrder" | "createdAt" | "updatedAt", ExtArgs["result"]["categoryFeature"]>
 export type CategoryFeatureInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>
 }
@@ -841,6 +877,7 @@ export type $CategoryFeaturePayload<ExtArgs extends runtime.Types.Extensions.Int
     filterable: boolean
     placeholder: string | null
     unit: string | null
+    units: string[]
     options: runtime.JsonValue | null
     sortOrder: number
     createdAt: Date
@@ -1279,6 +1316,7 @@ export interface CategoryFeatureFieldRefs {
   readonly filterable: Prisma.FieldRef<"CategoryFeature", 'Boolean'>
   readonly placeholder: Prisma.FieldRef<"CategoryFeature", 'String'>
   readonly unit: Prisma.FieldRef<"CategoryFeature", 'String'>
+  readonly units: Prisma.FieldRef<"CategoryFeature", 'String[]'>
   readonly options: Prisma.FieldRef<"CategoryFeature", 'Json'>
   readonly sortOrder: Prisma.FieldRef<"CategoryFeature", 'Int'>
   readonly createdAt: Prisma.FieldRef<"CategoryFeature", 'DateTime'>

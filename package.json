@@ -20,7 +20,8 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "prisma:seed": "dotenv -e .env -- ts-node prisma/seed.ts",
     "prisma:reset": "dotenv -e .env -- prisma migrate reset --force",
-    "prisma:generate": "dotenv -e .env -- prisma generate"
+    "prisma:generate": "dotenv -e .env -- prisma generate",
+    "prisma:deploy": "dotenv -e .env -- prisma migrate deploy"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1062.0",

@@ -1962,6 +1962,7 @@ export const CategoryFeatureScalarFieldEnum = {
   filterable: 'filterable',
   placeholder: 'placeholder',
   unit: 'unit',
+  units: 'units',
   options: 'options',
   sortOrder: 'sortOrder',
   createdAt: 'createdAt',
