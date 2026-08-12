@@ -20,7 +20,6 @@ export type CategoryFeatureInput = {
 type CategoryFeatureSeed = Omit<CategoryFeatureInput, 'id'> & { id?: string }
 
 export type CategoryInput = {
-  /** Стабильный ID. При переносе или переименовании категории задайте его явно в CATEGORY_TREE. */
   id: string
   parentId?: string
   slug: string
@@ -34,14 +33,6 @@ export type CategoryInput = {
   redirectToCategoryId?: string
   children?: CategoryInput[]
   categoryFeatures?: CategoryFeatureInput[]
-  /**
-   * Единицы измерения цены (значения enum Prisma PriceUnit — 'ITEM', 'TON',
-   * 'KG', 'LITER', 'M3', 'BAG', 'HEAD', 'DOSE', 'RUNNING_METER', 'HA',
-   * 'HOUR'), доступные при создании объявления в этой категории. Если не
-   * задано явно в CATEGORY_TREE — подставляется автоматически в
-   * materializeCategories() на основе набора categoryFeatures (см.
-   * DEFAULT_PRICE_UNITS_BY_FEATURES ниже), с запасным вариантом ['ITEM'].
-   */
   priceUnits: string[]
 }
 
@@ -66,7 +57,6 @@ type CategorySeed = Omit<
   version?: number
   children?: CategorySeed[]
   categoryFeatures?: CategoryFeatureSeed[]
-  /** Необязательный ручной оверрайд — если не задан, будет выведен автоматически. */
   priceUnits?: string[]
 }
 
@@ -119,7 +109,6 @@ function slugify(value: string): string {
     .replace(/-{2,}/g, '-')
 }
 
-/** Небольшой детерминированный хэш без внешних зависимостей. */
 function stableHash(value: string): string {
   let hash = 2166136261
   for (let index = 0; index < value.length; index += 1) {
@@ -179,7 +168,6 @@ export type CategoryValidationIssue = {
   message: string
 }
 
-/** Проверяет дерево при сборке, в тестах или в миграционном скрипте. */
 export function validateCategories(categories: CategoryInput[]): CategoryValidationIssue[] {
   const issues: CategoryValidationIssue[] = []
   const categoryIds = new Set<string>()
@@ -306,15 +294,8 @@ const AGRO_CHEM_STANDARD = [
   { name: 'active_ingredient', label: 'Действующее вещество', type: 'TEXT', required: true },
   { name: 'concentration', label: 'Концентрация', type: 'TEXT' },
   { name: 'application_purpose', label: 'Назначение', type: 'TEXT', filterable: false },
-  // Переименовано из 'crop': отдельный ключ от AGRO_SEED_FEATURES.crop —
-  // там 'crop' означает культуру, КОТОРАЯ продаётся (семена), а здесь —
-  // культуру, к которой ПРИМЕНЯЕТСЯ химикат. Разный смысл, общее имя поля
-  // раньше приводило к тому, что одно и то же имя 'crop' было то
-  // filterable, то нет в зависимости от категории.
   { name: 'target_crop', label: 'Культура применения', type: 'TEXT', filterable: false },
   { name: 'manufacturer', label: 'Производитель', type: 'TEXT' },
-  // Уникальный номер госрегистрации конкретного препарата — не факт
-  // фильтрации, справочное поле.
   { name: 'registration_number', label: 'Регистрационный номер', type: 'TEXT', filterable: false },
   {
     name: 'hazard_class',
@@ -332,9 +313,6 @@ const AGRO_CHEM_STANDARD = [
 ] satisfies CategoryFeatureSeed[]
 
 const AGRO_SOIL_FEATURES = [
-  // Список вариантов ориентировочный — стоит свериться и поправить под
-  // реальный ассортимент, прежде чем полагаться на него как на
-  // окончательный.
   {
     name: 'soil_type',
     label: 'Тип грунта/субстрата',
@@ -932,10 +910,6 @@ const PACKAGING_MATERIAL_FEATURES = [
   { name: 'new_or_used', label: 'Состояние', type: 'SELECT', options: ['Новое', 'Б/у'] }
 ] satisfies CategoryFeatureSeed[]
 
-// MATERIAL_FEATURES был удалён: набор нигде не применялся ни к одной
-// категории (мёртвый код), а его material_type: TEXT дублировал/конфликтовал
-// по смыслу с material_type: SELECT из PACKAGING_MATERIAL_FEATURES.
-
 const OTHER_FUEL_FEATURES = [
   { name: 'fuel_type', label: 'Тип/Марка', type: 'TEXT' },
   {
@@ -949,9 +923,6 @@ const OTHER_FUEL_FEATURES = [
 const OTHER_GOODS_FEATURES = [
   { name: 'material_description', label: 'Материал', type: 'TEXT', filterable: false },
   { name: 'dimensions', label: 'Размеры / Толщина', type: 'TEXT', filterable: false },
-  // Переименовано из 'origin': это то же самое поле "Производитель", что и
-  // в остальных наборах — просто раньше называлось по-другому и было
-  // независимым от общего ключа 'manufacturer'.
   { name: 'manufacturer', label: 'Производитель', type: 'TEXT' }
 ] satisfies CategoryFeatureSeed[]
 
@@ -1013,8 +984,6 @@ const AGRO_INDUSTRIAL_RAW_FEATURES = [
 const AGRO_SEED_FEATURES = [
   { name: 'crop', label: 'Культура', type: 'TEXT', required: true },
   { name: 'variety', label: 'Сорт/гибрид', type: 'TEXT' },
-  // Список вариантов ориентировочный (стандартная сортовая градация семян
-  // в РФ) — стоит свериться и поправить под реальный ассортимент.
   {
     name: 'reproduction',
     label: 'Репродукция/поколение',
@@ -1042,18 +1011,9 @@ const AGRO_SEED_FEATURES = [
   { name: 'batch_weight', label: 'Масса/количество партии', type: 'NUMBER', units: ['г', 'кг', 'т', 'шт.'] }
 ] satisfies CategoryFeatureSeed[]
 
-// Саженцы — раньше делили AGRO_SEED_FEATURES с семенами, а там половина
-// полей чисто семенные и для живого саженца бессмысленны (всхожесть,
-// чистота, масса 1000 семян). Тут — параметры, которые реально важны при
-// покупке саженца: подвой (актуально для плодовых), возраст, высота, тип
-// корневой системы (ОКС/ЗКС — стандартные термины питомниководства),
-// объём контейнера, сезон посадки.
 const AGRO_SAPLING_FEATURES = [
   { name: 'crop', label: 'Культура/порода', type: 'TEXT', required: true },
   { name: 'variety', label: 'Сорт', type: 'TEXT' },
-  // Подвой — актуален для плодовых саженцев (яблоня, груша и т.п.),
-  // необязательное текстовое поле — для декоративных/лесных пород (туя,
-  // ель) обычно не заполняется.
   { name: 'rootstock', label: 'Подвой', type: 'TEXT', filterable: false },
   { name: 'age', label: 'Возраст саженца', type: 'NUMBER', unit: 'лет' },
   { name: 'height', label: 'Высота', type: 'NUMBER', units: ['см', 'м'] },
@@ -1109,9 +1069,6 @@ const VET_MED_STANDARD = [
   { name: 'active_ingredient', label: 'Действующее вещество', type: 'TEXT', required: true },
   { name: 'dosage', label: 'Дозировка/Способ применения', type: 'TEXT', filterable: false },
   { name: 'manufacturer', label: 'Производитель', type: 'TEXT' },
-  // Уникальный номер регистрационного удостоверения препарата — справочное
-  // поле, не факт фильтрации (по аналогии с registration_number в
-  // AGRO_CHEM_STANDARD).
   { name: 'registration_number', label: 'Регистрационный номер', type: 'TEXT', filterable: false },
   { name: 'prescription_required', label: 'Отпускается по рецепту', type: 'BOOLEAN' },
   { name: 'expiry_date', label: 'Срок годности', type: 'TEXT', filterable: false },
@@ -1154,19 +1111,6 @@ const VET_CONSUMABLES_FEATURES = [
   { name: 'quantity_per_pack', label: 'Количество в упаковке', type: 'NUMBER', unit: 'шт.' }
 ] satisfies CategoryFeatureSeed[]
 
-// Значения — из enum Prisma PriceUnit ('ITEM' | 'TON' | 'KG' | 'LITER' |
-// 'M3' | 'BAG' | 'HEAD' | 'DOSE' | 'RUNNING_METER' | 'HA' | 'HOUR'),
-// см. server/prisma/schema.prisma. Ключи — ссылки на сами наборы фич
-// (не строки), поэтому карта должна идти ПОСЛЕ объявления всех наборов
-// фич выше и ДО того, как materializeCategories() реально выполнится
-// (то есть до вызова CATEGORIES_DATA = materializeCategories(...) внизу
-// файла) — сама функция materializeCategories объявлена раньше, но
-// вызывается только в самом конце файла, так что порядок ок.
-//
-// Порядок значений в каждом списке — это и порядок вариантов в выпадающем
-// списке при создании объявления, первое значение подставляется по
-// умолчанию. Список ориентировочный — по каждой категории его можно
-// переопределить вручную полем priceUnits прямо в CATEGORY_TREE.
 const DEFAULT_PRICE_UNITS_BY_FEATURES = new Map<CategoryFeatureSeed[], string[]>([
   [AGRO_CHEM_STANDARD, ['KG', 'LITER', 'ITEM']],
   [AGRO_SOIL_FEATURES, ['KG', 'M3', 'ITEM']],
@@ -1225,7 +1169,6 @@ const CATEGORY_TREE = [
     name: 'Агрохимия',
     id: 'cat_0jo0tv4',
     iconId: 'FlaskConical',
-    sortOrder: 1,
     children: [
       { name: 'Биопрепараты', id: 'cat_0hcxiwr', children: [], categoryFeatures: AGRO_CHEM_STANDARD },
       { name: 'Грунты', id: 'cat_11h0ntu', children: [], categoryFeatures: AGRO_SOIL_FEATURES },
@@ -1249,7 +1192,6 @@ const CATEGORY_TREE = [
     id: 'cat_157gz92',
     aliases: ['Сельскохозяйственные животные, птица и аквакультура', 'Сельхозживотные'],
     iconId: 'Bird',
-    sortOrder: 3,
     children: [
       { name: 'Крупный рогатый скот (КРС)', id: 'cat_0v9u8md', children: [], categoryFeatures: ANIMAL_FEATURES },
       { name: 'Свиньи', id: 'cat_1ir8arw', children: [], categoryFeatures: ANIMAL_FEATURES },
@@ -1867,7 +1809,6 @@ const CATEGORY_TREE = [
     id: 'cat_052ud0i',
     aliases: ['Продукты питания', 'Свежие продукты'],
     iconId: 'Apple',
-    sortOrder: 2,
     children: [
       { name: 'Грибы пищевые', id: 'cat_0o79fu8', children: [], categoryFeatures: AGRO_MUSHROOM_FEATURES },
       {
@@ -2152,15 +2093,6 @@ const CATEGORY_TREE = [
     ]
   },
   {
-    // Новая категория верхнего уровня — раньше "Семена, посевной материал"
-    // и "Саженцы" были детьми "Агрокультуры" (см. переименованную выше
-    // "Полевые культуры"), но по итогам обсуждения решили вынести отдельно:
-    // покупатель посадочного материала (вырастить самому) — другой сценарий
-    // использования, чем покупатель товарного зерна/масличных (продать/
-    // переработать/на корм). Названия "Семена и посадочный материал"
-    // используют реальные конкуренты (agrobazar.ru, Юла), но у нас за этим
-    // именем — два чётко разделённых раздела, а не всё в одну кучу, как у
-    // них. id обеих дочерних категорий не меняются — только parentId.
     name: 'Посадочный материал',
     id: 'cat_1vfli2x',
     iconId: 'Leaf',
@@ -2201,9 +2133,6 @@ const CATEGORY_TREE = [
           { name: 'Семена овощных культур', id: 'cat_1gzr2wi', children: [], categoryFeatures: AGRO_SEED_FEATURES },
           { name: 'Семена технических культур', id: 'cat_1fh9oor', children: [], categoryFeatures: AGRO_SEED_FEATURES },
           {
-            // id старой "Семена, рассада и саженцы плодово-ягодных культур"
-            // остался тут, за "Семена..." (см. также cat_14y5w5k ниже, в
-            // "Саженцы" — туда ушла рассадно-саженцевая часть).
             name: 'Семена плодово-ягодных культур',
             id: 'cat_0a49sh6',
             children: [],
@@ -2218,22 +2147,10 @@ const CATEGORY_TREE = [
         ]
       },
       {
-        // Уровень 2 (сестра "Семена, посевной материал"), а не лист внутри
-        // неё — иначе видовые подкатегории саженцев (хвойные/лиственные)
-        // оказались бы на 4-м уровне вложенности, а в проекте жёсткое
-        // ограничение в 3 уровня (см. category-cascader.tsx — грид
-        // захардкожен на 3 колонки). Деление по хвойные/лиственные деревья/
-        // лиственные кустарники — по образцу реальных категорий Avito
-        // (подтверждено скринами флоу подачи объявления) и agrobazar.ru.
         name: 'Саженцы',
         id: 'cat_03nuhy6',
         children: [
           {
-            // Было "Саженцы декоративных и лесных деревьев и кустарников"
-            // (лист внутри "Семена, посевной материал") — теперь разделили
-            // по видам, эта часть стала "лиственные деревья". id не меняем —
-            // переименование и перенос в другого родителя безопасны (см.
-            // seed.ts, матчинг по id), старые объявления не пострадают.
             name: 'Саженцы лиственных деревьев',
             id: 'cat_0gv6igf',
             children: [],
@@ -2247,8 +2164,6 @@ const CATEGORY_TREE = [
             categoryFeatures: AGRO_SAPLING_FEATURES
           },
           {
-            // Перенесено из "Семена, посевной материал" (это саженцы, а не
-            // семена) — id не меняем, перенос между родителями безопасен.
             name: 'Рассада, саженцы плодово-ягодных культур',
             id: 'cat_14y5w5k',
             children: [],
