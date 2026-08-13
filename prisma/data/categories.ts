@@ -1086,6 +1086,24 @@ const VET_MED_STANDARD = [
   }
 ] satisfies CategoryFeatureSeed[]
 
+const REAL_ESTATE_LAND_FEATURES = [
+  // Сознательно минимальный набор полей — по образцу Авито (Недвижимость →
+  // Земельные участки) и agroserver.ru: обе площадки НЕ структурируют тип
+  // почвы, обременения, инфраструктуру, назначение земли отдельными полями,
+  // всё остаётся в свободном описании. Тип использования — короткий список
+  // по образцу тега у Авито ("10 сот. (ИЖС)"), а не полный официальный
+  // классификатор ВРИ (там 60+ пунктов — избыточно для формы объявления).
+  { name: 'area', label: 'Площадь', type: 'NUMBER', units: ['Га', 'Сотка', 'м²'], required: true },
+  {
+    name: 'land_use_type',
+    label: 'Тип использования',
+    type: 'SELECT',
+    options: ['ИЖС', 'ЛПХ', 'КФХ', 'Земли сельхозназначения', 'Садоводство/СНТ', 'Прочее']
+  },
+  { name: 'deal_type', label: 'Тип сделки', type: 'SELECT', options: ['Продажа', 'Аренда'], required: true },
+  { name: 'cadastral_number', label: 'Кадастровый номер', type: 'TEXT', filterable: false }
+] satisfies CategoryFeatureSeed[]
+
 const VET_CONSUMABLES_FEATURES = [
   {
     name: 'item_type',
@@ -2442,6 +2460,25 @@ const CATEGORY_TREE = [
         categoryFeatures: [{ name: 'author', label: 'Автор/Издательство', type: 'TEXT', filterable: false }]
       }
     ]
+  },
+  {
+    // Новая категория верхнего уровня — земля и с/х недвижимость (см.
+    // обсуждение: изучили agroserver.ru и Авито "Недвижимость → Земельные
+    // участки", обе площадки держат минимум структурированных полей, всё
+    // остальное — в описании, см. REAL_ESTATE_LAND_FEATURES выше). Сама
+    // вершина — лист (children: []), без подкатегорий: усложнять дерево не
+    // имеет смысла при таком скромном наборе полей. priceUnits — явно
+    // переопределены (не через DEFAULT_PRICE_UNITS_BY_FEATURES): 'ITEM' для
+    // абсолютной цены участка (как у мелких лотов на Авито) и 'HA' для цены
+    // за гектар (как у agroserver для крупных с/х наделов) — продавец
+    // выбирает нужное при подаче объявления.
+    name: 'Земли и объекты с/х недвижимости',
+    id: 'cat_0pypyaf',
+    aliases: ['Земельные участки', 'Недвижимость', 'Земля'],
+    iconId: 'LandPlot',
+    children: [],
+    categoryFeatures: REAL_ESTATE_LAND_FEATURES,
+    priceUnits: ['ITEM', 'HA']
   }
 ] satisfies CategorySeed[]
 
