@@ -21,6 +21,17 @@ model User {
   bio      String?  @db.Text
   location String?
 
+  // Факт подтверждения ИП/компании через ИНН (DaData) — заполняются только
+  // после успешной проверки в UserService.verifyBusiness, никогда напрямую
+  // из формы настроек. businessName — готовое к показу название из ответа
+  // DaData (например "ИП Иванов И.И." или "ООО РОМАШКА"), businessInn —
+  // ИНН, по которому проверка проходила (может отличаться от текущего, если
+  // пользователь позже сменил тип продавца вручную — см.
+  // UserService.update). businessVerifiedAt — null, пока не подтверждено.
+  businessInn        String?   @map("business_inn")
+  businessName       String?   @map("business_name")
+  businessVerifiedAt DateTime? @map("business_verified_at")
+
   role UserRole @default(REGULAR)
 
   premiumUntil DateTime? @map("premium_until")

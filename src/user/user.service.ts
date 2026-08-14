@@ -1,7 +1,7 @@
 import { PrismaService } from '@/prisma/prisma.service'
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
 import { hash, verify } from 'argon2'
-import { AdStatus, AuthMethod, TokenType, UserRole } from 'prisma/generated/enums'
+import { AdStatus, AuthMethod, TokenType, UserRole, UserType } from 'prisma/generated/enums'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { PasswordChangeDto } from './dto/password-change.dto'
 import { DeleteAccountDto } from './dto/delete-account.dto'
@@ -133,16 +133,87 @@ export class UserService {
   async update(userId: string, dto: UpdateUserDto) {
     const user = await this.findById(userId)
 
+    // Раньше dto.type тут вообще не использовался — форма настроек
+    // (ContentGeneral) его отправляла, DTO валидировал, а сюда, в
+    // update(), поле так и не доходило: выбор "ИП"/"Компания" в интерфейсе
+    // никогда не сохранялся в базу.
+    const typeChanged = dto.type !== undefined && dto.type !== user.type
+
     const updatedUser = await this.prismaService.user.update({
       where: {
         id: user.id
       },
       data: {
-        displayName: dto.name
+        displayName: dto.name,
+        ...(dto.type !== undefined && { type: dto.type }),
+        // Смена типа продавца сбрасывает уже подтверждённые через ИНН
+        // бизнес-данные — иначе, например, при переключении вручную с
+        // подтверждённого "Компания" на "ИП" (без повторной проверки через
+        // verifyBusiness) карточка объявления продолжила бы показывать
+        // старое подтверждённое название компании поверх нового типа.
+        ...(typeChanged && { businessInn: null, businessName: null, businessVerifiedAt: null })
       }
     })
 
     return updatedUser
+  }
+
+  // Подтверждение ИП/компании по ИНН через DaData (party-suggest) —
+  // намеренно серверный вызов, а не доверие названию организации с
+  // клиента: иначе злоумышленник мог бы подставить реальный чужой ИНН и
+  // произвольное название. DaData покрывает и ЕГРЮЛ, и ЕГРИП одним и тем же
+  // эндпоинтом — различаются по data.type ('LEGAL' | 'INDIVIDUAL').
+  async verifyBusiness(userId: string, inn: string) {
+    const user = await this.findById(userId)
+
+    const dadataKey = this.configService.getOrThrow<string>('DADATA_KEY')
+
+    let response: Response
+
+    try {
+      response = await fetch('https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/party', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          Authorization: `Token ${dadataKey}`
+        },
+        body: JSON.stringify({ query: inn })
+      })
+    } catch {
+      throw new BadRequestException('Не удалось проверить ИНН — сервис проверки временно недоступен')
+    }
+
+    if (!response.ok) {
+      throw new BadRequestException('Не удалось проверить ИНН — сервис проверки временно недоступен')
+    }
+
+    const body = (await response.json()) as {
+      suggestions: {
+        value: string
+        data: { inn: string; type: 'LEGAL' | 'INDIVIDUAL'; state: { status: string } }
+      }[]
+    }
+
+    const match = body.suggestions?.find(suggestion => suggestion.data.inn === inn)
+
+    if (!match) {
+      throw new BadRequestException('Организация или ИП с таким ИНН не найдены')
+    }
+
+    if (match.data.state.status !== 'ACTIVE') {
+      throw new BadRequestException('Организация с таким ИНН недействующая (ликвидирована или в процессе ликвидации)')
+    }
+
+    return this.prismaService.user.update({
+      where: { id: user.id },
+      data: {
+        type: match.data.type === 'LEGAL' ? UserType.BUSINESS : UserType.INDIVIDUAL_ENTREPRENEUR,
+        businessInn: inn,
+        businessName: match.value,
+        businessVerifiedAt: new Date()
+      }
+    })
   }
 
   async updateAvatar(userId: string, fileName: string) {

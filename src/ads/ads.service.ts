@@ -261,6 +261,14 @@ export class AdsService {
       conditions.push(Prisma.join(priceBounds, ' AND '))
     }
 
+    // Тип продавца хранится на users, а не на ads — раз уж эти запросы уже
+    // построены как raw SQL с JOIN-подобными подзапросами (см.
+    // category_id/locality_fias_id выше), фильтруем той же подзапросной
+    // формой, а не втягиваем сюда декларативный Prisma-where.
+    if (query.sellerType) {
+      conditions.push(Prisma.sql`ads.user_id IN (SELECT id FROM users WHERE type = ${query.sellerType}::"UserType")`)
+    }
+
     conditions.push(...featureConditions)
 
     // DATE_DESC (сортировка по умолчанию) — COALESCE(bumped_at, created_at):
@@ -591,6 +599,14 @@ export class AdsService {
             picture: true,
             createdAt: true,
             type: true,
+            // Готовое к показу название из DaData ("ИП Иванов И.И." /
+            // "ООО РОМАШКА") — заполнено только если продавец подтвердил
+            // ИП/компанию через ИНН (см. UserService.verifyBusiness).
+            // Фронт показывает его вместо самозаявленного типа только
+            // когда businessVerifiedAt действительно есть (см. AdDetail) —
+            // тут это отдельно не проверяем, просто отдаём как есть.
+            businessName: true,
+            businessVerifiedAt: true,
             // Для бейджа "Премиум" рядом с именем продавца на публичной
             // карточке (см. AdDetail) — фронт сам решает, активен ли он
             // прямо сейчас (premiumUntil > now), тут просто отдаём сырое

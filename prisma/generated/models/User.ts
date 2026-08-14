@@ -33,6 +33,9 @@ export type UserMinAggregateOutputType = {
   type: $Enums.UserType | null
   bio: string | null
   location: string | null
+  businessInn: string | null
+  businessName: string | null
+  businessVerifiedAt: Date | null
   role: $Enums.UserRole | null
   premiumUntil: Date | null
   isVerified: boolean | null
@@ -52,6 +55,9 @@ export type UserMaxAggregateOutputType = {
   type: $Enums.UserType | null
   bio: string | null
   location: string | null
+  businessInn: string | null
+  businessName: string | null
+  businessVerifiedAt: Date | null
   role: $Enums.UserRole | null
   premiumUntil: Date | null
   isVerified: boolean | null
@@ -71,6 +77,9 @@ export type UserCountAggregateOutputType = {
   type: number
   bio: number
   location: number
+  businessInn: number
+  businessName: number
+  businessVerifiedAt: number
   role: number
   premiumUntil: number
   isVerified: number
@@ -92,6 +101,9 @@ export type UserMinAggregateInputType = {
   type?: true
   bio?: true
   location?: true
+  businessInn?: true
+  businessName?: true
+  businessVerifiedAt?: true
   role?: true
   premiumUntil?: true
   isVerified?: true
@@ -111,6 +123,9 @@ export type UserMaxAggregateInputType = {
   type?: true
   bio?: true
   location?: true
+  businessInn?: true
+  businessName?: true
+  businessVerifiedAt?: true
   role?: true
   premiumUntil?: true
   isVerified?: true
@@ -130,6 +145,9 @@ export type UserCountAggregateInputType = {
   type?: true
   bio?: true
   location?: true
+  businessInn?: true
+  businessName?: true
+  businessVerifiedAt?: true
   role?: true
   premiumUntil?: true
   isVerified?: true
@@ -222,6 +240,9 @@ export type UserGroupByOutputType = {
   type: $Enums.UserType
   bio: string | null
   location: string | null
+  businessInn: string | null
+  businessName: string | null
+  businessVerifiedAt: Date | null
   role: $Enums.UserRole
   premiumUntil: Date | null
   isVerified: boolean
@@ -262,6 +283,9 @@ export type UserWhereInput = {
   type?: Prisma.EnumUserTypeFilter<"User"> | $Enums.UserType
   bio?: Prisma.StringNullableFilter<"User"> | string | null
   location?: Prisma.StringNullableFilter<"User"> | string | null
+  businessInn?: Prisma.StringNullableFilter<"User"> | string | null
+  businessName?: Prisma.StringNullableFilter<"User"> | string | null
+  businessVerifiedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
   premiumUntil?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   isVerified?: Prisma.BoolFilter<"User"> | boolean
@@ -296,6 +320,9 @@ export type UserOrderByWithRelationInput = {
   type?: Prisma.SortOrder
   bio?: Prisma.SortOrderInput | Prisma.SortOrder
   location?: Prisma.SortOrderInput | Prisma.SortOrder
+  businessInn?: Prisma.SortOrderInput | Prisma.SortOrder
+  businessName?: Prisma.SortOrderInput | Prisma.SortOrder
+  businessVerifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   role?: Prisma.SortOrder
   premiumUntil?: Prisma.SortOrderInput | Prisma.SortOrder
   isVerified?: Prisma.SortOrder
@@ -333,6 +360,9 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   type?: Prisma.EnumUserTypeFilter<"User"> | $Enums.UserType
   bio?: Prisma.StringNullableFilter<"User"> | string | null
   location?: Prisma.StringNullableFilter<"User"> | string | null
+  businessInn?: Prisma.StringNullableFilter<"User"> | string | null
+  businessName?: Prisma.StringNullableFilter<"User"> | string | null
+  businessVerifiedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
   premiumUntil?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   isVerified?: Prisma.BoolFilter<"User"> | boolean
@@ -367,6 +397,9 @@ export type UserOrderByWithAggregationInput = {
   type?: Prisma.SortOrder
   bio?: Prisma.SortOrderInput | Prisma.SortOrder
   location?: Prisma.SortOrderInput | Prisma.SortOrder
+  businessInn?: Prisma.SortOrderInput | Prisma.SortOrder
+  businessName?: Prisma.SortOrderInput | Prisma.SortOrder
+  businessVerifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   role?: Prisma.SortOrder
   premiumUntil?: Prisma.SortOrderInput | Prisma.SortOrder
   isVerified?: Prisma.SortOrder
@@ -392,6 +425,9 @@ export type UserScalarWhereWithAggregatesInput = {
   type?: Prisma.EnumUserTypeWithAggregatesFilter<"User"> | $Enums.UserType
   bio?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   location?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  businessInn?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  businessName?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  businessVerifiedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   role?: Prisma.EnumUserRoleWithAggregatesFilter<"User"> | $Enums.UserRole
   premiumUntil?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   isVerified?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
@@ -411,6 +447,9 @@ export type UserCreateInput = {
   type?: $Enums.UserType
   bio?: string | null
   location?: string | null
+  businessInn?: string | null
+  businessName?: string | null
+  businessVerifiedAt?: Date | string | null
   role?: $Enums.UserRole
   premiumUntil?: Date | string | null
   isVerified?: boolean
@@ -445,6 +484,9 @@ export type UserUncheckedCreateInput = {
   type?: $Enums.UserType
   bio?: string | null
   location?: string | null
+  businessInn?: string | null
+  businessName?: string | null
+  businessVerifiedAt?: Date | string | null
   role?: $Enums.UserRole
   premiumUntil?: Date | string | null
   isVerified?: boolean
@@ -479,6 +521,9 @@ export type UserUpdateInput = {
   type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessInn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -513,6 +558,9 @@ export type UserUncheckedUpdateInput = {
   type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessInn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -547,6 +595,9 @@ export type UserCreateManyInput = {
   type?: $Enums.UserType
   bio?: string | null
   location?: string | null
+  businessInn?: string | null
+  businessName?: string | null
+  businessVerifiedAt?: Date | string | null
   role?: $Enums.UserRole
   premiumUntil?: Date | string | null
   isVerified?: boolean
@@ -566,6 +617,9 @@ export type UserUpdateManyMutationInput = {
   type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessInn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -585,6 +639,9 @@ export type UserUncheckedUpdateManyInput = {
   type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessInn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -604,6 +661,9 @@ export type UserCountOrderByAggregateInput = {
   type?: Prisma.SortOrder
   bio?: Prisma.SortOrder
   location?: Prisma.SortOrder
+  businessInn?: Prisma.SortOrder
+  businessName?: Prisma.SortOrder
+  businessVerifiedAt?: Prisma.SortOrder
   role?: Prisma.SortOrder
   premiumUntil?: Prisma.SortOrder
   isVerified?: Prisma.SortOrder
@@ -623,6 +683,9 @@ export type UserMaxOrderByAggregateInput = {
   type?: Prisma.SortOrder
   bio?: Prisma.SortOrder
   location?: Prisma.SortOrder
+  businessInn?: Prisma.SortOrder
+  businessName?: Prisma.SortOrder
+  businessVerifiedAt?: Prisma.SortOrder
   role?: Prisma.SortOrder
   premiumUntil?: Prisma.SortOrder
   isVerified?: Prisma.SortOrder
@@ -642,6 +705,9 @@ export type UserMinOrderByAggregateInput = {
   type?: Prisma.SortOrder
   bio?: Prisma.SortOrder
   location?: Prisma.SortOrder
+  businessInn?: Prisma.SortOrder
+  businessName?: Prisma.SortOrder
+  businessVerifiedAt?: Prisma.SortOrder
   role?: Prisma.SortOrder
   premiumUntil?: Prisma.SortOrder
   isVerified?: Prisma.SortOrder
@@ -674,12 +740,12 @@ export type EnumUserTypeFieldUpdateOperationsInput = {
   set?: $Enums.UserType
 }
 
-export type EnumUserRoleFieldUpdateOperationsInput = {
-  set?: $Enums.UserRole
-}
-
 export type NullableDateTimeFieldUpdateOperationsInput = {
   set?: Date | string | null
+}
+
+export type EnumUserRoleFieldUpdateOperationsInput = {
+  set?: $Enums.UserRole
 }
 
 export type BoolFieldUpdateOperationsInput = {
@@ -919,6 +985,9 @@ export type UserCreateWithoutPhonesInput = {
   type?: $Enums.UserType
   bio?: string | null
   location?: string | null
+  businessInn?: string | null
+  businessName?: string | null
+  businessVerifiedAt?: Date | string | null
   role?: $Enums.UserRole
   premiumUntil?: Date | string | null
   isVerified?: boolean
@@ -952,6 +1021,9 @@ export type UserUncheckedCreateWithoutPhonesInput = {
   type?: $Enums.UserType
   bio?: string | null
   location?: string | null
+  businessInn?: string | null
+  businessName?: string | null
+  businessVerifiedAt?: Date | string | null
   role?: $Enums.UserRole
   premiumUntil?: Date | string | null
   isVerified?: boolean
@@ -1001,6 +1073,9 @@ export type UserUpdateWithoutPhonesInput = {
   type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessInn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1034,6 +1109,9 @@ export type UserUncheckedUpdateWithoutPhonesInput = {
   type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessInn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1067,6 +1145,9 @@ export type UserCreateWithoutAccountsInput = {
   type?: $Enums.UserType
   bio?: string | null
   location?: string | null
+  businessInn?: string | null
+  businessName?: string | null
+  businessVerifiedAt?: Date | string | null
   role?: $Enums.UserRole
   premiumUntil?: Date | string | null
   isVerified?: boolean
@@ -1100,6 +1181,9 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   type?: $Enums.UserType
   bio?: string | null
   location?: string | null
+  businessInn?: string | null
+  businessName?: string | null
+  businessVerifiedAt?: Date | string | null
   role?: $Enums.UserRole
   premiumUntil?: Date | string | null
   isVerified?: boolean
@@ -1149,6 +1233,9 @@ export type UserUpdateWithoutAccountsInput = {
   type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessInn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1182,6 +1269,9 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessInn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1215,6 +1305,9 @@ export type UserCreateWithoutTokensInput = {
   type?: $Enums.UserType
   bio?: string | null
   location?: string | null
+  businessInn?: string | null
+  businessName?: string | null
+  businessVerifiedAt?: Date | string | null
   role?: $Enums.UserRole
   premiumUntil?: Date | string | null
   isVerified?: boolean
@@ -1248,6 +1341,9 @@ export type UserUncheckedCreateWithoutTokensInput = {
   type?: $Enums.UserType
   bio?: string | null
   location?: string | null
+  businessInn?: string | null
+  businessName?: string | null
+  businessVerifiedAt?: Date | string | null
   role?: $Enums.UserRole
   premiumUntil?: Date | string | null
   isVerified?: boolean
@@ -1297,6 +1393,9 @@ export type UserUpdateWithoutTokensInput = {
   type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessInn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1330,6 +1429,9 @@ export type UserUncheckedUpdateWithoutTokensInput = {
   type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessInn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1363,6 +1465,9 @@ export type UserCreateWithoutAdsInput = {
   type?: $Enums.UserType
   bio?: string | null
   location?: string | null
+  businessInn?: string | null
+  businessName?: string | null
+  businessVerifiedAt?: Date | string | null
   role?: $Enums.UserRole
   premiumUntil?: Date | string | null
   isVerified?: boolean
@@ -1396,6 +1501,9 @@ export type UserUncheckedCreateWithoutAdsInput = {
   type?: $Enums.UserType
   bio?: string | null
   location?: string | null
+  businessInn?: string | null
+  businessName?: string | null
+  businessVerifiedAt?: Date | string | null
   role?: $Enums.UserRole
   premiumUntil?: Date | string | null
   isVerified?: boolean
@@ -1445,6 +1553,9 @@ export type UserUpdateWithoutAdsInput = {
   type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessInn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1478,6 +1589,9 @@ export type UserUncheckedUpdateWithoutAdsInput = {
   type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessInn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1511,6 +1625,9 @@ export type UserCreateWithoutFavoritesInput = {
   type?: $Enums.UserType
   bio?: string | null
   location?: string | null
+  businessInn?: string | null
+  businessName?: string | null
+  businessVerifiedAt?: Date | string | null
   role?: $Enums.UserRole
   premiumUntil?: Date | string | null
   isVerified?: boolean
@@ -1544,6 +1661,9 @@ export type UserUncheckedCreateWithoutFavoritesInput = {
   type?: $Enums.UserType
   bio?: string | null
   location?: string | null
+  businessInn?: string | null
+  businessName?: string | null
+  businessVerifiedAt?: Date | string | null
   role?: $Enums.UserRole
   premiumUntil?: Date | string | null
   isVerified?: boolean
@@ -1593,6 +1713,9 @@ export type UserUpdateWithoutFavoritesInput = {
   type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessInn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1626,6 +1749,9 @@ export type UserUncheckedUpdateWithoutFavoritesInput = {
   type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessInn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1659,6 +1785,9 @@ export type UserCreateWithoutAdReportsInput = {
   type?: $Enums.UserType
   bio?: string | null
   location?: string | null
+  businessInn?: string | null
+  businessName?: string | null
+  businessVerifiedAt?: Date | string | null
   role?: $Enums.UserRole
   premiumUntil?: Date | string | null
   isVerified?: boolean
@@ -1692,6 +1821,9 @@ export type UserUncheckedCreateWithoutAdReportsInput = {
   type?: $Enums.UserType
   bio?: string | null
   location?: string | null
+  businessInn?: string | null
+  businessName?: string | null
+  businessVerifiedAt?: Date | string | null
   role?: $Enums.UserRole
   premiumUntil?: Date | string | null
   isVerified?: boolean
@@ -1741,6 +1873,9 @@ export type UserUpdateWithoutAdReportsInput = {
   type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessInn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1774,6 +1909,9 @@ export type UserUncheckedUpdateWithoutAdReportsInput = {
   type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessInn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1807,6 +1945,9 @@ export type UserCreateWithoutAdBumpsInput = {
   type?: $Enums.UserType
   bio?: string | null
   location?: string | null
+  businessInn?: string | null
+  businessName?: string | null
+  businessVerifiedAt?: Date | string | null
   role?: $Enums.UserRole
   premiumUntil?: Date | string | null
   isVerified?: boolean
@@ -1840,6 +1981,9 @@ export type UserUncheckedCreateWithoutAdBumpsInput = {
   type?: $Enums.UserType
   bio?: string | null
   location?: string | null
+  businessInn?: string | null
+  businessName?: string | null
+  businessVerifiedAt?: Date | string | null
   role?: $Enums.UserRole
   premiumUntil?: Date | string | null
   isVerified?: boolean
@@ -1889,6 +2033,9 @@ export type UserUpdateWithoutAdBumpsInput = {
   type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessInn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1922,6 +2069,9 @@ export type UserUncheckedUpdateWithoutAdBumpsInput = {
   type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessInn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1955,6 +2105,9 @@ export type UserCreateWithoutPremiumPurchasesInput = {
   type?: $Enums.UserType
   bio?: string | null
   location?: string | null
+  businessInn?: string | null
+  businessName?: string | null
+  businessVerifiedAt?: Date | string | null
   role?: $Enums.UserRole
   premiumUntil?: Date | string | null
   isVerified?: boolean
@@ -1988,6 +2141,9 @@ export type UserUncheckedCreateWithoutPremiumPurchasesInput = {
   type?: $Enums.UserType
   bio?: string | null
   location?: string | null
+  businessInn?: string | null
+  businessName?: string | null
+  businessVerifiedAt?: Date | string | null
   role?: $Enums.UserRole
   premiumUntil?: Date | string | null
   isVerified?: boolean
@@ -2037,6 +2193,9 @@ export type UserUpdateWithoutPremiumPurchasesInput = {
   type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessInn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2070,6 +2229,9 @@ export type UserUncheckedUpdateWithoutPremiumPurchasesInput = {
   type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessInn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2103,6 +2265,9 @@ export type UserCreateWithoutAdServicePurchasesInput = {
   type?: $Enums.UserType
   bio?: string | null
   location?: string | null
+  businessInn?: string | null
+  businessName?: string | null
+  businessVerifiedAt?: Date | string | null
   role?: $Enums.UserRole
   premiumUntil?: Date | string | null
   isVerified?: boolean
@@ -2136,6 +2301,9 @@ export type UserUncheckedCreateWithoutAdServicePurchasesInput = {
   type?: $Enums.UserType
   bio?: string | null
   location?: string | null
+  businessInn?: string | null
+  businessName?: string | null
+  businessVerifiedAt?: Date | string | null
   role?: $Enums.UserRole
   premiumUntil?: Date | string | null
   isVerified?: boolean
@@ -2185,6 +2353,9 @@ export type UserUpdateWithoutAdServicePurchasesInput = {
   type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessInn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2218,6 +2389,9 @@ export type UserUncheckedUpdateWithoutAdServicePurchasesInput = {
   type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessInn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2251,6 +2425,9 @@ export type UserCreateWithoutConversationsAsBuyerInput = {
   type?: $Enums.UserType
   bio?: string | null
   location?: string | null
+  businessInn?: string | null
+  businessName?: string | null
+  businessVerifiedAt?: Date | string | null
   role?: $Enums.UserRole
   premiumUntil?: Date | string | null
   isVerified?: boolean
@@ -2284,6 +2461,9 @@ export type UserUncheckedCreateWithoutConversationsAsBuyerInput = {
   type?: $Enums.UserType
   bio?: string | null
   location?: string | null
+  businessInn?: string | null
+  businessName?: string | null
+  businessVerifiedAt?: Date | string | null
   role?: $Enums.UserRole
   premiumUntil?: Date | string | null
   isVerified?: boolean
@@ -2322,6 +2502,9 @@ export type UserCreateWithoutConversationsAsSellerInput = {
   type?: $Enums.UserType
   bio?: string | null
   location?: string | null
+  businessInn?: string | null
+  businessName?: string | null
+  businessVerifiedAt?: Date | string | null
   role?: $Enums.UserRole
   premiumUntil?: Date | string | null
   isVerified?: boolean
@@ -2355,6 +2538,9 @@ export type UserUncheckedCreateWithoutConversationsAsSellerInput = {
   type?: $Enums.UserType
   bio?: string | null
   location?: string | null
+  businessInn?: string | null
+  businessName?: string | null
+  businessVerifiedAt?: Date | string | null
   role?: $Enums.UserRole
   premiumUntil?: Date | string | null
   isVerified?: boolean
@@ -2404,6 +2590,9 @@ export type UserUpdateWithoutConversationsAsBuyerInput = {
   type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessInn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2437,6 +2626,9 @@ export type UserUncheckedUpdateWithoutConversationsAsBuyerInput = {
   type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessInn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2481,6 +2673,9 @@ export type UserUpdateWithoutConversationsAsSellerInput = {
   type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessInn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2514,6 +2709,9 @@ export type UserUncheckedUpdateWithoutConversationsAsSellerInput = {
   type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessInn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2547,6 +2745,9 @@ export type UserCreateWithoutBlockedUsersInput = {
   type?: $Enums.UserType
   bio?: string | null
   location?: string | null
+  businessInn?: string | null
+  businessName?: string | null
+  businessVerifiedAt?: Date | string | null
   role?: $Enums.UserRole
   premiumUntil?: Date | string | null
   isVerified?: boolean
@@ -2580,6 +2781,9 @@ export type UserUncheckedCreateWithoutBlockedUsersInput = {
   type?: $Enums.UserType
   bio?: string | null
   location?: string | null
+  businessInn?: string | null
+  businessName?: string | null
+  businessVerifiedAt?: Date | string | null
   role?: $Enums.UserRole
   premiumUntil?: Date | string | null
   isVerified?: boolean
@@ -2618,6 +2822,9 @@ export type UserCreateWithoutBlockedByUsersInput = {
   type?: $Enums.UserType
   bio?: string | null
   location?: string | null
+  businessInn?: string | null
+  businessName?: string | null
+  businessVerifiedAt?: Date | string | null
   role?: $Enums.UserRole
   premiumUntil?: Date | string | null
   isVerified?: boolean
@@ -2651,6 +2858,9 @@ export type UserUncheckedCreateWithoutBlockedByUsersInput = {
   type?: $Enums.UserType
   bio?: string | null
   location?: string | null
+  businessInn?: string | null
+  businessName?: string | null
+  businessVerifiedAt?: Date | string | null
   role?: $Enums.UserRole
   premiumUntil?: Date | string | null
   isVerified?: boolean
@@ -2700,6 +2910,9 @@ export type UserUpdateWithoutBlockedUsersInput = {
   type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessInn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2733,6 +2946,9 @@ export type UserUncheckedUpdateWithoutBlockedUsersInput = {
   type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessInn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2777,6 +2993,9 @@ export type UserUpdateWithoutBlockedByUsersInput = {
   type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessInn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2810,6 +3029,9 @@ export type UserUncheckedUpdateWithoutBlockedByUsersInput = {
   type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessInn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2843,6 +3065,9 @@ export type UserCreateWithoutSentMessagesInput = {
   type?: $Enums.UserType
   bio?: string | null
   location?: string | null
+  businessInn?: string | null
+  businessName?: string | null
+  businessVerifiedAt?: Date | string | null
   role?: $Enums.UserRole
   premiumUntil?: Date | string | null
   isVerified?: boolean
@@ -2876,6 +3101,9 @@ export type UserUncheckedCreateWithoutSentMessagesInput = {
   type?: $Enums.UserType
   bio?: string | null
   location?: string | null
+  businessInn?: string | null
+  businessName?: string | null
+  businessVerifiedAt?: Date | string | null
   role?: $Enums.UserRole
   premiumUntil?: Date | string | null
   isVerified?: boolean
@@ -2925,6 +3153,9 @@ export type UserUpdateWithoutSentMessagesInput = {
   type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessInn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2958,6 +3189,9 @@ export type UserUncheckedUpdateWithoutSentMessagesInput = {
   type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessInn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2991,6 +3225,9 @@ export type UserCreateWithoutNotificationsInput = {
   type?: $Enums.UserType
   bio?: string | null
   location?: string | null
+  businessInn?: string | null
+  businessName?: string | null
+  businessVerifiedAt?: Date | string | null
   role?: $Enums.UserRole
   premiumUntil?: Date | string | null
   isVerified?: boolean
@@ -3024,6 +3261,9 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   type?: $Enums.UserType
   bio?: string | null
   location?: string | null
+  businessInn?: string | null
+  businessName?: string | null
+  businessVerifiedAt?: Date | string | null
   role?: $Enums.UserRole
   premiumUntil?: Date | string | null
   isVerified?: boolean
@@ -3073,6 +3313,9 @@ export type UserUpdateWithoutNotificationsInput = {
   type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessInn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3106,6 +3349,9 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   type?: Prisma.EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessInn?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   premiumUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3296,6 +3542,9 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   type?: boolean
   bio?: boolean
   location?: boolean
+  businessInn?: boolean
+  businessName?: boolean
+  businessVerifiedAt?: boolean
   role?: boolean
   premiumUntil?: boolean
   isVerified?: boolean
@@ -3331,6 +3580,9 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   type?: boolean
   bio?: boolean
   location?: boolean
+  businessInn?: boolean
+  businessName?: boolean
+  businessVerifiedAt?: boolean
   role?: boolean
   premiumUntil?: boolean
   isVerified?: boolean
@@ -3350,6 +3602,9 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   type?: boolean
   bio?: boolean
   location?: boolean
+  businessInn?: boolean
+  businessName?: boolean
+  businessVerifiedAt?: boolean
   role?: boolean
   premiumUntil?: boolean
   isVerified?: boolean
@@ -3369,6 +3624,9 @@ export type UserSelectScalar = {
   type?: boolean
   bio?: boolean
   location?: boolean
+  businessInn?: boolean
+  businessName?: boolean
+  businessVerifiedAt?: boolean
   role?: boolean
   premiumUntil?: boolean
   isVerified?: boolean
@@ -3379,7 +3637,7 @@ export type UserSelectScalar = {
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "password" | "email" | "displayName" | "picture" | "type" | "bio" | "location" | "role" | "premiumUntil" | "isVerified" | "isTwoFactorEnabled" | "deletedAt" | "method" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "password" | "email" | "displayName" | "picture" | "type" | "bio" | "location" | "businessInn" | "businessName" | "businessVerifiedAt" | "role" | "premiumUntil" | "isVerified" | "isTwoFactorEnabled" | "deletedAt" | "method" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   phones?: boolean | Prisma.User$phonesArgs<ExtArgs>
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
@@ -3429,6 +3687,9 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     type: $Enums.UserType
     bio: string | null
     location: string | null
+    businessInn: string | null
+    businessName: string | null
+    businessVerifiedAt: Date | null
     role: $Enums.UserRole
     premiumUntil: Date | null
     isVerified: boolean
@@ -3883,6 +4144,9 @@ export interface UserFieldRefs {
   readonly type: Prisma.FieldRef<"User", 'UserType'>
   readonly bio: Prisma.FieldRef<"User", 'String'>
   readonly location: Prisma.FieldRef<"User", 'String'>
+  readonly businessInn: Prisma.FieldRef<"User", 'String'>
+  readonly businessName: Prisma.FieldRef<"User", 'String'>
+  readonly businessVerifiedAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly role: Prisma.FieldRef<"User", 'UserRole'>
   readonly premiumUntil: Prisma.FieldRef<"User", 'DateTime'>
   readonly isVerified: Prisma.FieldRef<"User", 'Boolean'>

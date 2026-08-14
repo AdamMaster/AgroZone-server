@@ -1,6 +1,7 @@
 import { Type } from 'class-transformer'
 import { IsEnum, IsInt, IsNumber, IsOptional, IsString, Min } from 'class-validator'
 import { PriceUnit } from 'prisma/generated/client'
+import { UserType } from 'prisma/generated/enums'
 
 // Сортировка списка объявлений. По умолчанию (если sortBy не передан) —
 // DATE_DESC, см. AdsService.findAll.
@@ -83,4 +84,11 @@ export class FindAdsQueryDto {
   @IsOptional()
   @IsString()
   features?: string
+
+  // Фильтр по самозаявленному типу продавца (частное лицо / ИП / компания)
+  // — сравнивается с users.type (см. AdsService.findAll). Не зависит от
+  // выбранной категории, как и regionIsoCode/localityFiasId.
+  @IsOptional()
+  @IsEnum(UserType)
+  sellerType?: UserType
 }

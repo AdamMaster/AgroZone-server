@@ -23,6 +23,7 @@ import { Authorized } from '@/auth/decorators/authorized.decorator'
 import { Authorization } from '@/auth/decorators/auth.decorator'
 import { UserRole } from 'prisma/generated/enums'
 import { UpdateUserDto } from './dto/update-user.dto'
+import { VerifyBusinessDto } from './dto/verify-business.dto'
 import { FileService } from '@/file/file.service'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { PasswordChangeDto } from './dto/password-change.dto'
@@ -60,6 +61,17 @@ export class UserController {
   @Patch('profile')
   async updateProfile(@Authorized('id') userId: string, @Body() dto: UpdateUserDto) {
     return this.userService.update(userId, dto)
+  }
+
+  // Подтверждение ИП/компании по ИНН через DaData — см.
+  // UserService.verifyBusiness. Отдельный POST, а не часть updateProfile:
+  // требует внешнего запроса и может провалиться независимо от остальных
+  // полей формы настроек.
+  @Authorization()
+  @HttpCode(HttpStatus.OK)
+  @Post('profile/business-verification')
+  async verifyBusiness(@Authorized('id') userId: string, @Body() dto: VerifyBusinessDto) {
+    return this.userService.verifyBusiness(userId, dto.inn)
   }
 
   @Authorization()
