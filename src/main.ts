@@ -10,6 +10,7 @@ import IORedis from 'ioredis'
 import session from 'express-session'
 import { RedisStore } from 'connect-redis'
 import { createClient } from 'redis'
+import compression from 'compression'
 ;(BigInt.prototype as any).toJSON = function () {
   return Number(this)
 }
@@ -25,6 +26,8 @@ async function bootstrap() {
 
   redisClient.on('connect', () => console.log('✅ Redis connected'))
   redisClient.on('error', err => console.error('❌ Redis error:', err))
+
+  app.use(compression())
 
   app.use(cookieParser(config.getOrThrow<string>('COOKIES_SECRET')))
 
