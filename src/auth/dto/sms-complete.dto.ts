@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, Length, MinLength, Validate } from 'class-validator'
+import { Equals, IsBoolean, IsNotEmpty, IsString, Length, MinLength, Validate } from 'class-validator'
 import { SmsRegisterDto } from './sms-register.dto'
 import { IsPasswordsMatchingConstraint } from 'src/libs/common/decorators/is-passwords-matching-constraint.decorator'
 
@@ -19,4 +19,8 @@ export class SmsCompleteDto extends SmsRegisterDto {
   @IsString({ message: 'Пароль подтверждения должен быть строкой.' })
   @Validate(IsPasswordsMatchingConstraint, { message: 'Пароли не совпадают.' })
   passwordRepeat!: string
+
+  @IsBoolean({ message: 'Согласие на обработку персональных данных указано некорректно.' })
+  @Equals(true, { message: 'Необходимо дать согласие на обработку персональных данных.' })
+  personalDataConsent!: boolean
 }

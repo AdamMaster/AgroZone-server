@@ -99,7 +99,10 @@ export class UserService {
     phone: string | null,
     picture: string,
     method: AuthMethod,
-    isVerified: boolean
+    isVerified: boolean,
+    // По умолчанию false, чтобы новый вызывающий код, который забудет
+    // передать этот параметр, не проставлял согласие молча — 152-ФЗ.
+    personalDataConsent: boolean = false
   ) {
     const normalizedPhone = phone ? normalizePhone(phone) : null
 
@@ -111,6 +114,7 @@ export class UserService {
         picture,
         method,
         isVerified,
+        personalDataConsentAt: personalDataConsent ? new Date() : null,
 
         ...(normalizedPhone && {
           phones: {

@@ -39,6 +39,14 @@ model User {
   isVerified         Boolean @default(false) @map("is_verified")
   isTwoFactorEnabled Boolean @default(false) @map("is_two_factor_enabled")
 
+  // Момент, когда пользователь дал согласие на обработку персональных
+  // данных (152-ФЗ) — проставляется при регистрации (чекбокс на форме email
+  // /SMS-регистрации, обязателен к отметке; для OAuth-регистрации согласие
+  // подразумевается уведомлением рядом с кнопками Google/Яндекс на форме,
+  // см. AuthFormWrapper). null означает, что согласие не зафиксировано
+  // (не должно происходить для новых аккаунтов после этого изменения).
+  personalDataConsentAt DateTime? @map("personal_data_consent_at")
+
   deletedAt DateTime? @map("deleted_at")
 
   method   AuthMethod

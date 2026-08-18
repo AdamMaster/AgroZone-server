@@ -1,6 +1,16 @@
 import { IsPasswordsMatchingConstraint } from 'src/libs/common/decorators/is-passwords-matching-constraint.decorator'
 
-import { IsEmail, IsNotEmpty, IsOptional, IsString, Matches, MinLength, Validate } from 'class-validator'
+import {
+  Equals,
+  IsBoolean,
+  IsEmail,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  Matches,
+  MinLength,
+  Validate
+} from 'class-validator'
 
 export class RegisterDto {
   @IsString({ message: 'Имя должно быть строкой.' })
@@ -26,4 +36,8 @@ export class RegisterDto {
   @MinLength(6, { message: 'Пароль подтверждения должен содержать не менее 6 символов.' })
   @Validate(IsPasswordsMatchingConstraint, { message: 'Пароли не совпадают.' })
   passwordRepeat!: string
+
+  @IsBoolean({ message: 'Согласие на обработку персональных данных указано некорректно.' })
+  @Equals(true, { message: 'Необходимо дать согласие на обработку персональных данных.' })
+  personalDataConsent!: boolean
 }

@@ -104,6 +104,7 @@ export const UserScalarFieldEnum = {
   premiumUntil: 'premiumUntil',
   isVerified: 'isVerified',
   isTwoFactorEnabled: 'isTwoFactorEnabled',
+  personalDataConsentAt: 'personalDataConsentAt',
   deletedAt: 'deletedAt',
   method: 'method',
   createdAt: 'createdAt',

@@ -68,7 +68,16 @@ export class AuthService {
       throw new BadRequestException('Срок действия кода истек. Запросите новый.')
     }
 
-    const newUser = await this.userService.create(null, dto.password, dto.name, phone, '', AuthMethod.CREDENTIALS, true)
+    const newUser = await this.userService.create(
+      null,
+      dto.password,
+      dto.name,
+      phone,
+      '',
+      AuthMethod.CREDENTIALS,
+      true,
+      dto.personalDataConsent
+    )
 
     await this.prismaService.token.delete({ where: { id: smsToken.id } })
 
@@ -97,7 +106,8 @@ export class AuthService {
       phone,
       '',
       AuthMethod.CREDENTIALS,
-      false
+      false,
+      dto.personalDataConsent
     )
 
     if (newUser.email) {
@@ -333,6 +343,10 @@ export class AuthService {
     const providerKey = (profile?.provider?.toUpperCase() ?? '') as keyof typeof AuthMethod
     const method: AuthMethod = AuthMethod[providerKey] || AuthMethod.GOOGLE
 
+    // Согласие на обработку персональных данных для OAuth-регистрации не
+    // оформляется отдельным чекбоксом (тут нет формы — сразу редирект на
+    // Google/Яндекс), а подразумевается уведомлением рядом с кнопками входа
+    // через соцсети на форме регистрации (см. AuthFormWrapper/AuthSocials).
     user = await this.userService.create(
       profile?.email ?? null,
       null,
@@ -340,6 +354,7 @@ export class AuthService {
       null,
       profile?.picture ?? '',
       method,
+      true,
       true
     )
 
