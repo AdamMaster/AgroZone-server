@@ -10,14 +10,15 @@ import { FileService } from '../file/file.service'
 import { AD_LIMITS } from '@/ads/constants/ads.constants'
 import { isPremiumActive } from '@/premium/utils/is-premium-active.util'
 import { normalizePhone } from '@/libs/common/utils/phone.util'
-import { generateSmsCode } from '@/libs/common/utils/generate-code.util'
+import { ZvonokService } from '@/libs/zvonok/zvonok.service'
 
 @Injectable()
 export class UserService {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly fileService: FileService,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
+    private readonly zvonokService: ZvonokService
   ) {}
 
   async findById(id: string) {
@@ -298,7 +299,11 @@ export class UserService {
       throw new BadRequestException('Этот номер уже используется другим аккаунтом')
     }
 
-    const smsCode = generateSmsCode()
+    // 4 цифры — см. комментарий у AuthService.sendSmsCode: код должен
+    // умещаться в последние цифры номера, которым звонит Zvonok. Код
+    // возвращает сам Zvonok в ответе на звонок — та же логика, что и в
+    // AuthService.sendSmsCode (общий ZvonokService).
+    const smsCode = await this.zvonokService.sendVerificationCall(newPhone)
 
     await this.prismaService.token.deleteMany({ where: { userId, type: 'PHONE_CHANGE' } })
     await this.prismaService.token.create({
@@ -311,7 +316,6 @@ export class UserService {
       }
     })
 
-    console.log(`[СМС] Код: ${smsCode}`) // Сюда потом прикрутишь отправку
     return { success: true }
   }
 

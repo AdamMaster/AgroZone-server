@@ -23,7 +23,7 @@ import { VerifySmsDto } from './dto/verify-sms.dto'
 import { SmsRegisterDto } from './dto/sms-register.dto'
 import { SmsCompleteDto } from './dto/sms-complete.dto'
 import { normalizePhone } from '@/libs/common/utils/phone.util'
-import { generateSmsCode } from '@/libs/common/utils/generate-code.util'
+import { ZvonokService } from '@/libs/zvonok/zvonok.service'
 
 @Injectable()
 export class AuthService {
@@ -33,7 +33,8 @@ export class AuthService {
     private readonly configService: ConfigService,
     private readonly providerService: ProviderService,
     private readonly emailConfirmationService: EmailConfirmationService,
-    private readonly twoFactorAuthService: TwoFactorAuthService
+    private readonly twoFactorAuthService: TwoFactorAuthService,
+    private readonly zvonokService: ZvonokService
   ) {}
 
   async registerSmsStart(dto: SmsRegisterDto) {
@@ -116,7 +117,15 @@ export class AuthService {
   }
 
   async sendSmsCode(phone: string, type: TokenType = TokenType.SMS_VERIFICATION) {
-    const code = generateSmsCode()
+    // 4 цифры, а не 6, как у остальных кодов подтверждения (email, 2FA):
+    // Zvonok подтверждает код звонком, номер которого заканчивается на эти
+    // цифры, а на конце номера физически помещается только 4 знака.
+    //
+    // Код возвращает сам Zvonok в ответе на звонок (см. комментарий в
+    // ZvonokService), поэтому мы не генерируем его сами — сохраняем токен
+    // только после успешного звонка, иначе при сбое в базе остался бы код,
+    // который пользователь никогда не увидит.
+    const code = await this.zvonokService.sendVerificationCall(phone)
 
     // Удаляем старые коды для этого номера
     await this.prismaService.token.deleteMany({
@@ -138,12 +147,7 @@ export class AuthService {
       }
     })
 
-    // Твой консоль-лог для дебага
-    console.log(`\n--- [SMS.RU MOCK] ---`)
-    console.log(`КОД ДЛЯ НОМЕРА ${phone}: ${code}`)
-    console.log(`---------------------\n`)
-
-    return { message: 'Код подтверждения отправлен на ваш телефон' }
+    return { message: 'Вам поступит звонок — код подтверждения это последние 4 цифры номера, с которого позвонили' }
   }
 
   async sendPhoneChangeCode(phone: string, userId: string) {
