@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from '@/prisma/prisma.service'
-import { CategoryFeature } from 'prisma/generated/client'
+import { CategoryFeature } from '@/generated/prisma/client'
 
 export interface CategoryWithChildren {
   id: string

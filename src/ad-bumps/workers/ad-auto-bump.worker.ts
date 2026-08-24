@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { Cron } from '@nestjs/schedule'
-import { AdStatus } from 'prisma/generated/client'
+import { AdStatus } from '@/generated/prisma/client'
 
 import { PrismaService } from '@/prisma/prisma.service'
 import { isPremiumActive } from '@/premium/utils/is-premium-active.util'

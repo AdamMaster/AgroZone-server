@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common'
 import { Cron } from '@nestjs/schedule'
 import { PrismaService } from '@/prisma/prisma.service'
 import { FileService } from '@/file/file.service'
-import { AdStatus } from 'prisma/generated/client'
+import { AdStatus } from '@/generated/prisma/client'
 
 // Физически удаляет объявления, лежащие в архиве (ARCHIVED) — вместе с их
 // фотографиями в S3.

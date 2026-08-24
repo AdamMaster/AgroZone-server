@@ -1,5 +1,5 @@
 import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common'
-import { AdStatus } from 'prisma/generated/enums'
+import { AdStatus } from '@/generated/prisma/enums'
 
 import { BlockedUsersService } from '@/blocked-users/blocked-users.service'
 import { PrismaService } from '@/prisma/prisma.service'

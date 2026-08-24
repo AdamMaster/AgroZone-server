@@ -26,13 +26,13 @@ import { AD_LIMITS, AD_MAX_FILE_SIZE } from './constants/ads.constants'
 import { ModerateAdDto } from './dto/moderation-ad.dto'
 import { Roles } from '../auth/decorators/roles.decorator'
 import { RolesGuard } from '../auth/guards/roles.guard'
-import { UserRole } from 'prisma/generated/enums'
+import { UserRole } from '@/generated/prisma/enums'
 import { UpdateAdDto } from './dto/update-ad.dto'
 import { CurrentUser } from '@/auth/decorators/decorators/user.decorator'
 import { computeViewerKey } from './utils/viewer-key.util'
 import { FindAdsQueryDto } from './dto/find-ads-query.dto'
 import { FindMyAdsQueryDto } from './dto/find-my-ads-query.dto'
-import { User } from 'prisma/generated/client'
+import { User } from '@/generated/prisma/client'
 
 @Controller('ads')
 export class AdsController {

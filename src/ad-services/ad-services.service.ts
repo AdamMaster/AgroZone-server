@@ -1,7 +1,7 @@
 import { BadRequestException, ForbiddenException, Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { AdStatus } from 'prisma/generated/client'
-import { AdBadge, AdServicePurchaseStatus, AdServiceType } from 'prisma/generated/enums'
+import { AdStatus } from '@/generated/prisma/client'
+import { AdBadge, AdServicePurchaseStatus, AdServiceType } from '@/generated/prisma/enums'
 
 import { PrismaService } from '@/prisma/prisma.service'
 

@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, ParseUUIDPipe, Patch, UseGuards } from '@nestjs/common'
-import { UserRole } from 'prisma/generated/enums'
+import { UserRole } from '@/generated/prisma/enums'
 
 import { Roles } from '@/auth/decorators/roles.decorator'
 import { AuthGuard } from '@/auth/guards/auth.guard'

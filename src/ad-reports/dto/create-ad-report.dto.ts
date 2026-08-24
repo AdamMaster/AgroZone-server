@@ -1,5 +1,5 @@
 import { IsEnum, IsOptional, IsString, MaxLength } from 'class-validator'
-import { AdReportReason } from 'prisma/generated/enums'
+import { AdReportReason } from '@/generated/prisma/enums'
 
 export class CreateAdReportDto {
   @IsEnum(AdReportReason)

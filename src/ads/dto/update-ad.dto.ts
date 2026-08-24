@@ -1,6 +1,6 @@
 import { Transform } from 'class-transformer'
 import { IsArray, IsEnum, IsNotEmpty, IsNumber, IsObject, IsOptional, IsString, Matches } from 'class-validator'
-import { PriceUnit, Prisma } from 'prisma/generated/client'
+import { PriceUnit, Prisma } from '@/generated/prisma/client'
 
 export class UpdateAdDto {
   @IsOptional()

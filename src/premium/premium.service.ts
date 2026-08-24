@@ -1,7 +1,7 @@
 import { Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { AdStatus } from 'prisma/generated/client'
-import { PremiumPurchaseStatus } from 'prisma/generated/enums'
+import { AdStatus } from '@/generated/prisma/client'
+import { PremiumPurchaseStatus } from '@/generated/prisma/enums'
 
 import { PrismaService } from '@/prisma/prisma.service'
 

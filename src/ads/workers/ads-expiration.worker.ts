@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { Cron } from '@nestjs/schedule'
 import { PrismaService } from '@/prisma/prisma.service'
-import { AdStatus } from 'prisma/generated/client'
+import { AdStatus } from '@/generated/prisma/client'
 
 @Injectable()
 export class AdsExpirationWorker {

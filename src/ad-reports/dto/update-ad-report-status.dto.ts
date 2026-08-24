@@ -1,5 +1,5 @@
 import { IsEnum } from 'class-validator'
-import { AdReportStatus } from 'prisma/generated/enums'
+import { AdReportStatus } from '@/generated/prisma/enums'
 
 export class UpdateAdReportStatusDto {
   @IsEnum(AdReportStatus)

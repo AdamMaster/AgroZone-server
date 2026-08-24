@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { MailService } from '@/libs/mail/mail.service'
 import { PrismaService } from '@/prisma/prisma.service'
 import { UserService } from '@/user/user.service'
-import { TokenType } from 'prisma/generated/enums'
+import { TokenType } from '@/generated/prisma/enums'
 import { ChangeEmailDto } from './dto/email-change.dto'
 
 @Injectable()

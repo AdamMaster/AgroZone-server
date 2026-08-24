@@ -1,4 +1,4 @@
-import { AdServiceType } from 'prisma/generated/enums'
+import { AdServiceType } from '@/generated/prisma/enums'
 
 // Срок действия каждой из трёх услуг после успешной оплаты, в днях.
 // Одинаковый для всех — сознательное решение (см. обсуждение с

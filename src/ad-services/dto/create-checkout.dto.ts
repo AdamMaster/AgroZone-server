@@ -1,5 +1,5 @@
 import { ArrayMinSize, ArrayUnique, IsArray, IsEnum, IsOptional, ValidateIf } from 'class-validator'
-import { AdBadge, AdServiceType } from 'prisma/generated/enums'
+import { AdBadge, AdServiceType } from '@/generated/prisma/enums'
 
 export class CreateAdServiceCheckoutDto {
   @IsArray()

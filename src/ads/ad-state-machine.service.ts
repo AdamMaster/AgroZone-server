@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common'
-import { AdStatus } from 'prisma/generated/client'
+import { AdStatus } from '@/generated/prisma/client'
 
 type Action = 'PUBLISH' | 'REJECT' | 'ARCHIVE' | 'ACTIVATE' | 'DRAFT'
 

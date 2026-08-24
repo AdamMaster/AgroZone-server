@@ -1,6 +1,6 @@
 import { IsEnum, IsOptional, IsInt, Min, Max } from 'class-validator'
 import { Type } from 'class-transformer'
-import { AdStatus } from 'prisma/generated/enums'
+import { AdStatus } from '@/generated/prisma/enums'
 
 export class FindMyAdsQueryDto {
   @IsOptional()

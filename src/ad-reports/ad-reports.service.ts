@@ -1,6 +1,6 @@
 import { ConflictException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common'
-import { Prisma } from 'prisma/generated/client'
-import { AdReportStatus } from 'prisma/generated/enums'
+import { Prisma } from '@/generated/prisma/client'
+import { AdReportStatus } from '@/generated/prisma/enums'
 
 import { PrismaService } from '@/prisma/prisma.service'
 

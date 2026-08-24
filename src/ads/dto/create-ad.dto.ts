@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsNumber, IsObject, IsOptional, IsString, IsArray, IsEnum, Matches, Length } from 'class-validator'
 import { Transform } from 'class-transformer'
-import { PriceUnit, Prisma } from 'prisma/generated/client'
+import { PriceUnit, Prisma } from '@/generated/prisma/client'
 
 export class CreateAdDto {
   @IsString()

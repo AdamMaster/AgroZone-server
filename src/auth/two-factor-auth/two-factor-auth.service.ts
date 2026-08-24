@@ -1,7 +1,7 @@
 import { MailService } from '@/libs/mail/mail.service'
 import { PrismaService } from '@/prisma/prisma.service'
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
-import { TokenType } from 'prisma/generated/enums'
+import { TokenType } from '@/generated/prisma/enums'
 import { generateNumericCode } from '@/libs/common/utils/generate-code.util'
 
 @Injectable()

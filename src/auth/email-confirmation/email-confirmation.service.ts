@@ -1,18 +1,12 @@
 import { UserService } from './../../user/user.service'
 import { PrismaService } from '@/prisma/prisma.service'
-import {
-  BadRequestException,
-  forwardRef,
-  Inject,
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException
-} from '@nestjs/common'
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common'
+import { ModuleRef } from '@nestjs/core'
 import { Request } from 'express'
-import { TokenType } from 'prisma/generated/enums'
+import { TokenType } from '@/generated/prisma/enums'
 import { v4 as uuidv4 } from 'uuid'
 import { ConfirmationDto } from './dto/confirmation.dto'
-import { User } from 'prisma/generated/client'
+import { User } from '@/generated/prisma/client'
 import { MailService } from '@/libs/mail/mail.service'
 import { AuthService } from '../auth.service'
 
@@ -22,8 +16,15 @@ export class EmailConfirmationService {
     private readonly prismaService: PrismaService,
     private readonly mailService: MailService,
     private readonly userService: UserService,
-    @Inject(forwardRef(() => AuthService))
-    private readonly authService: AuthService
+    // AuthService сюда не инжектим через конструктор — это замыкает
+    // циклическую зависимость (AuthService тоже импортирует
+    // EmailConfirmationService), и SWC, в отличие от tsc, не подставляет
+    // безопасную проверку в decorator-метаданные параметра конструктора,
+    // из-за чего при циклической загрузке модулей падает
+    // "Cannot access 'AuthService' before initialization". ModuleRef
+    // достаёт сервис лениво, в момент вызова метода, когда все модули уже
+    // точно загружены — это официальный способ Nest обходить такие циклы.
+    private readonly moduleRef: ModuleRef
   ) {}
 
   async newVirification(req: Request, dto: ConfirmationDto) {
@@ -72,7 +73,9 @@ export class EmailConfirmationService {
       }
     })
 
-    return this.authService.saveSession(req, existingUser)
+    const authService = this.moduleRef.get(AuthService, { strict: false })
+
+    return authService.saveSession(req, existingUser)
   }
 
   async sendVerificationToken(email: string) {

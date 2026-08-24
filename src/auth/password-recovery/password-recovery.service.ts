@@ -4,7 +4,7 @@ import { PrismaService } from '@/prisma/prisma.service'
 import { UserService } from '@/user/user.service'
 import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common'
 import { v4 as uuidv4 } from 'uuid'
-import { TokenType } from 'prisma/generated/enums'
+import { TokenType } from '@/generated/prisma/enums'
 import { ResetPasswordDto } from './dto/reset-password.dto'
 import { NewPasswordDto } from './dto/new-password.dto'
 

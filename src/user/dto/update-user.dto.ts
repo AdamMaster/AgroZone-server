@@ -1,5 +1,5 @@
 import { IsBoolean, IsEmail, IsEnum, IsOptional, IsString, Matches } from 'class-validator'
-import { UserType } from 'prisma/generated/enums'
+import { UserType } from '@/generated/prisma/enums'
 
 export class UpdateUserDto {
   @IsOptional()

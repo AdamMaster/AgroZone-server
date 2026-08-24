@@ -1,7 +1,7 @@
 import { PrismaService } from '@/prisma/prisma.service'
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
 import { hash, verify } from 'argon2'
-import { AdStatus, AuthMethod, TokenType, UserRole, UserType } from 'prisma/generated/enums'
+import { AdStatus, AuthMethod, TokenType, UserRole, UserType } from '@/generated/prisma/enums'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { PasswordChangeDto } from './dto/password-change.dto'
 import { DeleteAccountDto } from './dto/delete-account.dto'

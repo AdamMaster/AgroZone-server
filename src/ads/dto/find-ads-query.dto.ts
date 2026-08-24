@@ -1,7 +1,7 @@
 import { Type } from 'class-transformer'
 import { IsEnum, IsInt, IsNumber, IsOptional, IsString, Min } from 'class-validator'
-import { PriceUnit } from 'prisma/generated/client'
-import { UserType } from 'prisma/generated/enums'
+import { PriceUnit } from '@/generated/prisma/client'
+import { UserType } from '@/generated/prisma/enums'
 
 // Сортировка списка объявлений. По умолчанию (если sortBy не передан) —
 // DATE_DESC, см. AdsService.findAll.
