@@ -19,12 +19,15 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "prisma:seed": "dotenv -e .env -- ts-node prisma/seed.ts",
+    "embeddings:precompute": "dotenv -e .env -- ts-node scripts/precompute-category-embeddings.ts",
+    "categories:enrich-descriptions": "dotenv -e .env -- ts-node scripts/enrich-category-descriptions.ts",
     "prisma:reset": "dotenv -e .env -- prisma migrate reset --force",
     "prisma:generate": "dotenv -e .env -- prisma generate",
     "prisma:deploy": "dotenv -e .env -- prisma migrate deploy"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1062.0",
+    "@huggingface/transformers": "^3.8.1",
     "@nestjs-modules/mailer": "^2.3.4",
     "@nestjs/bullmq": "^11.0.4",
     "@nestjs/common": "^11.0.1",
@@ -58,6 +61,7 @@
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "slugify": "^1.6.9",
+    "undici": "^8.8.0",
     "uuid": "^13.0.0"
   },
   "devDependencies": {

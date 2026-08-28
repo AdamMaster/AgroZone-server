@@ -46,6 +46,10 @@ lerna-debug.log*
 .temp
 .tmp
 
+# кэш локальной ONNX-модели эмбеддингов (@huggingface/transformers) — качается
+# сама при первом запуске сервера, в git незачем (сотня мегабайт)
+.cache
+
 # Runtime data
 pids
 *.pid

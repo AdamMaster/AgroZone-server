@@ -165,6 +165,19 @@ model Category {
 
   ads Ad[]
 
+  // Раньше тут был один Float[] embedding на всю категорию (см. git-историю
+  // и обсуждение с пользователем), посчитанный по name + всему description
+  // разом. Это не сработало: description после обогащения через GigaChat —
+  // это список из 15-25 обиходных названий/сортов ("ель обыкновенная, туя
+  // западная, кедр сибирский, ..."), а mean pooling усредняет вклад каждого
+  // слова в один вектор — "туя" в списке из 25 пород даёт вклад ~1/25, сигнал
+  // тонет, и поиск по "туи" не находил "Саженцы хвойных пород", хотя туя
+  // западная прямо была в описании. Заменили на CategoryTerm ниже — по
+  // отдельному вектору на каждый термин, и берём максимум при поиске вместо
+  // среднего (см. CategoriesService.searchBySemantic и
+  // scripts/precompute-category-embeddings.ts).
+  terms CategoryTerm[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -174,6 +187,31 @@ model Category {
   @@index([fullPath])
   @@index([code])
   @@map("categories")
+}
+
+// Один термин (название категории ИЛИ одно слово/фраза-синоним из
+// обогащённого description) — свой собственный эмбеддинг. Семантический
+// поиск категории (CategoriesService.searchBySemantic) сравнивает запрос со
+// ВСЕМИ терминами и берёт максимум по каждой категории — так запрос "туи"
+// напрямую сравнивается с термином "туя западная", а не размывается
+// усреднением с 24 другими соснами/елями в одном векторе категории (см.
+// комментарий у Category.terms выше). Отдельная таблица, а не Float[][] в
+// Category — сравнение остаётся плоским списком строк, дешевле для брутфорс
+// косинуса в коде, чем городить вложенные массивы.
+model CategoryTerm {
+  id String @id @default(uuid())
+
+  categoryId String   @map("category_id")
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  term String
+
+  embedding Float[] @default([])
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([categoryId])
+  @@map("category_terms")
 }
 
 model CategoryFeature {
