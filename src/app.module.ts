@@ -34,10 +34,17 @@ import { NotificationsModule } from './notifications/notifications.module'
     }),
     PrismaModule,
 
+    // host/port раньше были захардкожены на 'localhost'/6379 — работало
+    // только пока Redis и сервер были на одной машине. В докер-компоузе
+    // (см. обсуждение с пользователем — перенос на Selectel) Redis это
+    // отдельный контейнер со своим hostname ('dredis' в docker-compose),
+    // и с захардкоженным localhost BullMQ (бамп объявлений,
+    // архивация просрочки, статусы услуг и т.п.) просто не смог бы
+    // подключиться. REDIS_PORT — из .env строкой, поэтому Number(...).
     BullModule.forRoot({
       connection: {
-        host: 'localhost',
-        port: 6379,
+        host: process.env.REDIS_HOST,
+        port: Number(process.env.REDIS_PORT),
         password: process.env.REDIS_PASSWORD
       }
     }),

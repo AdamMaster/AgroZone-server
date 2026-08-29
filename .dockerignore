@@ -1,0 +1,11 @@
+node_modules
+dist
+.cache
+src/generated
+coverage
+.git
+.env
+.env.*
+*.log
+.vscode
+.idea
