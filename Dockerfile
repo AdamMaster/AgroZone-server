@@ -20,7 +20,7 @@ WORKDIR /app
 
 # Отдельным слоем — кэшируется, пока package*.json не меняются
 COPY package.json package-lock.json ./
-RUN npm ci
+RUN npm ci --legacy-peer-deps
 
 COPY . .
 RUN npx prisma generate --schema=prisma/schema.prisma
