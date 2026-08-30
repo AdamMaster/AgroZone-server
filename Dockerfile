@@ -40,6 +40,11 @@ COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/package.json ./package.json
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/prisma ./prisma
+# prisma migrate deploy читает datasource.url из этого файла (см.
+# комментарий выше и prisma.config.ts) — без него Prisma не находит
+# строку подключения к базе и падает с 'datasource url is required',
+# хотя переменная окружения POSTGRES_URI при этом реально задана.
+COPY --from=build /app/prisma.config.ts ./prisma.config.ts
 COPY --from=build /app/certs ./certs
 
 # Кэш ONNX-модели эмбеддингов (env.cacheDir в embeddings.service.ts =
