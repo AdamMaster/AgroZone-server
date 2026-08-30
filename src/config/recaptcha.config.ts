@@ -11,6 +11,6 @@ export const getRecaptchaConfig = (configService: ConfigService): GoogleRecaptch
     response: (req: IncomingMessage): string => req.headers.recaptcha as string,
     skipIf: isDev(configService),
     score: 0.5,
-    actions: ['login', 'register', 'register_sms_start', 'forgot_password', 'reset_password']
+    actions: ['login', 'register', 'register_sms_start', 'forgot_password', 'reset_password', 'email_change']
   }
 }
