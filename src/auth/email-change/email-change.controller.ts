@@ -18,8 +18,8 @@ export class EmailChangeController {
     return this.emailChangeService.requestEmailChange(userId, dto)
   }
 
-  // 2. Подтверждение из письма
-  @Captcha()
+  // 2. Подтверждение из письма — переход по ссылке, без интерактивной капчи;
+  // защитой служит сам токен из письма (см. EmailChangeService.confirmEmailChange)
   @Post('confirm')
   @HttpCode(HttpStatus.OK)
   async confirmChange(@Query('token') token: string) {
