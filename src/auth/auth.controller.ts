@@ -18,7 +18,7 @@ import { AuthService } from './auth.service'
 import { RegisterDto } from './dto/register.dto'
 import { Request, Response } from 'express'
 import { LoginDto } from './dto/login.dto'
-import { Recaptcha } from '@nestlab/google-recaptcha'
+import { Captcha } from '@/libs/captcha/captcha.decorator'
 import { AuthProviderGuard } from './guards/provider.quard'
 import { CheckUserDto } from './dto/check-user.dto'
 import { VerifySmsDto } from './dto/verify-sms.dto'
@@ -74,7 +74,7 @@ export class AuthController {
     return this.authService.checkRegisterCode(dto)
   }
 
-  @Recaptcha()
+  @Captcha()
   @Post('register')
   @HttpCode(HttpStatus.OK)
   async register(@Req() req: Request, @Body() dto: RegisterDto) {
@@ -89,7 +89,7 @@ export class AuthController {
     return this.authService.checkUser(dto)
   }
 
-  @Recaptcha()
+  @Captcha()
   @UseGuards(ThrottlerGuard)
   @Throttle(VERIFY_CODE_THROTTLE)
   @Post('login')

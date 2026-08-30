@@ -1,7 +1,7 @@
 import { Body, Controller, HttpCode, HttpStatus, Post, Query } from '@nestjs/common'
 import { EmailChangeService } from './email-change.service'
 import { ChangeEmailDto } from './dto/email-change.dto'
-import { Recaptcha } from '@nestlab/google-recaptcha'
+import { Captcha } from '@/libs/captcha/captcha.decorator'
 import { Authorization } from '../decorators/auth.decorator'
 import { CurrentUser } from '../decorators/decorators/user.decorator'
 
@@ -10,7 +10,7 @@ export class EmailChangeController {
   constructor(private readonly emailChangeService: EmailChangeService) {}
 
   // 1. Создание запроса на смену почты
-  @Recaptcha()
+  @Captcha()
   @Authorization()
   @Post()
   @HttpCode(HttpStatus.OK)
@@ -19,7 +19,7 @@ export class EmailChangeController {
   }
 
   // 2. Подтверждение из письма
-  @Recaptcha()
+  @Captcha()
   @Post('confirm')
   @HttpCode(HttpStatus.OK)
   async confirmChange(@Query('token') token: string) {
