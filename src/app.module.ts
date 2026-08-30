@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { IS_DEV_ENV } from './libs/common/utils/is-dev.util'
 import { PrismaModule } from './prisma/prisma.module'
+import { CaptchaModule } from './libs/captcha/captcha.module'
 import { AuthModule } from './auth/auth.module'
 import { UserModule } from './user/user.module'
 import { ProviderModule } from './auth/provider/provider.module'
@@ -32,6 +33,7 @@ import { NotificationsModule } from './notifications/notifications.module'
       ignoreEnvFile: !IS_DEV_ENV,
       isGlobal: true
     }),
+    CaptchaModule,
     PrismaModule,
 
     // host/port раньше были захардкожены на 'localhost'/6379 — работало
