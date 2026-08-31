@@ -303,15 +303,15 @@ export class UserService {
       throw new BadRequestException('Этот номер уже используется другим аккаунтом')
     }
 
-    // 4 цифры — см. комментарий у AuthService.sendSmsCode. Код возвращает
-    // сам Zvonok в ответе на звонок (робот диктует его голосом) — та же
-    // логика, что и в AuthService.sendSmsCode (общий ZvonokService).
-    const smsCode = await this.zvonokService.sendVerificationCall(newPhone)
+    // "Звонок на проверочный номер" — см. комментарий в ZvonokService и в
+    // AuthService.sendSmsCode. В token сохраняем call_id, а не код: сверять
+    // нечего, подтверждение идёт по факту звонка (см. checkPhoneCallbackStatus).
+    const { callId, number } = await this.zvonokService.requestCallbackConfirmation(newPhone)
 
     await this.prismaService.token.deleteMany({ where: { userId, type: 'PHONE_CHANGE' } })
     await this.prismaService.token.create({
       data: {
-        token: smsCode,
+        token: callId,
         expiresIn: new Date(Date.now() + 5 * 60 * 1000),
         type: 'PHONE_CHANGE',
         userId,
@@ -319,7 +319,35 @@ export class UserService {
       }
     })
 
-    return { success: true }
+    return { success: true, callNumber: number }
+  }
+
+  // Опрашивается с фронта, пока пользователь не позвонит на выданный
+  // номер. Как только zvonok подтвердит звонок — отдаём call_id (в поле
+  // code), фронт подставляет его в уже существующие confirmPhoneChange/
+  // confirmAddPhone, которые ищут токен по этому значению — их менять не
+  // пришлось (см. комментарий в AuthService.checkSmsCallbackStatus).
+  async checkPhoneCallbackStatus(userId: string) {
+    const tokenRecord = await this.prismaService.token.findFirst({
+      where: { userId, type: TokenType.PHONE_CHANGE }
+    })
+
+    if (!tokenRecord) {
+      throw new BadRequestException('Код подтверждения не запрошен. Запросите новый.')
+    }
+
+    if (new Date() > tokenRecord.expiresIn) {
+      await this.prismaService.token.delete({ where: { id: tokenRecord.id } })
+      throw new BadRequestException('Время ожидания звонка истекло. Запросите новый код.')
+    }
+
+    if (!tokenRecord.phone) {
+      throw new BadRequestException('Номер телефона отсутствует')
+    }
+
+    const confirmed = await this.zvonokService.checkCallbackConfirmed(tokenRecord.phone, tokenRecord.token)
+
+    return confirmed ? { confirmed: true, code: tokenRecord.token } : { confirmed: false }
   }
 
   async confirmPhoneChange(userId: string, smsCode: string) {

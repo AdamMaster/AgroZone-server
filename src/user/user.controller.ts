@@ -146,6 +146,16 @@ export class UserController {
     return this.userService.setPrimaryPhone(userId, dto.phone)
   }
 
+  // Опрашивается с фронта, пока пользователь не позвонит на выданный
+  // номер — общий для обоих флоу (смена номера и добавление номера),
+  // они используют один и тот же тип токена (см. UserService.checkPhoneCallbackStatus).
+  @Authorization()
+  @HttpCode(HttpStatus.OK)
+  @Post('profile/phones/status')
+  async checkPhoneCallbackStatus(@Authorized('id') userId: string) {
+    return this.userService.checkPhoneCallbackStatus(userId)
+  }
+
   // POST, а не DELETE — нужно передать пароль для подтверждения в теле
   // запроса, а клиентский FetchClient.delete() тела не поддерживает (см.
   // shared/fetch/fetch-client.ts). После удаления сразу же гасим сессию —

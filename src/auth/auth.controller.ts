@@ -34,6 +34,11 @@ const REQUEST_CODE_THROTTLE = { default: { limit: 3, ttl: 60000 } }
 // Более жёсткий лимит для проверки кода — именно здесь возможен брутфорс.
 const VERIFY_CODE_THROTTLE = { default: { limit: 5, ttl: 60000 } }
 
+// Лимит для опроса статуса звонка (polling с фронта каждые несколько
+// секунд, пока ждём, что пользователь позвонит на проверочный номер) —
+// это не попытки подбора, ограничиваем только от совсем частого спама.
+const POLL_STATUS_THROTTLE = { default: { limit: 30, ttl: 60000 } }
+
 @Controller('auth')
 export class AuthController {
   constructor(
@@ -72,6 +77,17 @@ export class AuthController {
   @Post('register/check-code')
   async checkRegisterCode(@Body() dto: VerifySmsDto) {
     return this.authService.checkRegisterCode(dto)
+  }
+
+  // Опрашивается с фронта каждые несколько секунд, пока пользователь не
+  // позвонит на выданный номер (см. AuthService.checkSmsCallbackStatus) —
+  // лимит выше, чем у ручной проверки кода, это не брутфорс, а обычный polling.
+  @UseGuards(ThrottlerGuard)
+  @Throttle(POLL_STATUS_THROTTLE)
+  @HttpCode(HttpStatus.OK)
+  @Post('register/sms/status')
+  async checkSmsCallbackStatus(@Body() dto: SmsRegisterDto) {
+    return this.authService.checkSmsCallbackStatus(dto.phone)
   }
 
   @Captcha()

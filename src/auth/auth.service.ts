@@ -127,15 +127,13 @@ export class AuthService {
   }
 
   async sendSmsCode(phone: string, type: TokenType = TokenType.SMS_VERIFICATION) {
-    // 4 цифры, а не 6, как у остальных кодов подтверждения (email, 2FA) —
-    // так исторически повелось ещё с flashcall, оставили тот же формат и
-    // для tellcode (робот его просто диктует голосом, длина роли не играет).
-    //
-    // Код возвращает сам Zvonok в ответе на звонок (см. комментарий в
-    // ZvonokService), поэтому мы не генерируем его сами — сохраняем токен
-    // только после успешного звонка, иначе при сбое в базе остался бы код,
-    // который пользователь никогда не увидит.
-    const code = await this.zvonokService.sendVerificationCall(phone)
+    // "Звонок на проверочный номер" — пользователь сам звонит на общий
+    // номер zvonok, никакого кода нет вообще (см. ZvonokService). Вместо
+    // кода в поле token храним call_id, который вернул zvonok — по нему
+    // потом (в checkSmsCallbackStatus) опрашиваем, поступил ли звонок.
+    // Токен сохраняем только после успешного ответа zvonok, иначе при
+    // сбое в базе остался бы "код", о котором фронт никогда не узнает.
+    const { callId, number } = await this.zvonokService.requestCallbackConfirmation(phone)
 
     // Удаляем старые коды для этого номера
     await this.prismaService.token.deleteMany({
@@ -150,14 +148,44 @@ export class AuthService {
     await this.prismaService.token.create({
       data: {
         phone,
-        token: code,
+        token: callId,
         type,
         expiresIn: new Date(Date.now() + 5 * 60 * 1000),
         ...(user ? { user: { connect: { id: user.id } } } : {})
       }
     })
 
-    return { message: 'Вам поступит звонок — назовите или введите код, который продиктует робот' }
+    return {
+      message: `Позвоните с этого номера на ${number} — подтверждение придёт автоматически`,
+      callNumber: number
+    }
+  }
+
+  // Опрашивается с фронта, пока пользователь не позвонит на выданный
+  // номер. Кода тут нет и сверять нечего — как только zvonok подтвердит,
+  // что звонок с нужного номера поступил, отдаём фронту сам call_id
+  // (в поле code) — фронт подставляет его в уже существующие ручки
+  // подтверждения (verify-sms/register/sms/complete и т.д.), которые как
+  // раз ищут токен по этому значению, так что их менять не пришлось.
+  async checkSmsCallbackStatus(phone: string, type: TokenType = TokenType.SMS_VERIFICATION) {
+    phone = normalizePhone(phone)
+
+    const smsToken = await this.prismaService.token.findFirst({
+      where: { phone, type }
+    })
+
+    if (!smsToken) {
+      throw new BadRequestException('Код подтверждения не запрошен. Запросите новый.')
+    }
+
+    if (new Date() > smsToken.expiresIn) {
+      await this.prismaService.token.delete({ where: { id: smsToken.id } })
+      throw new BadRequestException('Время ожидания звонка истекло. Запросите новый код.')
+    }
+
+    const confirmed = await this.zvonokService.checkCallbackConfirmed(phone, smsToken.token)
+
+    return confirmed ? { confirmed: true, code: smsToken.token } : { confirmed: false }
   }
 
   async sendPhoneChangeCode(phone: string, userId: string) {
