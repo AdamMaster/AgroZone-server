@@ -303,10 +303,9 @@ export class UserService {
       throw new BadRequestException('Этот номер уже используется другим аккаунтом')
     }
 
-    // 4 цифры — см. комментарий у AuthService.sendSmsCode: код должен
-    // умещаться в последние цифры номера, которым звонит Zvonok. Код
-    // возвращает сам Zvonok в ответе на звонок — та же логика, что и в
-    // AuthService.sendSmsCode (общий ZvonokService).
+    // 4 цифры — см. комментарий у AuthService.sendSmsCode. Код возвращает
+    // сам Zvonok в ответе на звонок (робот диктует его голосом) — та же
+    // логика, что и в AuthService.sendSmsCode (общий ZvonokService).
     const smsCode = await this.zvonokService.sendVerificationCall(newPhone)
 
     await this.prismaService.token.deleteMany({ where: { userId, type: 'PHONE_CHANGE' } })
