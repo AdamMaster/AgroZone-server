@@ -160,6 +160,16 @@ export class AdsController {
     return this.adsService.getViewStatsForOwner(id, userId, weekOffset)
   }
 
+  // Компактные счётчики владельца (просмотры всего/сегодня, избранное) —
+  // для панели над фото на странице объявления (см. AdsService.getCountersForOwner).
+  // Отдельно от .../views — та отдаёт тяжёлый недельный график, тут лёгкий
+  // объект без разбивки по дням.
+  @Get('my/:id/counters')
+  @UseGuards(AuthGuard)
+  getMyAdCounters(@Param('id', ParseUUIDPipe) id: string, @CurrentUser('id') userId: string) {
+    return this.adsService.getCountersForOwner(id, userId)
+  }
+
   // Та же статистика, но для админа — на любое объявление, не только своё
   // (см. AdsService.getViewStatsForAdmin). ':id/views', а не 'my/:id/views' —
   // тот же приём, что и с ':id/moderation' ниже: отдельный явный путь, а не

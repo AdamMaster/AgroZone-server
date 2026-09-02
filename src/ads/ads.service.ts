@@ -723,6 +723,43 @@ export class AdsService {
     return this.getViewStats(adId, weekOffset, ad.publishedAt)
   }
 
+  // Компактные счётчики для владельца — общее число просмотров за всё
+  // время, просмотры за сегодня и число добавлений в избранное. Отдельно
+  // от getViewStatsForOwner (та отдаёт недельный график) — это лёгкий
+  // запрос для панели над фото на странице объявления (см. обсуждение с
+  // пользователем), без разбивки по дням.
+  async getCountersForOwner(adId: string, userId: string) {
+    await this.getUserAdOrThrow(adId, userId)
+
+    return this.getCounters(adId)
+  }
+
+  private async getCounters(adId: string) {
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+
+    const [favoritesCount, viewsAggregate, todayRolledUp, todayRaw] = await Promise.all([
+      this.prisma.favorite.count({ where: { adId } }),
+      this.prisma.adViewDaily.aggregate({ where: { adId }, _sum: { views: true } }),
+      // Сегодняшний день обычно ещё не свёрнут (AdViewsRollupWorker крутится
+      // ночью, см. getViewStats выше) — rolledUp тут почти всегда null, но
+      // на случай если воркер уже отработал (например, время на сервере
+      // "перевалило" за полночь между двумя вызовами), не складываем его с
+      // сырыми записями, а берём максимум — иначе задвоили бы просмотры за
+      // сегодня, ровно та же защита от двойного счёта, что и в getViewStats.
+      this.prisma.adViewDaily.findUnique({
+        where: { adId_date: { adId, date: today } },
+        select: { views: true }
+      }),
+      this.prisma.adView.count({ where: { adId, viewDate: today } })
+    ])
+
+    const viewsToday = Math.max(todayRolledUp?.views ?? 0, todayRaw)
+    const viewsTotal = (viewsAggregate._sum.views ?? 0) + (todayRolledUp ? 0 : todayRaw)
+
+    return { viewsTotal, viewsToday, favoritesCount }
+  }
+
   // Неделя — понедельник-воскресенье (тот же принцип, что у большинства
   // маркетплейсов). weekOffset считаем от текущей недели: 0 — она и есть,
   // 1 — прошлая, и так далее, зажимаем в [0, maxWeekOffset], где
